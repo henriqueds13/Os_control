@@ -20,3 +20,21 @@ class ClienteRepositorio():
         query_cliente = cliente_query.ClienteQuery()
         clientes = query_cliente.listar_clientes(sessao)
         return clientes
+
+    def listar_cliente_id(self, id_cliente, sessao):
+        query_cliente = cliente_query.ClienteQuery()
+        cliente = query_cliente.listar_cliente_id(id_cliente, sessao)
+        return cliente
+
+    def listar_cliente_nome(self, nome_cliente, sessao):
+        query_cliente = cliente_query.ClienteQuery()
+        clientes = query_cliente.listar_cliente_nome(nome_cliente, sessao)
+        return clientes
+
+    def editar_cliente(self, id_cliente, cliente, sessao):
+        query_cliente = cliente_query.ClienteQuery()
+        query_cliente.editar_cliente(id_cliente, cliente, sessao)
+
+    def remover_cliente(self, id_cliente, sessao):
+        query_cliente = cliente_query.ClienteQuery()
+        query_cliente.remover_cliente(id_cliente, sessao)

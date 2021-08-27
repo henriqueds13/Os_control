@@ -30,7 +30,8 @@ class Cliente(Base):
     indicacao = Column(String(15), nullable=True)
 
     def __repr__(self):
-        return f"Cliente {self.nome}, celular: {self.celular}, endereço: {self.logradouro} {self.bairro} {self.cidade}, {self.uf}"
+        return f"Cliente: Id {self.id},nome: {self.nome}, celular: {self.celular}, endereço: {self.logradouro} {self.bairro}/" \
+               f"{self.cidade}, {self.uf}"
 
 
 Base.metadata.create_all(engine)
