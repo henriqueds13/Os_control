@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, ForeignKey, Float, Table
+from sqlalchemy import Column, String, Integer, ForeignKey, Float, Table, Date
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from fabricas import fabrica_conexao
@@ -7,6 +7,15 @@ fabrica = fabrica_conexao.FabricaConexão()
 engine = fabrica.conectar()
 
 Base = declarative_base()
+
+produto_os = Table('produto_os', Base.metadata,
+                   Column('id_produto', Integer, ForeignKey('produto.id_prod')),
+                   Column('id_os', Integer, ForeignKey('ordem_de_servico.id'))
+                   )
+produto_venda = Table('produto_venda', Base.metadata,
+                      Column('id_produto', Integer, ForeignKey('produto.id_prod')),
+                      Column('id_venda', Integer, ForeignKey('os_venda.id_venda'))
+                      )
 
 
 class Cliente(Base):
@@ -29,9 +38,12 @@ class Cliente(Base):
     contato = Column(String(15), nullable=True)
     indicacao = Column(String(15), nullable=True)
 
+    oss = relationship('OS', back_populates='cliente', cascade='delete')
+
     def __repr__(self):
         return f"Cliente: Id {self.id},nome: {self.nome}, celular: {self.celular}, endereço: {self.logradouro} {self.bairro}/" \
                f"{self.cidade}, {self.uf}"
+
 
 class OS(Base):
     __tablename__ = 'ordem_de_servico'
@@ -69,11 +81,19 @@ class OS(Base):
     obs2 = Column(String(30))
     obs3 = Column(String(30))
 
+    garantia_fabr = relationship('GarantiaFabrica', back_populates='os_gar')
+
     tecnico_id = Column(Integer, ForeignKey('tecnico.id'))
+    tecnico = relationship('Tecnico', back_populates='ostec')
+
     cliente_id = Column(Integer, ForeignKey('cliente.id'), nullable=False)
+    cliente = relationship('Cliente', back_populates='oss')
+
+    produtos = relationship('Produto', secondary='produto_os', back_populates='os_prod')
 
     def __repr__(self):
         return f"Equipamento"
+
 
 class Tecnico(Base):
     __tablename__ = 'tecnico'
@@ -81,6 +101,47 @@ class Tecnico(Base):
     nome = Column(String(30), nullable=False)
     senha_tecnico = Column(Integer, nullable=False)
 
+    ostec = relationship('OS', back_populates='tecnico')
 
+
+class GarantiaFabrica(Base):
+    __tablename__ = 'garantia_fabrica'
+    nun_nota = Column(Integer, nullable=False)
+    tempo_garantia = Column(Integer, nullable=False)
+    data_compra = Column(Date, nullable=False)
+    garantia_compl = Column(Integer, nullable=False)
+
+    os_id = Column(Integer, ForeignKey('ordem_de_servico.id'), primary_key=True, nullable=False)
+    os_gar = relationship('OS', back_populates='garantia_fabr')
+
+
+class OsVenda(Base):
+    __tablename__ = 'os_venda'
+    id_venda = Column(Integer, primary_key=True)
+    id_cliente = Column(Integer, ForeignKey('cliente.id'))
+    id_prod = Column(Integer, nullable=False)
+    qtd = Column(Integer, nullable=False)
+    desconto = Column(Integer)
+    form_pag = Column(String(20), nullable=False)
+    subvalor = Column(Integer, nullable=False)
+    valor_final = Column(Integer, nullable=False)
+
+    produto = relationship('Produto', secondary='produto_venda', back_populates='venda_prod')
+
+
+class Produto(Base):
+    __tablename__ = 'produto'
+    id_prod = Column(Integer, primary_key=True)
+    id_fabr = Column(Integer)
+    descricao = Column(String(50), nullable=False)
+    qtd = Column(Integer, nullable=False)
+    marca = Column(String(20))
+    valor_compra = Column(Integer)
+    valor_venda = Column(Integer)
+    obs = Column(String(50))
+    localizacao = Column(String(15))
+
+    os_prod = relationship('OS', secondary='produto_os', back_populates='produtos')
+    venda_prod = relationship('OsVenda', secondary='produto_venda', back_populates='produto')
 
 Base.metadata.create_all(engine)
