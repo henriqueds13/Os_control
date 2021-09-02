@@ -138,10 +138,13 @@ class Produto(Base):
     marca = Column(String(20))
     valor_compra = Column(Integer)
     valor_venda = Column(Integer)
-    obs = Column(String(50))
+    obs = Column(String(50), nullable=True)
     localizacao = Column(String(15))
 
     os_prod = relationship('OS', secondary='produto_os', back_populates='produtos')
     venda_prod = relationship('OsVenda', secondary='produto_venda', back_populates='produto')
+
+    def __repr__(self):
+        return f"Produto: {self.descricao} Quantidade: {self.qtd} Valor: {self.valor_venda}"
 
 Base.metadata.create_all(engine)

@@ -1,5 +1,5 @@
 class Produto():
-    def __init(self, id_fabr, descricao, qtd=0, marca='', valor_compra=0, valor_venda=0, margem_lucro=0,
+    def __init__(self, id_fabr, descricao, qtd=0, marca='', valor_compra=0, valor_venda=0,
                obs='', localizacao=''):
         self.__id_fabr = id_fabr
         self.__descricao = descricao
@@ -7,7 +7,6 @@ class Produto():
         self.__marca = marca
         self.__valor_compra = valor_compra
         self.__valor_venda = valor_venda
-        self.__margem_lucro = margem_lucro
         self.__obs = obs
         self.__localizacao = localizacao
 

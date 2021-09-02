@@ -1,12 +1,12 @@
 from fabricas import fabrica_conexao
-from entidades import cliente
-from repositorios import cliente_repositorio
+from entidades import cliente, produto
+from repositorios import cliente_repositorio, produto_repositorio
 
 #
 fabrica = fabrica_conexao.FabricaConexão()
 sessao = fabrica.criar_sessao()
 
-nome_cliente = input("Digite o nome do cliente a ser procurado: ")
+# nome_cliente = input("Digite o nome do cliente a ser procurado: ")
 # nome_cliente = input("Digite o nome do cliente: ")
 # operador = input("Operador: ")
 # cpf = input("cpf: ")
@@ -26,13 +26,39 @@ nome_cliente = input("Digite o nome do cliente a ser procurado: ")
 
 # novo_cliente = cliente.Cliente(nome_cliente, operador, celular, cpf, tel, rg, logradouro, uf, bairro, complemento,
 #                                  cep, cidade, email, whats, contato, indicacao)
-repositorio = cliente_repositorio.ClienteRepositorio()
-# repositorio.inserir_cliente(novo_cliente, sessao)
+repositorios = cliente_repositorio.ClienteRepositorio()
+# clientes = repositorios.listar_cliente_nome('Joao', sessao)
+#
+# for i in clientes:
+#     print (i)
 
 #
-#repositorio.remover_cliente(id_cliente, sessao)
-clientes = repositorio.listar_cliente_nome(nome_cliente, sessao)
-for i in clientes:
+# repositorio.remover_cliente(id_cliente, sessao)
+# clientes = repositorio.listar_clientes(sessao)
+# for i in clientes:
+#     print(i)
+
+# id_fabrica = int(input("Insira o id de fabrica do produto: "))
+# descricao = input("Insira a descrição do produto:")
+# qtd = int(input("Insira a quantidade do produto: "))
+# marca = input("Insira a marca do produto: ")
+# valor_compra = int(input("Valor que pagou no produto: "))
+# valor_venda = int(input("Valor que de venda do produto: "))
+# obs = input("Observação: ")
+# localizacao = input("Localização do produto: ")
+
+#novo_produto = produto.Produto(id_fabrica, descricao, qtd, marca, valor_compra, valor_venda, obs, localizacao)
+
+repositorio = produto_repositorio.ProdutoRepositorio()
+
+#repositorio.editar_produto(2,novo_produto, sessao)
+#repositorio.iserir_produto(novo_produto, sessao)
+#repositorio.remover_produto(2,sessao)
+produtos = repositorio.listar_produto_nome_avancado('perfurador',sessao)
+
+
+for i in produtos:
     print(i)
+
 sessao.commit()
 sessao.close()
