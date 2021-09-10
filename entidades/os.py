@@ -2,10 +2,10 @@ class Os():
     def __init__(self, equipamento, marca, modelo='', acessorios='', defeito='', estado_aparelho='',
                  n_serie='', tensao=None, status='EM SERVIÇO', desc_serv1='', desc_serv2='', desc_serv3='',
                  desc_serv4='',
-                 desc_serv5='', desc_serv6='', desconto=None, obs1='', obs2='', obs3='',valor_mao_obra=0.00, qtd1=0, qtd2=0,
+                 desc_serv5='', desc_serv6='', desconto=None, obs1='', obs2='', obs3='',valor_mao_obra=0, qtd1=0, qtd2=0,
                  qtd3=0,
                  qtd4=0, qtd5=0, qtd6=0, valor_uni1=0, valor_uni2=0, valor_uni3=0, valor_uni4=0, valor_uni5=0,
-                 valor_uni6=0):
+                 valor_uni6=0, tecnico=''):
         self.__equipamento = equipamento
         self.__marca = marca
         self.__modelo = modelo
@@ -38,6 +38,7 @@ class Os():
         self.__valor_uni4 = valor_uni4
         self.__valor_uni5 = valor_uni5
         self.__valor_uni6 = valor_uni6
+        self.__tecnico = tecnico
 
     @property
     def equipamento(self):
@@ -167,6 +168,10 @@ class Os():
     def valor_uni6(self):
         return self.__valor_uni6
 
+    @property
+    def tecnico(self):
+        return self.__tecnico
+
     @equipamento.setter
     def equipamento(self, equipamento):
         self.__equipamento = equipamento
@@ -294,3 +299,7 @@ class Os():
     @valor_uni6.setter
     def valor_uni6(self, valor):
         self.__valor_uni6 = valor
+
+    @tecnico.setter
+    def tecnico(self, tecnico):
+        self.__tecnico = tecnico

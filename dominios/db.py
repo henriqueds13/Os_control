@@ -92,7 +92,12 @@ class OS(Base):
     produtos = relationship('Produto', secondary='produto_os', back_populates='os_prod')
 
     def __repr__(self):
-        return f"Equipamento"
+        return f"Equipamento: {self.equipamento}" \
+               f"Marca: {self.marca}" \
+               f"Modelo: {self.modelo}" \
+               f"Tensao: {self.tensao}" \
+               f"defeito: {self.defeito}" \
+               f"tecnico: {self.tecnico}"
 
 
 class Tecnico(Base):
@@ -103,6 +108,8 @@ class Tecnico(Base):
 
     ostec = relationship('OS', back_populates='tecnico')
 
+    def __repr__(self):
+        return f"Nome: {self.nome}  Senha: {self.senha_tecnico}"
 
 class GarantiaFabrica(Base):
     __tablename__ = 'garantia_fabrica'
