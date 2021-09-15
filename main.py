@@ -1,3 +1,6 @@
+from sqlalchemy.orm import session
+
+from dominios.db import Tecnico
 from fabricas import fabrica_conexao
 from entidades import cliente, produto, tecnico, os
 from repositorios import cliente_repositorio, produto_repositorio, tecnico_repositorio, os_repositorio
@@ -65,14 +68,18 @@ repositorio_os = os_repositorio.Os_repositorio()
 #
 # tecnicos = repositorio_tecnico.editar_tecnico(2, novo_tecnico, sessao)
 # print(tecnicos)
-Equipamento = input("Digite o equipamento: ")
-marca = input("Digite a marca do equipamento: ")
-modelo = input("Digite o modelo do equipamento: ")
-defeito = input("Defeito: ")
-tecnico = input("Tecnico: ")
+# Equipamento = input("Digite o equipamento: ")
+# marca = input("Digite a marca do equipamento: ")
+# modelo = input("Digite o modelo do equipamento: ")
+# defeito = input("Defeito: ")
+# tecnic = int(input("Tecnico: "))
+# tec = repositorio_tecnico.listar_tecnico_id(tecnic,sessao)
+#tec = session.query(Tecnico).filter(Tecnico.nome == '').first()
+# nova_os = os.Os(equipamento=Equipamento, marca=marca, modelo=modelo, defeito=defeito, tecnico=tec)
+# repositorio_os.nova_os(2, nova_os, sessao)
+oss = repositorio_os.listar_os(sessao)
 
-nova_os = os.Os(Equipamento, marca, modelo, defeito, tecnico)
-repositorio_os.nova_os(2, nova_os, sessao)
+print(oss)
 
 sessao.commit()
 sessao.close()

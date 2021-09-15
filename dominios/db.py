@@ -92,12 +92,7 @@ class OS(Base):
     produtos = relationship('Produto', secondary='produto_os', back_populates='os_prod')
 
     def __repr__(self):
-        return f"Equipamento: {self.equipamento}" \
-               f"Marca: {self.marca}" \
-               f"Modelo: {self.modelo}" \
-               f"Tensao: {self.tensao}" \
-               f"defeito: {self.defeito}" \
-               f"tecnico: {self.tecnico}"
+        return f"[Equipamento: {self.equipamento} / Marca: {self.marca} / Modelo: {self.modelo} / Tensao: {self.tensao} / defeito: {self.defeito} / tecnico: {self.tecnico}]"
 
 
 class Tecnico(Base):
