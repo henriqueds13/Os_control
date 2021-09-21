@@ -1,4 +1,5 @@
 from tkinter import *
+import os
 
 
 # class Application:
@@ -38,44 +39,45 @@ from tkinter import *
 #     def mudar_cor3(self):
 #         self.texto['bg'] = "green"
 
-# class Passwords:
-#     def __init__(self, master):
-#
-#       self.frame1 = Frame(master)
-#       self.frame2 = Frame(master)
-#       self.frame3 = Frame(master)
-#       self.frame4 = Frame(master, pady=10)
-#       self.frame1.pack()
-#       self.frame2.pack()
-#       self.frame3.pack()
-#       self.frame4.pack()
-#
-#       Label(self.frame1, text="PASSWORDS", fg='darkblue', font=('Verdana', '14', 'bold'), height=3).pack()
-#
-#       fonte1 = ('Verdana', '10', 'bold')
-#       Label(self.frame2, text="Nome: ", font=fonte1, width=8).pack(side=LEFT)
-#       self.nome=Entry(self.frame2, width=10, font=fonte1)
-#       self.nome.focus_force()
-#       self.nome.pack(side=LEFT)
-#
-#       Label(self.frame3, text="Senha: ", font=fonte1, width=8).pack(side=LEFT)
-#       self.senha = Entry(self.frame3, width=10, show='*', font=fonte1)
-#       self.senha.pack(side=LEFT)
-#       self.confere = Button(self.frame4, font=fonte1, text='Conferir', bg='pink', command=self.conferir)
-#       self.confere.pack()
-#       self.msg = Label(self.frame4, font=fonte1, height=3, text='AGUARDANDO...')
-#       self.msg.pack()
-#
-#     def conferir(self):
-#         NOME = self.nome.get()
-#         SENHA = self.senha.get()
-#         if NOME == SENHA:
-#             self.msg['text'] = 'ACESSO PERMITIDO'
-#             self.msg['fg'] = 'darkgreen'
-#         else:
-#             self.msg['text'] = 'ACESSO NEGADO'
-#             self.msg['fg'] = 'red'
-#             self.nome.focus_force()
+class Passwords:
+    def __init__(self, master):
+
+        self.frame1 = Frame(master)
+        self.frame2 = Frame(master)
+        self.frame3 = Frame(master)
+        self.frame4 = Frame(master, pady=10)
+        self.frame1.pack(in_=master)
+        self.frame2.pack()
+        self.frame3.pack()
+        self.frame4.pack()
+
+        Label(self.frame1, text="PASSWORDS", fg='darkblue', font=('Verdana', '14', 'bold'), height=3).pack()
+
+        fonte1 = ('Verdana', '10', 'bold')
+        Label(self.frame2, text="Nome: ", font=fonte1, width=8).pack(side=LEFT)
+        self.nome = Entry(self.frame2, width=10, font=fonte1)
+        self.nome.focus_force()
+        self.nome.pack(side=LEFT)
+
+        Label(self.frame3, text="Senha: ", font=fonte1, width=8).pack(side=LEFT)
+        self.senha = Entry(self.frame3, width=10, show='*', font=fonte1)
+        self.senha.pack(side=LEFT)
+        self.confere = Button(self.frame4, font=fonte1, text='Conferir', bg='pink', command=self.conferir)
+        self.confere.pack()
+        self.msg = Label(self.frame4, font=fonte1, height=3, text='AGUARDANDO...')
+        self.msg.pack()
+
+    def conferir(self):
+        NOME = self.nome.get()
+        SENHA = self.senha.get()
+        if NOME == SENHA:
+            self.msg['text'] = 'ACESSO PERMITIDO'
+            self.msg['fg'] = 'darkgreen'
+        else:
+            self.msg['text'] = 'ACESSO NEGADO'
+            self.msg['fg'] = 'red'
+            self.nome.focus_force()
+
 
 class Castelo:
     def __init__(self, master):
@@ -87,16 +89,16 @@ class Castelo:
 
         barraDeMenus = Menu(master)
         menuArquivo = Menu(barraDeMenus, tearoff=0)
-        menuArquivo.add_command(label='Clientes', command=self.abrirCliente)
-        menuArquivo.add_command(label='Orçamento', command=self.semComando)
+        menuArquivo.add_command(label='Clientes', command=self.abrirJanelaCliente)
+        menuArquivo.add_command(label='Orçamento', command=self.abrirJanelaOrçamento)
         menuArquivo.add_command(label='Configurações', command=self.semComando)
         menuArquivo.add_separator()
         menuArquivo.add_command(label='Sair', command=master.quit)
         barraDeMenus.add_cascade(label='Arquivo', menu=menuArquivo)
 
         menuAparelhos = Menu(barraDeMenus, tearoff=0)
-        menuAparelhos.add_command(label='Em manutenção', command='')
-        menuAparelhos.add_command(label='Entregues', command='')
+        menuAparelhos.add_command(label='Em manutenção', command=self.abrirJanelaApmanutencao)
+        menuAparelhos.add_command(label='Entregues', command=self.abrirJanelaApEntregues)
         barraDeMenus.add_cascade(label='Aparelhos', menu=menuAparelhos)
 
         menuUtilitarios = Menu(barraDeMenus, tearoff=0)
@@ -112,35 +114,76 @@ class Castelo:
 
         master.config(menu=barraDeMenus)
 
-        #Barra de acesso rápido das páginas
+        # Janela principal inicial
+        self.frame_princ = Frame(master, borderwidth=2, relief="sunken")
+
+        # Janelas dos menus
+        self.frame_cadastro_clientes = Frame(self.frame_princ, bg="red")
+        self.frame_orçamentos = Frame(self.frame_princ, bg="blue")
+        self.frame_ap_manutencao = Frame(self.frame_princ, bg="yellow")
+        self.frame_ap_entregue = Frame(self.frame_princ, bg="black")
+
+        # Barra de acesso rápido das páginas
 
         menu_frame = Frame(master, borderwidth=2, relief='raised')
-        menu_frame.pack( fill=X)
+        menu_frame.pack(fill=X)
 
-        Button(menu_frame, text="1", height='2', width='5', relief='flat', command=self.abrirCliente).pack(side=LEFT)
-        Button(menu_frame, text="2", height='2', width='5', relief='flat', command=self.abrirCliente).pack(side=LEFT)
-        Button(menu_frame, text="3", height='2', width='5', relief='flat', command=self.abrirCliente).pack(side=LEFT)
-        Button(menu_frame, text="4", height='2', width='5', relief='flat', command=self.abrirCliente).pack(side=LEFT)
-        Button(menu_frame, text="5", height='2', width='5', relief='flat', command=self.abrirCliente).pack(side=LEFT)
-        Button(menu_frame, text="6", height='2', width='5', relief='flat', command=self.abrirCliente).pack(side=LEFT)
+        Button(menu_frame, text="1", height='2', width='5', relief='flat', command=self.abrirJanelaCliente).pack(side=LEFT)
+        Button(menu_frame, text="2", height='2', width='5', relief='flat', command=self.abrirJanelaOrçamento).pack(side=LEFT)
+        Button(menu_frame, text="3", height='2', width='5', relief='flat', command=self.abrirJanelaApmanutencao).pack(side=LEFT)
+        Button(menu_frame, text="4", height='2', width='5', relief='flat', command=self.abrirJanelaApEntregues).pack(side=LEFT)
+        Button(menu_frame, text="5", height='2', width='5', relief='flat', command=master.quit).pack(side=LEFT)
+        horario_menu = Label(menu_frame, text="Quinta feira, 16 de setembro de 2021", font=('Verdana', '12', 'bold'),
+                             fg="gray")
+        horario_menu.pack(side=BOTTOM)
 
-
-        #Barra de logo
-
+        # Barra de logo
         logo_frame = Frame(master, borderwidth=1, relief='sunken')
-        logo_frame.pack(fill=X, ipady=16)
+        logo_frame.pack(fill=X)
+        l_logo = Label(logo_frame, text="Logo", bg="green", font=('Verdana', '10', 'bold'))
+        l_logo.pack(side=LEFT, padx=10)
+        nome_empresa_logo = Label(logo_frame, text="Castelo Máquinas", font=('Verdana', '14', 'bold'), fg="green")
+        nome_empresa_logo.pack(side=LEFT, padx=10)
 
+        # Iniciando Janela Principal
+        self.frame_princ.pack(fill="both", expand=TRUE)
 
+        # Barra inferior de tarefas
+        frame_inferior = Frame(master, borderwidth=1, relief='raised')
+        frame_inferior.pack(ipady=3, fill=X)
+        label_inferior = Label(frame_inferior, text='Castelo Máquinas - Controle de Máquinas e Estoque', borderwidth=1,
+                               relief='sunken', font=('Verdana', '10'))
+        label_inferior.pack(side=LEFT, ipadx=5)
+
+        self.nome_frame = self.frame_cadastro_clientes
 
     def semComando(self):
         print('Clientes')
 
-    def abrirCliente(self):
-        exec(open("cliente_layout.py").read())
+    def abrirJanelaCliente(self):
+        self.nome_frame.pack_forget()
+        self.frame_cadastro_clientes.pack(fill="both", expand=TRUE)
+        self.nome_frame = self.frame_cadastro_clientes
+
+    def abrirJanelaOrçamento(self):
+        self.nome_frame.pack_forget()
+        self.frame_orçamentos.pack(fill="both", expand=TRUE)
+        self.nome_frame = self.frame_orçamentos
+
+    def abrirJanelaApmanutencao(self):
+        self.nome_frame.pack_forget()
+        self.frame_ap_manutencao.pack(fill="both", expand=TRUE)
+        self.nome_frame = self.frame_ap_manutencao
+
+    def abrirJanelaApEntregues(self):
+        self.nome_frame.pack_forget()
+        self.frame_ap_entregue.pack(fill="both", expand=TRUE)
+        self.nome_frame = self.frame_ap_entregue
 
 
-root = Tk()
+root2 = Tk()
 # Application(root)
-# Passwords(root)
-Castelo(root)
-root.mainloop()
+# Passwords(root1)
+Castelo(root2)
+# root1.mainloop()
+root2.mainloop()
