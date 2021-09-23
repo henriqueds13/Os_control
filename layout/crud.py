@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import ttk
 import os
 
 
@@ -117,8 +118,114 @@ class Castelo:
         # Janela principal inicial
         self.frame_princ = Frame(master, borderwidth=2, relief="sunken")
 
-        # Janelas dos menus
-        self.frame_cadastro_clientes = Frame(self.frame_princ, bg="red")
+        # Janela cadastro de clientes
+        font_label = ('Verdana', '9', 'bold')
+        self.frame_cadastro_clientes = Frame(self.frame_princ)
+
+        self.subframe_cadastro_cliente = Frame(self.frame_cadastro_clientes)
+        self.cadastro_label_frame = LabelFrame(self.subframe_cadastro_cliente, text='Digite um Nome para Pesquisar',
+                                               font=font_label, fg='blue',
+                                               width=200)  # Frame de pesquisa e inserção de clientes
+
+        self.subframe2_entry_cliente = Frame(self.cadastro_label_frame)
+        self.entrada_pesquisa_cliente = Entry(self.subframe2_entry_cliente, width=40, bg='yellow') # Entrada para pesquisa
+
+        self.frame_num_clientes = LabelFrame(self.subframe2_entry_cliente, text='Núm de Clientes')
+        Label(self.frame_num_clientes, text=2, fg='blue', font='bold').pack()
+
+        self.scrollbar = Scrollbar(self.cadastro_label_frame, orient=HORIZONTAL) # Scrollbar da treeview
+
+
+        self.tree_cliente = ttk.Treeview(self.cadastro_label_frame, columns=('nome', 'endereço', 'bairro','telefone'),
+                                         show='headings', xscrollcommand=self.scrollbar.set) # TreeView listagem de clientes
+        self.tree_cliente.column('nome', width=100,  minwidth=100, stretch=False)
+        self.tree_cliente.column('endereço', width=200, minwidth=100, stretch=False)
+        self.tree_cliente.column('bairro', width=100,  minwidth=100, stretch=False)
+        self.tree_cliente.column('telefone', width=100,  minwidth=100, stretch=False)
+        self.tree_cliente.heading('nome', text='Nome')
+        self.tree_cliente.heading('endereço', text='Endereço')
+        self.tree_cliente.heading('bairro', text='Bairro')
+        self.tree_cliente.heading('telefone', text='Telefone')
+
+        self.subframe3_botoes_cliente = Frame(self.cadastro_label_frame)
+        self.botao_novo_cliente = Button(self.subframe3_botoes_cliente, text="Novo Cliente", width=10, wraplength=50,
+                                         font=font_label, underline=0, bg='#959595')
+        self.botao_excluir_cliente = Button(self.subframe3_botoes_cliente, text="Excluir Cliente", width=10,
+                                            wraplength=50, font=font_label, underline=0, bg='#BEC7C7')
+        self.botao_alterar_cliente = Button(self.subframe3_botoes_cliente, text="Alterar Cadastro", width=10,
+                                            wraplength=70, font=font_label, underline=0, bg='#959595')
+        self.botao_localizar_cliente = Button(self.subframe3_botoes_cliente, text="Localizar Cliente", width=10,
+                                              wraplength=70, font=font_label, underline=0, bg='#BEC7C7')
+
+        self.tree_cliente.insert('', 'end', values=('Henrique', 'Rua Nosssa Senhora das Dores', 'Centro', '98428-8565'))
+        self.tree_cliente.insert('', 'end', values=('Hugo', 'Rua Nosssa Senhora das Dores', 'Centro', '98428-8565'))
+
+        self.subframe_cadastro_cliente.grid(row=0, column=0)
+        self.cadastro_label_frame.pack(side=LEFT, padx=5, pady=5, ipadx=7)
+        self.subframe2_entry_cliente.pack(fill=X, pady=5)
+        self.entrada_pesquisa_cliente.pack(side=LEFT, padx=7)
+        self.frame_num_clientes.pack(side=RIGHT, padx=7)
+        self.tree_cliente.pack()
+        self.scrollbar.config(command=self.tree_cliente.xview)
+        self.scrollbar.pack(fill=X, padx=7)
+        self.subframe3_botoes_cliente.pack(fill='x', padx=20, pady=10)
+        self.botao_novo_cliente.pack(side='left')
+        self.botao_excluir_cliente.pack(side='left', padx=10)
+        self.botao_localizar_cliente.pack(side='right')
+        self.botao_alterar_cliente.pack(side='right', padx=10)
+
+
+        self.subframe_listagem_clientes = Frame(self.subframe_cadastro_cliente, height=500)
+        self.listagem_label_frame = LabelFrame(self.subframe_listagem_clientes, text='Dados do Cliente',
+                                               font=font_label,
+                                               fg='blue')  # Frame onde mostra os dados do cliente pesquisado
+        #Dados dos clientes
+        Label(self.listagem_label_frame, text="Id: ", font=font_label).grid(row=0, column=0, sticky='e')
+        Label(self.listagem_label_frame, text="01", fg="#4146A6", font=font_label).grid(row=0, column=1, sticky='w')
+        Label(self.listagem_label_frame, text="Nome: ", font=font_label).grid(row=1, column=0, sticky='e')
+        Label(self.listagem_label_frame, text="Henrique", fg="#4146A6", font=font_label).grid(row=1, column=1, sticky='w')
+        Label(self.listagem_label_frame, text="Endereço: ", font=font_label).grid(row=2, column=0, sticky='e')
+        Label(self.listagem_label_frame, text="Rua Nossa senhora das Dores, 657", fg="#4146A6", font=font_label).grid(row=2, column=1, sticky='w')
+        Label(self.listagem_label_frame, text="Complemento: ", font=font_label).grid(row=3, column=0, sticky='e')
+        Label(self.listagem_label_frame, text="", fg="#4146A6", font=font_label).grid(row=3, column=1, sticky='w')
+        Label(self.listagem_label_frame, text="Bairro: ", font=font_label).grid(row=4, column=0, sticky='e')
+        Label(self.listagem_label_frame, text="Centro", fg="#4146A6", font=font_label).grid(row=4, column=1, sticky='w')
+        Label(self.listagem_label_frame, text="Cidade: ", font=font_label).grid(row=5, column=0, sticky='e')
+        Label(self.listagem_label_frame, text="Artur Nogueira", fg="#4146A6", font=font_label).grid(row=5, column=1, sticky='w')
+        Label(self.listagem_label_frame, text="Estado: ", font=font_label).grid(row=6, column=0, sticky='e')
+        Label(self.listagem_label_frame, text="SP", fg="#4146A6", font=font_label).grid(row=6, column=1, sticky='w')
+        Label(self.listagem_label_frame, text="CEP: ", font=font_label).grid(row=7, column=0, sticky='e')
+        Label(self.listagem_label_frame, text="13160-166", fg="#4146A6", font=font_label).grid(row=7, column=1, sticky='w')
+        Label(self.listagem_label_frame, text="Tel. Residêncial: ", font=font_label).grid(row=8, column=0, sticky='e')
+        Label(self.listagem_label_frame, text="", fg="#4146A6", font=font_label).grid(row=8, column=1, sticky='w')
+        Label(self.listagem_label_frame, text="Whatsapp: ", font=font_label).grid(row=9, column=0, sticky='e')
+        Label(self.listagem_label_frame, text="98428-8565", fg="#4146A6", font=font_label).grid(row=9, column=1, sticky='w')
+        Label(self.listagem_label_frame, text="Tel. Comercial: ", font=font_label).grid(row=10, column=0, sticky='e')
+        Label(self.listagem_label_frame, text="", fg="#4146A6", font=font_label).grid(row=10, column=1, sticky='w')
+        Label(self.listagem_label_frame, text="Celular: ", font=font_label).grid(row=11, column=0, sticky='e')
+        Label(self.listagem_label_frame, text="", fg="#4146A6", font=font_label).grid(row=11, column=1, sticky='w')
+        Label(self.listagem_label_frame, text="Obs: ", font=font_label).grid(row=12, column=0, sticky='e')
+        Label(self.listagem_label_frame, text="", fg="#4146A6", font=font_label).grid(row=12, column=1, sticky='w')
+        Label(self.listagem_label_frame, text="Operador: ", font=font_label).grid(row=13, column=0, sticky='e')
+        Label(self.listagem_label_frame, text="", fg="#4146A6", font=font_label).grid(row=13, column=1, sticky='w')
+        Label(self.listagem_label_frame, text="Data Cadastro: ", font=font_label).grid(row=14, column=0, sticky='e')
+        Label(self.listagem_label_frame, text="", fg="#4146A6", font=font_label).grid(row=14, column=1, sticky='w')
+
+        # Botoes de ordem de serviço
+
+        self.subframe4_botoes_os = Frame(self.subframe_listagem_clientes)
+        self.botao_nova_os = Button(self.subframe4_botoes_os, text="Ordem de Serviço", width=10, wraplength=70,
+                                         font=font_label, underline=0, bg='#959595')
+        self.botao_fechar_cliente = Button(self.subframe4_botoes_os, text="Fechar", width=10,
+                                            wraplength=50, font=font_label, underline=0, bg='#BEC7C7', height=2)
+
+        self.subframe_listagem_clientes.pack(side=TOP)
+        self.listagem_label_frame.pack(ipadx=10, ipady=10, padx=7, pady=5)
+        self.subframe4_botoes_os.pack(fill='x', padx=7, pady=10)
+        self.botao_nova_os.pack(side='left')
+        self.botao_fechar_cliente.pack(side='left', padx=10)
+
+        # Janela orçamento
         self.frame_orçamentos = Frame(self.frame_princ, bg="blue")
         self.frame_ap_manutencao = Frame(self.frame_princ, bg="yellow")
         self.frame_ap_entregue = Frame(self.frame_princ, bg="black")
@@ -128,10 +235,14 @@ class Castelo:
         menu_frame = Frame(master, borderwidth=2, relief='raised')
         menu_frame.pack(fill=X)
 
-        Button(menu_frame, text="1", height='2', width='5', relief='flat', command=self.abrirJanelaCliente).pack(side=LEFT)
-        Button(menu_frame, text="2", height='2', width='5', relief='flat', command=self.abrirJanelaOrçamento).pack(side=LEFT)
-        Button(menu_frame, text="3", height='2', width='5', relief='flat', command=self.abrirJanelaApmanutencao).pack(side=LEFT)
-        Button(menu_frame, text="4", height='2', width='5', relief='flat', command=self.abrirJanelaApEntregues).pack(side=LEFT)
+        Button(menu_frame, text="1", height='2', width='5', relief='flat', command=self.abrirJanelaCliente).pack(
+            side=LEFT)
+        Button(menu_frame, text="2", height='2', width='5', relief='flat', command=self.abrirJanelaOrçamento).pack(
+            side=LEFT)
+        Button(menu_frame, text="3", height='2', width='5', relief='flat', command=self.abrirJanelaApmanutencao).pack(
+            side=LEFT)
+        Button(menu_frame, text="4", height='2', width='5', relief='flat', command=self.abrirJanelaApEntregues).pack(
+            side=LEFT)
         Button(menu_frame, text="5", height='2', width='5', relief='flat', command=master.quit).pack(side=LEFT)
         horario_menu = Label(menu_frame, text="Quinta feira, 16 de setembro de 2021", font=('Verdana', '12', 'bold'),
                              fg="gray")
