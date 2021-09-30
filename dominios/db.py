@@ -40,9 +40,7 @@ class Cliente(Base):
 
     oss = relationship('OS', back_populates='cliente', cascade='delete')
 
-    def __repr__(self):
-        return f"Cliente: Id {self.id},nome: {self.nome}, celular: {self.celular}, endereço: {self.logradouro} {self.bairro}/" \
-               f"{self.cidade}, {self.uf}"
+
 
 
 class OS(Base):

@@ -1,6 +1,6 @@
 class Cliente():
-    def __init__(self, nome, operador, celular='', cpf_cnpj='', tel_fixo='', rg_ie='', logradouro='', uf='SP', bairro='', complemento='',
-                 cep=0000, cidade='', email='', whats='', contato='', indicacao=''):
+    def __init__(self, nome, operador, celular=' ', cpf_cnpj=' ', tel_fixo=' ', rg_ie=' ', logradouro=' ', uf='SP', bairro=' ', complemento=' ',
+                 cep=0000, cidade=' ', email=' ', whats=' ', contato=' ', indicacao=' '):
         self.__nome = nome
         self.__operador = operador
         self.__celular = celular

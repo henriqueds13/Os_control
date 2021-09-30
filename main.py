@@ -9,7 +9,6 @@ from repositorios import cliente_repositorio, produto_repositorio, tecnico_repos
 fabrica = fabrica_conexao.FabricaConexão()
 sessao = fabrica.criar_sessao()
 
-# nome_cliente = input("Digite o nome do cliente a ser procurado: ")
 # nome_cliente = input("Digite o nome do cliente: ")
 # operador = input("Operador: ")
 # cpf = input("cpf: ")
@@ -26,14 +25,13 @@ sessao = fabrica.criar_sessao()
 # email = input("email: ")
 # contato = input("contato: ")
 # indicacao = input("indicacão: ")
-
-# novo_cliente = cliente.Cliente(nome_cliente, operador, celular, cpf, tel, rg, logradouro, uf, bairro, complemento,
-#                                  cep, cidade, email, whats, contato, indicacao)
-repositorios = cliente_repositorio.ClienteRepositorio()
-# clientes = repositorios.listar_cliente_nome('Joao', sessao)
 #
-# for i in clientes:
-#     print (i)
+# novo_cliente = cliente.Cliente(nome_cliente, operador, celular, cpf, tel, rg, logradouro, uf, bairro, complemento,
+#                                 cep, cidade, email, whats, contato, indicacao)
+repositorios = cliente_repositorio.ClienteRepositorio()
+# repositorios.inserir_cliente(novo_cliente,sessao)
+clientes = repositorios.listar_cliente_nome('Joao', sessao)
+print(clientes.nome)
 
 #
 # repositorio.remover_cliente(id_cliente, sessao)
@@ -77,9 +75,6 @@ repositorio_os = os_repositorio.Os_repositorio()
 #tec = session.query(Tecnico).filter(Tecnico.nome == '').first()
 # nova_os = os.Os(equipamento=Equipamento, marca=marca, modelo=modelo, defeito=defeito, tecnico=tec)
 # repositorio_os.nova_os(2, nova_os, sessao)
-oss = repositorio_os.listar_os(sessao)
-
-print(oss)
 
 sessao.commit()
 sessao.close()
