@@ -141,9 +141,11 @@ class Castelo:
 
         self.scrollbar = Scrollbar(self.cadastro_label_frame, orient=HORIZONTAL)  # Scrollbar da treeview
 
-        self.tree_cliente = ttk.Treeview(self.cadastro_label_frame, columns=('id', 'nome', 'endereço', 'bairro', 'telefone'),
+        self.tree_cliente = ttk.Treeview(self.cadastro_label_frame,
+                                         columns=('id', 'nome', 'endereço', 'bairro', 'telefone'),
                                          show='headings',
-                                         xscrollcommand=self.scrollbar.set)  # TreeView listagem de clientes
+                                         xscrollcommand=self.scrollbar.set,
+                                         selectmode='browse')  # TreeView listagem de clientes
         self.tree_cliente.column('id', width=100, minwidth=100, stretch=False)
         self.tree_cliente.column('nome', width=100, minwidth=100, stretch=False)
         self.tree_cliente.column('endereço', width=200, minwidth=100, stretch=False)
@@ -168,7 +170,7 @@ class Castelo:
                                             command=self.janelaEditarCliente)
         self.botao_localizar_cliente = Button(self.subframe3_botoes_cliente, text="Localizar Cliente", width=10,
                                               wraplength=70, font=font_label, underline=0, bg='#BEC7C7',
-                                              command=self.popular)
+                                              command=self.semComando())
 
         self.subframe_cadastro_cliente.grid(row=0, column=0)
         self.cadastro_label_frame.pack(side=LEFT, padx=5, pady=5, ipadx=7)
@@ -188,50 +190,80 @@ class Castelo:
         self.listagem_label_frame = LabelFrame(self.subframe_listagem_clientes, text='Dados do Cliente',
                                                font=font_label,
                                                fg='blue')  # Frame onde mostra os dados do cliente pesquisado
-        # Dados dos clientes
-        cliente_selecionado = self.tree_cliente.selection()[0]
-        dado_cli = self.tree_cliente.item(cliente_selecionado, "values")
-        Label(self.listagem_label_frame, text="Id: ", font=font_label).grid(row=0, column=0, sticky='e')
-        Label(self.listagem_label_frame, text=dado_cli, fg="#4146A6", font=font_label).grid(row=0, column=1, sticky='w')
-        Label(self.listagem_label_frame, text="Nome: ", font=font_label).grid(row=1, column=0, sticky='e')
-        Label(self.listagem_label_frame, text="Henrique", fg="#4146A6", font=font_label).grid(row=1, column=1,
-                                                                                              sticky='w')
-        Label(self.listagem_label_frame, text="Endereço: ", font=font_label).grid(row=2, column=0, sticky='e')
-        Label(self.listagem_label_frame, text="Rua Nossa senhora das Dores, 657", fg="#4146A6", font=font_label).grid(
-            row=2, column=1, sticky='w')
-        Label(self.listagem_label_frame, text="Complemento: ", font=font_label).grid(row=3, column=0, sticky='e')
-        Label(self.listagem_label_frame, text="", fg="#4146A6", font=font_label).grid(row=3, column=1, sticky='w')
-        Label(self.listagem_label_frame, text="Bairro: ", font=font_label).grid(row=4, column=0, sticky='e')
-        Label(self.listagem_label_frame, text="Centro", fg="#4146A6", font=font_label).grid(row=4, column=1, sticky='w')
-        Label(self.listagem_label_frame, text="Cidade: ", font=font_label).grid(row=5, column=0, sticky='e')
-        Label(self.listagem_label_frame, text="Artur Nogueira", fg="#4146A6", font=font_label).grid(row=5, column=1,
-                                                                                                    sticky='w')
-        Label(self.listagem_label_frame, text="Estado: ", font=font_label).grid(row=6, column=0, sticky='e')
-        Label(self.listagem_label_frame, text="SP", fg="#4146A6", font=font_label).grid(row=6, column=1, sticky='w')
-        Label(self.listagem_label_frame, text="CEP: ", font=font_label).grid(row=7, column=0, sticky='e')
-        Label(self.listagem_label_frame, text="13160-166", fg="#4146A6", font=font_label).grid(row=7, column=1,
-                                                                                               sticky='w')
-        Label(self.listagem_label_frame, text="Tel. Residêncial: ", font=font_label).grid(row=8, column=0, sticky='e')
-        Label(self.listagem_label_frame, text="", fg="#4146A6", font=font_label).grid(row=8, column=1, sticky='w')
-        Label(self.listagem_label_frame, text="Whatsapp: ", font=font_label).grid(row=9, column=0, sticky='e')
-        Label(self.listagem_label_frame, text="98428-8565", fg="#4146A6", font=font_label).grid(row=9, column=1,
-                                                                                                sticky='w')
-        Label(self.listagem_label_frame, text="Tel. Comercial: ", font=font_label).grid(row=10, column=0, sticky='e')
-        Label(self.listagem_label_frame, text="", fg="#4146A6", font=font_label).grid(row=10, column=1, sticky='w')
-        Label(self.listagem_label_frame, text="Celular: ", font=font_label).grid(row=11, column=0, sticky='e')
-        Label(self.listagem_label_frame, text="", fg="#4146A6", font=font_label).grid(row=11, column=1, sticky='w')
-        Label(self.listagem_label_frame, text="Obs: ", font=font_label).grid(row=12, column=0, sticky='e')
-        Label(self.listagem_label_frame, text="", fg="#4146A6", font=font_label).grid(row=12, column=1, sticky='w')
-        Label(self.listagem_label_frame, text="Operador: ", font=font_label).grid(row=13, column=0, sticky='e')
-        Label(self.listagem_label_frame, text="", fg="#4146A6", font=font_label).grid(row=13, column=1, sticky='w')
-        Label(self.listagem_label_frame, text="Data Cadastro: ", font=font_label).grid(row=14, column=0, sticky='e')
-        Label(self.listagem_label_frame, text="", fg="#4146A6", font=font_label).grid(row=14, column=1, sticky='w')
 
+        # capturando dados da row
+        self.tree_cliente.focus_set()
+        children = self.tree_cliente.get_children()
+        if children:
+            self.tree_cliente.focus(children[0])
+            self.tree_cliente.selection_set(children[0])
+        self.cliente_selecionado = self.tree_cliente.focus()
+        self.dado_cli = self.tree_cliente.item(self.cliente_selecionado, "values")
+        self.cliente_dados = cliente_repositorio.ClienteRepositorio().listar_cliente_id(self.dado_cli[0], sessao)
+
+        # Dados dos clientes
+        Label(self.listagem_label_frame, text="Id: ", font=font_label).grid(row=0, column=0, sticky='e')
+        self.id_label = Label(self.listagem_label_frame, text=self.cliente_dados.id, fg="#4146A6", font=font_label)
+        self.id_label.grid(row=0, column=1, sticky='w')
+        Label(self.listagem_label_frame, text="Nome: ", font=font_label).grid(row=1, column=0, sticky='e')
+        self.nome_label = Label(self.listagem_label_frame, text=self.cliente_dados.nome, fg="#4146A6", font=font_label)
+        self.nome_label.grid(row=1, column=1, sticky='w')
+        Label(self.listagem_label_frame, text="Endereço: ", font=font_label).grid(row=2, column=0, sticky='e')
+        self.end_label = Label(self.listagem_label_frame, text=self.cliente_dados.logradouro, fg="#4146A6",
+                               font=font_label)
+        self.end_label.grid(row=2, column=1, sticky='w')
+        Label(self.listagem_label_frame, text="Complemento: ", font=font_label).grid(row=3, column=0, sticky='e')
+        self.compl_label = Label(self.listagem_label_frame, text=self.cliente_dados.complemento, fg="#4146A6",
+                                 font=font_label)
+        self.compl_label.grid(row=3, column=1, sticky='w')
+        Label(self.listagem_label_frame, text="Bairro: ", font=font_label).grid(row=4, column=0, sticky='e')
+        self.bairro_label = Label(self.listagem_label_frame, text=self.cliente_dados.bairro, fg="#4146A6",
+                                  font=font_label)
+        self.bairro_label.grid(row=4, column=1, sticky='w')
+        Label(self.listagem_label_frame, text="Cidade: ", font=font_label).grid(row=5, column=0, sticky='e')
+        self.cidade_label = Label(self.listagem_label_frame, text=self.cliente_dados.cidade, fg="#4146A6",
+                                  font=font_label)
+        self.cidade_label.grid(row=5, column=1, sticky='w')
+        Label(self.listagem_label_frame, text="Estado: ", font=font_label).grid(row=6, column=0, sticky='e')
+        self.estado_label = Label(self.listagem_label_frame, text=self.cliente_dados.uf, fg="#4146A6", font=font_label)
+        self.estado_label.grid(row=6, column=1, sticky='w')
+        Label(self.listagem_label_frame, text="CEP: ", font=font_label).grid(row=7, column=0, sticky='e')
+        self.cep_label = Label(self.listagem_label_frame, text=self.cliente_dados.cep, fg="#4146A6", font=font_label)
+        self.cep_label.grid(row=7, column=1, sticky='w')
+        Label(self.listagem_label_frame, text="Tel. Residêncial: ", font=font_label).grid(row=8, column=0, sticky='e')
+        self.telfix_label = Label(self.listagem_label_frame, text=self.cliente_dados.tel_fixo, fg="#4146A6",
+                                  font=font_label)
+        self.telfix_label.grid(row=8, column=1, sticky='w')
+        Label(self.listagem_label_frame, text="Whatsapp: ", font=font_label).grid(row=9, column=0, sticky='e')
+        self.whats_label = Label(self.listagem_label_frame, text=self.cliente_dados.whats, fg="#4146A6",
+                                 font=font_label)
+        self.whats_label.grid(row=9, column=1, sticky='w')
+        Label(self.listagem_label_frame, text="Tel. Comercial: ", font=font_label).grid(row=10, column=0, sticky='e')
+        self.telcom_label = Label(self.listagem_label_frame, text=self.cliente_dados.email, fg="#4146A6",
+                                  font=font_label)
+        self.telcom_label.grid(row=10, column=1, sticky='w')
+        Label(self.listagem_label_frame, text="Celular: ", font=font_label).grid(row=11, column=0, sticky='e')
+        self.cel_label = Label(self.listagem_label_frame, text=self.cliente_dados.celular, fg="#4146A6",
+                               font=font_label)
+        self.cel_label.grid(row=11, column=1, sticky='w')
+        Label(self.listagem_label_frame, text="Obs: ", font=font_label).grid(row=12, column=0, sticky='e')
+        # self.obs_label = Label(self.listagem_label_frame, self.cliente_dados.nome, fg="#4146A6", font=font_label)
+        # self.obs_label.grid(row=12, column=1, sticky='w')
+        Label(self.listagem_label_frame, text="Operador: ", font=font_label).grid(row=13, column=0, sticky='e')
+        self.op_label = Label(self.listagem_label_frame, text=self.cliente_dados.operador, fg="#4146A6",
+                              font=font_label)
+        self.op_label.grid(row=13, column=1, sticky='w')
+        Label(self.listagem_label_frame, text="Data Cadastro: ", font=font_label).grid(row=14, column=0, sticky='e')
+        self.datacad_label = Label(self.listagem_label_frame, text=self.cliente_dados.indicacao, fg="#4146A6",
+                                   font=font_label)
+        self.datacad_label.grid(row=14, column=1, sticky='w')
+
+        self.tree_cliente.bind("<ButtonRelease-1>", self.atualizarComClique)
         # Botoes de ordem de serviço
 
         self.subframe4_botoes_os = Frame(self.subframe_listagem_clientes)
         self.botao_nova_os = Button(self.subframe4_botoes_os, text="Ordem de Serviço", width=10, wraplength=70,
-                                    font=font_label, underline=0, bg='#959595')
+                                    font=font_label, underline=0, bg='#959595', command=self.semComando)
         self.botao_fechar_cliente = Button(self.subframe4_botoes_os, text="Fechar", width=10,
                                            wraplength=50, font=font_label, underline=0, bg='#BEC7C7', height=2,
                                            command=self.frame_cadastro_clientes.forget)
@@ -285,8 +317,10 @@ class Castelo:
 
         self.nome_frame = self.frame_cadastro_clientes
 
+
+
     def semComando(self):
-        print('Clientes')
+        print()
 
     def abrirJanelaCliente(self):
         self.nome_frame.pack_forget()
@@ -353,7 +387,8 @@ class Castelo:
         Button(self.botao_entr_frame, text="Confirmar Cadastro", width=10, wraplength=70,
                underline=0, font=('Verdana', '9', 'bold'), command=self.cadastrarCliente).grid()
         Button(self.botao_entr_frame, text="Cancelar", width=10, wraplength=70,
-               underline=0, font=('Verdana', '9', 'bold'), height=2, command=self.jan.destroy).grid(row=0, column=1, padx=10)
+               underline=0, font=('Verdana', '9', 'bold'), height=2, command=self.jan.destroy).grid(row=0, column=1,
+                                                                                                    padx=10)
 
         self.jan.transient(root2)
         self.jan.focus_force()
@@ -419,63 +454,144 @@ class Castelo:
         x_cordinate = int((self.w / 2) - (550 / 2))
         y_cordinate = int((self.h / 2) - (370 / 2))
         jan.geometry("{}x{}+{}+{}".format(550, 370, x_cordinate, y_cordinate))
-        Label(jan, text="Nome:", bg="#ffffe1").grid(sticky=W, padx=10)
-        self.cad_cli_nome = Entry(jan, width=40)
+
+        cliente_selecionado = self.tree_cliente.focus()
+        dado_cli = self.tree_cliente.item(cliente_selecionado, "values")
+        cliente_dados = cliente_repositorio.ClienteRepositorio().listar_cliente_id(dado_cli[0], sessao)
+
+        self.first_frame = Frame(jan, bg="#ffffe1")
+        self.first_frame.pack(fill=X)
+        self.first_intro_frame = Frame(self.first_frame, bg="#ffffe1")
+        self.first_intro_frame.pack(side=LEFT, ipadx=10)
+        Label(self.first_intro_frame, text="ID:", bg="#ffffe1").pack()
+        self.cad_cli_id = Label(self.first_intro_frame, text=dado_cli[0], width=10, relief=SUNKEN)
+        self.cad_cli_id.pack()
+        Label(self.first_frame, text="Operador:", bg="#ffffe1").pack(side=RIGHT, ipadx=10)
+        self.cad_cli_oper = Entry(self.first_frame, width=20)
+        self.cad_cli_oper.pack(side=RIGHT)
+        self.second_frame = Frame(jan, bg="#ffffe1")
+        self.second_frame.pack()
+        Label(self.second_frame, text="Nome:", bg="#ffffe1").grid(sticky=W, padx=10)
+        self.cad_cli_nome = Entry(self.second_frame, width=40)
+        self.cad_cli_nome.insert(0, cliente_dados.nome)
         self.cad_cli_nome.grid(row=1, column=0, stick=W, padx=10, columnspan=2)
-        Label(jan, text="CPF:", bg="#ffffe1").grid(row=0, column=2, sticky=W)
-        self.cad_cli_cpf = Entry(jan, width=25)
+        Label(self.second_frame, text="CPF:", bg="#ffffe1").grid(row=0, column=2, sticky=W)
+        self.cad_cli_cpf = Entry(self.second_frame, width=25)
+        self.cad_cli_cpf.insert(0, cliente_dados.cpf_cnpj)
         self.cad_cli_cpf.grid(row=1, column=2, stick=W)
-        Label(jan, text="Endereço:", bg="#ffffe1").grid(sticky=W, padx=10)
-        self.cad_cli_end = Entry(jan, width=50)
+        Label(self.second_frame, text="Endereço:", bg="#ffffe1").grid(sticky=W, padx=10)
+        self.cad_cli_end = Entry(self.second_frame, width=50)
+        self.cad_cli_end.insert(0, cliente_dados.logradouro)
         self.cad_cli_end.grid(row=3, column=0, padx=10, columnspan=2, sticky=W)
-        Label(jan, text="Complemento:", bg="#ffffe1").grid(row=2, column=2, sticky=W)
-        self.cad_cli_compl = Entry(jan, width=27)
+        Label(self.second_frame, text="Complemento:", bg="#ffffe1").grid(row=2, column=2, sticky=W)
+        self.cad_cli_compl = Entry(self.second_frame, width=27)
+        self.cad_cli_compl.insert(0, cliente_dados.complemento)
         self.cad_cli_compl.grid(row=3, column=2, sticky=W)
-        Label(jan, text="Bairro:", bg="#ffffe1").grid(sticky=W, padx=10)
-        self.cad_cli_bairro = Entry(jan, width=25)
+        Label(self.second_frame, text="Bairro:", bg="#ffffe1").grid(sticky=W, padx=10)
+        self.cad_cli_bairro = Entry(self.second_frame, width=25)
+        self.cad_cli_bairro.insert(0, cliente_dados.bairro)
         self.cad_cli_bairro.grid(row=5, column=0, padx=10, sticky=W)
-        Label(jan, text="Cidade:", bg="#ffffe1").grid(row=4, column=1, sticky=W, padx=10)
-        self.cad_cli_cid = Entry(jan, width=25)
+        Label(self.second_frame, text="Cidade:", bg="#ffffe1").grid(row=4, column=1, sticky=W, padx=10)
+        self.cad_cli_cid = Entry(self.second_frame, width=25)
+        self.cad_cli_cid.insert(0, cliente_dados.cidade)
         self.cad_cli_cid.grid(row=5, column=1)
-        Label(jan, text="Estado:", bg="#ffffe1").grid(row=4, column=2, sticky=W, padx=10)
-        self.cad_cli_estado = Entry(jan, width=15)
+        Label(self.second_frame, text="Estado:", bg="#ffffe1").grid(row=4, column=2, sticky=W, padx=10)
+        self.cad_cli_estado = Entry(self.second_frame, width=15)
+        self.cad_cli_estado.insert(0, cliente_dados.uf)
         self.cad_cli_estado.grid(row=5, column=2, sticky=W, padx=10)
-        Label(jan, text="Cep:", bg="#ffffe1").grid(row=6, column=0, sticky=W, padx=10)
-        self.cep_frame = Frame(jan, bg="#ffffe1")
+        Label(self.second_frame, text="Cep:", bg="#ffffe1").grid(row=6, column=0, sticky=W, padx=10)
+        self.cep_frame = Frame(self.second_frame, bg="#ffffe1")
         self.cep_frame.grid(row=7, column=0, columnspan=2, sticky=W)
         self.cad_cli_cep = Entry(self.cep_frame, width=20, )
+        self.cad_cli_cep.insert(0, cliente_dados.cep)
         self.cad_cli_cep.grid(padx=10)
         Button(self.cep_frame, text="CEP Online").grid(row=0, column=1)
-        self.contato_frame = Frame(jan, bg="#ffffe1")
+        self.contato_frame = Frame(self.second_frame, bg="#ffffe1")
         self.contato_frame.grid(row=8, column=0, columnspan=2, sticky=W)
         Label(self.contato_frame, text="Tel Fixo:", bg="#ffffe1").grid(row=0, column=0, sticky=W, padx=10)
         self.cad_cli_telfix = Entry(self.contato_frame, width=25, )
+        self.cad_cli_telfix.insert(0, cliente_dados.tel_fixo)
         self.cad_cli_telfix.grid(padx=10)
         Label(self.contato_frame, text="Tel Comercial:", bg="#ffffe1").grid(row=0, column=1, sticky=W, padx=10)
         self.cad_cli_telcomer = Entry(self.contato_frame, width=25, )
         self.cad_cli_telcomer.grid(row=1, column=1, padx=10)
         Label(self.contato_frame, text="Celular:", bg="#ffffe1").grid(row=2, column=0, sticky=W, padx=10)
         self.cad_cli_cel = Entry(self.contato_frame, width=25, )
+        self.cad_cli_cel.insert(0, cliente_dados.celular)
         self.cad_cli_cel.grid(row=3, column=0, padx=10)
         Label(self.contato_frame, text="Whatsapp:", bg="#ffffe1").grid(row=2, column=1, sticky=W, padx=10)
-        self.cad_cli_whats = Entry(self.contato_frame, width=25, )
+        self.cad_cli_whats = Entry(self.contato_frame, width=25)
+        self.cad_cli_whats.insert(0, cliente_dados.whats)
         self.cad_cli_whats.grid(row=3, column=1, padx=10)
-        Label(jan, text="Email:", bg="#ffffe1").grid(row=9, column=0, sticky=W, padx=10)
-        self.cad_cli_email = Entry(jan, width=40)
+        Label(self.second_frame, text="Email:", bg="#ffffe1").grid(row=9, column=0, sticky=W, padx=10)
+        self.cad_cli_email = Entry(self.second_frame, width=40)
+        self.cad_cli_email.insert(0, cliente_dados.email)
         self.cad_cli_email.grid(row=10, column=0, sticky=W, padx=10, columnspan=2)
-        Label(jan, text="Operador:", bg="#ffffe1").grid(row=11, column=1, sticky=W, padx=10)
-        self.cad_cli_oper = Entry(jan, width=20)
-        self.cad_cli_oper.grid(row=12, column=1, sticky=W, padx=10)
-        self.botao_entr_frame = Frame(jan, bg="#ffffe1")
+        self.botao_entr_frame = Frame(self.second_frame, bg="#ffffe1")
         self.botao_entr_frame.grid(row=12, column=2, sticky=W)
-        Button(self.botao_entr_frame, text="Confirmar Cadastro", width=10, wraplength=70,
-               underline=0, font=('Verdana', '9', 'bold'), command=self.cadastrarCliente).grid()
+        self.alterar_button = Button(self.botao_entr_frame, text="Editar Cadastro", width=10, wraplength=70,
+               underline=0, font=('Verdana', '9', 'bold'),
+               command=lambda: [self.editarCliente(), self.atualizandoDados()])
+        self.alterar_button.grid()
         Button(self.botao_entr_frame, text="Cancelar", width=10, wraplength=70,
                underline=0, font=('Verdana', '9', 'bold'), height=2, command=jan.destroy).grid(row=0, column=1, padx=10)
 
         jan.transient(root2)
         jan.focus_force()
         jan.grab_set()
+
+    def editarCliente(self):
+        try:
+            cliente_selecionado = self.tree_cliente.focus()
+            dado_cli = self.tree_cliente.item(cliente_selecionado, "values")
+            nome = self.cad_cli_nome.get()
+            cpf = self.cad_cli_cpf.get()
+            endereco = self.cad_cli_end.get()
+            complemento = self.cad_cli_compl.get()
+            bairro = self.cad_cli_bairro.get()
+            cidade = self.cad_cli_cid.get()
+            estado = self.cad_cli_estado.get()
+            cep = self.cad_cli_cep.get()
+            tel_fixo = self.cad_cli_telfix.get()
+            tel_comercial = self.cad_cli_telcomer.get()
+            celular = self.cad_cli_cel.get()
+            whats = self.cad_cli_whats.get()
+            email = self.cad_cli_email.get()
+            operador = self.cad_cli_oper.get()
+
+            novo_cliente = cliente.Cliente(nome, operador, celular, cpf, tel_fixo, '-', endereco, estado, bairro,
+                                           complemento, cep, cidade, email, whats, '-', '-')
+            repositorio = cliente_repositorio.ClienteRepositorio()
+            repositorio.editar_cliente(dado_cli[0], novo_cliente, sessao)
+            sessao.commit()
+            self.popular()
+        except:
+            messagebox.showinfo(title="ERRO", message="ERRO")
+        finally:
+            sessao.close()
+
+    def atualizandoDados(self):
+        cliente_selecionado = self.tree_cliente.focus()
+        dado_cli = self.tree_cliente.item(cliente_selecionado, "values")
+        cliente_dados = cliente_repositorio.ClienteRepositorio().listar_cliente_id(dado_cli[0], sessao)
+        self.id_label.config(text=cliente_dados.id)
+        self.nome_label.config(text=cliente_dados.nome)
+        self.end_label.config(text=cliente_dados.logradouro)
+        self.compl_label.config(text=cliente_dados.complemento)
+        self.bairro_label.config(text=cliente_dados.bairro)
+        self.cidade_label.config(text=cliente_dados.cidade)
+        self.estado_label.config(text=cliente_dados.uf)
+        self.cep_label.config(text=cliente_dados.cep)
+        self.telfix_label.config(text=cliente_dados.tel_fixo)
+        self.whats_label.config(text=cliente_dados.whats)
+        self.telcom_label.config(text=cliente_dados.email)
+        self.cel_label.config(text=cliente_dados.celular)
+        # self.obs_label.config(text=cliente_dados.contato)
+        self.op_label.config(text=cliente_dados.operador)
+        self.datacad_label.config(text=cliente_dados.indicacao)
+
+    def atualizarComClique(self, event):
+        self.atualizandoDados()
 
     def abrirJanelaOrçamento(self):
         self.nome_frame.pack_forget()
