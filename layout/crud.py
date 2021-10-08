@@ -276,8 +276,188 @@ class Castelo:
 
         # Janela orçamento
         self.frame_orçamentos = Frame(self.frame_princ, bg="blue")
-        self.frame_ap_manutencao = Frame(self.frame_princ, bg="yellow")
-        self.frame_ap_entregue = Frame(self.frame_princ, bg="black")
+
+        # ------------------------------- Janela Aparelhos em Manutenção------------------------------------------------
+
+        self.frame_ap_manutencao = Frame(self.frame_princ)
+        self.subframe_ap_manut1 = Frame(self.frame_ap_manutencao)
+        self.subframe_ap_manut1.pack(fill=BOTH)
+        self.subframe_ap_manut2 = Frame(self.frame_ap_manutencao, bg="#D9D0C1", height=70)
+        self.subframe_ap_manut2.pack(fill=X, side=BOTTOM)
+
+        self.scrollbar_manut_v = Scrollbar(self.subframe_ap_manut1, orient=VERTICAL)  # Scrollbar da treeview vert
+        self.scrollbar_manut_h = Scrollbar(self.subframe_ap_manut1, orient=HORIZONTAL)  # Scrollbar da treeview horiz
+
+        self.tree_ap_manut = ttk.Treeview(self.subframe_ap_manut1,
+                                          columns=('os', 'entrada', 'cliente', 'aparelho', 'marca', 'modelo', 'tipo',
+                                                   'status', 'dias', 'valor', 'tecnico', 'operador', 'defeito',
+                                                   'num_serie', 'chassis', 'data_orc', 'data_entreg', 'hora',
+                                                   'id_cliente'),
+                                          show='headings',
+                                          xscrollcommand=self.scrollbar_manut_h.set,
+                                          yscrollcommand=self.scrollbar_manut_v.set,
+                                          selectmode='browse',
+                                          height=41)  # TreeView listagem de aparelhos em manutençãp
+
+        self.tree_ap_manut.column('os', width=100, minwidth=100, stretch=False)
+        self.tree_ap_manut.column('entrada', width=100, minwidth=10, stretch=False)
+        self.tree_ap_manut.column('cliente', width=200, minwidth=10, stretch=False)
+        self.tree_ap_manut.column('aparelho', width=100, minwidth=10, stretch=False)
+        self.tree_ap_manut.column('marca', width=100, minwidth=10, stretch=False)
+        self.tree_ap_manut.column('modelo', width=100, minwidth=10, stretch=False)
+        self.tree_ap_manut.column('tipo', width=100, minwidth=10, stretch=False)
+        self.tree_ap_manut.column('status', width=100, minwidth=10, stretch=False)
+        self.tree_ap_manut.column('dias', width=100, minwidth=10, stretch=False)
+        self.tree_ap_manut.column('valor', width=100, minwidth=10, stretch=False)
+        self.tree_ap_manut.column('tecnico', width=100, minwidth=10, stretch=False)
+        self.tree_ap_manut.column('operador', width=100, minwidth=10, stretch=False)
+        self.tree_ap_manut.column('defeito', width=100, minwidth=10, stretch=False)
+        self.tree_ap_manut.column('num_serie', width=100, minwidth=10, stretch=False)
+        self.tree_ap_manut.column('chassis', width=100, minwidth=10, stretch=False)
+        self.tree_ap_manut.column('data_orc', width=100, minwidth=10, stretch=False)
+        self.tree_ap_manut.column('data_entreg', width=100, minwidth=10, stretch=False)
+        self.tree_ap_manut.column('hora', width=100, minwidth=10, stretch=False)
+        self.tree_ap_manut.column('id_cliente', width=100, minwidth=10, stretch=False)
+
+        self.tree_ap_manut.heading('#0', text='', anchor=CENTER)
+        self.tree_ap_manut.heading('os', text='OS')
+        self.tree_ap_manut.heading('entrada', text='ENTRADA')
+        self.tree_ap_manut.heading('cliente', text='CLIENTE')
+        self.tree_ap_manut.heading('aparelho', text='APARELHO')
+        self.tree_ap_manut.heading('marca', text='MARCA')
+        self.tree_ap_manut.heading('modelo', text='MODELO')
+        self.tree_ap_manut.heading('tipo', text='TIPO')
+        self.tree_ap_manut.heading('status', text='STATUS')
+        self.tree_ap_manut.heading('dias', text='DIAS')
+        self.tree_ap_manut.heading('valor', text='VALOR')
+        self.tree_ap_manut.heading('tecnico', text='TECNICO')
+        self.tree_ap_manut.heading('operador', text='OPERADOR')
+        self.tree_ap_manut.heading('defeito', text='DEFEITO')
+        self.tree_ap_manut.heading('num_serie', text='NUM SERIE')
+        self.tree_ap_manut.heading('chassis', text='CHASSI')
+        self.tree_ap_manut.heading('data_orc', text='DATA ORÇAMENTO')
+        self.tree_ap_manut.heading('data_entreg', text='DATA ENTREGA')
+        self.tree_ap_manut.heading('hora', text='HORA')
+        self.tree_ap_manut.heading('id_cliente', text='ID CLIENTE')
+
+        self.scrollbar_manut_v.config(command=self.tree_ap_manut.yview)
+        self.scrollbar_manut_v.pack(fill=Y, side=RIGHT)
+        self.tree_ap_manut.pack()
+        self.scrollbar_manut_h.config(command=self.tree_ap_manut.xview)
+        self.scrollbar_manut_h.pack(fill=X)
+
+        self.label_pesquisa_manut = LabelFrame(self.subframe_ap_manut2, text="Digite um Nome para Pesquisar",
+                                               bg="#D9D0C1")
+        self.label_pesquisa_manut.pack(side=LEFT, padx=10, pady=5)
+        self.entr_pesq_manut = Entry(self.label_pesquisa_manut, relief=SUNKEN, width=35)
+        self.entr_pesq_manut.pack(side=LEFT, padx=5)
+        self.botao_pesqu_manut = Button(self.label_pesquisa_manut, text="C", width=5)
+        self.botao_pesqu_manut.pack(side=RIGHT, padx=5, ipady=5, pady=2)
+
+        self.label_n_aparelhos = LabelFrame(self.subframe_ap_manut2, text="N Aparelhos", bg="#D9D0C1")
+        self.label_n_aparelhos.pack(side=LEFT, padx=20, pady=5, ipadx=5)
+        self.widget1_n_aparelhos = Label(self.label_n_aparelhos, text="1", bg="#D9D0C1")
+        self.widget1_n_aparelhos.pack(side=LEFT, padx=5, pady=10)
+        self.widget2_n_aparelhos = Label(self.label_n_aparelhos, text="Aparelhos", bg="#D9D0C1")
+        self.widget2_n_aparelhos.pack(side=RIGHT, padx=5)
+
+        self.label_botoes_ap_mant = Label(self.subframe_ap_manut2, bg="#D9D0C1")
+        self.label_botoes_ap_mant.pack(side=LEFT, pady=5, padx= 100)
+        Button(self.label_botoes_ap_mant, text="1", width=5).pack(side=LEFT, ipady=7, padx=5)
+        Button(self.label_botoes_ap_mant, text="2", width=5).pack(side=LEFT, ipady=7, padx=5)
+        Button(self.label_botoes_ap_mant, text="3", width=5).pack(side=LEFT, ipady=7, padx=5)
+        Button(self.label_botoes_ap_mant, text="4", width=5).pack(side=LEFT, ipady=7, padx=5)
+
+        # ------------------------------- Janela Aparelhos Entregues----------------------------------------------
+        self.frame_ap_entregue = Frame(self.frame_princ)
+
+        self.subframe_ap_entr1 = Frame(self.frame_ap_entregue)
+        self.subframe_ap_entr1.pack(fill=BOTH)
+        self.subframe_ap_entr2 = Frame(self.frame_ap_entregue, bg="#F2E8B3", height=70)
+        self.subframe_ap_entr2.pack(fill=X, side=BOTTOM)
+
+        self.scrollbar_entr_v = Scrollbar(self.subframe_ap_entr1, orient=VERTICAL)  # Scrollbar da treeview vert
+        self.scrollbar_entr_h = Scrollbar(self.subframe_ap_entr1, orient=HORIZONTAL)  # Scrollbar da treeview horiz
+
+        self.tree_ap_entr = ttk.Treeview(self.subframe_ap_entr1,
+                                          columns=('os', 'saida', 'cliente', 'aparelho', 'marca', 'modelo', 'tipo',
+                                                   'status', 'dias', 'valor', 'tecnico', 'operador', 'defeito',
+                                                   'num_serie', 'chassis', 'data_orc', 'data_entreg', 'hora',
+                                                   'id_cliente'),
+                                          show='headings',
+                                          xscrollcommand=self.scrollbar_entr_h.set,
+                                          yscrollcommand=self.scrollbar_entr_v.set,
+                                          selectmode='browse',
+                                          height=41)  # TreeView listagem de aparelhos em manutençãp
+
+        self.tree_ap_entr.column('os', width=100, minwidth=100, stretch=False)
+        self.tree_ap_entr.column('saida', width=100, minwidth=10, stretch=False)
+        self.tree_ap_entr.column('cliente', width=200, minwidth=10, stretch=False)
+        self.tree_ap_entr.column('aparelho', width=100, minwidth=10, stretch=False)
+        self.tree_ap_entr.column('marca', width=100, minwidth=10, stretch=False)
+        self.tree_ap_entr.column('modelo', width=100, minwidth=10, stretch=False)
+        self.tree_ap_entr.column('tipo', width=100, minwidth=10, stretch=False)
+        self.tree_ap_entr.column('status', width=100, minwidth=10, stretch=False)
+        self.tree_ap_entr.column('dias', width=100, minwidth=10, stretch=False)
+        self.tree_ap_entr.column('valor', width=100, minwidth=10, stretch=False)
+        self.tree_ap_entr.column('tecnico', width=100, minwidth=10, stretch=False)
+        self.tree_ap_entr.column('operador', width=100, minwidth=10, stretch=False)
+        self.tree_ap_entr.column('defeito', width=100, minwidth=10, stretch=False)
+        self.tree_ap_entr.column('num_serie', width=100, minwidth=10, stretch=False)
+        self.tree_ap_entr.column('chassis', width=100, minwidth=10, stretch=False)
+        self.tree_ap_entr.column('data_orc', width=100, minwidth=10, stretch=False)
+        self.tree_ap_entr.column('data_entreg', width=100, minwidth=10, stretch=False)
+        self.tree_ap_entr.column('hora', width=100, minwidth=10, stretch=False)
+        self.tree_ap_entr.column('id_cliente', width=100, minwidth=10, stretch=False)
+
+        self.tree_ap_entr.heading('#0', text='', anchor=CENTER)
+        self.tree_ap_entr.heading('os', text='OS')
+        self.tree_ap_entr.heading('saida', text='SAÍDA')
+        self.tree_ap_entr.heading('cliente', text='CLIENTE')
+        self.tree_ap_entr.heading('aparelho', text='APARELHO')
+        self.tree_ap_entr.heading('marca', text='MARCA')
+        self.tree_ap_entr.heading('modelo', text='MODELO')
+        self.tree_ap_entr.heading('tipo', text='TIPO')
+        self.tree_ap_entr.heading('status', text='STATUS')
+        self.tree_ap_entr.heading('dias', text='DIAS')
+        self.tree_ap_entr.heading('valor', text='VALOR')
+        self.tree_ap_entr.heading('tecnico', text='TECNICO')
+        self.tree_ap_entr.heading('operador', text='OPERADOR')
+        self.tree_ap_entr.heading('defeito', text='DEFEITO')
+        self.tree_ap_entr.heading('num_serie', text='NUM SERIE')
+        self.tree_ap_entr.heading('chassis', text='CHASSI')
+        self.tree_ap_entr.heading('data_orc', text='DATA ORÇAMENTO')
+        self.tree_ap_entr.heading('data_entreg', text='DATA ENTREGA')
+        self.tree_ap_entr.heading('hora', text='HORA')
+        self.tree_ap_entr.heading('id_cliente', text='ID CLIENTE')
+
+        self.scrollbar_entr_v.config(command=self.tree_ap_entr.yview)
+        self.scrollbar_entr_v.pack(fill=Y, side=RIGHT)
+        self.tree_ap_entr.pack()
+        self.scrollbar_entr_h.config(command=self.tree_ap_entr.xview)
+        self.scrollbar_entr_h.pack(fill=X)
+
+        self.label_pesquisa_entr = LabelFrame(self.subframe_ap_entr2, text="Digite um Nome para Pesquisar",
+                                               bg="#F2E8B3")
+        self.label_pesquisa_entr.pack(side=LEFT, padx=10, pady=5)
+        self.entr_pesq_entr = Entry(self.label_pesquisa_entr, relief=SUNKEN, width=35)
+        self.entr_pesq_entr.pack(side=LEFT, padx=5)
+        self.botao_pesqu_entr = Button(self.label_pesquisa_entr, text="C", width=5)
+        self.botao_pesqu_entr.pack(side=RIGHT, padx=5, ipady=5, pady=2)
+
+        self.label_n_aparelhos_entr = LabelFrame(self.subframe_ap_entr2, text="N Aparelhos", bg="#F2E8B3")
+        self.label_n_aparelhos_entr.pack(side=LEFT, padx=20, pady=5, ipadx=5)
+        self.widget1_n_aparelhos_entr = Label(self.label_n_aparelhos_entr, text="1", bg="#F2E8B3")
+        self.widget1_n_aparelhos_entr.pack(side=LEFT, padx=5, pady=10)
+        self.widget2_n_aparelhos_entr = Label(self.label_n_aparelhos_entr, text="Aparelhos", bg="#F2E8B3")
+        self.widget2_n_aparelhos_entr.pack(side=RIGHT, padx=5)
+
+        self.label_botoes_ap_entr = Label(self.subframe_ap_entr2, bg="#F2E8B3")
+        self.label_botoes_ap_entr.pack(side=LEFT, pady=5, padx= 100)
+        Button(self.label_botoes_ap_entr, text="1", width=5).pack(side=LEFT, ipady=7, padx=5)
+        Button(self.label_botoes_ap_entr, text="2", width=5).pack(side=LEFT, ipady=7, padx=5)
+        Button(self.label_botoes_ap_entr, text="3", width=5).pack(side=LEFT, ipady=7, padx=5)
+        Button(self.label_botoes_ap_entr, text="4", width=5).pack(side=LEFT, ipady=7, padx=5)
 
         # Barra de acesso rápido das páginas
 
@@ -316,8 +496,6 @@ class Castelo:
         label_inferior.pack(side=LEFT, ipadx=5)
 
         self.nome_frame = self.frame_cadastro_clientes
-
-
 
     def semComando(self):
         print()
@@ -530,8 +708,8 @@ class Castelo:
         self.botao_entr_frame = Frame(self.second_frame, bg="#ffffe1")
         self.botao_entr_frame.grid(row=12, column=2, sticky=W)
         self.alterar_button = Button(self.botao_entr_frame, text="Editar Cadastro", width=10, wraplength=70,
-               underline=0, font=('Verdana', '9', 'bold'),
-               command=lambda: [self.editarCliente(), self.atualizandoDados()])
+                                     underline=0, font=('Verdana', '9', 'bold'),
+                                     command=lambda: [self.editarCliente(), self.atualizandoDados()])
         self.alterar_button.grid()
         Button(self.botao_entr_frame, text="Cancelar", width=10, wraplength=70,
                underline=0, font=('Verdana', '9', 'bold'), height=2, command=jan.destroy).grid(row=0, column=1, padx=10)
