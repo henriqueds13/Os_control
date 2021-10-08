@@ -123,7 +123,8 @@ class Castelo:
         # Janela principal inicial
         self.frame_princ = Frame(master, borderwidth=2, relief="sunken")
 
-        # Janela cadastro de clientes
+        # ------------------------------- Janela Cadastro de Clientes----------------------------------------------
+
         font_label = ('Verdana', '9', 'bold')
         self.frame_cadastro_clientes = Frame(self.frame_princ)
 
@@ -274,8 +275,74 @@ class Castelo:
         self.botao_nova_os.pack(side='left')
         self.botao_fechar_cliente.pack(side='left', padx=10)
 
-        # Janela orçamento
-        self.frame_orçamentos = Frame(self.frame_princ, bg="blue")
+        # ------------------------------- Janela Orçamento----------------------------------------------
+
+        color_orc2 = "#90CBFB"
+        self.frame_orcamentos = Frame(self.frame_princ)
+        self.subframe_orc1 = Frame(self.frame_orcamentos, bg="#110066")
+        self.subframe_orc1.pack(fill=X)
+        self.subframe_orc2 = Frame(self.frame_orcamentos, bg=color_orc2)
+        self.subframe_orc2.pack(fill=X)
+
+        self.widget_orc1 = Label(self.subframe_orc1, text="Orçamento", fg="white", bg="#110066",
+                                 font=('Verdana', '12', 'bold'))
+        self.widget_orc1.pack(side=LEFT, padx=20, pady=10)
+        self.label_os_orc = Label(self.subframe_orc1, bg=color_orc2, text=1, relief=SUNKEN, bd=3,
+                                  font=('verdana', '12', 'bold'), fg="#FFFCE6")
+        self.label_os_orc.config(highlightbackground="black")
+        self.label_os_orc.pack(side=RIGHT, padx=20, ipadx=30)
+        self.widget_orc2 = Label(self.subframe_orc1, text="Ordem De Serviço:", fg="white", bg="#110066",
+                                 font=('Verdana', '12', 'bold'))
+        self.widget_orc2.pack(side=RIGHT)
+
+        self.frame1_orc = Frame(self.subframe_orc2, bg=color_orc2)
+        self.frame1_orc.pack(fill=X)
+        self.labelframe_dadoscli = LabelFrame(self.frame1_orc, text="Aparelhos em Manutenção", bg=color_orc2)
+        self.labelframe_dadoscli.pack(side=LEFT, ipadx=10, ipady=5, padx=10)
+        self.scrll_orc = Scrollbar(self.labelframe_dadoscli, orient=HORIZONTAL)
+        self.tree_orc = ttk.Treeview(self.labelframe_dadoscli,
+                                     columns=('os', 'entrada', 'cliente'),
+                                     show='headings',
+                                     xscrollcommand=self.scrll_orc,
+                                     selectmode='browse',
+                                     height=7)
+        self.tree_orc.column('os', width=70, minwidth=80, stretch=False)
+        self.tree_orc.column('entrada', width=100, minwidth=70, stretch=False)
+        self.tree_orc.column('cliente', width=300, minwidth=80, stretch=False)
+        self.tree_orc.heading('os', text='OS')
+        self.tree_orc.heading('entrada', text='ENTRADA')
+        self.tree_orc.heading('cliente', text='CLIENTE')
+
+
+        self.scrll_orc.config(command=self.tree_orc.xview)
+        self.scrll_orc.pack(fill=X, padx=10, side=BOTTOM)
+        self.tree_orc.pack(side=BOTTOM)
+
+        self.frame2_orc = Frame(self.frame1_orc, bg=color_orc2)
+        self.frame2_orc.pack(side=LEFT)
+        self.labelframe_orc_dadosap = LabelFrame(self.frame2_orc, text="Dados do Aparelho", bg=color_orc2)
+        self.labelframe_orc_dadosap.pack()
+        Label(self.labelframe_orc_dadosap, text='Aparelho', bg=color_orc2).grid(column=0, row=0, sticky=W)
+        Label(self.labelframe_orc_dadosap, text='Marca', bg=color_orc2).grid(column=0, row=1, sticky=W)
+        Label(self.labelframe_orc_dadosap, text='Modelo', bg=color_orc2).grid(column=0, row=2, sticky=W)
+        Label(self.labelframe_orc_dadosap, text='Defeito', bg=color_orc2).grid(column=0, row=3, sticky=W)
+        Label(self.labelframe_orc_dadosap, text='Lavadora Alta Pressão', bg=color_orc2, fg="red").grid(column=1, row=0, sticky=W, padx=10)
+        Label(self.labelframe_orc_dadosap, text='Karcher', bg=color_orc2, fg="red").grid(column=1, row=1, sticky=W, padx=10)
+        Label(self.labelframe_orc_dadosap, text='K330', bg=color_orc2, fg="red").grid(column=1, row=2, sticky=W, padx=10)
+        Label(self.labelframe_orc_dadosap, text='Sem Pressão', bg=color_orc2, fg="red").grid(column=1, row=3, sticky=W, padx=10)
+
+        self.labelframe_orc_pesquisa = LabelFrame(self.frame2_orc, bg=color_orc2, text="Digite um nome para pesquisar")
+        self.labelframe_orc_pesquisa.pack(pady=10)
+        self.entry_orc = Entry(self.labelframe_orc_pesquisa, width=35)
+        self.entry_orc.pack(padx=10)
+
+        self.labelframe_orc_coment = LabelFrame(self.subframe_orc2, text="Comentários", bg=color_orc2)
+        self.labelframe_orc_coment.pack(side=LEFT, padx=10)
+        Entry(self.labelframe_orc_coment, width=65).pack(padx=5, pady=5)
+        Entry(self.labelframe_orc_coment, width=65).pack()
+        Entry(self.labelframe_orc_coment, width=65).pack(pady=5)
+        Entry(self.labelframe_orc_coment, width=65).pack()
+        Entry(self.labelframe_orc_coment, width=65).pack(pady=5)
 
         # ------------------------------- Janela Aparelhos em Manutenção------------------------------------------------
 
@@ -362,7 +429,7 @@ class Castelo:
         self.widget2_n_aparelhos.pack(side=RIGHT, padx=5)
 
         self.label_botoes_ap_mant = Label(self.subframe_ap_manut2, bg="#D9D0C1")
-        self.label_botoes_ap_mant.pack(side=LEFT, pady=5, padx= 100)
+        self.label_botoes_ap_mant.pack(side=LEFT, pady=5, padx=100)
         Button(self.label_botoes_ap_mant, text="1", width=5).pack(side=LEFT, ipady=7, padx=5)
         Button(self.label_botoes_ap_mant, text="2", width=5).pack(side=LEFT, ipady=7, padx=5)
         Button(self.label_botoes_ap_mant, text="3", width=5).pack(side=LEFT, ipady=7, padx=5)
@@ -380,15 +447,15 @@ class Castelo:
         self.scrollbar_entr_h = Scrollbar(self.subframe_ap_entr1, orient=HORIZONTAL)  # Scrollbar da treeview horiz
 
         self.tree_ap_entr = ttk.Treeview(self.subframe_ap_entr1,
-                                          columns=('os', 'saida', 'cliente', 'aparelho', 'marca', 'modelo', 'tipo',
-                                                   'status', 'dias', 'valor', 'tecnico', 'operador', 'defeito',
-                                                   'num_serie', 'chassis', 'data_orc', 'data_entreg', 'hora',
-                                                   'id_cliente'),
-                                          show='headings',
-                                          xscrollcommand=self.scrollbar_entr_h.set,
-                                          yscrollcommand=self.scrollbar_entr_v.set,
-                                          selectmode='browse',
-                                          height=41)  # TreeView listagem de aparelhos em manutençãp
+                                         columns=('os', 'saida', 'cliente', 'aparelho', 'marca', 'modelo', 'tipo',
+                                                  'status', 'dias', 'valor', 'tecnico', 'operador', 'defeito',
+                                                  'num_serie', 'chassis', 'data_orc', 'data_entreg', 'hora',
+                                                  'id_cliente'),
+                                         show='headings',
+                                         xscrollcommand=self.scrollbar_entr_h.set,
+                                         yscrollcommand=self.scrollbar_entr_v.set,
+                                         selectmode='browse',
+                                         height=41)  # TreeView listagem de aparelhos em manutençãp
 
         self.tree_ap_entr.column('os', width=100, minwidth=100, stretch=False)
         self.tree_ap_entr.column('saida', width=100, minwidth=10, stretch=False)
@@ -438,7 +505,7 @@ class Castelo:
         self.scrollbar_entr_h.pack(fill=X)
 
         self.label_pesquisa_entr = LabelFrame(self.subframe_ap_entr2, text="Digite um Nome para Pesquisar",
-                                               bg="#F2E8B3")
+                                              bg="#F2E8B3")
         self.label_pesquisa_entr.pack(side=LEFT, padx=10, pady=5)
         self.entr_pesq_entr = Entry(self.label_pesquisa_entr, relief=SUNKEN, width=35)
         self.entr_pesq_entr.pack(side=LEFT, padx=5)
@@ -453,7 +520,7 @@ class Castelo:
         self.widget2_n_aparelhos_entr.pack(side=RIGHT, padx=5)
 
         self.label_botoes_ap_entr = Label(self.subframe_ap_entr2, bg="#F2E8B3")
-        self.label_botoes_ap_entr.pack(side=LEFT, pady=5, padx= 100)
+        self.label_botoes_ap_entr.pack(side=LEFT, pady=5, padx=100)
         Button(self.label_botoes_ap_entr, text="1", width=5).pack(side=LEFT, ipady=7, padx=5)
         Button(self.label_botoes_ap_entr, text="2", width=5).pack(side=LEFT, ipady=7, padx=5)
         Button(self.label_botoes_ap_entr, text="3", width=5).pack(side=LEFT, ipady=7, padx=5)
@@ -773,8 +840,8 @@ class Castelo:
 
     def abrirJanelaOrçamento(self):
         self.nome_frame.pack_forget()
-        self.frame_orçamentos.pack(fill="both", expand=TRUE)
-        self.nome_frame = self.frame_orçamentos
+        self.frame_orcamentos.pack(fill="both", expand=TRUE)
+        self.nome_frame = self.frame_orcamentos
 
     def abrirJanelaApmanutencao(self):
         self.nome_frame.pack_forget()
