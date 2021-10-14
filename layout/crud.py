@@ -120,8 +120,37 @@ class Castelo:
 
         master.config(menu=barraDeMenus)
 
+        # Barra de acesso rápido das páginas
+
+        menu_frame = Frame(master, borderwidth=2, relief='raised')
+        menu_frame.pack(fill=X)
+
+        Button(menu_frame, text="1", height='2', width='5', relief='flat', command=self.abrirJanelaCliente).pack(
+            side=LEFT)
+        Button(menu_frame, text="2", height='2', width='5', relief='flat', command=self.abrirJanelaOrçamento).pack(
+            side=LEFT)
+        Button(menu_frame, text="3", height='2', width='5', relief='flat', command=self.abrirJanelaApmanutencao).pack(
+            side=LEFT)
+        Button(menu_frame, text="4", height='2', width='5', relief='flat', command=self.abrirJanelaApEntregues).pack(
+            side=LEFT)
+        Button(menu_frame, text="5", height='2', width='5', relief='flat', command=self.abrirJanelaEstoque).pack(
+            side=LEFT)
+        Button(menu_frame, text="EXIT", height='2', width='5', relief='flat', command=master.quit).pack(side=LEFT)
+        horario_menu = Label(menu_frame, text="Quinta feira, 16 de setembro de 2021", font=('Verdana', '12', 'bold'),
+                             fg="gray")
+        horario_menu.pack(side=BOTTOM)
+
+        # Barra de logo
+        logo_frame = Frame(master, borderwidth=1, relief='sunken')
+        logo_frame.pack(fill=X)
+        l_logo = Label(logo_frame, text="Logo", bg="green", font=('Verdana', '10', 'bold'))
+        l_logo.pack(side=LEFT, padx=10)
+        nome_empresa_logo = Label(logo_frame, text="Castelo Máquinas", font=('Verdana', '14', 'bold'), fg="green")
+        nome_empresa_logo.pack(side=LEFT, padx=10)
+
         # Janela principal inicial
         self.frame_princ = Frame(master, borderwidth=2, relief="sunken")
+        self.frame_princ.pack(fill="both", expand=TRUE)
 
         # ------------------------------- Janela Cadastro de Clientes----------------------------------------------
 
@@ -467,8 +496,6 @@ class Castelo:
         Button(self.frame5_orc, text="Imprimir", width=8).pack(side=RIGHT, padx=10, pady=5, ipadx=5, ipady=5)
         Button(self.frame5_orc, text="Localizar", width=8).pack(side=RIGHT, ipadx=5, ipady=5)
 
-
-
         # ------------------------------- Janela Aparelhos em Manutenção------------------------------------------------
 
         self.frame_ap_manutencao = Frame(self.frame_princ)
@@ -651,35 +678,132 @@ class Castelo:
         Button(self.label_botoes_ap_entr, text="3", width=5).pack(side=LEFT, ipady=7, padx=5)
         Button(self.label_botoes_ap_entr, text="4", width=5).pack(side=LEFT, ipady=7, padx=5)
 
-        # Barra de acesso rápido das páginas
+        # ------------------------------- Janela Estoque Peças e Máquinas ----------------------------------------------
+        color_est1 = "#FCE196"
+        color_est2 = "#F2F0CE"
+        self.frame_estoque = Frame(self.frame_princ, bg=color_est1)
+        self.frame_nome_jan_estoque = Frame(self.frame_estoque, relief='raised', borderwidth=1)
+        self.frame_nome_jan_estoque.pack(fill=X)
+        Label(self.frame_nome_jan_estoque, text="Controle de Estoque").pack()
 
-        menu_frame = Frame(master, borderwidth=2, relief='raised')
-        menu_frame.pack(fill=X)
+        listaSetores = ["Todos", "Roçadeiras", "Cortador de Grama", "Motoserras"]
 
-        Button(menu_frame, text="1", height='2', width='5', relief='flat', command=self.abrirJanelaCliente).pack(
-            side=LEFT)
-        Button(menu_frame, text="2", height='2', width='5', relief='flat', command=self.abrirJanelaOrçamento).pack(
-            side=LEFT)
-        Button(menu_frame, text="3", height='2', width='5', relief='flat', command=self.abrirJanelaApmanutencao).pack(
-            side=LEFT)
-        Button(menu_frame, text="4", height='2', width='5', relief='flat', command=self.abrirJanelaApEntregues).pack(
-            side=LEFT)
-        Button(menu_frame, text="5", height='2', width='5', relief='flat', command=master.quit).pack(side=LEFT)
-        horario_menu = Label(menu_frame, text="Quinta feira, 16 de setembro de 2021", font=('Verdana', '12', 'bold'),
-                             fg="gray")
-        horario_menu.pack(side=BOTTOM)
+        self.frame_buttons_prod_est = Frame(self.frame_estoque, bg=color_est2, relief='raised', borderwidth=1)
+        self.frame_buttons_prod_est.pack(fill=X, pady=3)
+        Button(self.frame_buttons_prod_est, text="Cadastrar Produto", width=15, relief=FLAT,
+               wraplength=50, bg=color_est2).pack(side=LEFT)
+        Label(self.frame_buttons_prod_est, height=2, relief='raised', bg=color_est2).pack(side=LEFT)
+        Button(self.frame_buttons_prod_est, text="Editar Produto", width=15, relief=FLAT,
+               wraplength=50, bg=color_est2).pack(side=LEFT)
+        Label(self.frame_buttons_prod_est, height=2, relief='raised', bg=color_est2).pack(side=LEFT)
+        Button(self.frame_buttons_prod_est, text="Duplicar Produto", width=15, relief=FLAT,
+               wraplength=50, bg=color_est2).pack(side=LEFT)
+        Label(self.frame_buttons_prod_est, height=2, relief='raised', bg=color_est2).pack(side=LEFT)
+        Button(self.frame_buttons_prod_est, text="Excluir Produto", width=15, relief=FLAT,
+               wraplength=50, bg=color_est2).pack(side=LEFT)
+        Label(self.frame_buttons_prod_est, height=2, relief='raised', bg=color_est2).pack(side=LEFT)
 
-        # Barra de logo
-        logo_frame = Frame(master, borderwidth=1, relief='sunken')
-        logo_frame.pack(fill=X)
-        l_logo = Label(logo_frame, text="Logo", bg="green", font=('Verdana', '10', 'bold'))
-        l_logo.pack(side=LEFT, padx=10)
-        nome_empresa_logo = Label(logo_frame, text="Castelo Máquinas", font=('Verdana', '14', 'bold'), fg="green")
-        nome_empresa_logo.pack(side=LEFT, padx=10)
+        self.frame_pesq_estoq = Frame(self.frame_estoque, bg=color_est1)
+        self.frame_pesq_estoq.pack(fill=X, ipady=5)
+        Label(self.frame_pesq_estoq, text="Código:", bg=color_est1).grid(sticky=W, padx=10, pady=1)
+        Label(self.frame_pesq_estoq, text="Produto:", bg=color_est1).grid(row=0, column=1, sticky=W, padx=10)
+        Label(self.frame_pesq_estoq, text="Setor:", bg=color_est1).grid(row=0, column=2, sticky=W, padx=10)
+        self.entry_cod_esto = Entry(self.frame_pesq_estoq, width=10, relief=SUNKEN)
+        self.entry_cod_esto.grid(row=1, column=0, padx=10)
+        self.entry_descr_esto = Entry(self.frame_pesq_estoq, width=30, relief=SUNKEN)
+        self.entry_descr_esto.grid(row=1, column=1, padx=10)
+        self.option_setor_esto = ttk.Combobox(self.frame_pesq_estoq, values=listaSetores, state="readonly")
+        self.option_setor_esto.set("Todos")
+        self.option_setor_esto.grid(row=1, column=2, padx=10)
+        Button(self.frame_pesq_estoq, text="Pesquisar").grid(row=1, column=3)
+        Checkbutton(self.frame_pesq_estoq, text="Busca Avançada", bg=color_est1).grid(row=1, column=4, padx=10)
 
-        # Iniciando Janela Principal
-        self.frame_princ.pack(fill="both", expand=TRUE)
+        self.frame_tree_produtos = Frame(self.frame_estoque, bg=color_est1)
+        self.frame_tree_produtos.pack(fill=X)
 
+        self.scrollbar_prod_h = Scrollbar(self.frame_tree_produtos, orient=HORIZONTAL)  # Scrollbar da treeview horiz
+
+        self.tree_est_prod = ttk.Treeview(self.frame_tree_produtos,
+                                          columns=('codigo', 'descricao', 'preco', 'setor', 'marca', 'utilizado',
+                                                   'unidade', 'revendedor', 'cod_fabrica'),
+                                          show='headings',
+                                          xscrollcommand=self.scrollbar_entr_h.set,
+                                          selectmode='browse',
+                                          height=20)  # TreeView listagem de produtos em estoque
+
+        self.tree_est_prod.column('codigo', width=150, minwidth=50, stretch=False)
+        self.tree_est_prod.column('descricao', width=500, minwidth=100, stretch=False)
+        self.tree_est_prod.column('preco', width=100, minwidth=50, stretch=False)
+        self.tree_est_prod.column('setor', width=200, minwidth=100, stretch=False)
+        self.tree_est_prod.column('marca', width=200, minwidth=50, stretch=False)
+        self.tree_est_prod.column('utilizado', width=400, minwidth=10, stretch=False)
+        self.tree_est_prod.column('unidade', width=100, minwidth=10, stretch=False)
+        self.tree_est_prod.column('revendedor', width=200, minwidth=10, stretch=False)
+        self.tree_est_prod.column('cod_fabrica', width=150, minwidth=50, stretch=False)
+
+        self.tree_est_prod.heading('codigo', text='CÓDIGO')
+        self.tree_est_prod.heading('descricao', text='DESCRIÇÃO')
+        self.tree_est_prod.heading('preco', text='PREÇO')
+        self.tree_est_prod.heading('setor', text='SETOR')
+        self.tree_est_prod.heading('marca', text='MARCA')
+        self.tree_est_prod.heading('utilizado', text='UTILIZADO EM')
+        self.tree_est_prod.heading('unidade', text='UNIDADE')
+        self.tree_est_prod.heading('revendedor', text='REVENDEDOR')
+        self.tree_est_prod.heading('cod_fabrica', text='COD_FÁBRICA')
+
+        self.tree_est_prod.pack(padx=5)
+        self.scrollbar_prod_h.config(command=self.tree_est_prod.xview)
+        self.scrollbar_prod_h.pack(fill=X, padx=5)
+
+        self.frame_reg_est = Frame(self.frame_estoque, bg=color_est1)
+        self.frame_reg_est.pack(fill=X)
+        self.frame_buttons_reg_est = Frame(self.frame_reg_est, bg=color_est2, relief='raised', borderwidth=1)
+        self.frame_buttons_reg_est.pack(pady=3, side=LEFT, ipadx=1)
+        Button(self.frame_buttons_reg_est, text=" Entrada Estoque", width=15, relief=FLAT,
+               wraplength=50, bg=color_est2).pack(side=LEFT)
+        Label(self.frame_buttons_reg_est, height=2, relief='raised', bg=color_est2).pack(side=LEFT)
+        Button(self.frame_buttons_reg_est, text="Saída do Estoque", width=15, relief=FLAT,
+               wraplength=50, bg=color_est2).pack(side=LEFT)
+        Label(self.frame_buttons_reg_est, height=2, relief='raised', bg=color_est2).pack(side=LEFT)
+        Button(self.frame_buttons_reg_est, text="Editar Registro", width=15, relief=FLAT,
+               wraplength=50, bg=color_est2).pack(side=LEFT)
+        Label(self.frame_buttons_reg_est, height=2, relief='raised', bg=color_est2).pack(side=LEFT)
+        Button(self.frame_buttons_reg_est, text="Excluir Registro", width=15, relief=FLAT,
+               wraplength=50, bg=color_est2).pack(side=LEFT)
+        Label(self.frame_buttons_reg_est, height=2, relief='raised', bg=color_est2).pack(side=LEFT)
+
+        self.frame_tree_registro = Frame(self.frame_estoque, bg=color_est1)
+        self.frame_tree_registro.pack(fill=X)
+        self.scrollbar_reg_h = Scrollbar(self.frame_tree_registro, orient=HORIZONTAL)  # Scrollbar da treeview horiz
+        self.tree_est_reg = ttk.Treeview(self.frame_tree_registro,
+                                          columns=('data', 'hora', 'cliente_forn', 'custo', 'qtde', 'operador',
+                                                   'observações'),
+                                          show='headings',
+                                          xscrollcommand=self.scrollbar_reg_h.set,
+                                          selectmode='browse',
+                                          height=10)  # TreeView listagem de registro em estoque
+
+        self.tree_est_reg.column('data', width=100, minwidth=50, stretch=False)
+        self.tree_est_reg.column('hora', width=100, minwidth=100, stretch=False)
+        self.tree_est_reg.column('cliente_forn', width=400, minwidth=50, stretch=False)
+        self.tree_est_reg.column('custo', width=150, minwidth=100, stretch=False)
+        self.tree_est_reg.column('qtde', width=100, minwidth=50, stretch=False)
+        self.tree_est_reg.column('operador', width=200, minwidth=10, stretch=False)
+        self.tree_est_reg.column('observações', width=900, minwidth=10, stretch=False)
+
+        self.tree_est_reg.heading('data', text='DATA')
+        self.tree_est_reg.heading('hora', text='HORA')
+        self.tree_est_reg.heading('cliente_forn', text='CLIENTE/ FORNECEDOR')
+        self.tree_est_reg.heading('custo', text='CUSTO')
+        self.tree_est_reg.heading('qtde', text='QTDE.')
+        self.tree_est_reg.heading('operador', text='OPERADOR')
+        self.tree_est_reg.heading('observações', text='OBSERVAÕES')
+
+        self.tree_est_reg.pack(padx=5)
+        self.scrollbar_reg_h.config(command=self.tree_est_reg.xview)
+        self.scrollbar_reg_h.pack(fill=X, padx=5)
+
+        # ---------------------------------------------------------------------------------------------------------------
         # Barra inferior de tarefas
         frame_inferior = Frame(master, borderwidth=1, relief='raised')
         frame_inferior.pack(ipady=3, fill=X)
@@ -977,6 +1101,11 @@ class Castelo:
         self.nome_frame.pack_forget()
         self.frame_ap_entregue.pack(fill="both", expand=TRUE)
         self.nome_frame = self.frame_ap_entregue
+
+    def abrirJanelaEstoque(self):
+        self.nome_frame.pack_forget()
+        self.frame_estoque.pack(fill="both", expand=TRUE)
+        self.nome_frame = self.frame_estoque
 
 
 fabrica = fabrica_conexao.FabricaConexão()
