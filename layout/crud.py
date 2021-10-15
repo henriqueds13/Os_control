@@ -91,6 +91,8 @@ class Castelo:
         master.geometry(f"{self.w}x{self.h}")
         self.sessao = sessao
 
+        self.color_fg_label = "blue"
+
         # Barra de menus
 
         barraDeMenus = Menu(master)
@@ -200,7 +202,7 @@ class Castelo:
                                             command=self.janelaEditarCliente)
         self.botao_localizar_cliente = Button(self.subframe3_botoes_cliente, text="Localizar Cliente", width=10,
                                               wraplength=70, font=font_label, underline=0, bg='#BEC7C7',
-                                              command=self.semComando())
+                                              command=self.janelaLocalizarCliente)
 
         self.subframe_cadastro_cliente.grid(row=0, column=0)
         self.cadastro_label_frame.pack(side=LEFT, padx=5, pady=5, ipadx=7)
@@ -293,7 +295,7 @@ class Castelo:
 
         self.subframe4_botoes_os = Frame(self.subframe_listagem_clientes)
         self.botao_nova_os = Button(self.subframe4_botoes_os, text="Ordem de Serviço", width=10, wraplength=70,
-                                    font=font_label, underline=0, bg='#959595', command=self.semComando)
+                                    font=font_label, underline=0, bg='#959595', command=self.janelaCriarOs)
         self.botao_fechar_cliente = Button(self.subframe4_botoes_os, text="Fechar", width=10,
                                            wraplength=50, font=font_label, underline=0, bg='#BEC7C7', height=2,
                                            command=self.frame_cadastro_clientes.forget)
@@ -1063,6 +1065,88 @@ class Castelo:
             messagebox.showinfo(title="ERRO", message="ERRO")
         finally:
             sessao.close()
+
+    def janelaLocalizarCliente(self):
+        jan = Toplevel()
+
+        # Centraliza a janela
+        x_cordinate = int((self.w / 2) - (400 / 2))
+        y_cordinate = int((self.h / 2) - (200 / 2))
+        jan.geometry("{}x{}+{}+{}".format(400, 200, x_cordinate, y_cordinate))
+
+        radio_loc_text = StringVar()
+        frame_localizar_jan1 = Frame(jan)
+        frame_localizar_jan1.pack(padx=10, fill=X)
+        labelframe_local = LabelFrame(frame_localizar_jan1, text="Opção de Busca", fg="blue")
+        labelframe_local.pack(side=LEFT, pady=10)
+        radio_id_locali = Radiobutton(labelframe_local, text="Id do Cliente", value="id", variable=radio_loc_text)
+        radio_id_locali.grid(row=0, column=0, padx=5, sticky=W)
+        radio_telres_locali = Radiobutton(labelframe_local, text="Telefone Residêncial", value="telres",
+                                          variable=radio_loc_text)
+        radio_telres_locali.grid(row=1, column=0, padx=5, sticky=W)
+        radio_whats_locali = Radiobutton(labelframe_local, text="Whatsapp", value="whats", variable=radio_loc_text)
+        radio_whats_locali.grid(row=2, column=0, padx=5, sticky=W)
+        radio_cel_locali = Radiobutton(labelframe_local, text="Celular", value="cel", variable=radio_loc_text)
+        radio_cel_locali.grid(row=3, column=0, padx=5, sticky=W)
+
+        frame_localizar_jan2 = Frame(jan)
+        frame_localizar_jan2.pack(pady=10, fill=X)
+        entry_locali = Entry(frame_localizar_jan2, width=30, relief="sunken",  borderwidth=2)
+        entry_locali.pack(side=LEFT, padx=10)
+        Button(frame_localizar_jan2, text="Iniciar Pesquisa", width=10, wraplength=70,
+               underline=0, font=('Verdana', '9', 'bold'), height=2).pack(side=LEFT, padx=5)
+        Button(frame_localizar_jan2, text="Fechar", width=10, wraplength=70,
+               underline=0, font=('Verdana', '9', 'bold'), height=2, command=jan.destroy).pack(side=LEFT, padx=5)
+
+        jan.transient(root2)
+        jan.focus_force()
+        jan.grab_set()
+
+    def janelaCriarOs(self):
+        jan = Toplevel()
+
+        color_fd_labels = "blue"
+        color_bgdc_labels = "gray"
+
+        # Centraliza a janela
+        x_cordinate = int((self.w / 2) - (550 / 2))
+        y_cordinate = int((self.h / 2) - (370 / 2))
+        jan.geometry("{}x{}+{}+{}".format(550, 370, x_cordinate, y_cordinate))
+
+        frame_princ_jan_os = Frame(jan)
+        frame_princ_jan_os.pack(side=LEFT, fill=BOTH, padx=10, pady=10)
+
+        labelframe_dadoscli_os = LabelFrame(frame_princ_jan_os, text="Dados do Cliente", fg=self.color_fg_label)
+        labelframe_dadoscli_os.grid(row=0, column=0)
+        sub_frame_dc_os1 = Frame(labelframe_dadoscli_os)
+        sub_frame_dc_os1.pack(side=LEFT, fill=BOTH)
+        sub_frame_dc_os2 = Frame(labelframe_dadoscli_os)
+        sub_frame_dc_os2.pack(side=LEFT, fill=BOTH)
+        Label(sub_frame_dc_os1, text="Nome", fg=color_fd_labels).grid(row=0, column=0, sticky=W)
+        Label(sub_frame_dc_os1, text="Henrique", bg=color_bgdc_labels, width=30).grid(row=0, column=1, sticky=W)
+        Label(sub_frame_dc_os1, text="Endereço", fg=color_fd_labels).grid(row=1, column=0, sticky=W, columnspan=2, pady=1)
+        Label(sub_frame_dc_os1, text="Rua Nossa Senhora das Dores", bg=color_bgdc_labels,
+              width=27).grid(row=1, column=1, sticky=E)
+        Label(sub_frame_dc_os1, text="Complemento", fg=color_fd_labels).grid(row=2, column=0, sticky=W, columnspan=2)
+        Label(sub_frame_dc_os1, text="", bg=color_bgdc_labels, width=23).grid(row=2, column=1, sticky=E)
+        Label(sub_frame_dc_os1, text="Bairro", fg=color_fd_labels).grid(row=3, column=0, sticky=W, columnspan=2, pady=1)
+        Label(sub_frame_dc_os1, text="", bg=color_bgdc_labels, width=18).grid(row=3, column=1, sticky=W)
+        Label(sub_frame_dc_os1, text="Cidade", fg=color_fd_labels).grid(row=4, column=0, sticky=W, columnspan=2)
+        Label(sub_frame_dc_os1, text="", bg=color_bgdc_labels, width=16).grid(row=4, column=1, sticky=W, padx=4)
+
+
+        labelframe_os = LabelFrame(frame_princ_jan_os, text="Ordem de Serviço", fg=self.color_fg_label)
+        labelframe_os.grid(row=0, column=1)
+
+        labelframe_dadosapare_os = LabelFrame(frame_princ_jan_os, text="Dados do Aparelho", fg=self.color_fg_label)
+        labelframe_dadosapare_os.grid(row=1, column=0)
+
+        labelframe_prazo_os = LabelFrame(frame_princ_jan_os, text="Prazo", fg=self.color_fg_label)
+        labelframe_prazo_os.grid(row=1, column=1)
+
+        jan.transient(root2)
+        jan.focus_force()
+        jan.grab_set()
 
     def atualizandoDados(self):
         cliente_selecionado = self.tree_cliente.focus()
