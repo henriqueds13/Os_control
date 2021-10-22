@@ -587,7 +587,8 @@ class Castelo:
         Button(self.label_botoes_ap_mant, text="1", width=5).pack(side=LEFT, ipady=7, padx=5)
         Button(self.label_botoes_ap_mant, text="2", width=5, command=self.janelaLocalizarOs).pack(side=LEFT, ipady=7,
                                                                                                   padx=5)
-        Button(self.label_botoes_ap_mant, text="3", width=5, command=self.janelaAbrirOs).pack(side=LEFT, ipady=7, padx=5)
+        Button(self.label_botoes_ap_mant, text="3", width=5, command=self.janelaAbrirOs).pack(side=LEFT, ipady=7,
+                                                                                              padx=5)
         Button(self.label_botoes_ap_mant, text="4", width=5).pack(side=LEFT, ipady=7, padx=5)
 
         # ------------------------------- Janela Aparelhos Entregues----------------------------------------------
@@ -1328,9 +1329,9 @@ class Castelo:
         color_bgdc_labels = "gray"
 
         # Centraliza a janela
-        x_cordinate = int((self.w / 2) - (800 / 2))
+        x_cordinate = int((self.w / 2) - (780 / 2))
         y_cordinate = int((self.h / 2) - (520 / 2))
-        jan.geometry("{}x{}+{}+{}".format(800, 520, x_cordinate, y_cordinate))
+        jan.geometry("{}x{}+{}+{}".format(780, 520, x_cordinate, y_cordinate))
 
         frame_princ_jan_os = Frame(jan)
         frame_princ_jan_os.pack(side=LEFT, fill=BOTH, padx=10, pady=10)
@@ -1366,7 +1367,6 @@ class Castelo:
         frame_sub_dc1.grid(row=0, column=2, rowspan=3, sticky=S, ipadx=13)
         Button(frame_sub_dc1, text="1", width=7).pack(ipady=8, side=RIGHT)
 
-
         Label(sub_frame_dc_os2, text="Tel.Res.", fg=color_fg_labels, font=font_dados1).grid(row=0, column=0, sticky=W)
         Label(sub_frame_dc_os2, text="", bg=color_bgdc_labels, width=16, font=font_dados2, anchor=W).grid(row=0,
                                                                                                           column=1)
@@ -1386,18 +1386,22 @@ class Castelo:
                                                                                                           column=1)
 
         labelframe_os = LabelFrame(frame_princ_jan_os, text="Ordem de Serviço", fg=self.color_fg_label)
-        labelframe_os.grid(row=0, column=1, padx=15, rowspan=3, ipadx=5, sticky=N)
-        Label(labelframe_os, text="12", fg="red", font=('Verdana', '15', 'bold')).grid(row=0, column=0,
+        labelframe_os.grid(row=0, column=1, padx=15, rowspan=4, ipadx=3, sticky=N)
+        Label(labelframe_os, text="12", fg="red", font=('Verdana', '20', 'bold')).grid(row=0, column=0,
                                                                                        columnspan=2, padx=10, pady=5)
-        Label(labelframe_os, text="Entrada:", fg=color_fg_labels2, font=font_dados2).grid(row=1, column=0, sticky=E, padx=5)
+        Label(labelframe_os, text="Entrada:", fg=color_fg_labels2, font=font_dados2).grid(row=1, column=0, sticky=E,
+                                                                                          padx=5)
         Label(labelframe_os, text="19/10/2021", fg=color_fg_labels, font=font_dados2).grid(row=1, column=1, sticky=W)
-        Label(labelframe_os, text="Hora:", fg=color_fg_labels2, font=font_dados2).grid(row=2, column=0, sticky=E, padx=5)
+        Label(labelframe_os, text="Hora:", fg=color_fg_labels2, font=font_dados2).grid(row=2, column=0, sticky=E,
+                                                                                       padx=5)
         Label(labelframe_os, text="21:28", fg=color_fg_labels, font=font_dados2).grid(row=2, column=1, sticky=W)
-        Label(labelframe_os, text="Dias:", fg=color_fg_labels2, font=font_dados2).grid(row=3, column=0, sticky=E, padx=5)
+        Label(labelframe_os, text="Dias:", fg=color_fg_labels2, font=font_dados2).grid(row=3, column=0, sticky=E,
+                                                                                       padx=5)
         Label(labelframe_os, text="1", fg=color_fg_labels, font=font_dados2).grid(row=3, column=1, sticky=W)
         Label(labelframe_os, text="Via:", fg=color_fg_labels2, font=font_dados2).grid(row=4, column=0, sticky=E, padx=5)
         Label(labelframe_os, text="0ª", fg=color_fg_labels, font=font_dados2).grid(row=4, column=1, sticky=W)
-        Label(labelframe_os, text="---------------------------------", fg=color_bgdc_labels).grid(row=5, column=0, columnspan=2)
+        Label(labelframe_os, text="-------------------------------------", fg=color_bgdc_labels).grid(row=5, column=0,
+                                                                                                      columnspan=2)
         Label(labelframe_os, text="Tipo:", fg=color_fg_labels2,
               font=font_dados2).grid(row=6, column=0, sticky=E, padx=1)
         Label(labelframe_os, text="ORÇAMENTO", fg=color_fg_labels, font=font_dados2).grid(row=6, column=1, sticky=W)
@@ -1410,8 +1414,21 @@ class Castelo:
         Label(labelframe_os, text="Atendimento:", fg=color_fg_labels2,
               font=font_dados2).grid(row=9, column=0, sticky=E, padx=1)
         Label(labelframe_os, text="INTERNO", fg=color_fg_labels, font=font_dados2).grid(row=9, column=1, sticky=W)
-        Label(labelframe_os, text="--------------------------------", fg=color_bgdc_labels).grid(row=10, column=0,
-                                                                                             columnspan=2)
+        Label(labelframe_os, text="------------------------------------", fg=color_bgdc_labels).grid(row=10, column=0,
+                                                                                                     columnspan=2)
+        Label(labelframe_os, text="Status", fg=color_fg_labels2,
+              font=font_dados2).grid(row=11, column=0, sticky=E, padx=1)
+        Label(labelframe_os, text="EM SERVIÇO", fg=color_fg_labels, font=font_dados2).grid(row=11, column=1, sticky=W)
+        Label(labelframe_os, text="Técnico:", fg=color_fg_labels2,
+              font=font_dados2).grid(row=12, column=0, sticky=E, padx=1)
+        Label(labelframe_os, text="HENRIQUE", fg=color_fg_labels, font=font_dados2).grid(row=12, column=1, sticky=W)
+        Label(labelframe_os, text="Conclusão:", fg=color_fg_labels2,
+              font=font_dados2).grid(row=13, column=0, sticky=E, padx=1)
+        Label(labelframe_os, text="21/10/2021", fg=color_fg_labels, font=font_dados2).grid(row=13, column=1, sticky=W)
+        Label(labelframe_os, text="Valor:", fg=color_fg_labels2,
+              font=font_dados2).grid(row=14, column=0, sticky=E, padx=1)
+        Label(labelframe_os, text="R$ 0,00", fg=color_fg_labels,
+              font=('', '14', 'bold')).grid(row=14, column=1, sticky=W)
 
         labelframe_dadosapare_os = LabelFrame(frame_princ_jan_os, text="Dados do Aparelho", fg=self.color_fg_label)
         labelframe_dadosapare_os.grid(row=1, column=0, sticky=W, ipady=5)
@@ -1451,10 +1468,68 @@ class Castelo:
         Label(labelframe_garantia, text='Gar. Complementar').grid(row=0, column=3, sticky=W)
         Entry(labelframe_garantia, width=18).grid(row=1, column=3, sticky=W)
 
-        frame_button_os = Frame(frame_princ_jan_os)
-        frame_button_os.grid(row=3, column=1, sticky=S)
-        Button(frame_button_os, text="Fechar", height=2, width=10, bg="#BEC7C7",
-               command=jan.destroy).pack(ipadx=10)
+        frame_os_final = Frame(frame_princ_jan_os)
+        frame_os_final.grid(row=4, column=0, sticky=W)
+        nb_os = ttk.Notebook(frame_os_final, height=125, width=350)
+        nb_os.grid(row=0, column=0, sticky=W)
+        labelframe_os_andamento = LabelFrame(nb_os, text="Andamento do Serviço", fg="Blue")
+        labelframe_os_status = LabelFrame(nb_os, text="Status", fg="blue")
+        labelframe_os_tecnicos = LabelFrame(nb_os, text="Técnicos", fg="blue")
+
+        s = ttk.Style()
+        s.configure('TNotebook', tabposition='ne')
+
+        nb_os.add(labelframe_os_andamento, text="Relatório")
+        nb_os.add(labelframe_os_status, text="Status")
+        nb_os.add(labelframe_os_tecnicos, text="Técnicos")
+
+        frame_andamento_os = Frame(labelframe_os_andamento)
+        frame_andamento_os.pack(padx=8, pady=8)
+        scroll_andamento_os = Scrollbar(frame_andamento_os)
+        scroll_andamento_os.pack(side=RIGHT, fill=Y)
+        text_andamento_os = Text(frame_andamento_os, relief=SUNKEN, yscrollcommand=scroll_andamento_os)
+        text_andamento_os.pack(side=LEFT)
+        scroll_andamento_os.config(command=text_andamento_os.yview)
+
+        list_status_os = Listbox(labelframe_os_status)
+        list_status_os.insert(1, "EM ANDAMENTO")
+        list_status_os.insert(2, "EM SERVIÇO")
+        list_status_os.insert(3, "NÃO AUTORIZADO")
+        list_status_os.insert(4, "PENDENTE")
+        list_status_os.insert(5, "PRONTO")
+        list_status_os.insert(6, "SEM CONSERTO")
+        list_status_os.pack(side=LEFT, padx=5, pady=5)
+        frame_status_os = Frame(labelframe_os_status)
+        frame_status_os.pack(side=LEFT, padx=5, fill=Y)
+        Label(frame_status_os, text="EM ANDAMENTO", fg="blue",
+              bg=color_bgdc_labels, bd=2, relief=SUNKEN, width=15).grid(row=0, column=0, ipadx=10, padx=5)
+        Button(frame_status_os, text="Salvar").grid(row=1, column=0, pady=20, ipadx=10)
+
+        list_tecnicos_os = Listbox(labelframe_os_tecnicos)
+        list_tecnicos_os.insert(1, "HENRIQUE")
+        list_tecnicos_os.insert(2, "HUGO")
+        list_tecnicos_os.insert(3, "AUGUSTO")
+        list_tecnicos_os.pack(side=LEFT, padx=5, pady=5)
+        frame_tecnico_os = Frame(labelframe_os_tecnicos)
+        frame_tecnico_os.pack(side=LEFT, padx=5, fill=Y)
+        Label(frame_tecnico_os, text="HENRIQUE", fg="blue",
+              bg=color_bgdc_labels, bd=2, relief=SUNKEN, width=15).grid(row=0, column=0, ipadx=10, padx=5)
+        Button(frame_tecnico_os, text="Salvar").grid(row=1, column=0, pady=20, ipadx=10)
+
+        Button(frame_os_final, width=10, text="Manutenções Anteriores",
+               wraplength=80).grid(row=0, column=1, sticky=S, padx=30, ipadx=15, pady=5)
+
+
+        labelframe_os_buttons = LabelFrame(frame_princ_jan_os)
+        labelframe_os_buttons.grid(row=4, column=1, ipady=5)
+        Button(labelframe_os_buttons, text="Alterar Dados", height=2, width=7,
+               bg="#BEC7C7").grid(row=0, column=0, ipadx=10, padx=7, pady=7)
+        Button(labelframe_os_buttons, text="Orçamento", height=2, width=7,
+               bg="#BEC7C7").grid(row=0, column=1, ipadx=10, padx=7, pady=7)
+        Button(labelframe_os_buttons, text="Imprimor OS", height=2, width=7,
+               bg="#BEC7C7").grid(row=1, column=0, ipadx=10)
+        Button(labelframe_os_buttons, text="Fechar", height=2, width=7, bg="#BEC7C7",
+               command=jan.destroy).grid(row=1, column=1, ipadx=10)
 
         jan.transient(root2)
         jan.focus_force()
