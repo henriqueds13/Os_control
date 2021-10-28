@@ -1541,8 +1541,8 @@ class Castelo:
 
         # Centraliza a janela
         x_cordinate = int((self.w / 2) - (1000 / 2))
-        y_cordinate = int((self.h / 2) - (750 / 2))
-        jan.geometry("{}x{}+{}+{}".format(1000, 750, x_cordinate, y_cordinate))
+        y_cordinate = int((self.h / 2) - (650 / 2))
+        jan.geometry("{}x{}+{}+{}".format(1000, 650, x_cordinate, y_cordinate))
 
         frame_princ_os1 = Frame(jan)
         frame_princ_os1.pack(fill=Y, side=LEFT)
@@ -1761,10 +1761,10 @@ class Castelo:
         text_os.pack(side=RIGHT)
         scroll_os.config(command=text_os.yview)
 
-        labelframe_form_pag = LabelFrame(frame_princ_os2)
+        labelframe_form_pag = LabelFrame(frame_princ_os2, text="Forma de Pagamento")
         labelframe_form_pag.pack(pady=10, fill=X)
         subframe_form_pag1 = Frame(labelframe_form_pag)
-        subframe_form_pag1.pack(padx=15, pady=10)
+        subframe_form_pag1.pack(padx=15, pady=5)
         Label(subframe_form_pag1, text="Dinheiro", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=0, column=0, padx=5)
         Entry(subframe_form_pag1, width=18, justify=RIGHT).grid(row=0, column=1, padx=5)
         Label(subframe_form_pag1, text="Cheque", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=1, column=0, padx=5, pady=5)
@@ -1777,6 +1777,27 @@ class Castelo:
         Entry(subframe_form_pag1, width=18, justify=RIGHT).grid(row=4, column=1, padx=5)
         Label(subframe_form_pag1, text="Outros", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=5, column=0, padx=5, pady=5)
         Entry(subframe_form_pag1, width=18, justify=RIGHT).grid(row=5, column=1, padx=5)
+        labelframe_pag_coment = LabelFrame(labelframe_form_pag, text="Observações de Pagamento")
+        labelframe_pag_coment.pack(padx=10, pady=4)
+        Entry(labelframe_pag_coment, width=47).pack(padx=5, pady=5)
+        Entry(labelframe_pag_coment, width=47).pack(padx=5)
+        Entry(labelframe_pag_coment, width=47).pack(pady=5, padx=5)
+        subframe_form_pag2 = Frame(labelframe_form_pag)
+        subframe_form_pag2.pack(padx=10, fill=X, side=LEFT)
+        labelframe_valor_rec = LabelFrame(subframe_form_pag2)
+        labelframe_valor_rec.grid(row=0, column=0, sticky=W, pady=5)
+        Label(labelframe_valor_rec, text="Valor à Receber:").pack()
+        Label(labelframe_valor_rec, text="R$ 0,00", anchor=E, font=("", "12", ""), fg="red").pack(fill=X, pady=5, padx=30)
+        Button(subframe_form_pag2, text="Salvar", width=8).grid(row=1, column=0, sticky=W, pady=5, padx=10)
+        subframe_form_pag3 = Frame(labelframe_form_pag)
+        subframe_form_pag3.pack(padx=5, fill=BOTH, side=LEFT, pady=5)
+        Label(subframe_form_pag3, bg="grey", text=3, width=21, height=6).pack()
+
+        botoes_os = Frame(frame_princ_os2)
+        botoes_os.pack(fill=X, padx=10, pady=20)
+        Button(botoes_os, text="Confirmar Saída", wraplength=70, width=15, height=2).pack(side=LEFT, padx=10)
+        Button(botoes_os, text="Fechar", width=15, height=2).pack(side=LEFT, padx=10)
+
 
 
         jan.transient(root2)
