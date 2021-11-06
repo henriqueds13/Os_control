@@ -93,6 +93,12 @@ class Castelo:
 
         self.color_fg_label = "blue"
 
+        def on_enter(e):
+            e.widget['relief'] = 'raised'
+
+        def on_leave(e):
+            e.widget['relief'] = 'flat'
+
         # Barra de menus
 
         barraDeMenus = Menu(master)
@@ -127,20 +133,45 @@ class Castelo:
         menu_frame = Frame(master, borderwidth=2, relief='raised')
         menu_frame.pack(fill=X)
 
-        Button(menu_frame, text="1", height='2', width='5', relief='flat', command=self.abrirJanelaCliente).pack(
-            side=LEFT)
-        Button(menu_frame, text="2", height='2', width='5', relief='flat', command=self.abrirJanelaOrçamento).pack(
-            side=LEFT)
-        Button(menu_frame, text="3", height='2', width='5', relief='flat', command=self.abrirJanelaApmanutencao).pack(
-            side=LEFT)
-        Button(menu_frame, text="4", height='2', width='5', relief='flat', command=self.abrirJanelaApEntregues).pack(
-            side=LEFT)
-        Button(menu_frame, text="5", height='2', width='5', relief='flat', command=self.abrirJanelaEstoque).pack(
-            side=LEFT)
-        Button(menu_frame, text="EXIT", height='2', width='5', relief='flat', command=master.quit).pack(side=LEFT)
+        button_princ1 = Button(menu_frame, text="1", height='2', width='5', relief='flat',
+                               command=self.abrirJanelaCliente)
+        button_princ1.pack(side=LEFT)
+        button_princ2 = Button(menu_frame, text="2", height='2', width='5', relief='flat',
+                               command=self.abrirJanelaOrçamento)
+        button_princ2.pack(side=LEFT)
+        button_princ3 = Button(menu_frame, text="3", height='2', width='5', relief='flat',
+                               command=self.abrirJanelaApmanutencao)
+        button_princ3.pack(side=LEFT)
+        button_princ4 = Button(menu_frame, text="4", height='2', width='5', relief='flat',
+                               command=self.abrirJanelaApEntregues)
+        button_princ4.pack(side=LEFT)
+        button_princ5 = Button(menu_frame, text="5", height='2', width='5', relief='flat',
+                               command=self.abrirJanelaEstoque)
+        button_princ5.pack(side=LEFT)
+        button_princ6 = Button(menu_frame, text="6", height='2', width='5', relief='flat',
+                               command=self.abrirJanelaVendas)
+        button_princ6.pack(side=LEFT)
+        button_princ7 = Button(menu_frame, text="EXIT", height='2', width='5', relief='flat',
+                               command=master.quit)
+        button_princ7.pack(side=LEFT)
         horario_menu = Label(menu_frame, text="Quinta feira, 16 de setembro de 2021", font=('Verdana', '12', 'bold'),
                              fg="gray")
         horario_menu.pack(side=BOTTOM)
+
+        button_princ1.bind('<Enter>', on_enter)
+        button_princ1.bind('<Leave>', on_leave)
+        button_princ2.bind('<Enter>', on_enter)
+        button_princ2.bind('<Leave>', on_leave)
+        button_princ3.bind('<Enter>', on_enter)
+        button_princ3.bind('<Leave>', on_leave)
+        button_princ4.bind('<Enter>', on_enter)
+        button_princ4.bind('<Leave>', on_leave)
+        button_princ5.bind('<Enter>', on_enter)
+        button_princ5.bind('<Leave>', on_leave)
+        button_princ6.bind('<Enter>', on_enter)
+        button_princ6.bind('<Leave>', on_leave)
+        button_princ7.bind('<Enter>', on_enter)
+        button_princ7.bind('<Leave>', on_leave)
 
         # Barra de logo
         logo_frame = Frame(master, borderwidth=1, relief='sunken')
@@ -700,18 +731,22 @@ class Castelo:
 
         self.frame_buttons_prod_est = Frame(self.frame_estoque, bg=color_est2, relief='raised', borderwidth=1)
         self.frame_buttons_prod_est.pack(fill=X, pady=3)
-        Button(self.frame_buttons_prod_est, text="Cadastrar Produto", width=15, relief=FLAT,
-               wraplength=50, bg=color_est2, command=self.janelaCadastrarProduto).pack(side=LEFT)
-        Label(self.frame_buttons_prod_est, height=2, relief='raised', bg=color_est2).pack(side=LEFT)
-        Button(self.frame_buttons_prod_est, text="Editar Produto", width=15, relief=FLAT,
-               wraplength=50, bg=color_est2).pack(side=LEFT)
-        Label(self.frame_buttons_prod_est, height=2, relief='raised', bg=color_est2).pack(side=LEFT)
-        Button(self.frame_buttons_prod_est, text="Duplicar Produto", width=15, relief=FLAT,
-               wraplength=50, bg=color_est2).pack(side=LEFT)
-        Label(self.frame_buttons_prod_est, height=2, relief='raised', bg=color_est2).pack(side=LEFT)
-        Button(self.frame_buttons_prod_est, text="Excluir Produto", width=15, relief=FLAT,
-               wraplength=50, bg=color_est2).pack(side=LEFT)
-        Label(self.frame_buttons_prod_est, height=2, relief='raised', bg=color_est2).pack(side=LEFT)
+        button_est1 = Button(self.frame_buttons_prod_est, text="Cadastrar Produto", width=15, relief=FLAT,
+                             wraplength=50, bg=color_est2, command=self.janelaCadastrarProduto)
+        button_est1.pack(side=LEFT)
+        ttk.Separator(self.frame_buttons_prod_est, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
+        button_est2 = Button(self.frame_buttons_prod_est, text="Editar Produto", width=15, relief=FLAT,
+                             wraplength=50, bg=color_est2, command=self.janelaEditarProduto)
+        button_est2.pack(side=LEFT)
+        ttk.Separator(self.frame_buttons_prod_est, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
+        button_est3 = Button(self.frame_buttons_prod_est, text="Duplicar Produto", width=15, relief=FLAT,
+                             wraplength=50, bg=color_est2, command=self.janelaClonarProduto)
+        button_est3.pack(side=LEFT)
+        ttk.Separator(self.frame_buttons_prod_est, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
+        button_est4 = Button(self.frame_buttons_prod_est, text="Excluir Produto", width=15, relief=FLAT,
+                             wraplength=50, bg=color_est2)
+        button_est4.pack(side=LEFT)
+        ttk.Separator(self.frame_buttons_prod_est, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
 
         self.frame_pesq_estoq = Frame(self.frame_estoque, bg=color_est1)
         self.frame_pesq_estoq.pack(fill=X, ipady=5)
@@ -768,19 +803,22 @@ class Castelo:
         self.frame_reg_est = Frame(self.frame_estoque, bg=color_est1)
         self.frame_reg_est.pack(fill=X)
         self.frame_buttons_reg_est = Frame(self.frame_reg_est, bg=color_est2, relief='raised', borderwidth=1)
-        self.frame_buttons_reg_est.pack(pady=3, side=LEFT, ipadx=1)
-        Button(self.frame_buttons_reg_est, text=" Entrada Estoque", width=15, relief=FLAT,
-               wraplength=50, bg=color_est2).pack(side=LEFT)
-        Label(self.frame_buttons_reg_est, height=2, relief='raised', bg=color_est2).pack(side=LEFT)
-        Button(self.frame_buttons_reg_est, text="Saída do Estoque", width=15, relief=FLAT,
-               wraplength=50, bg=color_est2).pack(side=LEFT)
-        Label(self.frame_buttons_reg_est, height=2, relief='raised', bg=color_est2).pack(side=LEFT)
-        Button(self.frame_buttons_reg_est, text="Editar Registro", width=15, relief=FLAT,
-               wraplength=50, bg=color_est2).pack(side=LEFT)
-        Label(self.frame_buttons_reg_est, height=2, relief='raised', bg=color_est2).pack(side=LEFT)
-        Button(self.frame_buttons_reg_est, text="Excluir Registro", width=15, relief=FLAT,
-               wraplength=50, bg=color_est2).pack(side=LEFT)
-        Label(self.frame_buttons_reg_est, height=2, relief='raised', bg=color_est2).pack(side=LEFT)
+        self.frame_buttons_reg_est.pack(pady=3, side=LEFT, ipadx=1, fill=X)
+        button_est5 = Button(self.frame_buttons_reg_est, text=" Entrada Estoque", width=15, relief=FLAT,
+                             wraplength=50, bg=color_est2)
+        button_est5.pack(side=LEFT)
+        ttk.Separator(self.frame_buttons_reg_est, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
+        button_est6 = Button(self.frame_buttons_reg_est, text="Saída do Estoque", width=15, relief=FLAT,
+                             wraplength=50, bg=color_est2)
+        button_est6.pack(side=LEFT)
+        ttk.Separator(self.frame_buttons_reg_est, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
+        button_est7 = Button(self.frame_buttons_reg_est, text="Editar Registro", width=15, relief=FLAT,
+                             wraplength=50, bg=color_est2)
+        button_est7.pack(side=LEFT)
+        ttk.Separator(self.frame_buttons_reg_est, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
+        button_est8 = Button(self.frame_buttons_reg_est, text="Excluir Registro", width=15, relief=FLAT,
+                             wraplength=50, bg=color_est2)
+        button_est8.pack(side=LEFT)
 
         self.frame_tree_registro = Frame(self.frame_estoque, bg=color_est1)
         self.frame_tree_registro.pack(fill=X)
@@ -807,12 +845,115 @@ class Castelo:
         self.tree_est_reg.heading('custo', text='CUSTO')
         self.tree_est_reg.heading('qtde', text='QTDE.')
         self.tree_est_reg.heading('operador', text='OPERADOR')
-        self.tree_est_reg.heading('observações', text='OBSERVAÕES')
+        self.tree_est_reg.heading('observações', text='OBSERVAÇÕES')
 
         self.tree_est_reg.pack(padx=5)
         self.scrollbar_reg_h.config(command=self.tree_est_reg.xview)
         self.scrollbar_reg_h.pack(fill=X, padx=5)
 
+        button_est1.bind('<Enter>', on_enter)
+        button_est1.bind('<Leave>', on_leave)
+        button_est2.bind('<Enter>', on_enter)
+        button_est2.bind('<Leave>', on_leave)
+        button_est3.bind('<Enter>', on_enter)
+        button_est3.bind('<Leave>', on_leave)
+        button_est4.bind('<Enter>', on_enter)
+        button_est4.bind('<Leave>', on_leave)
+        button_est5.bind('<Enter>', on_enter)
+        button_est5.bind('<Leave>', on_leave)
+        button_est6.bind('<Enter>', on_enter)
+        button_est6.bind('<Leave>', on_leave)
+        button_est7.bind('<Enter>', on_enter)
+        button_est7.bind('<Leave>', on_leave)
+        button_est8.bind('<Enter>', on_enter)
+        button_est8.bind('<Leave>', on_leave)
+
+        # ------------------------------------------Janela de Vendas-----------------------------------------------------
+
+        color_est1 = "#FCE196"
+        color_est2 = "#F2F0CE"
+        self.frame_vendas = Frame(self.frame_princ, bg=color_est1)
+        self.frame_nome_jan_vendas = Frame(self.frame_vendas, relief='raised', borderwidth=1)
+        self.frame_nome_jan_vendas.pack(fill=X)
+        Label(self.frame_nome_jan_vendas, text="Vendas").pack()
+
+        self.frame_buttons_prod_vendas = Frame(self.frame_vendas, bg=color_est2, relief='raised', borderwidth=1)
+        self.frame_buttons_prod_vendas.pack(fill=X, pady=3)
+        button_vend1 = Button(self.frame_buttons_prod_vendas, text="Nova Venda", width=15, relief=FLAT,
+                             bg=color_est2, command=self.janelaCadastrarProduto, height=2)
+        button_vend1.pack(side=LEFT)
+        button_vend2 = Button(self.frame_buttons_prod_vendas, text="Editar", width=15, relief=FLAT,
+                             bg=color_est2, command=self.janelaEditarProduto, height=2)
+        button_vend2.pack(side=LEFT)
+        ttk.Separator(self.frame_buttons_prod_vendas, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
+        button_vend3 = Button(self.frame_buttons_prod_vendas, text="Troca ou Devolução", width=15, relief=FLAT,
+                             bg=color_est2, command=self.janelaClonarProduto, height=2)
+        button_vend3.pack(side=LEFT)
+        ttk.Separator(self.frame_buttons_prod_vendas, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
+        button_vend4 = Button(self.frame_buttons_prod_vendas, text="Cancelar Venda", width=15, relief=FLAT,
+                             bg=color_est2, height=2)
+        button_vend4.pack(side=LEFT)
+        ttk.Separator(self.frame_buttons_prod_vendas, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
+        button_vend5 = Button(self.frame_buttons_prod_vendas, text="Fechar", width=15, relief=FLAT,
+                             bg=color_est2, height=2, command=self.frame_vendas.forget)
+        button_vend5.pack(side=LEFT)
+        ttk.Separator(self.frame_buttons_prod_vendas, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
+        button_vend6 = Button(self.frame_buttons_prod_vendas, text="Fechar Caixa", width=15, relief=FLAT,
+                             bg=color_est2, height=2)
+        button_vend6.pack(side=RIGHT)
+        ttk.Separator(self.frame_buttons_prod_vendas, orient=VERTICAL).pack(side=RIGHT, fill=Y, pady=4)
+
+        self.frame_tree_vendas = Frame(self.frame_vendas, bg=color_est1)
+        self.frame_tree_vendas.pack(fill=X)
+
+        self.scrollbar_vend_h = Scrollbar(self.frame_vendas, orient=HORIZONTAL)  # Scrollbar da treeview horiz
+
+        self.tree_est_vendas = ttk.Treeview(self.frame_vendas,
+                                            columns=('id', 'data', 'itens', 'cliente', 'vendedor', 'vtotal',
+                                                     'desconto', 'subtotal', 'valorpago', 'meiopagamento'),
+                                            show='headings',
+                                            xscrollcommand=self.scrollbar_entr_h.set,
+                                            selectmode='browse',
+                                            height=41)  # TreeView listagem de produtos em estoque
+
+        self.tree_est_vendas.column('id', width=100, minwidth=50, stretch=False)
+        self.tree_est_vendas.column('data', width=100, minwidth=100, stretch=False)
+        self.tree_est_vendas.column('itens', width=500, minwidth=50, stretch=False)
+        self.tree_est_vendas.column('cliente', width=200, minwidth=100, stretch=False)
+        self.tree_est_vendas.column('vendedor', width=200, minwidth=50, stretch=False)
+        self.tree_est_vendas.column('vtotal', width=200, minwidth=10, stretch=False)
+        self.tree_est_vendas.column('desconto', width=200, minwidth=10, stretch=False)
+        self.tree_est_vendas.column('subtotal', width=200, minwidth=10, stretch=False)
+        self.tree_est_vendas.column('valorpago', width=200, minwidth=10, stretch=False)
+        self.tree_est_vendas.column('meiopagamento', width=150, minwidth=50, stretch=False)
+
+        self.tree_est_vendas.heading('id', text='CÓDIGO')
+        self.tree_est_vendas.heading('data', text='DATA')
+        self.tree_est_vendas.heading('itens', text='ITENS')
+        self.tree_est_vendas.heading('cliente', text='CLIENTE')
+        self.tree_est_vendas.heading('vendedor', text='VENDEDOR')
+        self.tree_est_vendas.heading('vtotal', text='TOTAL')
+        self.tree_est_vendas.heading('desconto', text='DESCONTO')
+        self.tree_est_vendas.heading('subtotal', text='SUBTOTAL')
+        self.tree_est_vendas.heading('valorpago', text='VALOR PAGO')
+        self.tree_est_vendas.heading('meiopagamento', text='MEIO PAGAMENTO')
+
+        self.tree_est_vendas.pack()
+        self.scrollbar_vend_h.config(command=self.tree_est_vendas.xview)
+        self.scrollbar_vend_h.pack(fill=X, padx=5)
+
+        button_vend1.bind('<Enter>', on_enter)
+        button_vend1.bind('<Leave>', on_leave)
+        button_vend2.bind('<Enter>', on_enter)
+        button_vend2.bind('<Leave>', on_leave)
+        button_vend3.bind('<Enter>', on_enter)
+        button_vend3.bind('<Leave>', on_leave)
+        button_vend4.bind('<Enter>', on_enter)
+        button_vend4.bind('<Leave>', on_leave)
+        button_vend5.bind('<Enter>', on_enter)
+        button_vend5.bind('<Leave>', on_leave)
+        button_vend6.bind('<Enter>', on_enter)
+        button_vend6.bind('<Leave>', on_leave)
         # ---------------------------------------------------------------------------------------------------------------
         # Barra inferior de tarefas
         frame_inferior = Frame(master, borderwidth=1, relief='raised')
@@ -2347,6 +2488,10 @@ class Castelo:
     def janelaCadastrarProduto(self):
 
         font_fg_labels = ("Verdana", "12", "")
+        lista_categ = ["Roçadeiras", "Cortador de Grama", "Motoserras"]
+        lista_marca = ["Kawashima", "Stihl", "Raisman"]
+        un_medida = ["UN", "METRO", "Kg"]
+        lista_revendedor = ["CCM DO BRASIL", "INTERBRASIL", "RAYSMAN", "KRAFT"]
 
         jan = Toplevel()
 
@@ -2358,8 +2503,8 @@ class Castelo:
         frame_princ1 = Frame(jan)
         frame_princ1.pack(fill=X, padx=10, pady=10)
         Button(frame_princ1, text="Salvar(F2)", width=10).pack(side=LEFT)
-        Button(frame_princ1, text="Cancelar", width=10).pack(side=LEFT, padx=20)
-        Button(frame_princ1, text="Clonar", width=10).pack(side=RIGHT)
+        Button(frame_princ1, text="Cancelar", width=10, command=jan.destroy).pack(side=LEFT, padx=20)
+        Button(frame_princ1, text="Clonar", width=10, command=self.janelaClonarProduto, state=DISABLED).pack(side=RIGHT)
 
         frame_princ2 = Frame(jan)
         frame_princ2.pack(fill=BOTH, padx=10, pady=10)
@@ -2373,27 +2518,229 @@ class Castelo:
         nb_os.add(frame_est_tributos, text="Tributos")
 
         subframe_est_dados1 = Frame(frame_est_dados)
-        subframe_est_dados1.pack(fill=X)
+        subframe_est_dados1.pack(fill=X, padx=20, ipady=5)
         Label(subframe_est_dados1, text="Código").grid(row=0, column=0, sticky=W, pady=10)
         Entry(subframe_est_dados1, width=20).grid(row=0, column=1, sticky=W, padx=20)
         Label(subframe_est_dados1, width=20).grid(row=0, column=2)
         Label(subframe_est_dados1, text="Código Extra").grid(row=0, column=3, sticky=E)
         Entry(subframe_est_dados1, width=20).grid(row=0, column=4, sticky=W, padx=20)
         Label(subframe_est_dados1, text="Descrição").grid(row=1, column=0, sticky=W)
-        Entry(subframe_est_dados1, width=85).grid(row=1, column=1, columnspan=4, sticky=W, padx=20)
+        Entry(subframe_est_dados1, width=87).grid(row=1, column=1, columnspan=4, sticky=W, padx=20)
         Label(subframe_est_dados1, text="Categoria").grid(row=2, column=0, sticky=W, pady=10)
-        Entry(subframe_est_dados1, width=20).grid(row=2, column=1, sticky=W, padx=20)
+        option_categ = ttk.Combobox(subframe_est_dados1, values=lista_categ, state="readonly", width=17)
+        option_categ.grid(row=2, column=1, sticky=W, padx=20)
         Label(subframe_est_dados1, text="Marca").grid(row=3, column=0, sticky=W)
-        Entry(subframe_est_dados1, width=20).grid(row=3, column=1, sticky=W, padx=20)
-        Label(subframe_est_dados1, text="Revendedor").grid(row=3, column=3, sticky=E)
-        Entry(subframe_est_dados1, width=20).grid(row=3, column=4, sticky=W, padx=20)
+        option_marca = ttk.Combobox(subframe_est_dados1, values=lista_marca, state="readonly", width=17)
+        option_marca.grid(row=3, column=1, sticky=W, padx=20)
+        Label(subframe_est_dados1, text="Revendedor").grid(row=4, column=3, sticky=E)
+        option_revendedor = ttk.Combobox(subframe_est_dados1, values=lista_revendedor, state="readonly", width=17)
+        option_revendedor.grid(row=4, column=4, sticky=W, padx=20)
         Label(subframe_est_dados1, text="Localização").grid(row=4, column=0, sticky=W, pady=10)
         Entry(subframe_est_dados1, width=20).grid(row=4, column=1, sticky=W, padx=20)
+        Label(subframe_est_dados1, width=20, relief=SUNKEN, height=7).grid(row=0, column=5, rowspan=5, sticky=N,
+                                                                           pady=10)
+        Button(subframe_est_dados1, text="IMG", width=5).grid(row=4, column=5, sticky=E)
 
+        ttk.Separator(subframe_est_dados1, orient=HORIZONTAL).grid(row=5, column=0, columnspan=8, sticky=EW)
+
+        Label(subframe_est_dados1, text="Preço de Venda", font=("", 8, "bold")).grid(row=6, column=0, sticky=W, pady=10)
+        Entry(subframe_est_dados1, width=20).grid(row=6, column=1, sticky=W, padx=20)
+        Label(subframe_est_dados1, text="Preço de Custo").grid(row=7, column=0, sticky=W)
+        Entry(subframe_est_dados1, width=20).grid(row=7, column=1, sticky=W, padx=20)
+
+        ttk.Separator(subframe_est_dados1, orient=HORIZONTAL).grid(row=8, column=0, columnspan=6, sticky=EW, pady=10)
+
+        Label(subframe_est_dados1, text="Estoque Atual", font=("", 8, "bold")).grid(row=9, column=0, sticky=W)
+        Entry(subframe_est_dados1, width=20).grid(row=9, column=1, sticky=W, padx=20)
+        Label(subframe_est_dados1, text="Unidade de Medida").grid(row=10, column=0, sticky=W, pady=10)
+        option_medida = ttk.Combobox(subframe_est_dados1, values=un_medida, state="readonly", width=17)
+        option_medida.grid(row=10, column=1, sticky=W, padx=20)
+        Label(subframe_est_dados1, text="Estoque Mínimo").grid(row=11, column=0, sticky=W)
+        Entry(subframe_est_dados1, width=20).grid(row=11, column=1, sticky=W, padx=20)
+
+        ttk.Separator(subframe_est_dados1, orient=HORIZONTAL).grid(row=12, column=0, columnspan=6, sticky=EW, pady=10)
+
+        Label(subframe_est_dados1, text="Observações").grid(row=13, column=0, sticky=NW)
+        obs_criar_prod = Text(subframe_est_dados1, relief=SUNKEN, height=5, width=67)
+        obs_criar_prod.grid(row=13, column=1, sticky=W, columnspan=5, padx=20)
 
         jan.transient(root2)
         jan.focus_force()
         jan.grab_set()
+
+    def janelaEditarProduto(self):
+
+        font_fg_labels = ("Verdana", "12", "")
+        lista_categ = ["Roçadeiras", "Cortador de Grama", "Motoserras"]
+        lista_marca = ["Kawashima", "Stihl", "Raisman"]
+        un_medida = ["UN", "METRO", "Kg"]
+        lista_revendedor = ["CCM DO BRASIL", "INTERBRASIL", "RAYSMAN", "KRAFT"]
+
+        jan = Toplevel()
+
+        # Centraliza a janela
+        x_cordinate = int((self.w / 2) - (1000 / 2))
+        y_cordinate = int((self.h / 2) - (650 / 2))
+        jan.geometry("{}x{}+{}+{}".format(1000, 650, x_cordinate, y_cordinate))
+
+        frame_princ1 = Frame(jan)
+        frame_princ1.pack(fill=X, padx=10, pady=10)
+        Button(frame_princ1, text="Salvar(F2)", width=10).pack(side=LEFT)
+        Button(frame_princ1, text="Cancelar", width=10, command=jan.destroy).pack(side=LEFT, padx=20)
+        Button(frame_princ1, text="Clonar", width=10,
+               command=lambda: [jan.destroy(), self.janelaClonarProduto()]).pack(side=RIGHT)
+
+        frame_princ2 = Frame(jan)
+        frame_princ2.pack(fill=BOTH, padx=10, pady=10)
+
+        nb_os = ttk.Notebook(frame_princ2, width=350)
+        nb_os.pack(fill=BOTH)
+        frame_est_dados = Frame(nb_os)
+        frame_est_tributos = Frame(nb_os)
+
+        nb_os.add(frame_est_dados, text="Dados")
+        nb_os.add(frame_est_tributos, text="Tributos")
+
+        subframe_est_dados1 = Frame(frame_est_dados)
+        subframe_est_dados1.pack(fill=X, padx=20, ipady=5)
+        Label(subframe_est_dados1, text="Código").grid(row=0, column=0, sticky=W, pady=10)
+        Entry(subframe_est_dados1, width=20).grid(row=0, column=1, sticky=W, padx=20)
+        Label(subframe_est_dados1, width=20).grid(row=0, column=2)
+        Label(subframe_est_dados1, text="Código Extra").grid(row=0, column=3, sticky=E)
+        Entry(subframe_est_dados1, width=20).grid(row=0, column=4, sticky=W, padx=20)
+        Label(subframe_est_dados1, text="Descrição").grid(row=1, column=0, sticky=W)
+        Entry(subframe_est_dados1, width=87).grid(row=1, column=1, columnspan=4, sticky=W, padx=20)
+        Label(subframe_est_dados1, text="Categoria").grid(row=2, column=0, sticky=W, pady=10)
+        option_categ = ttk.Combobox(subframe_est_dados1, values=lista_categ, state="readonly", width=17)
+        option_categ.grid(row=2, column=1, sticky=W, padx=20)
+        Label(subframe_est_dados1, text="Marca").grid(row=3, column=0, sticky=W)
+        option_marca = ttk.Combobox(subframe_est_dados1, values=lista_marca, state="readonly", width=17)
+        option_marca.grid(row=3, column=1, sticky=W, padx=20)
+        Label(subframe_est_dados1, text="Revendedor").grid(row=4, column=3, sticky=E)
+        option_revendedor = ttk.Combobox(subframe_est_dados1, values=lista_revendedor, state="readonly", width=17)
+        option_revendedor.grid(row=4, column=4, sticky=W, padx=20)
+        Label(subframe_est_dados1, text="Localização").grid(row=4, column=0, sticky=W, pady=10)
+        Entry(subframe_est_dados1, width=20).grid(row=4, column=1, sticky=W, padx=20)
+        Label(subframe_est_dados1, width=20, relief=SUNKEN, height=7).grid(row=0, column=5, rowspan=5, sticky=N,
+                                                                           pady=10)
+        Button(subframe_est_dados1, text="IMG", width=5).grid(row=4, column=5, sticky=E)
+
+        ttk.Separator(subframe_est_dados1, orient=HORIZONTAL).grid(row=5, column=0, columnspan=8, sticky=EW)
+
+        Label(subframe_est_dados1, text="Preço de Venda", font=("", 8, "bold")).grid(row=6, column=0, sticky=W, pady=10)
+        Entry(subframe_est_dados1, width=20).grid(row=6, column=1, sticky=W, padx=20)
+        Label(subframe_est_dados1, text="Preço de Custo").grid(row=7, column=0, sticky=W)
+        Entry(subframe_est_dados1, width=20).grid(row=7, column=1, sticky=W, padx=20)
+
+        ttk.Separator(subframe_est_dados1, orient=HORIZONTAL).grid(row=8, column=0, columnspan=6, sticky=EW, pady=10)
+
+        Label(subframe_est_dados1, text="Estoque Atual", font=("", 8, "bold")).grid(row=9, column=0, sticky=W)
+        Entry(subframe_est_dados1, width=20).grid(row=9, column=1, sticky=W, padx=20)
+        Label(subframe_est_dados1, text="Unidade de Medida").grid(row=10, column=0, sticky=W, pady=10)
+        option_medida = ttk.Combobox(subframe_est_dados1, values=un_medida, state="readonly", width=17)
+        option_medida.grid(row=10, column=1, sticky=W, padx=20)
+        Label(subframe_est_dados1, text="Estoque Mínimo").grid(row=11, column=0, sticky=W)
+        Entry(subframe_est_dados1, width=20).grid(row=11, column=1, sticky=W, padx=20)
+
+        ttk.Separator(subframe_est_dados1, orient=HORIZONTAL).grid(row=12, column=0, columnspan=6, sticky=EW, pady=10)
+
+        Label(subframe_est_dados1, text="Observações").grid(row=13, column=0, sticky=NW)
+        obs_criar_prod = Text(subframe_est_dados1, relief=SUNKEN, height=5, width=67)
+        obs_criar_prod.grid(row=13, column=1, sticky=W, columnspan=5, padx=20)
+
+        jan.transient(root2)
+        jan.focus_force()
+        jan.grab_set()
+
+    def janelaClonarProduto(self):
+
+        font_fg_labels = ("Verdana", "12", "")
+        lista_categ = ["Roçadeiras", "Cortador de Grama", "Motoserras"]
+        lista_marca = ["Kawashima", "Stihl", "Raisman"]
+        un_medida = ["UN", "METRO", "Kg"]
+        lista_revendedor = ["CCM DO BRASIL", "INTERBRASIL", "RAYSMAN", "KRAFT"]
+
+        jan = Toplevel()
+
+        # Centraliza a janela
+        x_cordinate = int((self.w / 2) - (1000 / 2))
+        y_cordinate = int((self.h / 2) - (650 / 2))
+        jan.geometry("{}x{}+{}+{}".format(1000, 650, x_cordinate, y_cordinate))
+
+        frame_princ1 = Frame(jan)
+        frame_princ1.pack(fill=X, padx=10, pady=10)
+        Button(frame_princ1, text="Salvar(F2)", width=10).pack(side=LEFT)
+        Button(frame_princ1, text="Cancelar", width=10, command=jan.destroy).pack(side=LEFT, padx=20)
+        Button(frame_princ1, text="Clonar", width=10, state=DISABLED).pack(side=RIGHT)
+
+        frame_princ2 = Frame(jan)
+        frame_princ2.pack(fill=BOTH, padx=10, pady=10)
+
+        nb_os = ttk.Notebook(frame_princ2, width=350)
+        nb_os.pack(fill=BOTH)
+        frame_est_dados = Frame(nb_os)
+        frame_est_tributos = Frame(nb_os)
+
+        nb_os.add(frame_est_dados, text="Dados")
+        nb_os.add(frame_est_tributos, text="Tributos")
+
+        subframe_est_dados1 = Frame(frame_est_dados)
+        subframe_est_dados1.pack(fill=X, padx=20, ipady=5)
+        Label(subframe_est_dados1, text="Código").grid(row=0, column=0, sticky=W, pady=10)
+        Entry(subframe_est_dados1, width=20).grid(row=0, column=1, sticky=W, padx=20)
+        Label(subframe_est_dados1, width=20).grid(row=0, column=2)
+        Label(subframe_est_dados1, text="Código Extra").grid(row=0, column=3, sticky=E)
+        Entry(subframe_est_dados1, width=20).grid(row=0, column=4, sticky=W, padx=20)
+        Label(subframe_est_dados1, text="Descrição").grid(row=1, column=0, sticky=W)
+        Entry(subframe_est_dados1, width=87).grid(row=1, column=1, columnspan=4, sticky=W, padx=20)
+        Label(subframe_est_dados1, text="Categoria").grid(row=2, column=0, sticky=W, pady=10)
+        option_categ = ttk.Combobox(subframe_est_dados1, values=lista_categ, state="readonly", width=17)
+        option_categ.grid(row=2, column=1, sticky=W, padx=20)
+        Label(subframe_est_dados1, text="Marca").grid(row=3, column=0, sticky=W)
+        option_marca = ttk.Combobox(subframe_est_dados1, values=lista_marca, state="readonly", width=17)
+        option_marca.grid(row=3, column=1, sticky=W, padx=20)
+        Label(subframe_est_dados1, text="Revendedor").grid(row=4, column=3, sticky=E)
+        option_revendedor = ttk.Combobox(subframe_est_dados1, values=lista_revendedor, state="readonly", width=17)
+        option_revendedor.grid(row=4, column=4, sticky=W, padx=20)
+        Label(subframe_est_dados1, text="Localização").grid(row=4, column=0, sticky=W, pady=10)
+        Entry(subframe_est_dados1, width=20).grid(row=4, column=1, sticky=W, padx=20)
+        Label(subframe_est_dados1, width=20, relief=SUNKEN, height=7).grid(row=0, column=5, rowspan=5, sticky=N,
+                                                                           pady=10)
+        Button(subframe_est_dados1, text="IMG", width=5).grid(row=4, column=5, sticky=E)
+
+        ttk.Separator(subframe_est_dados1, orient=HORIZONTAL).grid(row=5, column=0, columnspan=8, sticky=EW)
+
+        Label(subframe_est_dados1, text="Preço de Venda", font=("", 8, "bold")).grid(row=6, column=0, sticky=W, pady=10)
+        Entry(subframe_est_dados1, width=20).grid(row=6, column=1, sticky=W, padx=20)
+        Label(subframe_est_dados1, text="Preço de Custo").grid(row=7, column=0, sticky=W)
+        Entry(subframe_est_dados1, width=20).grid(row=7, column=1, sticky=W, padx=20)
+
+        ttk.Separator(subframe_est_dados1, orient=HORIZONTAL).grid(row=8, column=0, columnspan=6, sticky=EW, pady=10)
+
+        Label(subframe_est_dados1, text="Estoque Atual", font=("", 8, "bold")).grid(row=9, column=0, sticky=W)
+        Entry(subframe_est_dados1, width=20).grid(row=9, column=1, sticky=W, padx=20)
+        Label(subframe_est_dados1, text="Unidade de Medida").grid(row=10, column=0, sticky=W, pady=10)
+        option_medida = ttk.Combobox(subframe_est_dados1, values=un_medida, state="readonly", width=17)
+        option_medida.grid(row=10, column=1, sticky=W, padx=20)
+        Label(subframe_est_dados1, text="Estoque Mínimo").grid(row=11, column=0, sticky=W)
+        Entry(subframe_est_dados1, width=20).grid(row=11, column=1, sticky=W, padx=20)
+
+        ttk.Separator(subframe_est_dados1, orient=HORIZONTAL).grid(row=12, column=0, columnspan=6, sticky=EW, pady=10)
+
+        Label(subframe_est_dados1, text="Observações").grid(row=13, column=0, sticky=NW)
+        obs_criar_prod = Text(subframe_est_dados1, relief=SUNKEN, height=5, width=67)
+        obs_criar_prod.grid(row=13, column=1, sticky=W, columnspan=5, padx=20)
+
+        jan.transient(root2)
+        jan.focus_force()
+        jan.grab_set()
+
+    # --------------------------------------------------------------------------------------
+    def abrirJanelaVendas(self):
+        self.nome_frame.pack_forget()
+        self.frame_vendas.pack(fill="both", expand=TRUE)
+        self.nome_frame = self.frame_vendas
+
 
 fabrica = fabrica_conexao.FabricaConexão()
 sessao = fabrica.criar_sessao()
