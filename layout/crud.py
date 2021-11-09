@@ -880,7 +880,7 @@ class Castelo:
         self.frame_buttons_prod_vendas = Frame(self.frame_vendas, bg=color_est2, relief='raised', borderwidth=1)
         self.frame_buttons_prod_vendas.pack(fill=X, pady=3)
         button_vend1 = Button(self.frame_buttons_prod_vendas, text="Nova Venda", width=15, relief=FLAT,
-                             bg=color_est2, command=self.janelaCadastrarProduto, height=2)
+                             bg=color_est2, command=self.janelaNovaVenda, height=2)
         button_vend1.pack(side=LEFT)
         button_vend2 = Button(self.frame_buttons_prod_vendas, text="Editar", width=15, relief=FLAT,
                              bg=color_est2, command=self.janelaEditarProduto, height=2)
@@ -2741,6 +2741,76 @@ class Castelo:
         self.frame_vendas.pack(fill="both", expand=TRUE)
         self.nome_frame = self.frame_vendas
 
+    def janelaNovaVenda(self):
+
+        jan = Toplevel()
+
+        # Centraliza a janela
+        x_cordinate = int((self.w / 2) - (1000 / 2))
+        y_cordinate = int((self.h / 2) - (650 / 2))
+        jan.geometry("{}x{}+{}+{}".format(1000, 650, x_cordinate, y_cordinate))
+
+        frame_princ = Frame(jan)
+        frame_princ.pack(fill=BOTH)
+        frame_princ1 = Frame(frame_princ)
+        frame_princ1.pack(fill=BOTH, padx=10, pady=10)
+
+        subframe_cliente = Frame(frame_princ1)
+        subframe_cliente.pack(fill=X)
+        Label(subframe_cliente, text='Cliente').grid(row=0, column=0, sticky=W)
+        Entry(subframe_cliente, width=150).grid(row=1, column=0, sticky=W)
+        Button(subframe_cliente, text='Buscar').grid(row=1, column=1, padx=10, ipadx=10)
+
+        subframe_prod = Frame(frame_princ1)
+        subframe_prod.pack(fill=X, pady=10)
+        frame_prod = LabelFrame(subframe_prod)
+        frame_prod.grid(row=0, column=0, sticky=W, ipady=3)
+        Label(frame_prod, text='Cód. do item').grid(sticky=W, padx=10)
+        Entry(frame_prod, width=15).grid(row=1, column=0, sticky=W, padx=10)
+        Label(frame_prod, text='Descrição do item').grid(row=0, column=1, sticky=W)
+        Entry(frame_prod, width=90).grid(row=1, column=1, sticky=W)
+        Label(frame_prod, text='Preço Unit.').grid(row=0, column=2, sticky=W, padx=10)
+        Entry(frame_prod, width=10).grid(row=1, column=2, sticky=W, padx=10)
+        Label(frame_prod, text='Qtd.').grid(row=0, column=3, sticky=W)
+        Entry(frame_prod, width=5).grid(row=1, column=3, sticky=W)
+        Button(frame_prod, text='Buscar').grid(row=1, column=4, padx=10, ipadx=10)
+        Button(subframe_prod, text='Adicionar Produto', wraplength=70).grid(row=0, column=1, padx=10, ipadx=10)
+
+        subframe_prod1 = Frame(frame_princ1)
+        subframe_prod1.pack(fill=BOTH)
+
+        tree_est_venda = ttk.Treeview(subframe_prod1,
+                                            columns=('item', 'desc', 'valorUni', 'quantidade', 'valorTotal'),
+                                            show='headings',
+                                            selectmode='browse',
+                                            height=15)
+
+        tree_est_venda.column('item', width=50, minwidth=50, stretch=False)
+        tree_est_venda.column('desc', width=500, minwidth=100, stretch=False)
+        tree_est_venda.column('valorUni', width=70, minwidth=50, stretch=False)
+        tree_est_venda.column('quantidade', width=50, minwidth=100, stretch=False)
+        tree_est_venda.column('valorTotal', width=70, minwidth=50, stretch=False)
+
+        tree_est_venda.heading('item', text='Item')
+        tree_est_venda.heading('desc', text='Descrição')
+        tree_est_venda.heading('valorUni', text='Valor Uni.')
+        tree_est_venda.heading('quantidade', text='Qtd.')
+        tree_est_venda.heading('valorTotal', text='Total')
+
+        tree_est_venda.grid(sticky=W)
+
+        labelframe_desc_vend = LabelFrame(subframe_prod1)
+        labelframe_desc_vend.grid(row=0, column=1, sticky=NW, padx=10)
+        frame_descr_vend = Frame(labelframe_desc_vend)
+        frame_descr_vend.pack(fill=BOTH, padx=10, pady=10)
+        Label(frame_descr_vend, text='SubTotal:').grid()
+        Label(frame_descr_vend, text='R$20,00', fg='blue').grid(row=0, column=1)
+        Label(frame_descr_vend, text='desconto:').grid(row=1, column=0)
+        Entry(frame_descr_vend, width=10).grid(row=1, column=1)
+
+        jan.transient(root2)
+        jan.focus_force()
+        jan.grab_set()
 
 fabrica = fabrica_conexao.FabricaConexão()
 sessao = fabrica.criar_sessao()
