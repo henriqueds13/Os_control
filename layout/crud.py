@@ -2746,9 +2746,9 @@ class Castelo:
         jan = Toplevel()
 
         # Centraliza a janela
-        x_cordinate = int((self.w / 2) - (1000 / 2))
-        y_cordinate = int((self.h / 2) - (650 / 2))
-        jan.geometry("{}x{}+{}+{}".format(1000, 650, x_cordinate, y_cordinate))
+        x_cordinate = int((self.w / 2) - (1010 / 2))
+        y_cordinate = int((self.h / 2) - (625 / 2))
+        jan.geometry("{}x{}+{}+{}".format(1010, 625, x_cordinate, y_cordinate))
 
         frame_princ = Frame(jan)
         frame_princ.pack(fill=BOTH)
@@ -2774,7 +2774,8 @@ class Castelo:
         Label(frame_prod, text='Qtd.').grid(row=0, column=3, sticky=W)
         Entry(frame_prod, width=5).grid(row=1, column=3, sticky=W)
         Button(frame_prod, text='Buscar').grid(row=1, column=4, padx=10, ipadx=10)
-        Button(subframe_prod, text='Adicionar Produto', wraplength=70).grid(row=0, column=1, padx=10, ipadx=10)
+        Button(subframe_prod, text='1', width=3, height=2).grid(row=0, column=1, padx=10, ipadx=10)
+        Button(subframe_prod, text='2', width=3, height=2).grid(row=0, column=2, padx=0, ipadx=10)
 
         subframe_prod1 = Frame(frame_princ1)
         subframe_prod1.pack(fill=BOTH)
@@ -2786,7 +2787,7 @@ class Castelo:
                                             height=15)
 
         tree_est_venda.column('item', width=50, minwidth=50, stretch=False)
-        tree_est_venda.column('desc', width=500, minwidth=100, stretch=False)
+        tree_est_venda.column('desc', width=422, minwidth=100, stretch=False)
         tree_est_venda.column('valorUni', width=70, minwidth=50, stretch=False)
         tree_est_venda.column('quantidade', width=50, minwidth=100, stretch=False)
         tree_est_venda.column('valorTotal', width=70, minwidth=50, stretch=False)
@@ -2799,14 +2800,74 @@ class Castelo:
 
         tree_est_venda.grid(sticky=W)
 
+        labelframe_form_pag = LabelFrame(subframe_prod1, text="Forma de Pagamento")
+        labelframe_form_pag.grid(row=0, column=1, sticky=NW, padx=10)
+        subframe_form_pag1 = Frame(labelframe_form_pag)
+        subframe_form_pag1.pack(padx=15, pady=18)
+        Label(subframe_form_pag1, text="Dinheiro", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=0, column=0,
+                                                                                                        padx=5)
+        Entry(subframe_form_pag1, width=18, justify=RIGHT).grid(row=0, column=1, padx=5)
+        Label(subframe_form_pag1, text="Cheque", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=1, column=0,
+                                                                                                      padx=5, pady=5)
+        Entry(subframe_form_pag1, width=18, justify=RIGHT).grid(row=1, column=1, padx=5)
+        Label(subframe_form_pag1, text="Cartão de Crédito", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=2,
+                                                                                                                 column=0,
+                                                                                                                 padx=5)
+        Entry(subframe_form_pag1, width=18, justify=RIGHT).grid(row=2, column=1, padx=5)
+        Label(subframe_form_pag1, text="Cartão de Débito", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=3,
+                                                                                                                column=0,
+                                                                                                                padx=5,
+                                                                                                                pady=5)
+        Entry(subframe_form_pag1, width=18, justify=RIGHT).grid(row=3, column=1, padx=5)
+        Label(subframe_form_pag1, text="PIX", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=4, column=0,
+                                                                                                   padx=5)
+        Entry(subframe_form_pag1, width=18, justify=RIGHT).grid(row=4, column=1, padx=5)
+        Label(subframe_form_pag1, text="Outros", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=5, column=0,
+                                                                                                      padx=5, pady=5)
+        Entry(subframe_form_pag1, width=18, justify=RIGHT).grid(row=5, column=1, padx=5)
+        subframe_form_pag2 = Frame(labelframe_form_pag)
+        subframe_form_pag2.pack(padx=10, fill=X, side=LEFT)
+        labelframe_valor_rec = LabelFrame(subframe_form_pag2)
+        labelframe_valor_rec.grid(row=0, column=0, sticky=W, pady=5)
+        Label(labelframe_valor_rec, text="Valor à Receber:").pack()
+        Label(labelframe_valor_rec, text="R$ 0,00", anchor=E, font=("", "12", ""), fg="red").pack(fill=X, pady=5,
+                                                                                                  padx=30)
+        Button(subframe_form_pag2, text="Salvar", width=8).grid(row=1, column=0, sticky=W, pady=5, padx=30)
+        subframe_form_pag3 = Frame(labelframe_form_pag)
+        subframe_form_pag3.pack(padx=5, fill=BOTH, side=LEFT, pady=7)
+        Label(subframe_form_pag3, bg="grey", text=3, width=21, height=6).pack()
+
+        labelframe_pag_coment = LabelFrame(subframe_prod1, text="Observações de Pagamento")
+        labelframe_pag_coment.grid(row=1, column=0, sticky=W)
+        Entry(labelframe_pag_coment, width=108).pack(padx=5, pady=5)
+        Entry(labelframe_pag_coment, width=108).pack(padx=5)
+        Entry(labelframe_pag_coment, width=108).pack(pady=5, padx=5)
+
         labelframe_desc_vend = LabelFrame(subframe_prod1)
-        labelframe_desc_vend.grid(row=0, column=1, sticky=NW, padx=10)
+        labelframe_desc_vend.grid(row=1, column=1, sticky=SW, padx=10, ipady=1)
         frame_descr_vend = Frame(labelframe_desc_vend)
         frame_descr_vend.pack(fill=BOTH, padx=10, pady=10)
         Label(frame_descr_vend, text='SubTotal:').grid()
-        Label(frame_descr_vend, text='R$20,00', fg='blue').grid(row=0, column=1)
+        Label(frame_descr_vend, text='R$20,00', fg='blue', font=('', '12', '')).grid(row=0, column=1)
         Label(frame_descr_vend, text='desconto:').grid(row=1, column=0)
         Entry(frame_descr_vend, width=10).grid(row=1, column=1)
+        Label(frame_descr_vend, width=2).grid(row=0, column=2, padx=5)
+        frame_valor_total = LabelFrame(frame_descr_vend)
+        frame_valor_total.grid(row=0, column=3, rowspan=2, padx=5)
+        Label(frame_valor_total, text='TOTAL:', font=('verdana', '12', 'bold')).pack(pady=1)
+        Label(frame_valor_total, text='R$50,00', font=('verdana', '15', 'bold'), fg='red').pack(padx=10, pady=1)
+
+        frame_orcamento = Frame(subframe_prod1)
+        frame_orcamento.grid(row=2, column=0, sticky=W)
+        Button(frame_orcamento, text='Orçamento').grid(row=0, column=0, ipady=10, ipadx=10,sticky=W)
+        Label(frame_orcamento, width=56).grid(row=0, column=1)
+        Label(frame_orcamento, text="Vendedor:").grid(row=0, column=2, padx=10)
+        Entry(frame_orcamento, width=15, justify=RIGHT, relief=SUNKEN, bd=2, show='*').grid(row=0, column=3)
+
+        frame_button_confirma = Frame(subframe_prod1)
+        frame_button_confirma.grid(row=2, column=1, pady=10, sticky=E)
+        Button(frame_button_confirma, text='Fechar', command=jan.destroy).pack(side=LEFT, ipady=10, ipadx=30)
+        Button(frame_button_confirma, text='Confirmar Venda').pack(side=LEFT, ipady=10, padx=15)
 
         jan.transient(root2)
         jan.focus_force()
