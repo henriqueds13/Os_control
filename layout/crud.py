@@ -805,11 +805,11 @@ class Castelo:
         self.frame_buttons_reg_est = Frame(self.frame_reg_est, bg=color_est2, relief='raised', borderwidth=1)
         self.frame_buttons_reg_est.pack(pady=3, side=LEFT, ipadx=1, fill=X)
         button_est5 = Button(self.frame_buttons_reg_est, text=" Entrada Estoque", width=15, relief=FLAT,
-                             wraplength=50, bg=color_est2)
+                             wraplength=50, bg=color_est2, command=self.janelaEntradaEstoque)
         button_est5.pack(side=LEFT)
         ttk.Separator(self.frame_buttons_reg_est, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
         button_est6 = Button(self.frame_buttons_reg_est, text="Saída do Estoque", width=15, relief=FLAT,
-                             wraplength=50, bg=color_est2)
+                             wraplength=50, bg=color_est2, command=self.janelaSaidaEstoque)
         button_est6.pack(side=LEFT)
         ttk.Separator(self.frame_buttons_reg_est, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
         button_est7 = Button(self.frame_buttons_reg_est, text="Editar Registro", width=15, relief=FLAT,
@@ -883,11 +883,11 @@ class Castelo:
                              bg=color_est2, command=self.janelaNovaVenda, height=2)
         button_vend1.pack(side=LEFT)
         button_vend2 = Button(self.frame_buttons_prod_vendas, text="Editar", width=15, relief=FLAT,
-                             bg=color_est2, command=self.janelaEditarProduto, height=2)
+                             bg=color_est2, command=self.janelaEditarVenda, height=2)
         button_vend2.pack(side=LEFT)
         ttk.Separator(self.frame_buttons_prod_vendas, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
-        button_vend3 = Button(self.frame_buttons_prod_vendas, text="Troca ou Devolução", width=15, relief=FLAT,
-                             bg=color_est2, command=self.janelaClonarProduto, height=2)
+        button_vend3 = Button(self.frame_buttons_prod_vendas, text="Imprimir Recibo", width=15, relief=FLAT,
+                             bg=color_est2, height=2)
         button_vend3.pack(side=LEFT)
         ttk.Separator(self.frame_buttons_prod_vendas, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
         button_vend4 = Button(self.frame_buttons_prod_vendas, text="Cancelar Venda", width=15, relief=FLAT,
@@ -2735,6 +2735,403 @@ class Castelo:
         jan.focus_force()
         jan.grab_set()
 
+    def janelaEntradaEstoque(self):
+
+        jan = Toplevel()
+
+        # Centraliza a janela
+        x_cordinate = int((self.w / 2) - (1010 / 2))
+        y_cordinate = int((self.h / 2) - (625 / 2))
+        jan.geometry("{}x{}+{}+{}".format(1010, 625, x_cordinate, y_cordinate))
+
+        frame_princ = Frame(jan)
+        frame_princ.pack(fill=BOTH)
+        frame_princ1 = Frame(frame_princ)
+        frame_princ1.pack(fill=BOTH, padx=10, pady=10)
+
+        subframe_fornecedor = Frame(frame_princ1)
+        subframe_fornecedor.pack(fill=X)
+        Label(subframe_fornecedor, text='Fornecedor').grid(row=0, column=0, sticky=W)
+        Entry(subframe_fornecedor, width=150).grid(row=1, column=0, sticky=W)
+        Button(subframe_fornecedor, text='Buscar').grid(row=1, column=1, padx=10, ipadx=10)
+
+        subframe_prod = Frame(frame_princ1)
+        subframe_prod.pack(fill=X, pady=10)
+        frame_prod = LabelFrame(subframe_prod)
+        frame_prod.grid(row=0, column=0, sticky=W, ipady=3)
+        Label(frame_prod, text='Cód. do item').grid(sticky=W, padx=10)
+        Entry(frame_prod, width=15).grid(row=1, column=0, sticky=W, padx=10)
+        Label(frame_prod, text='Descrição do item').grid(row=0, column=1, sticky=W)
+        Entry(frame_prod, width=90).grid(row=1, column=1, sticky=W)
+        Label(frame_prod, text='Preço Unit.').grid(row=0, column=2, sticky=W, padx=10)
+        Entry(frame_prod, width=10).grid(row=1, column=2, sticky=W, padx=10)
+        Label(frame_prod, text='Qtd.').grid(row=0, column=3, sticky=W)
+        Entry(frame_prod, width=5).grid(row=1, column=3, sticky=W)
+        Button(frame_prod, text='Buscar').grid(row=1, column=4, padx=10, ipadx=10)
+        Button(subframe_prod, text='1', width=3, height=2).grid(row=0, column=1, padx=10, ipadx=10)
+        Button(subframe_prod, text='2', width=3, height=2).grid(row=0, column=2, padx=0, ipadx=10)
+
+        subframe_prod1 = Frame(frame_princ1)
+        subframe_prod1.pack(fill=BOTH)
+
+        tree_est_venda = ttk.Treeview(subframe_prod1,
+                                            columns=('item', 'desc', 'valorUni', 'quantidade', 'valorTotal'),
+                                            show='headings',
+                                            selectmode='browse',
+                                            height=15)
+
+        tree_est_venda.column('item', width=50, minwidth=50, stretch=False)
+        tree_est_venda.column('desc', width=422, minwidth=100, stretch=False)
+        tree_est_venda.column('valorUni', width=70, minwidth=50, stretch=False)
+        tree_est_venda.column('quantidade', width=50, minwidth=100, stretch=False)
+        tree_est_venda.column('valorTotal', width=70, minwidth=50, stretch=False)
+
+        tree_est_venda.heading('item', text='Item')
+        tree_est_venda.heading('desc', text='Descrição')
+        tree_est_venda.heading('valorUni', text='Valor Uni.')
+        tree_est_venda.heading('quantidade', text='Qtd.')
+        tree_est_venda.heading('valorTotal', text='Total')
+
+        tree_est_venda.grid(sticky=W)
+
+        labelframe_form_pag = LabelFrame(subframe_prod1, text="Dados do produto")
+        labelframe_form_pag.grid(row=0, column=1, sticky=NW, padx=10)
+        subframe_form_pag1 = Frame(labelframe_form_pag)
+        subframe_form_pag1.pack(padx=15, pady=18)
+        Label(subframe_form_pag1, text="Descrição", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=0, column=0,
+                                                                                                        padx=5)
+        Entry(subframe_form_pag1, width=18, justify=RIGHT, state=DISABLED).grid(row=0, column=1, padx=5)
+        Label(subframe_form_pag1, text="Categoria", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=1, column=0,
+                                                                                                      padx=5, pady=5)
+        Entry(subframe_form_pag1, width=18, justify=RIGHT, state=DISABLED).grid(row=1, column=1, padx=5)
+        Label(subframe_form_pag1, text="Estoque Atual", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=2,
+                                                                                                                 column=0,
+                                                                                                                 padx=5)
+        Entry(subframe_form_pag1, width=18, justify=RIGHT, state=DISABLED).grid(row=2, column=1, padx=5)
+        Label(subframe_form_pag1, text="Preço de Custo", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=3,
+                                                                                                                column=0,
+                                                                                                                padx=5,
+                                                                                                                pady=5)
+        Entry(subframe_form_pag1, width=18, justify=RIGHT).grid(row=3, column=1, padx=5)
+        Label(subframe_form_pag1, text="Preço de Venda", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=4, column=0,
+                                                                                                   padx=5)
+        Entry(subframe_form_pag1, width=18, justify=RIGHT).grid(row=4, column=1, padx=5)
+        Label(subframe_form_pag1, text="Revendedor", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=5, column=0,
+                                                                                                      padx=5, pady=5)
+        Entry(subframe_form_pag1, width=18, justify=RIGHT, state=DISABLED).grid(row=5, column=1, padx=5)
+        subframe_form_pag2 = Frame(labelframe_form_pag)
+        subframe_form_pag2.pack(padx=10, fill=X, side=LEFT)
+        labelframe_valor_rec = LabelFrame(subframe_form_pag2)
+        labelframe_valor_rec.grid(row=0, column=0, sticky=W, pady=5)
+        Label(labelframe_valor_rec, text="Estoque Miníno:").pack()
+        Label(labelframe_valor_rec, text="0", anchor=E, font=("", "12", ""), fg="red").pack(fill=X, pady=5,
+                                                                                                  padx=30)
+        Button(subframe_form_pag2, text="Editar", width=8).grid(row=1, column=0, sticky=W, pady=5, padx=30)
+        subframe_form_pag3 = Frame(labelframe_form_pag)
+        subframe_form_pag3.pack(padx=5, fill=BOTH, side=LEFT, pady=7)
+        Label(subframe_form_pag3, bg="grey", text=3, width=21, height=6).pack()
+
+        labelframe_pag_coment = LabelFrame(subframe_prod1, text="Observações")
+        labelframe_pag_coment.grid(row=1, column=0, sticky=W)
+        Entry(labelframe_pag_coment, width=108).pack(padx=5, pady=5)
+        Entry(labelframe_pag_coment, width=108).pack(padx=5)
+        Entry(labelframe_pag_coment, width=108).pack(pady=5, padx=5)
+
+        labelframe_desc_vend = LabelFrame(subframe_prod1)
+        labelframe_desc_vend.grid(row=1, column=1, sticky=SW, padx=10, ipady=1)
+        frame_descr_vend = Frame(labelframe_desc_vend)
+        frame_descr_vend.pack(fill=BOTH, padx=10, pady=10)
+        Label(frame_descr_vend, text='N° Nota:').grid()
+        Label(frame_descr_vend, text='45654', fg='blue', font=('', '12', '')).grid(row=0, column=1)
+        Label(frame_descr_vend, text='Frete:').grid(row=1, column=0)
+        Entry(frame_descr_vend, width=10, state=DISABLED).grid(row=1, column=1)
+        Label(frame_descr_vend, width=2).grid(row=0, column=2, padx=5)
+        frame_valor_total = LabelFrame(frame_descr_vend)
+        frame_valor_total.grid(row=0, column=3, rowspan=2, padx=5)
+        Label(frame_valor_total, text='TOTAL:', font=('verdana', '12', 'bold')).pack(pady=1)
+        Label(frame_valor_total, text='R$50,00', font=('verdana', '15', 'bold'), fg='red').pack(padx=10, pady=1)
+
+        frame_orcamento = Frame(subframe_prod1)
+        frame_orcamento.grid(row=2, column=0, sticky=W)
+        Label(frame_orcamento, text="Vendedor:").grid(row=0, column=2, padx=10)
+        Entry(frame_orcamento, width=15, justify=RIGHT, relief=SUNKEN, bd=2, show='*').grid(row=0, column=3)
+
+        frame_button_confirma = Frame(subframe_prod1)
+        frame_button_confirma.grid(row=2, column=1, pady=10, sticky=E)
+        Button(frame_button_confirma, text='Fechar', command=jan.destroy).pack(side=LEFT, ipady=10, ipadx=30)
+        Button(frame_button_confirma, text='Confirmar Entrada').pack(side=LEFT, ipady=10, padx=15)
+
+        jan.transient(root2)
+        jan.focus_force()
+        jan.grab_set()
+
+    def janelaEntradaEstoque(self):
+        jan = Toplevel()
+
+        # Centraliza a janela
+        x_cordinate = int((self.w / 2) - (1010 / 2))
+        y_cordinate = int((self.h / 2) - (625 / 2))
+        jan.geometry("{}x{}+{}+{}".format(1010, 625, x_cordinate, y_cordinate))
+
+        frame_princ = Frame(jan)
+        frame_princ.pack(fill=BOTH)
+        frame_princ1 = Frame(frame_princ)
+        frame_princ1.pack(fill=BOTH, padx=10, pady=10)
+
+        subframe_fornecedor = Frame(frame_princ1)
+        subframe_fornecedor.pack(fill=X)
+        Label(subframe_fornecedor, text='Fornecedor').grid(row=0, column=0, sticky=W)
+        Entry(subframe_fornecedor, width=150).grid(row=1, column=0, sticky=W)
+        Button(subframe_fornecedor, text='Buscar').grid(row=1, column=1, padx=10, ipadx=10)
+
+        subframe_prod = Frame(frame_princ1)
+        subframe_prod.pack(fill=X, pady=10)
+        frame_prod = LabelFrame(subframe_prod)
+        frame_prod.grid(row=0, column=0, sticky=W, ipady=3)
+        Label(frame_prod, text='Cód. do item').grid(sticky=W, padx=10)
+        Entry(frame_prod, width=15).grid(row=1, column=0, sticky=W, padx=10)
+        Label(frame_prod, text='Descrição do item').grid(row=0, column=1, sticky=W)
+        Entry(frame_prod, width=90).grid(row=1, column=1, sticky=W)
+        Label(frame_prod, text='Preço Unit.').grid(row=0, column=2, sticky=W, padx=10)
+        Entry(frame_prod, width=10).grid(row=1, column=2, sticky=W, padx=10)
+        Label(frame_prod, text='Qtd.').grid(row=0, column=3, sticky=W)
+        Entry(frame_prod, width=5).grid(row=1, column=3, sticky=W)
+        Button(frame_prod, text='Buscar').grid(row=1, column=4, padx=10, ipadx=10)
+        Button(subframe_prod, text='1', width=3, height=2).grid(row=0, column=1, padx=10, ipadx=10)
+        Button(subframe_prod, text='2', width=3, height=2).grid(row=0, column=2, padx=0, ipadx=10)
+
+        subframe_prod1 = Frame(frame_princ1)
+        subframe_prod1.pack(fill=BOTH)
+
+        tree_est_venda = ttk.Treeview(subframe_prod1,
+                                      columns=('item', 'desc', 'valorUni', 'quantidade', 'valorTotal'),
+                                      show='headings',
+                                      selectmode='browse',
+                                      height=15)
+
+        tree_est_venda.column('item', width=50, minwidth=50, stretch=False)
+        tree_est_venda.column('desc', width=422, minwidth=100, stretch=False)
+        tree_est_venda.column('valorUni', width=70, minwidth=50, stretch=False)
+        tree_est_venda.column('quantidade', width=50, minwidth=100, stretch=False)
+        tree_est_venda.column('valorTotal', width=70, minwidth=50, stretch=False)
+
+        tree_est_venda.heading('item', text='Item')
+        tree_est_venda.heading('desc', text='Descrição')
+        tree_est_venda.heading('valorUni', text='Valor Uni.')
+        tree_est_venda.heading('quantidade', text='Qtd.')
+        tree_est_venda.heading('valorTotal', text='Total')
+
+        tree_est_venda.grid(sticky=W)
+
+        labelframe_form_pag = LabelFrame(subframe_prod1, text="Dados do produto")
+        labelframe_form_pag.grid(row=0, column=1, sticky=NW, padx=10)
+        subframe_form_pag1 = Frame(labelframe_form_pag)
+        subframe_form_pag1.pack(padx=15, pady=18)
+        Label(subframe_form_pag1, text="Descrição", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=0,
+                                                                                                         column=0,
+                                                                                                         padx=5)
+        Entry(subframe_form_pag1, width=18, justify=RIGHT, state=DISABLED).grid(row=0, column=1, padx=5)
+        Label(subframe_form_pag1, text="Categoria", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=1,
+                                                                                                         column=0,
+                                                                                                         padx=5,
+                                                                                                         pady=5)
+        Entry(subframe_form_pag1, width=18, justify=RIGHT, state=DISABLED).grid(row=1, column=1, padx=5)
+        Label(subframe_form_pag1, text="Estoque Atual", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=2,
+                                                                                                             column=0,
+                                                                                                             padx=5)
+        Entry(subframe_form_pag1, width=18, justify=RIGHT, state=DISABLED).grid(row=2, column=1, padx=5)
+        Label(subframe_form_pag1, text="Preço de Custo", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=3,
+                                                                                                              column=0,
+                                                                                                              padx=5,
+                                                                                                              pady=5)
+        Entry(subframe_form_pag1, width=18, justify=RIGHT).grid(row=3, column=1, padx=5)
+        Label(subframe_form_pag1, text="Preço de Venda", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=4,
+                                                                                                              column=0,
+                                                                                                              padx=5)
+        Entry(subframe_form_pag1, width=18, justify=RIGHT).grid(row=4, column=1, padx=5)
+        Label(subframe_form_pag1, text="Revendedor", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=5,
+                                                                                                          column=0,
+                                                                                                          padx=5,
+                                                                                                          pady=5)
+        Entry(subframe_form_pag1, width=18, justify=RIGHT, state=DISABLED).grid(row=5, column=1, padx=5)
+        subframe_form_pag2 = Frame(labelframe_form_pag)
+        subframe_form_pag2.pack(padx=10, fill=X, side=LEFT)
+        labelframe_valor_rec = LabelFrame(subframe_form_pag2)
+        labelframe_valor_rec.grid(row=0, column=0, sticky=W, pady=5)
+        Label(labelframe_valor_rec, text="Estoque Miníno:").pack()
+        Label(labelframe_valor_rec, text="0", anchor=E, font=("", "12", ""), fg="red").pack(fill=X, pady=5,
+                                                                                            padx=30)
+        Button(subframe_form_pag2, text="Editar", width=8).grid(row=1, column=0, sticky=W, pady=5, padx=30)
+        subframe_form_pag3 = Frame(labelframe_form_pag)
+        subframe_form_pag3.pack(padx=5, fill=BOTH, side=LEFT, pady=7)
+        Label(subframe_form_pag3, bg="grey", text=3, width=21, height=6).pack()
+
+        labelframe_pag_coment = LabelFrame(subframe_prod1, text="Observações")
+        labelframe_pag_coment.grid(row=1, column=0, sticky=W)
+        Entry(labelframe_pag_coment, width=108).pack(padx=5, pady=5)
+        Entry(labelframe_pag_coment, width=108).pack(padx=5)
+        Entry(labelframe_pag_coment, width=108).pack(pady=5, padx=5)
+
+        labelframe_desc_vend = LabelFrame(subframe_prod1)
+        labelframe_desc_vend.grid(row=1, column=1, sticky=SW, padx=10, ipady=1)
+        frame_descr_vend = Frame(labelframe_desc_vend)
+        frame_descr_vend.pack(fill=BOTH, padx=10, pady=10)
+        Label(frame_descr_vend, text='N° Nota:').grid()
+        Label(frame_descr_vend, text='45654', fg='blue', font=('', '12', '')).grid(row=0, column=1)
+        Label(frame_descr_vend, text='Frete:').grid(row=1, column=0)
+        Entry(frame_descr_vend, width=10, state=DISABLED).grid(row=1, column=1)
+        Label(frame_descr_vend, width=2).grid(row=0, column=2, padx=5)
+        frame_valor_total = LabelFrame(frame_descr_vend)
+        frame_valor_total.grid(row=0, column=3, rowspan=2, padx=5)
+        Label(frame_valor_total, text='TOTAL:', font=('verdana', '12', 'bold')).pack(pady=1)
+        Label(frame_valor_total, text='R$50,00', font=('verdana', '15', 'bold'), fg='red').pack(padx=10, pady=1)
+
+        frame_orcamento = Frame(subframe_prod1)
+        frame_orcamento.grid(row=2, column=0, sticky=W)
+        Label(frame_orcamento, text="Vendedor:").grid(row=0, column=2, padx=10)
+        Entry(frame_orcamento, width=15, justify=RIGHT, relief=SUNKEN, bd=2, show='*').grid(row=0, column=3)
+
+        frame_button_confirma = Frame(subframe_prod1)
+        frame_button_confirma.grid(row=2, column=1, pady=10, sticky=E)
+        Button(frame_button_confirma, text='Fechar', command=jan.destroy).pack(side=LEFT, ipady=10, ipadx=30)
+        Button(frame_button_confirma, text='Confirmar Entrada').pack(side=LEFT, ipady=10, padx=15)
+
+        jan.transient(root2)
+        jan.focus_force()
+        jan.grab_set()
+
+    def janelaSaidaEstoque(self):
+        jan = Toplevel()
+
+        # Centraliza a janela
+        x_cordinate = int((self.w / 2) - (1010 / 2))
+        y_cordinate = int((self.h / 2) - (625 / 2))
+        jan.geometry("{}x{}+{}+{}".format(1010, 625, x_cordinate, y_cordinate))
+
+        frame_princ = Frame(jan)
+        frame_princ.pack(fill=BOTH)
+        frame_princ1 = Frame(frame_princ)
+        frame_princ1.pack(fill=BOTH, padx=10, pady=10)
+
+        subframe_fornecedor = Frame(frame_princ1)
+        subframe_fornecedor.pack(fill=X)
+        Label(subframe_fornecedor, text='Fornecedor').grid(row=0, column=0, sticky=W)
+        Entry(subframe_fornecedor, width=150).grid(row=1, column=0, sticky=W)
+        Button(subframe_fornecedor, text='Buscar').grid(row=1, column=1, padx=10, ipadx=10)
+
+        subframe_prod = Frame(frame_princ1)
+        subframe_prod.pack(fill=X, pady=10)
+        frame_prod = LabelFrame(subframe_prod)
+        frame_prod.grid(row=0, column=0, sticky=W, ipady=3)
+        Label(frame_prod, text='Cód. do item').grid(sticky=W, padx=10)
+        Entry(frame_prod, width=15).grid(row=1, column=0, sticky=W, padx=10)
+        Label(frame_prod, text='Descrição do item').grid(row=0, column=1, sticky=W)
+        Entry(frame_prod, width=90).grid(row=1, column=1, sticky=W)
+        Label(frame_prod, text='Preço Unit.').grid(row=0, column=2, sticky=W, padx=10)
+        Entry(frame_prod, width=10).grid(row=1, column=2, sticky=W, padx=10)
+        Label(frame_prod, text='Qtd.').grid(row=0, column=3, sticky=W)
+        Entry(frame_prod, width=5).grid(row=1, column=3, sticky=W)
+        Button(frame_prod, text='Buscar').grid(row=1, column=4, padx=10, ipadx=10)
+        Button(subframe_prod, text='1', width=3, height=2).grid(row=0, column=1, padx=10, ipadx=10)
+        Button(subframe_prod, text='2', width=3, height=2).grid(row=0, column=2, padx=0, ipadx=10)
+
+        subframe_prod1 = Frame(frame_princ1)
+        subframe_prod1.pack(fill=BOTH)
+
+        tree_est_venda = ttk.Treeview(subframe_prod1,
+                                      columns=('item', 'desc', 'valorUni', 'quantidade', 'valorTotal'),
+                                      show='headings',
+                                      selectmode='browse',
+                                      height=15)
+
+        tree_est_venda.column('item', width=50, minwidth=50, stretch=False)
+        tree_est_venda.column('desc', width=422, minwidth=100, stretch=False)
+        tree_est_venda.column('valorUni', width=70, minwidth=50, stretch=False)
+        tree_est_venda.column('quantidade', width=50, minwidth=100, stretch=False)
+        tree_est_venda.column('valorTotal', width=70, minwidth=50, stretch=False)
+
+        tree_est_venda.heading('item', text='Item')
+        tree_est_venda.heading('desc', text='Descrição')
+        tree_est_venda.heading('valorUni', text='Valor Uni.')
+        tree_est_venda.heading('quantidade', text='Qtd.')
+        tree_est_venda.heading('valorTotal', text='Total')
+
+        tree_est_venda.grid(sticky=W)
+
+        labelframe_form_pag = LabelFrame(subframe_prod1, text="Dados do produto")
+        labelframe_form_pag.grid(row=0, column=1, sticky=NW, padx=10)
+        subframe_form_pag1 = Frame(labelframe_form_pag)
+        subframe_form_pag1.pack(padx=15, pady=18)
+        Label(subframe_form_pag1, text="Descrição", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=0,
+                                                                                                         column=0,
+                                                                                                         padx=5)
+        Entry(subframe_form_pag1, width=18, justify=RIGHT, state=DISABLED).grid(row=0, column=1, padx=5)
+        Label(subframe_form_pag1, text="Categoria", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=1,
+                                                                                                         column=0,
+                                                                                                         padx=5,
+                                                                                                         pady=5)
+        Entry(subframe_form_pag1, width=18, justify=RIGHT, state=DISABLED).grid(row=1, column=1, padx=5)
+        Label(subframe_form_pag1, text="Estoque Atual", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=2,
+                                                                                                             column=0,
+                                                                                                             padx=5)
+        Entry(subframe_form_pag1, width=18, justify=RIGHT, state=DISABLED).grid(row=2, column=1, padx=5)
+        Label(subframe_form_pag1, text="Preço de Custo", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=3,
+                                                                                                              column=0,
+                                                                                                              padx=5,
+                                                                                                              pady=5)
+        Entry(subframe_form_pag1, width=18, justify=RIGHT).grid(row=3, column=1, padx=5)
+        Label(subframe_form_pag1, text="Preço de Venda", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=4,
+                                                                                                              column=0,
+                                                                                                              padx=5)
+        Entry(subframe_form_pag1, width=18, justify=RIGHT).grid(row=4, column=1, padx=5)
+        Label(subframe_form_pag1, text="Revendedor", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=5,
+                                                                                                          column=0,
+                                                                                                          padx=5,
+                                                                                                          pady=5)
+        Entry(subframe_form_pag1, width=18, justify=RIGHT, state=DISABLED).grid(row=5, column=1, padx=5)
+        subframe_form_pag2 = Frame(labelframe_form_pag)
+        subframe_form_pag2.pack(padx=10, fill=X, side=LEFT)
+        labelframe_valor_rec = LabelFrame(subframe_form_pag2)
+        labelframe_valor_rec.grid(row=0, column=0, sticky=W, pady=5)
+        Label(labelframe_valor_rec, text="Estoque Miníno:").pack()
+        Label(labelframe_valor_rec, text="0", anchor=E, font=("", "12", ""), fg="red").pack(fill=X, pady=5,
+                                                                                            padx=30)
+        Button(subframe_form_pag2, text="Editar", width=8).grid(row=1, column=0, sticky=W, pady=5, padx=30)
+        subframe_form_pag3 = Frame(labelframe_form_pag)
+        subframe_form_pag3.pack(padx=5, fill=BOTH, side=LEFT, pady=7)
+        Label(subframe_form_pag3, bg="grey", text=3, width=21, height=6).pack()
+
+        labelframe_pag_coment = LabelFrame(subframe_prod1, text="Observações")
+        labelframe_pag_coment.grid(row=1, column=0, sticky=W)
+        Entry(labelframe_pag_coment, width=108).pack(padx=5, pady=5)
+        Entry(labelframe_pag_coment, width=108).pack(padx=5)
+        Entry(labelframe_pag_coment, width=108).pack(pady=5, padx=5)
+
+        labelframe_desc_vend = LabelFrame(subframe_prod1)
+        labelframe_desc_vend.grid(row=1, column=1, sticky=SW, padx=10, ipady=1)
+        frame_descr_vend = Frame(labelframe_desc_vend)
+        frame_descr_vend.pack(fill=BOTH, padx=10, pady=10)
+        Label(frame_descr_vend, text='Motivo da Saída:').grid()
+        Entry(frame_descr_vend, width=20).grid(row=1, column=0)
+        Label(frame_descr_vend, width=2).grid(row=0, column=2, padx=5)
+        frame_valor_total = LabelFrame(frame_descr_vend)
+        frame_valor_total.grid(row=0, column=3, rowspan=2, padx=5)
+        Label(frame_valor_total, text='TOTAL:', font=('verdana', '12', 'bold')).pack(pady=1)
+        Label(frame_valor_total, text='R$50,00', font=('verdana', '15', 'bold'), fg='red').pack(padx=10, pady=1)
+
+        frame_orcamento = Frame(subframe_prod1)
+        frame_orcamento.grid(row=2, column=0, sticky=W)
+        Label(frame_orcamento, text="Vendedor:").grid(row=0, column=2, padx=10)
+        Entry(frame_orcamento, width=15, justify=RIGHT, relief=SUNKEN, bd=2, show='*').grid(row=0, column=3)
+
+        frame_button_confirma = Frame(subframe_prod1)
+        frame_button_confirma.grid(row=2, column=1, pady=10, sticky=E)
+        Button(frame_button_confirma, text='Fechar', command=jan.destroy).pack(side=LEFT, ipady=10, ipadx=30)
+        Button(frame_button_confirma, text='Confirmar Saída').pack(side=LEFT, ipady=10, padx=15)
+
+        jan.transient(root2)
+        jan.focus_force()
+        jan.grab_set()
     # --------------------------------------------------------------------------------------
     def abrirJanelaVendas(self):
         self.nome_frame.pack_forget()
@@ -2868,6 +3265,138 @@ class Castelo:
         frame_button_confirma.grid(row=2, column=1, pady=10, sticky=E)
         Button(frame_button_confirma, text='Fechar', command=jan.destroy).pack(side=LEFT, ipady=10, ipadx=30)
         Button(frame_button_confirma, text='Confirmar Venda').pack(side=LEFT, ipady=10, padx=15)
+
+        jan.transient(root2)
+        jan.focus_force()
+        jan.grab_set()
+
+    def janelaEditarVenda(self):
+
+        jan = Toplevel()
+
+        # Centraliza a janela
+        x_cordinate = int((self.w / 2) - (1010 / 2))
+        y_cordinate = int((self.h / 2) - (625 / 2))
+        jan.geometry("{}x{}+{}+{}".format(1010, 625, x_cordinate, y_cordinate))
+
+        frame_princ = Frame(jan)
+        frame_princ.pack(fill=BOTH)
+        frame_princ1 = Frame(frame_princ)
+        frame_princ1.pack(fill=BOTH, padx=10, pady=10)
+
+        subframe_cliente = Frame(frame_princ1)
+        subframe_cliente.pack(fill=X)
+        Label(subframe_cliente, text='Cliente').grid(row=0, column=0, sticky=W)
+        Entry(subframe_cliente, width=150).grid(row=1, column=0, sticky=W)
+        Button(subframe_cliente, text='Buscar').grid(row=1, column=1, padx=10, ipadx=10)
+
+        subframe_prod = Frame(frame_princ1)
+        subframe_prod.pack(fill=X, pady=10)
+        frame_prod = LabelFrame(subframe_prod)
+        frame_prod.grid(row=0, column=0, sticky=W, ipady=3)
+        Label(frame_prod, text='Cód. do item').grid(sticky=W, padx=10)
+        Entry(frame_prod, width=15).grid(row=1, column=0, sticky=W, padx=10)
+        Label(frame_prod, text='Descrição do item').grid(row=0, column=1, sticky=W)
+        Entry(frame_prod, width=90).grid(row=1, column=1, sticky=W)
+        Label(frame_prod, text='Preço Unit.').grid(row=0, column=2, sticky=W, padx=10)
+        Entry(frame_prod, width=10).grid(row=1, column=2, sticky=W, padx=10)
+        Label(frame_prod, text='Qtd.').grid(row=0, column=3, sticky=W)
+        Entry(frame_prod, width=5).grid(row=1, column=3, sticky=W)
+        Button(frame_prod, text='Buscar').grid(row=1, column=4, padx=10, ipadx=10)
+        Button(subframe_prod, text='1', width=3, height=2).grid(row=0, column=1, padx=10, ipadx=10)
+        Button(subframe_prod, text='2', width=3, height=2).grid(row=0, column=2, padx=0, ipadx=10)
+
+        subframe_prod1 = Frame(frame_princ1)
+        subframe_prod1.pack(fill=BOTH)
+
+        tree_est_venda = ttk.Treeview(subframe_prod1,
+                                      columns=('item', 'desc', 'valorUni', 'quantidade', 'valorTotal'),
+                                      show='headings',
+                                      selectmode='browse',
+                                      height=15)
+
+        tree_est_venda.column('item', width=50, minwidth=50, stretch=False)
+        tree_est_venda.column('desc', width=422, minwidth=100, stretch=False)
+        tree_est_venda.column('valorUni', width=70, minwidth=50, stretch=False)
+        tree_est_venda.column('quantidade', width=50, minwidth=100, stretch=False)
+        tree_est_venda.column('valorTotal', width=70, minwidth=50, stretch=False)
+
+        tree_est_venda.heading('item', text='Item')
+        tree_est_venda.heading('desc', text='Descrição')
+        tree_est_venda.heading('valorUni', text='Valor Uni.')
+        tree_est_venda.heading('quantidade', text='Qtd.')
+        tree_est_venda.heading('valorTotal', text='Total')
+
+        tree_est_venda.grid(sticky=W)
+
+        labelframe_form_pag = LabelFrame(subframe_prod1, text="Forma de Pagamento")
+        labelframe_form_pag.grid(row=0, column=1, sticky=NW, padx=10)
+        subframe_form_pag1 = Frame(labelframe_form_pag)
+        subframe_form_pag1.pack(padx=15, pady=18)
+        Label(subframe_form_pag1, text="Dinheiro", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=0, column=0,
+                                                                                                        padx=5)
+        Entry(subframe_form_pag1, width=18, justify=RIGHT).grid(row=0, column=1, padx=5)
+        Label(subframe_form_pag1, text="Cheque", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=1, column=0,
+                                                                                                      padx=5, pady=5)
+        Entry(subframe_form_pag1, width=18, justify=RIGHT).grid(row=1, column=1, padx=5)
+        Label(subframe_form_pag1, text="Cartão de Crédito", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=2,
+                                                                                                                 column=0,
+                                                                                                                 padx=5)
+        Entry(subframe_form_pag1, width=18, justify=RIGHT).grid(row=2, column=1, padx=5)
+        Label(subframe_form_pag1, text="Cartão de Débito", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=3,
+                                                                                                                column=0,
+                                                                                                                padx=5,
+                                                                                                                pady=5)
+        Entry(subframe_form_pag1, width=18, justify=RIGHT).grid(row=3, column=1, padx=5)
+        Label(subframe_form_pag1, text="PIX", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=4, column=0,
+                                                                                                   padx=5)
+        Entry(subframe_form_pag1, width=18, justify=RIGHT).grid(row=4, column=1, padx=5)
+        Label(subframe_form_pag1, text="Outros", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=5, column=0,
+                                                                                                      padx=5, pady=5)
+        Entry(subframe_form_pag1, width=18, justify=RIGHT).grid(row=5, column=1, padx=5)
+        subframe_form_pag2 = Frame(labelframe_form_pag)
+        subframe_form_pag2.pack(padx=10, fill=X, side=LEFT)
+        labelframe_valor_rec = LabelFrame(subframe_form_pag2)
+        labelframe_valor_rec.grid(row=0, column=0, sticky=W, pady=5)
+        Label(labelframe_valor_rec, text="Valor à Receber:").pack()
+        Label(labelframe_valor_rec, text="R$ 0,00", anchor=E, font=("", "12", ""), fg="red").pack(fill=X, pady=5,
+                                                                                                  padx=30)
+        Button(subframe_form_pag2, text="Salvar", width=8).grid(row=1, column=0, sticky=W, pady=5, padx=30)
+        subframe_form_pag3 = Frame(labelframe_form_pag)
+        subframe_form_pag3.pack(padx=5, fill=BOTH, side=LEFT, pady=7)
+        Label(subframe_form_pag3, bg="grey", text=3, width=21, height=6).pack()
+
+        labelframe_pag_coment = LabelFrame(subframe_prod1, text="Observações de Pagamento")
+        labelframe_pag_coment.grid(row=1, column=0, sticky=W)
+        Entry(labelframe_pag_coment, width=108).pack(padx=5, pady=5)
+        Entry(labelframe_pag_coment, width=108).pack(padx=5)
+        Entry(labelframe_pag_coment, width=108).pack(pady=5, padx=5)
+
+        labelframe_desc_vend = LabelFrame(subframe_prod1)
+        labelframe_desc_vend.grid(row=1, column=1, sticky=SW, padx=10, ipady=1)
+        frame_descr_vend = Frame(labelframe_desc_vend)
+        frame_descr_vend.pack(fill=BOTH, padx=10, pady=10)
+        Label(frame_descr_vend, text='SubTotal:').grid()
+        Label(frame_descr_vend, text='R$20,00', fg='blue', font=('', '12', '')).grid(row=0, column=1)
+        Label(frame_descr_vend, text='desconto:').grid(row=1, column=0)
+        Entry(frame_descr_vend, width=10).grid(row=1, column=1)
+        Label(frame_descr_vend, width=2).grid(row=0, column=2, padx=5)
+        frame_valor_total = LabelFrame(frame_descr_vend)
+        frame_valor_total.grid(row=0, column=3, rowspan=2, padx=5)
+        Label(frame_valor_total, text='TOTAL:', font=('verdana', '12', 'bold')).pack(pady=1)
+        Label(frame_valor_total, text='R$50,00', font=('verdana', '15', 'bold'), fg='red').pack(padx=10, pady=1)
+
+        frame_orcamento = Frame(subframe_prod1)
+        frame_orcamento.grid(row=2, column=0, sticky=W)
+        Button(frame_orcamento, text='Orçamento', state=DISABLED).grid(row=0, column=0, ipady=10, ipadx=10, sticky=W)
+        Label(frame_orcamento, width=56).grid(row=0, column=1)
+        Label(frame_orcamento, text="Vendedor:").grid(row=0, column=2, padx=10)
+        Entry(frame_orcamento, width=15, justify=RIGHT, relief=SUNKEN, bd=2, show='*').grid(row=0, column=3)
+
+        frame_button_confirma = Frame(subframe_prod1)
+        frame_button_confirma.grid(row=2, column=1, pady=10, sticky=E)
+        Button(frame_button_confirma, text='Fechar', command=jan.destroy).pack(side=LEFT, ipady=10, ipadx=30)
+        Button(frame_button_confirma, text='Editar Venda').pack(side=LEFT, ipady=10, padx=15)
 
         jan.transient(root2)
         jan.focus_force()
