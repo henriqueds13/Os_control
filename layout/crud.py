@@ -2882,7 +2882,7 @@ class Castelo:
         subframe_fornecedor.pack(fill=X)
         Label(subframe_fornecedor, text='Fornecedor').grid(row=0, column=0, sticky=W)
         Entry(subframe_fornecedor, width=150).grid(row=1, column=0, sticky=W)
-        Button(subframe_fornecedor, text='Buscar').grid(row=1, column=1, padx=10, ipadx=10)
+        Button(subframe_fornecedor, text='Buscar', command=self.janelaBuscaFornecedor).grid(row=1, column=1, padx=10, ipadx=10)
 
         subframe_prod = Frame(frame_princ1)
         subframe_prod.pack(fill=X, pady=10)
@@ -2896,7 +2896,7 @@ class Castelo:
         Entry(frame_prod, width=10).grid(row=1, column=2, sticky=W, padx=10)
         Label(frame_prod, text='Qtd.').grid(row=0, column=3, sticky=W)
         Entry(frame_prod, width=5).grid(row=1, column=3, sticky=W)
-        Button(frame_prod, text='Buscar').grid(row=1, column=4, padx=10, ipadx=10)
+        Button(frame_prod, text='Buscar', command=self.janelaBuscaProduto).grid(row=1, column=4, padx=10, ipadx=10)
         Button(subframe_prod, text='1', width=3, height=2).grid(row=0, column=1, padx=10, ipadx=10)
         Button(subframe_prod, text='2', width=3, height=2).grid(row=0, column=2, padx=0, ipadx=10)
 
@@ -3017,7 +3017,7 @@ class Castelo:
         subframe_fornecedor.pack(fill=X)
         Label(subframe_fornecedor, text='Fornecedor').grid(row=0, column=0, sticky=W)
         Entry(subframe_fornecedor, width=150).grid(row=1, column=0, sticky=W)
-        Button(subframe_fornecedor, text='Buscar').grid(row=1, column=1, padx=10, ipadx=10)
+        Button(subframe_fornecedor, text='Buscar', command=self.janelaBuscaFornecedor).grid(row=1, column=1, padx=10, ipadx=10)
 
         subframe_prod = Frame(frame_princ1)
         subframe_prod.pack(fill=X, pady=10)
@@ -3031,7 +3031,7 @@ class Castelo:
         Entry(frame_prod, width=10).grid(row=1, column=2, sticky=W, padx=10)
         Label(frame_prod, text='Qtd.').grid(row=0, column=3, sticky=W)
         Entry(frame_prod, width=5).grid(row=1, column=3, sticky=W)
-        Button(frame_prod, text='Buscar').grid(row=1, column=4, padx=10, ipadx=10)
+        Button(frame_prod, text='Buscar', command=self.janelaBuscaProduto).grid(row=1, column=4, padx=10, ipadx=10)
         Button(subframe_prod, text='1', width=3, height=2).grid(row=0, column=1, padx=10, ipadx=10)
         Button(subframe_prod, text='2', width=3, height=2).grid(row=0, column=2, padx=0, ipadx=10)
 
@@ -3156,7 +3156,7 @@ class Castelo:
         subframe_cliente.pack(fill=X)
         Label(subframe_cliente, text='Cliente').grid(row=0, column=0, sticky=W)
         Entry(subframe_cliente, width=150).grid(row=1, column=0, sticky=W)
-        Button(subframe_cliente, text='Buscar').grid(row=1, column=1, padx=10, ipadx=10)
+        Button(subframe_cliente, text='Buscar', command=self.janelaBuscaCliente).grid(row=1, column=1, padx=10, ipadx=10)
 
         subframe_prod = Frame(frame_princ1)
         subframe_prod.pack(fill=X, pady=10)
@@ -3170,7 +3170,7 @@ class Castelo:
         Entry(frame_prod, width=10).grid(row=1, column=2, sticky=W, padx=10)
         Label(frame_prod, text='Qtd.').grid(row=0, column=3, sticky=W)
         Entry(frame_prod, width=5).grid(row=1, column=3, sticky=W)
-        Button(frame_prod, text='Buscar').grid(row=1, column=4, padx=10, ipadx=10)
+        Button(frame_prod, text='Buscar', command=self.janelaBuscaProduto).grid(row=1, column=4, padx=10, ipadx=10)
         Button(subframe_prod, text='1', width=3, height=2).grid(row=0, column=1, padx=10, ipadx=10)
         Button(subframe_prod, text='2', width=3, height=2).grid(row=0, column=2, padx=0, ipadx=10)
 
@@ -3288,7 +3288,7 @@ class Castelo:
         subframe_cliente.pack(fill=X)
         Label(subframe_cliente, text='Cliente').grid(row=0, column=0, sticky=W)
         Entry(subframe_cliente, width=150).grid(row=1, column=0, sticky=W)
-        Button(subframe_cliente, text='Buscar').grid(row=1, column=1, padx=10, ipadx=10)
+        Button(subframe_cliente, text='Buscar', command=self.janelaBuscaCliente).grid(row=1, column=1, padx=10, ipadx=10)
 
         subframe_prod = Frame(frame_princ1)
         subframe_prod.pack(fill=X, pady=10)
@@ -3302,7 +3302,7 @@ class Castelo:
         Entry(frame_prod, width=10).grid(row=1, column=2, sticky=W, padx=10)
         Label(frame_prod, text='Qtd.').grid(row=0, column=3, sticky=W)
         Entry(frame_prod, width=5).grid(row=1, column=3, sticky=W)
-        Button(frame_prod, text='Buscar').grid(row=1, column=4, padx=10, ipadx=10)
+        Button(frame_prod, text='Buscar', command=self.janelaBuscaProduto).grid(row=1, column=4, padx=10, ipadx=10)
         Button(subframe_prod, text='1', width=3, height=2).grid(row=0, column=1, padx=10, ipadx=10)
         Button(subframe_prod, text='2', width=3, height=2).grid(row=0, column=2, padx=0, ipadx=10)
 
@@ -3396,11 +3396,192 @@ class Castelo:
         frame_button_confirma = Frame(subframe_prod1)
         frame_button_confirma.grid(row=2, column=1, pady=10, sticky=E)
         Button(frame_button_confirma, text='Fechar', command=jan.destroy).pack(side=LEFT, ipady=10, ipadx=30)
-        Button(frame_button_confirma, text='Editar Venda').pack(side=LEFT, ipady=10, padx=15)
+        Button(frame_button_confirma, text='Editar Venda').pack(side=LEFT, ipady=10, padx=15, ipadx=15)
 
         jan.transient(root2)
         jan.focus_force()
         jan.grab_set()
+
+    def janelaBuscaProduto(self):
+
+        jan = Toplevel()
+
+        # Centraliza a janela
+        x_cordinate = int((self.w / 2) - (1200 / 2))
+        y_cordinate = int((self.h / 2) - (900 / 2))
+        jan.geometry("{}x{}+{}+{}".format(900, 540, x_cordinate, y_cordinate))
+
+        frame_principal = Frame(jan)
+        frame_principal.pack(pady=10, fill=BOTH)
+
+        subframe1 = Frame(frame_principal)
+        subframe1.pack(fill=X)
+        scrollbar_busca_y = Scrollbar(subframe1, orient=VERTICAL)
+        scrollbar_busca_x = Scrollbar(subframe1, orient=HORIZONTAL)
+        treeview_busca_produto = ttk.Treeview(subframe1,
+                                              columns=("codigo", 'descricao', 'quantidade', 'setor', 'marca',
+                                                       'utilizado', 'revendedor'),
+                                              show='headings',
+                                              xscrollcommand=scrollbar_busca_x,
+                                              yscrollcommand=scrollbar_busca_y,
+                                              selectmode='browse',
+                                              height=20)
+        treeview_busca_produto.column('codigo', width=100, minwidth=50, stretch=False)
+        treeview_busca_produto.column('descricao', width=500, minwidth=50, stretch=False)
+        treeview_busca_produto.column('quantidade', width=50, minwidth=50, stretch=False)
+        treeview_busca_produto.column('setor', width=150, minwidth=50, stretch=False)
+        treeview_busca_produto.column('marca', width=200, minwidth=50, stretch=False)
+        treeview_busca_produto.column('utilizado', width=300, minwidth=50, stretch=False)
+        treeview_busca_produto.column('revendedor', width=200, minwidth=50, stretch=False)
+
+        treeview_busca_produto.heading('codigo', text='CODIGO')
+        treeview_busca_produto.heading('descricao', text='PRODUTO')
+        treeview_busca_produto.heading('quantidade', text='QTD.')
+        treeview_busca_produto.heading('setor', text='SETOR')
+        treeview_busca_produto.heading('marca', text='MARCA')
+        treeview_busca_produto.heading('utilizado', text='UTILIZADO')
+        treeview_busca_produto.heading('revendedor', text='REVENDOR')
+
+        scrollbar_busca_y.config(command=treeview_busca_produto.yview)
+        scrollbar_busca_y.pack(fill=Y, side=RIGHT)
+        treeview_busca_produto.pack()
+        scrollbar_busca_x.config(command=treeview_busca_produto.xview)
+        scrollbar_busca_x.pack(fill=X)
+
+        subframe2 = Frame(frame_principal)
+        subframe2.pack(padx=10, pady=10, side=LEFT)
+
+        frame_prod = LabelFrame(subframe2)
+        frame_prod.grid(row=0, column=0, sticky=W, ipady=3)
+        Label(frame_prod, text='Cód. do item').grid(sticky=W, padx=10)
+        Entry(frame_prod, width=15).grid(row=1, column=0, sticky=W, padx=10)
+        Label(frame_prod, text='Descrição do item').grid(row=0, column=1, sticky=W)
+        Entry(frame_prod, width=90).grid(row=1, column=1, sticky=W)
+        Button(frame_prod, text='Buscar').grid(row=1, column=4, padx=10, ipadx=10)
+        Button(subframe2, text='Fechar', command=jan.destroy).grid(row=0, column=1, padx=25, ipadx=20, ipady=5)
+
+        jan.transient(root2)
+        jan.focus_force()
+        jan.grab_set()
+
+    def janelaBuscaCliente(self):
+
+        jan = Toplevel()
+
+        # Centraliza a janela
+        x_cordinate = int((self.w / 2) - (1200 / 2))
+        y_cordinate = int((self.h / 2) - (900 / 2))
+        jan.geometry("{}x{}+{}+{}".format(800, 540, x_cordinate, y_cordinate))
+
+        frame_principal = Frame(jan)
+        frame_principal.pack(pady=10, fill=BOTH)
+
+        subframe1 = Frame(frame_principal)
+        subframe1.pack(fill=X)
+        scrollbar_busca_y = Scrollbar(subframe1, orient=VERTICAL)
+        scrollbar_busca_x = Scrollbar(subframe1, orient=HORIZONTAL)
+        treeview_busca_produto = ttk.Treeview(subframe1,
+                                              columns=("id", 'cliente', 'endereco', 'cidade', 'whats',
+                                                       'telefone', 'email'),
+                                              show='headings',
+                                              xscrollcommand=scrollbar_busca_x,
+                                              yscrollcommand=scrollbar_busca_y,
+                                              selectmode='browse',
+                                              height=20)
+        treeview_busca_produto.column('id', width=100, minwidth=50, stretch=False)
+        treeview_busca_produto.column('cliente', width=500, minwidth=50, stretch=False)
+        treeview_busca_produto.column('endereco', width=200, minwidth=50, stretch=False)
+        treeview_busca_produto.column('cidade', width=150, minwidth=50, stretch=False)
+        treeview_busca_produto.column('whats', width=200, minwidth=50, stretch=False)
+        treeview_busca_produto.column('telefone', width=200, minwidth=50, stretch=False)
+        treeview_busca_produto.column('email', width=200, minwidth=50, stretch=False)
+
+        treeview_busca_produto.heading('id', text='ID')
+        treeview_busca_produto.heading('cliente', text='CLIENTE')
+        treeview_busca_produto.heading('endereco', text='ENDEREÇO.')
+        treeview_busca_produto.heading('cidade', text='CIDADE')
+        treeview_busca_produto.heading('whats', text='WHATSAPP')
+        treeview_busca_produto.heading('telefone', text='TELEFONE')
+        treeview_busca_produto.heading('email', text='EMAIL')
+
+        scrollbar_busca_y.config(command=treeview_busca_produto.yview)
+        scrollbar_busca_y.pack(fill=Y, side=RIGHT)
+        treeview_busca_produto.pack()
+        scrollbar_busca_x.config(command=treeview_busca_produto.xview)
+        scrollbar_busca_x.pack(fill=X)
+
+        subframe2 = Frame(frame_principal)
+        subframe2.pack(padx=10, pady=10, side=LEFT)
+
+        frame_prod = LabelFrame(subframe2, text='Digite um Nome para Pesquisar')
+        frame_prod.grid(row=0, column=0, sticky=W, ipady=3)
+        Entry(frame_prod, width=90).grid(row=0, column=0, sticky=W, padx=10)
+        Button(frame_prod, text='Buscar').grid(row=0, column=1, padx=10, ipadx=10)
+        Button(subframe2, text='Fechar', command=jan.destroy).grid(row=0, column=1, padx=25, ipadx=20, ipady=5)
+
+        jan.transient(root2)
+        jan.focus_force()
+        jan.grab_set()
+
+    def janelaBuscaFornecedor(self):
+
+        jan = Toplevel()
+
+        # Centraliza a janela
+        x_cordinate = int((self.w / 2) - (1200 / 2))
+        y_cordinate = int((self.h / 2) - (900 / 2))
+        jan.geometry("{}x{}+{}+{}".format(800, 540, x_cordinate, y_cordinate))
+
+        frame_principal = Frame(jan)
+        frame_principal.pack(pady=10, fill=BOTH)
+
+        subframe1 = Frame(frame_principal)
+        subframe1.pack(fill=X)
+        scrollbar_busca_y = Scrollbar(subframe1, orient=VERTICAL)
+        scrollbar_busca_x = Scrollbar(subframe1, orient=HORIZONTAL)
+        treeview_busca_produto = ttk.Treeview(subframe1,
+                                              columns=("id", 'fornecedor', 'endereco', 'cidade', 'whats',
+                                                       'telefone', 'email'),
+                                              show='headings',
+                                              xscrollcommand=scrollbar_busca_x,
+                                              yscrollcommand=scrollbar_busca_y,
+                                              selectmode='browse',
+                                              height=20)
+        treeview_busca_produto.column('id', width=100, minwidth=50, stretch=False)
+        treeview_busca_produto.column('fornecedor', width=500, minwidth=50, stretch=False)
+        treeview_busca_produto.column('endereco', width=200, minwidth=50, stretch=False)
+        treeview_busca_produto.column('cidade', width=150, minwidth=50, stretch=False)
+        treeview_busca_produto.column('whats', width=200, minwidth=50, stretch=False)
+        treeview_busca_produto.column('telefone', width=200, minwidth=50, stretch=False)
+        treeview_busca_produto.column('email', width=200, minwidth=50, stretch=False)
+
+        treeview_busca_produto.heading('id', text='ID')
+        treeview_busca_produto.heading('fornecedor', text='FORNECEDOR')
+        treeview_busca_produto.heading('endereco', text='ENDEREÇO.')
+        treeview_busca_produto.heading('cidade', text='CIDADE')
+        treeview_busca_produto.heading('whats', text='WHATSAPP')
+        treeview_busca_produto.heading('telefone', text='TELEFONE')
+        treeview_busca_produto.heading('email', text='EMAIL')
+
+        scrollbar_busca_y.config(command=treeview_busca_produto.yview)
+        scrollbar_busca_y.pack(fill=Y, side=RIGHT)
+        treeview_busca_produto.pack()
+        scrollbar_busca_x.config(command=treeview_busca_produto.xview)
+        scrollbar_busca_x.pack(fill=X)
+
+        subframe2 = Frame(frame_principal)
+        subframe2.pack(padx=10, pady=10, side=LEFT)
+
+        frame_prod = LabelFrame(subframe2, text='Digite um Nome para Pesquisar')
+        frame_prod.grid(row=0, column=0, sticky=W, ipady=3)
+        Entry(frame_prod, width=90).grid(row=0, column=0, sticky=W, padx=10)
+        Button(frame_prod, text='Buscar').grid(row=0, column=1, padx=10, ipadx=10)
+        Button(subframe2, text='Fechar', command=jan.destroy).grid(row=0, column=1, padx=25, ipadx=20, ipady=5)
+
+        jan.transient(root2)
+        jan.focus_force()
+        jan.grab_set()
+
 
 fabrica = fabrica_conexao.FabricaConexão()
 sessao = fabrica.criar_sessao()
