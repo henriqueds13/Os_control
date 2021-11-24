@@ -99,11 +99,28 @@ class Castelo:
         def on_leave(e):
             e.widget['relief'] = 'flat'
 
+        def mostrarMensagem(tipoMsg, msg):
+            if (tipoMsg == "1"):
+                messagebox.showinfo(None, message=msg)
+            elif (tipoMsg == "2"):
+                messagebox.showwarning(None, mesage=msg)
+            elif(tipoMsg == "3"):
+                messagebox.showerror(None, mesage=msg)
+
+        def fecharPrograma():
+            res = messagebox.askyesno(None, "Deseja Realmente Fechar o Programa?")
+            if (res==True):
+                mostrarMensagem("1", "O programa será fechado! ")
+                master.quit()
+            else:
+                pass
+
         # Barra de menus
 
         barraDeMenus = Menu(master)
         menuArquivo = Menu(barraDeMenus, tearoff=0)
         menuArquivo.add_command(label='Clientes', command=self.abrirJanelaCliente)
+        menuArquivo.add_command(label='Fornecedores', command=self.janelaBuscaFornecedor)
         menuArquivo.add_command(label='Orçamento', command=self.abrirJanelaOrçamento)
         menuArquivo.add_command(label='Configurações', command=self.semComando)
         menuArquivo.add_separator()
@@ -152,7 +169,7 @@ class Castelo:
                                command=self.abrirJanelaVendas)
         button_princ6.pack(side=LEFT)
         button_princ7 = Button(menu_frame, text="EXIT", height='2', width='5', relief='flat',
-                               command=master.quit)
+                               command=fecharPrograma)
         button_princ7.pack(side=LEFT)
         horario_menu = Label(menu_frame, text="Quinta feira, 16 de setembro de 2021", font=('Verdana', '12', 'bold'),
                              fg="gray")
@@ -3409,7 +3426,7 @@ class Castelo:
         # Centraliza a janela
         x_cordinate = int((self.w / 2) - (1200 / 2))
         y_cordinate = int((self.h / 2) - (900 / 2))
-        jan.geometry("{}x{}+{}+{}".format(900, 540, x_cordinate, y_cordinate))
+        jan.geometry("{}x{}+{}+{}".format(960, 545, x_cordinate, y_cordinate))
 
         frame_principal = Frame(jan)
         frame_principal.pack(pady=10, fill=BOTH)
@@ -3453,12 +3470,17 @@ class Castelo:
 
         frame_prod = LabelFrame(subframe2)
         frame_prod.grid(row=0, column=0, sticky=W, ipady=3)
-        Label(frame_prod, text='Cód. do item').grid(sticky=W, padx=10)
-        Entry(frame_prod, width=15).grid(row=1, column=0, sticky=W, padx=10)
-        Label(frame_prod, text='Descrição do item').grid(row=0, column=1, sticky=W)
-        Entry(frame_prod, width=90).grid(row=1, column=1, sticky=W)
-        Button(frame_prod, text='Buscar').grid(row=1, column=4, padx=10, ipadx=10)
-        Button(subframe2, text='Fechar', command=jan.destroy).grid(row=0, column=1, padx=25, ipadx=20, ipady=5)
+        subframe_prod = Frame(frame_prod)
+        subframe_prod.pack(pady=5)
+        Label(subframe_prod, text='Cód. do item').grid(sticky=W, padx=10)
+        Entry(subframe_prod, width=15).grid(row=1, column=0, sticky=W, padx=10)
+        Label(subframe_prod, text='Descrição do item').grid(row=0, column=1, sticky=W)
+        Entry(subframe_prod, width=90).grid(row=1, column=1, sticky=W)
+        subframe_button = Frame(subframe_prod)
+        subframe_button.grid(row=0, column=4, rowspan=2)
+        Button(subframe_button, text='1', height=2).pack(padx=10, ipadx=15, side=BOTTOM)
+        Button(subframe2, text='Selecionar').grid(row=0, column=2, ipadx=10, ipady=5)
+        Button(subframe2, text='Fechar', command=jan.destroy).grid(row=0, column=1, ipadx=20, ipady=5, padx=15)
 
         jan.transient(root2)
         jan.focus_force()
@@ -3471,7 +3493,7 @@ class Castelo:
         # Centraliza a janela
         x_cordinate = int((self.w / 2) - (1200 / 2))
         y_cordinate = int((self.h / 2) - (900 / 2))
-        jan.geometry("{}x{}+{}+{}".format(800, 540, x_cordinate, y_cordinate))
+        jan.geometry("{}x{}+{}+{}".format(860, 550, x_cordinate, y_cordinate))
 
         frame_principal = Frame(jan)
         frame_principal.pack(pady=10, fill=BOTH)
@@ -3516,8 +3538,10 @@ class Castelo:
         frame_prod = LabelFrame(subframe2, text='Digite um Nome para Pesquisar')
         frame_prod.grid(row=0, column=0, sticky=W, ipady=3)
         Entry(frame_prod, width=90).grid(row=0, column=0, sticky=W, padx=10)
-        Button(frame_prod, text='Buscar').grid(row=0, column=1, padx=10, ipadx=10)
-        Button(subframe2, text='Fechar', command=jan.destroy).grid(row=0, column=1, padx=25, ipadx=20, ipady=5)
+        Button(frame_prod, text='1', height=2).grid(row=0, column=1, padx=10, ipadx=15)
+        Button(subframe2, text='Novo', command=self.janelaCadastroCliente).grid(row=0, column=1, padx=15, ipadx=20,
+                                                                                 ipady=5)
+        Button(subframe2, text='Fechar', command=jan.destroy).grid(row=0, column=2, ipadx=20, ipady=5)
 
         jan.transient(root2)
         jan.focus_force()
@@ -3530,7 +3554,7 @@ class Castelo:
         # Centraliza a janela
         x_cordinate = int((self.w / 2) - (1200 / 2))
         y_cordinate = int((self.h / 2) - (900 / 2))
-        jan.geometry("{}x{}+{}+{}".format(800, 540, x_cordinate, y_cordinate))
+        jan.geometry("{}x{}+{}+{}".format(860, 550, x_cordinate, y_cordinate))
 
         frame_principal = Frame(jan)
         frame_principal.pack(pady=10, fill=BOTH)
@@ -3575,12 +3599,148 @@ class Castelo:
         frame_prod = LabelFrame(subframe2, text='Digite um Nome para Pesquisar')
         frame_prod.grid(row=0, column=0, sticky=W, ipady=3)
         Entry(frame_prod, width=90).grid(row=0, column=0, sticky=W, padx=10)
-        Button(frame_prod, text='Buscar').grid(row=0, column=1, padx=10, ipadx=10)
-        Button(subframe2, text='Fechar', command=jan.destroy).grid(row=0, column=1, padx=25, ipadx=20, ipady=5)
+        Button(frame_prod, text='1', height=2).grid(row=0, column=1, padx=10, ipadx=15)
+        Button(subframe2, text='Novo', command=self.janelaCadastroFornecedor).grid(row=0, column=1, padx=15, ipadx=20,
+                                                                                 ipady=5)
+        Button(subframe2, text='Fechar', command=jan.destroy).grid(row=0, column=2, ipadx=20, ipady=5)
 
         jan.transient(root2)
         jan.focus_force()
         jan.grab_set()
+
+    def janelaCadastroFornecedor(self):
+        self.jan = Toplevel()
+
+        # Centraliza a janela
+        x_cordinate = int((self.w / 2) - (550 / 2))
+        y_cordinate = int((self.h / 2) - (370 / 2))
+        self.jan.geometry("{}x{}+{}+{}".format(550, 370, x_cordinate, y_cordinate))
+        self.Nome = ''
+        Label(self.jan, text="Empresa:").grid(sticky=W, padx=10)
+        self.cad_cli_nome = Entry(self.jan, width=50)
+        self.cad_cli_nome.grid(row=1, column=0, stick=W, padx=10, columnspan=2)
+        Label(self.jan, text="CNPJ:").grid(row=0, column=2, sticky=W)
+        self.cad_cli_cpf = Entry(self.jan, width=25)
+        self.cad_cli_cpf.grid(row=1, column=2, stick=W)
+        Label(self.jan, text="Endereço:").grid(sticky=W, padx=10)
+        self.cad_cli_end = Entry(self.jan, width=50)
+        self.cad_cli_end.grid(row=3, column=0, padx=10, columnspan=2, sticky=W)
+        Label(self.jan, text="Complemento:").grid(row=2, column=2, sticky=W)
+        self.cad_cli_compl = Entry(self.jan, width=27)
+        self.cad_cli_compl.grid(row=3, column=2, sticky=W)
+        Label(self.jan, text="Bairro:").grid(sticky=W, padx=10)
+        self.cad_cli_bairro = Entry(self.jan, width=25)
+        self.cad_cli_bairro.grid(row=5, column=0, padx=10, sticky=W)
+        Label(self.jan, text="Cidade:").grid(row=4, column=1, sticky=W, padx=10)
+        self.cad_cli_cid = Entry(self.jan, width=25)
+        self.cad_cli_cid.grid(row=5, column=1)
+        Label(self.jan, text="Estado:").grid(row=4, column=2, sticky=W, padx=10)
+        self.cad_cli_estado = Entry(self.jan, width=15)
+        self.cad_cli_estado.grid(row=5, column=2, sticky=W, padx=10)
+        Label(self.jan, text="Cep:").grid(row=6, column=0, sticky=W, padx=10)
+        self.cep_frame = Frame(self.jan)
+        self.cep_frame.grid(row=7, column=0, columnspan=2, sticky=W)
+        self.cad_cli_cep = Entry(self.cep_frame, width=20, )
+        self.cad_cli_cep.grid(padx=10)
+        Button(self.cep_frame, text="CEP Online").grid(row=0, column=1)
+        self.contato_frame = Frame(self.jan)
+        self.contato_frame.grid(row=8, column=0, columnspan=2, sticky=W)
+        Label(self.contato_frame, text="Tel Comercial1:").grid(row=0, column=0, sticky=W, padx=10)
+        self.cad_cli_telfix = Entry(self.contato_frame, width=25, )
+        self.cad_cli_telfix.grid(padx=10)
+        Label(self.contato_frame, text="Tel Comercial2:").grid(row=0, column=1, sticky=W, padx=10)
+        self.cad_cli_telcomer = Entry(self.contato_frame, width=25, )
+        self.cad_cli_telcomer.grid(row=1, column=1, padx=10)
+        Label(self.contato_frame, text="Contato:").grid(row=2, column=0, sticky=W, padx=10)
+        self.cad_cli_cel = Entry(self.contato_frame, width=25, )
+        self.cad_cli_cel.grid(row=3, column=0, padx=10)
+        Label(self.contato_frame, text="Whatsapp:").grid(row=2, column=1, sticky=W, padx=10)
+        self.cad_cli_whats = Entry(self.contato_frame, width=25, )
+        self.cad_cli_whats.grid(row=3, column=1, padx=10)
+        Label(self.jan, text="Email:").grid(row=9, column=0, sticky=W, padx=10)
+        self.cad_cli_email = Entry(self.jan, width=40)
+        self.cad_cli_email.grid(row=10, column=0, sticky=W, padx=10, columnspan=2)
+        Label(self.jan, text="Operador:").grid(row=11, column=1, sticky=W, padx=10)
+        self.cad_cli_oper = Entry(self.jan, width=20)
+        self.cad_cli_oper.grid(row=12, column=1, sticky=W, padx=10)
+        self.botao_entr_frame = Frame(self.jan)
+        self.botao_entr_frame.grid(row=12, column=2, sticky=W)
+        Button(self.botao_entr_frame, text="Confirmar Cadastro", width=10, wraplength=70,
+               underline=0, font=('Verdana', '9', 'bold')).grid()
+        Button(self.botao_entr_frame, text="Cancelar", width=10, wraplength=70,
+               underline=0, font=('Verdana', '9', 'bold'), height=2, command=self.jan.destroy).grid(row=0, column=1,
+                                                                                                    padx=10)
+
+        self.jan.transient(root2)
+        self.jan.focus_force()
+        self.jan.grab_set()
+
+    def janelaEditarFornecedor(self):
+        self.jan = Toplevel()
+
+        # Centraliza a janela
+        x_cordinate = int((self.w / 2) - (550 / 2))
+        y_cordinate = int((self.h / 2) - (370 / 2))
+        self.jan.geometry("{}x{}+{}+{}".format(550, 370, x_cordinate, y_cordinate))
+        self.Nome = ''
+        Label(self.jan, text="Empresa:").grid(sticky=W, padx=10)
+        self.cad_cli_nome = Entry(self.jan, width=50)
+        self.cad_cli_nome.grid(row=1, column=0, stick=W, padx=10, columnspan=2)
+        Label(self.jan, text="CNPJ:").grid(row=0, column=2, sticky=W)
+        self.cad_cli_cpf = Entry(self.jan, width=25)
+        self.cad_cli_cpf.grid(row=1, column=2, stick=W)
+        Label(self.jan, text="Endereço:").grid(sticky=W, padx=10)
+        self.cad_cli_end = Entry(self.jan, width=50)
+        self.cad_cli_end.grid(row=3, column=0, padx=10, columnspan=2, sticky=W)
+        Label(self.jan, text="Complemento:").grid(row=2, column=2, sticky=W)
+        self.cad_cli_compl = Entry(self.jan, width=27)
+        self.cad_cli_compl.grid(row=3, column=2, sticky=W)
+        Label(self.jan, text="Bairro:").grid(sticky=W, padx=10)
+        self.cad_cli_bairro = Entry(self.jan, width=25)
+        self.cad_cli_bairro.grid(row=5, column=0, padx=10, sticky=W)
+        Label(self.jan, text="Cidade:").grid(row=4, column=1, sticky=W, padx=10)
+        self.cad_cli_cid = Entry(self.jan, width=25)
+        self.cad_cli_cid.grid(row=5, column=1)
+        Label(self.jan, text="Estado:").grid(row=4, column=2, sticky=W, padx=10)
+        self.cad_cli_estado = Entry(self.jan, width=15)
+        self.cad_cli_estado.grid(row=5, column=2, sticky=W, padx=10)
+        Label(self.jan, text="Cep:").grid(row=6, column=0, sticky=W, padx=10)
+        self.cep_frame = Frame(self.jan)
+        self.cep_frame.grid(row=7, column=0, columnspan=2, sticky=W)
+        self.cad_cli_cep = Entry(self.cep_frame, width=20, )
+        self.cad_cli_cep.grid(padx=10)
+        Button(self.cep_frame, text="CEP Online").grid(row=0, column=1)
+        self.contato_frame = Frame(self.jan)
+        self.contato_frame.grid(row=8, column=0, columnspan=2, sticky=W)
+        Label(self.contato_frame, text="Tel Comercial1:").grid(row=0, column=0, sticky=W, padx=10)
+        self.cad_cli_telfix = Entry(self.contato_frame, width=25, )
+        self.cad_cli_telfix.grid(padx=10)
+        Label(self.contato_frame, text="Tel Comercial2:").grid(row=0, column=1, sticky=W, padx=10)
+        self.cad_cli_telcomer = Entry(self.contato_frame, width=25, )
+        self.cad_cli_telcomer.grid(row=1, column=1, padx=10)
+        Label(self.contato_frame, text="Contato:").grid(row=2, column=0, sticky=W, padx=10)
+        self.cad_cli_cel = Entry(self.contato_frame, width=25, )
+        self.cad_cli_cel.grid(row=3, column=0, padx=10)
+        Label(self.contato_frame, text="Whatsapp:").grid(row=2, column=1, sticky=W, padx=10)
+        self.cad_cli_whats = Entry(self.contato_frame, width=25, )
+        self.cad_cli_whats.grid(row=3, column=1, padx=10)
+        Label(self.jan, text="Email:").grid(row=9, column=0, sticky=W, padx=10)
+        self.cad_cli_email = Entry(self.jan, width=40)
+        self.cad_cli_email.grid(row=10, column=0, sticky=W, padx=10, columnspan=2)
+        Label(self.jan, text="Operador:").grid(row=11, column=1, sticky=W, padx=10)
+        self.cad_cli_oper = Entry(self.jan, width=20)
+        self.cad_cli_oper.grid(row=12, column=1, sticky=W, padx=10)
+        self.botao_entr_frame = Frame(self.jan)
+        self.botao_entr_frame.grid(row=12, column=2, sticky=W)
+        Button(self.botao_entr_frame, text="Editar Cadastro", width=10, wraplength=70,
+               underline=0, font=('Verdana', '9', 'bold')).grid()
+        Button(self.botao_entr_frame, text="Cancelar", width=10, wraplength=70,
+               underline=0, font=('Verdana', '9', 'bold'), height=2, command=self.jan.destroy).grid(row=0, column=1,
+                                                                                                    padx=10)
+
+        self.jan.transient(root2)
+        self.jan.focus_force()
+        self.jan.grab_set()
 
 
 fabrica = fabrica_conexao.FabricaConexão()
