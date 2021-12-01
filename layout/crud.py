@@ -99,18 +99,9 @@ class Castelo:
         def on_leave(e):
             e.widget['relief'] = 'flat'
 
-        def mostrarMensagem(tipoMsg, msg):
-            if (tipoMsg == "1"):
-                messagebox.showinfo(None, message=msg)
-            elif (tipoMsg == "2"):
-                messagebox.showwarning(None, mesage=msg)
-            elif(tipoMsg == "3"):
-                messagebox.showerror(None, mesage=msg)
-
         def fecharPrograma():
             res = messagebox.askyesno(None, "Deseja Realmente Fechar o Programa?")
             if (res==True):
-                mostrarMensagem("1", "O programa será fechado! ")
                 master.quit()
             else:
                 pass
@@ -981,6 +972,14 @@ class Castelo:
 
         self.nome_frame = self.frame_cadastro_clientes
 
+    def mostrarMensagem(self, tipoMsg, msg):
+        if (tipoMsg == "1"):
+            messagebox.showinfo(None, message=msg)
+        elif (tipoMsg == "2"):
+            messagebox.showwarning(None, mesage=msg)
+        elif (tipoMsg == "3"):
+            messagebox.showerror(None, mesage=msg)
+
     def semComando(self):
         print()
 
@@ -1047,7 +1046,8 @@ class Castelo:
         self.botao_entr_frame = Frame(self.jan)
         self.botao_entr_frame.grid(row=12, column=2, sticky=W)
         Button(self.botao_entr_frame, text="Confirmar Cadastro", width=10, wraplength=70,
-               underline=0, font=('Verdana', '9', 'bold'), command=self.cadastrarCliente).grid()
+               underline=0, font=('Verdana', '9', 'bold'),
+               command= lambda: [self.cadastrarCliente(), self.jan.destroy()]).grid()
         Button(self.botao_entr_frame, text="Cancelar", width=10, wraplength=70,
                underline=0, font=('Verdana', '9', 'bold'), height=2, command=self.jan.destroy).grid(row=0, column=1,
                                                                                                     padx=10)
@@ -1062,6 +1062,7 @@ class Castelo:
         clientes = repositorio.listar_clientes(sessao)
         for i in clientes:
             self.tree_cliente.insert("", "end", values=(i.id, i.nome, i.logradouro, i.bairro, i.tel_fixo))
+
 
     def cadastrarCliente(self):
 
@@ -1086,6 +1087,7 @@ class Castelo:
             repositorio = cliente_repositorio.ClienteRepositorio()
             repositorio.inserir_cliente(novo_cliente, sessao)
             sessao.commit()
+            self.mostrarMensagem("1", "Cliente Cadastrado com Sucesso!")
             self.popular()
         except:
             sessao.rollback()
@@ -1094,20 +1096,25 @@ class Castelo:
             sessao.close()
 
     def deletarCliente(self):
-        try:
-            item_selecionado = self.tree_cliente.selection()[0]
-            id_cliente = self.tree_cliente.item(item_selecionado, "values")[0]
-            repositorio = cliente_repositorio.ClienteRepositorio()
-            repositorio.remover_cliente(id_cliente, sessao)
-            sessao.commit()
-            self.tree_cliente.delete(item_selecionado)
-            self.popular()
+        res = messagebox.askyesno(None, "Deseja Realmente Deletar o Cadastro?")
+        if res:
+            try:
+                item_selecionado = self.tree_cliente.selection()[0]
+                id_cliente = self.tree_cliente.item(item_selecionado, "values")[0]
+                repositorio = cliente_repositorio.ClienteRepositorio()
+                repositorio.remover_cliente(id_cliente, sessao)
+                sessao.commit()
+                self.tree_cliente.delete(item_selecionado)
+                self.mostrarMensagem("1", "Cadastro Excluído com Sucesso!")
+                self.popular()
 
-        except:
-            messagebox.showinfo(title="ERRO", message="Selecione um elemento a ser deletado")
+            except:
+                messagebox.showinfo(title="ERRO", message="Selecione um elemento a ser deletado")
 
-        finally:
-            sessao.close()
+            finally:
+                sessao.close()
+        else:
+            pass
 
     def janelaEditarCliente(self):
         jan = Toplevel(bg="#ffffe1")
@@ -1193,7 +1200,7 @@ class Castelo:
         self.botao_entr_frame.grid(row=12, column=2, sticky=W)
         self.alterar_button = Button(self.botao_entr_frame, text="Editar Cadastro", width=10, wraplength=70,
                                      underline=0, font=('Verdana', '9', 'bold'),
-                                     command=lambda: [self.editarCliente(), self.atualizandoDados()])
+                                     command=lambda: [self.editarCliente(jan), self.atualizandoDados()])
         self.alterar_button.grid()
         Button(self.botao_entr_frame, text="Cancelar", width=10, wraplength=70,
                underline=0, font=('Verdana', '9', 'bold'), height=2, command=jan.destroy).grid(row=0, column=1, padx=10)
@@ -1202,35 +1209,41 @@ class Castelo:
         jan.focus_force()
         jan.grab_set()
 
-    def editarCliente(self):
-        try:
-            cliente_selecionado = self.tree_cliente.focus()
-            dado_cli = self.tree_cliente.item(cliente_selecionado, "values")
-            nome = self.cad_cli_nome.get()
-            cpf = self.cad_cli_cpf.get()
-            endereco = self.cad_cli_end.get()
-            complemento = self.cad_cli_compl.get()
-            bairro = self.cad_cli_bairro.get()
-            cidade = self.cad_cli_cid.get()
-            estado = self.cad_cli_estado.get()
-            cep = self.cad_cli_cep.get()
-            tel_fixo = self.cad_cli_telfix.get()
-            tel_comercial = self.cad_cli_telcomer.get()
-            celular = self.cad_cli_cel.get()
-            whats = self.cad_cli_whats.get()
-            email = self.cad_cli_email.get()
-            operador = self.cad_cli_oper.get()
+    def editarCliente(self, jan):
+        res = messagebox.askyesno(None, "Deseja Realmente Editar o Cadastro?")
+        if res:
+            try:
+                cliente_selecionado = self.tree_cliente.focus()
+                dado_cli = self.tree_cliente.item(cliente_selecionado, "values")
+                nome = self.cad_cli_nome.get()
+                cpf = self.cad_cli_cpf.get()
+                endereco = self.cad_cli_end.get()
+                complemento = self.cad_cli_compl.get()
+                bairro = self.cad_cli_bairro.get()
+                cidade = self.cad_cli_cid.get()
+                estado = self.cad_cli_estado.get()
+                cep = self.cad_cli_cep.get()
+                tel_fixo = self.cad_cli_telfix.get()
+                tel_comercial = self.cad_cli_telcomer.get()
+                celular = self.cad_cli_cel.get()
+                whats = self.cad_cli_whats.get()
+                email = self.cad_cli_email.get()
+                operador = self.cad_cli_oper.get()
 
-            novo_cliente = cliente.Cliente(nome, operador, celular, cpf, tel_fixo, '-', endereco, estado, bairro,
-                                           complemento, cep, cidade, email, whats, '-', '-')
-            repositorio = cliente_repositorio.ClienteRepositorio()
-            repositorio.editar_cliente(dado_cli[0], novo_cliente, sessao)
-            sessao.commit()
-            self.popular()
-        except:
-            messagebox.showinfo(title="ERRO", message="ERRO")
-        finally:
-            sessao.close()
+                novo_cliente = cliente.Cliente(nome, operador, celular, cpf, tel_fixo, '-', endereco, estado, bairro,
+                                               complemento, cep, cidade, email, whats, '-', '-')
+                repositorio = cliente_repositorio.ClienteRepositorio()
+                repositorio.editar_cliente(dado_cli[0], novo_cliente, sessao)
+                sessao.commit()
+                self.mostrarMensagem("1", "Cadastro Editado com Sucesso!")
+                jan.destroy()
+                self.popular()
+            except:
+                messagebox.showinfo(title="ERRO", message="ERRO")
+            finally:
+                sessao.close()
+        else:
+            pass
 
     def janelaLocalizarCliente(self):
         jan = Toplevel()

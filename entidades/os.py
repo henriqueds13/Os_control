@@ -1,11 +1,71 @@
 class Os():
     def __init__(self, equipamento, marca, modelo='', acessorios='', defeito='', estado_aparelho='',
-                 n_serie='', tensao=None, status='EM SERVIÇO', desc_serv1='', desc_serv2='', desc_serv3='',
+                 n_serie='', tensao=None, status='EM SERVIÇO', chassi='', andamento='', data_entrada=None,
+                 hora_entrada=None, dias='', data_orc=None, conclusao=None, operador='', log='', codigo1='', codigo2='',
+                 codigo3='', codigo4='', codigo5='', codigo6='', codigo7='', codigo8='', codigo9='',
+                 desc_serv1='', desc_serv2='', desc_serv3='',
                  desc_serv4='',
-                 desc_serv5='', desc_serv6='', desconto=None, obs1='', obs2='', obs3='',valor_mao_obra=0, qtd1=0, qtd2=0,
+                 desc_serv5='', desc_serv6='', desc_serv7='', desc_serv8='', desc_serv9='', desconto=None, obs1='',
+                 obs2='', obs3='',valor_mao_obra=0, qtd1=0, qtd2=0,
                  qtd3=0,
-                 qtd4=0, qtd5=0, qtd6=0, valor_uni1=0, valor_uni2=0, valor_uni3=0, valor_uni4=0, valor_uni5=0,
-                 valor_uni6=0, tecnico=''):
+                 qtd4=0, qtd5=0, qtd6=0, qtd7=0, qtd8=0, qtd9=0, valor_uni1=0, valor_uni2=0, valor_uni3=0, valor_uni4=0,
+                 valor_uni5=0,
+                 valor_uni6=0, valor_uni7=0, valor_uni8=0, valor_uni9=0, valor_total1=0, valor_total2=0, valor_total3=0,
+                 valor_total4=0, valor_total5=0, valor_total6=0, valor_total7=0, valor_total8=0, valor_total9=0,
+                 caixa_peca1=0, caixa_peca2=0, caixa_peca3=0, caixa_peca4=0, caixa_peca5=0, caixa_peca6=0,
+                 caixa_peca7=0, caixa_peca8=0, caixa_peca9=0, caixa_peca_total=0, tecnico='', total=0, defeitos='',
+                 cheque=0, ccredito=0, cdebito=0, pix=0, dinheiro=0, outros=0, obs_pagamento1='', obs_pagamento2='',
+                 obs_pagamento3='', data_garantia=None):
+
+        self.__total = total
+        self.__defeitos = defeitos
+        self.__cheque = cheque
+        self.__ccredito = ccredito
+        self.__cdebito = cdebito
+        self.__pix = pix
+        self.__dinheiro = dinheiro
+        self.__outros = outros
+        self.__obs_pagamento1 = obs_pagamento1
+        self.__obs_pagamento2 = obs_pagamento2
+        self.__obs_pagamento3 = obs_pagamento3
+        self.__data_garantia = data_garantia
+        self.__caixa_peca1 = caixa_peca1
+        self.__caixa_peca2 = caixa_peca2
+        self.__caixa_peca3 = caixa_peca3
+        self.__caixa_peca4 = caixa_peca4
+        self.__caixa_peca5 = caixa_peca5
+        self.__caixa_peca6 = caixa_peca6
+        self.__caixa_peca7 = caixa_peca7
+        self.__caixa_peca8 = caixa_peca8
+        self.__caixa_peca9 = caixa_peca9
+        self.__caixa_peca_total = caixa_peca_total
+        self.__valor_total1 = valor_total1
+        self.__valor_total2 = valor_total2
+        self.__valor_total3 = valor_total3
+        self.__valor_total4 = valor_total4
+        self.__valor_total5 = valor_total5
+        self.__valor_total6 = valor_total6
+        self.__valor_total7 = valor_total7
+        self.__valor_total8 = valor_total8
+        self.__valor_total9 = valor_total9
+        self.__chassi = chassi
+        self.__andamento = andamento
+        self.__data_entrada = data_entrada
+        self.__hora_entrada = hora_entrada
+        self.__dias = dias
+        self.__data_orc = data_orc
+        self.__conclusao = conclusao
+        self.__operador = operador
+        self.__log = log
+        self.__codigo1 = codigo1
+        self.__codigo2 = codigo2
+        self.__codigo3 = codigo3
+        self.__codigo4 = codigo4
+        self.__codigo5 = codigo5
+        self.__codigo6 = codigo6
+        self.__codigo7 = codigo7
+        self.__codigo8 = codigo8
+        self.__codigo9 = codigo9
         self.__equipamento = equipamento
         self.__marca = marca
         self.__modelo = modelo
@@ -21,6 +81,9 @@ class Os():
         self.__desc_serv4 = desc_serv4
         self.__desc_serv5 = desc_serv5
         self.__desc_serv6 = desc_serv6
+        self.__desc_serv7 = desc_serv7
+        self.__desc_serv8 = desc_serv8
+        self.__desc_serv9 = desc_serv9
         self.__desconto = desconto
         self.__obs1 = obs1
         self.__obs2 = obs2
@@ -32,12 +95,18 @@ class Os():
         self.__qtd4 = qtd4
         self.__qtd5 = qtd5
         self.__qtd6 = qtd6
+        self.__qtd7 = qtd7
+        self.__qtd8 = qtd8
+        self.__qtd9 = qtd9
         self.__valor_uni1 = valor_uni1
         self.__valor_uni2 = valor_uni2
         self.__valor_uni3 = valor_uni3
         self.__valor_uni4 = valor_uni4
         self.__valor_uni5 = valor_uni5
         self.__valor_uni6 = valor_uni6
+        self.__valor_uni7 = valor_uni7
+        self.__valor_uni8 = valor_uni8
+        self.__valor_uni9 = valor_uni9
         self.__tecnico = tecnico
 
     @property
@@ -101,6 +170,18 @@ class Os():
         return self.__desc_serv6
 
     @property
+    def desc_serv7(self):
+        return self.__desc_serv7
+
+    @property
+    def desc_serv8(self):
+        return self.__desc_serv8
+
+    @property
+    def desc_serv9(self):
+        return self.__desc_serv9
+
+    @property
     def desconto(self):
         return self.__desconto
 
@@ -145,6 +226,18 @@ class Os():
         return self.__qtd6
 
     @property
+    def qtd7(self):
+        return self.__qtd7
+
+    @property
+    def qtd8(self):
+        return self.__qtd8
+
+    @property
+    def qtd9(self):
+        return self.__qtd9
+
+    @property
     def valor_uni1(self):
         return self.__valor_uni1
 
@@ -167,6 +260,18 @@ class Os():
     @property
     def valor_uni6(self):
         return self.__valor_uni6
+
+    @property
+    def valor_uni7(self):
+        return self.__valor_uni7
+
+    @property
+    def valor_uni8(self):
+        return self.__valor_uni8
+
+    @property
+    def valor_uni9(self):
+        return self.__valor_uni9
 
     @property
     def tecnico(self):
