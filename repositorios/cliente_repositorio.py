@@ -12,8 +12,8 @@ class ClienteRepositorio():
                                uf=cliente.uf,
                                bairro=cliente.bairro, complemento=cliente.complemento, cep=cliente.cep,
                                cidade=cliente.cidade,
-                               email=cliente.email, whats=cliente.whats, contato=cliente.contato,
-                               indicacao=cliente.indicacao)
+                               email=cliente.email, whats=cliente.whats,
+                               indicacao=cliente.indicacao, tel_comercial=cliente.tel_comercial)
         query_cliente.inserir_cliente(novo_cliente, sessao)
 
     def listar_clientes(self, sessao):

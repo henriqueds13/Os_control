@@ -110,6 +110,7 @@ class OS(Base):
     valor_uni7 = Column(Float)
     valor_uni8 = Column(Float)
     valor_uni9 = Column(Float)
+    valor_tot1 = Column(Float)
     valor_tot2 = Column(Float)
     valor_tot3 = Column(Float)
     valor_tot4 = Column(Float)

@@ -33,7 +33,7 @@ class ClienteQuery():
         client.cidade = cliente.cidade
         client.email = cliente.email
         client.whats = cliente.whats
-        client.contato = cliente.contato
+        client.tel_comercial = cliente.tel_comercial
         client.indicacao = cliente.indicacao
 
     def remover_cliente(self, id_cliente, sessao):

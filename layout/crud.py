@@ -1,8 +1,10 @@
 from tkinter import *
 from tkinter import ttk, messagebox
+
+import entidades
 from fabricas import fabrica_conexao
-from repositorios import cliente_repositorio
-from entidades import cliente
+from repositorios import cliente_repositorio, os_repositorio
+from entidades import cliente, os
 import os
 
 
@@ -101,7 +103,7 @@ class Castelo:
 
         def fecharPrograma():
             res = messagebox.askyesno(None, "Deseja Realmente Fechar o Programa?")
-            if (res==True):
+            if (res == True):
                 master.quit()
             else:
                 pass
@@ -888,26 +890,26 @@ class Castelo:
         self.frame_buttons_prod_vendas = Frame(self.frame_vendas, bg=color_est2, relief='raised', borderwidth=1)
         self.frame_buttons_prod_vendas.pack(fill=X, pady=3)
         button_vend1 = Button(self.frame_buttons_prod_vendas, text="Nova Venda", width=15, relief=FLAT,
-                             bg=color_est2, command=self.janelaNovaVenda, height=2)
+                              bg=color_est2, command=self.janelaNovaVenda, height=2)
         button_vend1.pack(side=LEFT)
         button_vend2 = Button(self.frame_buttons_prod_vendas, text="Editar", width=15, relief=FLAT,
-                             bg=color_est2, command=self.janelaEditarVenda, height=2)
+                              bg=color_est2, command=self.janelaEditarVenda, height=2)
         button_vend2.pack(side=LEFT)
         ttk.Separator(self.frame_buttons_prod_vendas, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
         button_vend3 = Button(self.frame_buttons_prod_vendas, text="Imprimir Recibo", width=15, relief=FLAT,
-                             bg=color_est2, height=2)
+                              bg=color_est2, height=2)
         button_vend3.pack(side=LEFT)
         ttk.Separator(self.frame_buttons_prod_vendas, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
         button_vend4 = Button(self.frame_buttons_prod_vendas, text="Cancelar Venda", width=15, relief=FLAT,
-                             bg=color_est2, height=2)
+                              bg=color_est2, height=2)
         button_vend4.pack(side=LEFT)
         ttk.Separator(self.frame_buttons_prod_vendas, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
         button_vend5 = Button(self.frame_buttons_prod_vendas, text="Fechar", width=15, relief=FLAT,
-                             bg=color_est2, height=2, command=self.frame_vendas.forget)
+                              bg=color_est2, height=2, command=self.frame_vendas.forget)
         button_vend5.pack(side=LEFT)
         ttk.Separator(self.frame_buttons_prod_vendas, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
         button_vend6 = Button(self.frame_buttons_prod_vendas, text="Fechar Caixa", width=15, relief=FLAT,
-                             bg=color_est2, height=2)
+                              bg=color_est2, height=2)
         button_vend6.pack(side=RIGHT)
         ttk.Separator(self.frame_buttons_prod_vendas, orient=VERTICAL).pack(side=RIGHT, fill=Y, pady=4)
 
@@ -1047,7 +1049,7 @@ class Castelo:
         self.botao_entr_frame.grid(row=12, column=2, sticky=W)
         Button(self.botao_entr_frame, text="Confirmar Cadastro", width=10, wraplength=70,
                underline=0, font=('Verdana', '9', 'bold'),
-               command= lambda: [self.cadastrarCliente(), self.jan.destroy()]).grid()
+               command=lambda: [self.cadastrarCliente(), self.jan.destroy()]).grid()
         Button(self.botao_entr_frame, text="Cancelar", width=10, wraplength=70,
                underline=0, font=('Verdana', '9', 'bold'), height=2, command=self.jan.destroy).grid(row=0, column=1,
                                                                                                     padx=10)
@@ -1062,7 +1064,6 @@ class Castelo:
         clientes = repositorio.listar_clientes(sessao)
         for i in clientes:
             self.tree_cliente.insert("", "end", values=(i.id, i.nome, i.logradouro, i.bairro, i.tel_fixo))
-
 
     def cadastrarCliente(self):
 
@@ -1083,7 +1084,7 @@ class Castelo:
             operador = self.cad_cli_oper.get()
 
             novo_cliente = cliente.Cliente(nome, operador, celular, cpf, tel_fixo, '-', endereco, estado, bairro,
-                                           complemento, cep, cidade, email, whats, '-', '-')
+                                           complemento, cep, cidade, email, whats, '-', tel_comercial)
             repositorio = cliente_repositorio.ClienteRepositorio()
             repositorio.inserir_cliente(novo_cliente, sessao)
             sessao.commit()
@@ -1183,6 +1184,7 @@ class Castelo:
         self.cad_cli_telfix.grid(padx=10)
         Label(self.contato_frame, text="Tel Comercial:", bg="#ffffe1").grid(row=0, column=1, sticky=W, padx=10)
         self.cad_cli_telcomer = Entry(self.contato_frame, width=25, )
+        self.cad_cli_telcomer.insert(0, cliente_dados.tel_comercial)
         self.cad_cli_telcomer.grid(row=1, column=1, padx=10)
         Label(self.contato_frame, text="Celular:", bg="#ffffe1").grid(row=2, column=0, sticky=W, padx=10)
         self.cad_cli_cel = Entry(self.contato_frame, width=25, )
@@ -1231,7 +1233,7 @@ class Castelo:
                 operador = self.cad_cli_oper.get()
 
                 novo_cliente = cliente.Cliente(nome, operador, celular, cpf, tel_fixo, '-', endereco, estado, bairro,
-                                               complemento, cep, cidade, email, whats, '-', '-')
+                                               complemento, cep, cidade, email, whats, '-', tel_comercial)
                 repositorio = cliente_repositorio.ClienteRepositorio()
                 repositorio.editar_cliente(dado_cli[0], novo_cliente, sessao)
                 sessao.commit()
@@ -1299,6 +1301,11 @@ class Castelo:
         y_cordinate = int((self.h / 2) - (520 / 2))
         jan.geometry("{}x{}+{}+{}".format(700, 520, x_cordinate, y_cordinate))
 
+        cliente_selecionado = self.tree_cliente.focus()
+        dado_cli = self.tree_cliente.item(cliente_selecionado, "values")
+        cliente_dados = cliente_repositorio.ClienteRepositorio().listar_cliente_id(dado_cli[0], sessao)
+        self.os_idcliente = cliente_dados.id
+
         frame_princ_jan_os = Frame(jan)
         frame_princ_jan_os.pack(side=LEFT, fill=BOTH, padx=10, pady=10)
 
@@ -1309,9 +1316,10 @@ class Castelo:
         sub_frame_dc_os2 = Frame(labelframe_dadoscli_os)
         sub_frame_dc_os2.pack(side=LEFT, fill=BOTH, padx=10, pady=5)
         Label(sub_frame_dc_os1, text="Nome", fg=color_fd_labels, font=font_dados1).grid(row=0, column=0, sticky=W)
-        Label(sub_frame_dc_os1, text="Henrique", bg=color_bgdc_labels, width=30, font=font_dados2, anchor=W).grid(row=0,
-                                                                                                                  column=1,
-                                                                                                                  sticky=W)
+        Label(sub_frame_dc_os1, text=cliente_dados.nome, bg=color_bgdc_labels, width=30, font=font_dados2,
+              anchor=W).grid(row=0,
+                             column=1,
+                             sticky=W)
         Label(sub_frame_dc_os1, text="Endereço", fg=color_fd_labels, font=font_dados1).grid(row=1, column=0, sticky=W,
                                                                                             columnspan=2, pady=2)
         Label(sub_frame_dc_os1, text="Rua Nossa Senhora das Dores", bg=color_bgdc_labels,
@@ -1355,46 +1363,59 @@ class Castelo:
 
         labelframe_os = LabelFrame(frame_princ_jan_os, text="Ordem de Serviço", fg=self.color_fg_label)
         labelframe_os.grid(row=0, column=1, padx=15)
-        Label(labelframe_os, text="12", fg="red", font=('Verdana', '20', 'bold')).pack(padx=10, pady=8)
-        Button(labelframe_os, text="Confirmar Entrada", wraplength=70).pack(pady=10, padx=10, ipadx=10)
+        Label(labelframe_os, text=cliente_dados.id, fg="red", font=('Verdana', '20', 'bold')).pack(padx=10, pady=8)
+        Button(labelframe_os, text="Confirmar Entrada", wraplength=70, command=self.cadastrarOs).pack(pady=10, padx=10,
+                                                                                                      ipadx=10)
 
         labelframe_dadosapare_os = LabelFrame(frame_princ_jan_os, text="Dados do Aparelho", fg=self.color_fg_label)
         labelframe_dadosapare_os.grid(row=1, column=0, sticky=W, ipady=5)
         frame_dadosapare_os1 = Frame(labelframe_dadosapare_os)
         frame_dadosapare_os1.pack(fill=X, padx=10)
         Label(frame_dadosapare_os1, text='Aparelho').grid(row=0, column=0, sticky=W)
-        ttk.Combobox(frame_dadosapare_os1, values=lista_aparelhos, state="readonly").grid(row=1, column=0)
+        self.os_aparelho = ttk.Combobox(frame_dadosapare_os1, values=lista_aparelhos, state="readonly")
+        self.os_aparelho.grid(row=1, column=0)
         Label(frame_dadosapare_os1, text='Marca').grid(row=0, column=1, sticky=W, padx=10)
-        ttk.Combobox(frame_dadosapare_os1, values=lista_marca, state="readonly").grid(row=1, column=1, padx=10)
+        self.os_marca = ttk.Combobox(frame_dadosapare_os1, values=lista_marca, state="readonly")
+        self.os_marca.grid(row=1, column=1, padx=10)
         Label(frame_dadosapare_os1, text='Modelo').grid(row=0, column=2, sticky=W)
-        Entry(frame_dadosapare_os1, width=28).grid(row=1, column=2)
+        self.os_modelo = Entry(frame_dadosapare_os1, width=28)
+        self.os_modelo.grid(row=1, column=2)
         frame_dadosapare_os2 = Frame(labelframe_dadosapare_os)
         frame_dadosapare_os2.pack(fill=X, padx=10)
         Label(frame_dadosapare_os2, text='Chassis').grid(row=0, column=0, sticky=W)
-        Entry(frame_dadosapare_os2, width=15).grid(row=1, column=0)
+        self.os_chassis = Entry(frame_dadosapare_os2, width=15)
+        self.os_chassis.grid(row=1, column=0)
         Label(frame_dadosapare_os2, text='Núm Série').grid(row=0, column=1, sticky=W, padx=10)
-        Entry(frame_dadosapare_os2, width=25).grid(row=1, column=1, padx=10)
+        self.os_numserie = Entry(frame_dadosapare_os2, width=25)
+        self.os_numserie.grid(row=1, column=1, padx=10)
         Label(frame_dadosapare_os2, text='Tensão').grid(row=0, column=2, sticky=W)
-        Entry(frame_dadosapare_os2, width=8).grid(row=1, column=2)
+        self.os_tensao = Entry(frame_dadosapare_os2, width=8)
+        self.os_tensao.grid(row=1, column=2)
         Label(frame_dadosapare_os2, text='Técnico').grid(row=0, column=3, sticky=W)
-        ttk.Combobox(frame_dadosapare_os2, values=lista_tecnicos, state="readonly").grid(row=1, column=3, padx=10)
+        self.os_tecnico = ttk.Combobox(frame_dadosapare_os2, values=lista_tecnicos, state="readonly")
+        self.os_tecnico.grid(row=1, column=3, padx=10)
         frame_dadosapare_os3 = Frame(labelframe_dadosapare_os)
         frame_dadosapare_os3.pack(fill=X, padx=10)
         Label(frame_dadosapare_os3, text="Defeito Reclamado").grid(row=0, column=0, sticky=W)
-        Entry(frame_dadosapare_os3, width=79).grid(row=1, column=0, columnspan=2)
+        self.os_defeito = Entry(frame_dadosapare_os3, width=79)
+        self.os_defeito.grid(row=1, column=0, columnspan=2)
         Label(frame_dadosapare_os3, text="Estado do Aparelho").grid(row=2, column=0, sticky=W)
-        Entry(frame_dadosapare_os3, width=79).grid(row=3, column=0, columnspan=2)
+        self.os_estadoaparelho = Entry(frame_dadosapare_os3, width=79)
+        self.os_estadoaparelho.grid(row=3, column=0, columnspan=2)
         Label(frame_dadosapare_os3, text="Acessórios").grid(row=4, column=0, sticky=W)
-        Entry(frame_dadosapare_os3, width=60).grid(row=5, column=0, sticky=W)
+        self.os_acessorios = Entry(frame_dadosapare_os3, width=60)
+        self.os_acessorios.grid(row=5, column=0, sticky=W)
         Label(frame_dadosapare_os3, text="Operador").grid(row=4, column=1, sticky=W)
-        Entry(frame_dadosapare_os3, width=8, font=('Verdana', '13', 'bold')).grid(row=5, column=1, sticky=E)
+        self.os_operador = Entry(frame_dadosapare_os3, width=8, font=('Verdana', '13', 'bold'))
+        self.os_operador.grid(row=5, column=1, sticky=E)
 
         frame_prazo = Frame(frame_princ_jan_os)
         frame_prazo.grid(row=1, column=1, sticky=N, rowspan=2)
         labelframe_prazo_os = LabelFrame(frame_prazo, text="Prazo", fg=self.color_fg_label)
         labelframe_prazo_os.pack(ipadx=15)
         Label(labelframe_prazo_os, text='Dias').grid(row=0, column=1, padx=1)
-        Entry(labelframe_prazo_os, width=5, justify=CENTER).grid(row=0, column=0, padx=5, pady=5)
+        self.os_dias = Entry(labelframe_prazo_os, width=5, justify=CENTER)
+        self.os_dias.grid(row=0, column=0, padx=5, pady=5)
         Label(frame_prazo, text="3", bg="grey", height=15).pack(fill=X, pady=5)
 
         labelframe_tipo = LabelFrame(frame_princ_jan_os, text="Tipo", fg=self.color_fg_label)
@@ -1411,13 +1432,17 @@ class Castelo:
         labelframe_garantia = LabelFrame(frame_princ_jan_os, text="Garantia de Fábrica", fg=self.color_fg_label)
         labelframe_garantia.grid(row=3, column=0, sticky=W, ipadx=6, ipady=5)
         Label(labelframe_garantia, text='Loja').grid(row=0, column=0, sticky=W, padx=10)
-        Entry(labelframe_garantia, width=25).grid(row=1, column=0, sticky=W, padx=10)
+        self.os_loja = Entry(labelframe_garantia, width=25)
+        self.os_loja.grid(row=1, column=0, sticky=W, padx=10)
         Label(labelframe_garantia, text='Data Compra').grid(row=0, column=1, sticky=W)
-        Entry(labelframe_garantia, width=15).grid(row=1, column=1, sticky=W)
+        self.os_datacompra = Entry(labelframe_garantia, width=15)
+        self.os_datacompra.grid(row=1, column=1, sticky=W)
         Label(labelframe_garantia, text='Nota Fiscal').grid(row=0, column=2, sticky=W, padx=10)
-        Entry(labelframe_garantia, width=15).grid(row=1, column=2, sticky=W, padx=10)
+        self.os_notafiscal = Entry(labelframe_garantia, width=15)
+        self.os_notafiscal.grid(row=1, column=2, sticky=W, padx=10)
         Label(labelframe_garantia, text='Gar. Complementar').grid(row=0, column=3, sticky=W)
-        Entry(labelframe_garantia, width=18).grid(row=1, column=3, sticky=W)
+        self.os_garantiacompl = Entry(labelframe_garantia, width=18)
+        self.os_garantiacompl.grid(row=1, column=3, sticky=W)
 
         frame_button_os = Frame(frame_princ_jan_os)
         frame_button_os.grid(row=3, column=1, sticky=S)
@@ -1427,6 +1452,43 @@ class Castelo:
         jan.transient(root2)
         jan.focus_force()
         jan.grab_set()
+
+    def cadastrarOs(self):
+
+        try:
+            equipamento = self.os_aparelho.get()
+            marca = self.os_marca.get()
+            modelo = self.os_modelo.get()
+            acessorios = self.os_acessorios.get()
+            defeito = self.os_defeito.get()
+            estado_aparelho = self.os_estadoaparelho.get()
+            n_serie = self.os_numserie.get()
+            tensao = self.os_tensao.get()
+            chassi = self.os_chassis.get()
+            dias = self.os_dias.get()
+            operador = self.os_operador.get()
+            tecnico = self.os_tecnico.get()
+            loja = self.os_loja.get()
+            garantia_complementar = self.os_garantiacompl.get()
+            data_compra = self.os_datacompra.get()
+            cli_id = self.os_idcliente
+
+            nova_os = os.Os(equipamento, marca, modelo, acessorios, defeito, estado_aparelho, n_serie, tensao,
+                            'EM SERVIÇO', chassi, '', None, None, dias, None, None, operador, '', '', '', '', '', '',
+                            '', '',
+                            '', '', '', '', '', '', '', '', '', '', '', 0, '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, tecnico, 0,
+                            '', 0, 0, 0, 0, 0, 0, '', '', '', None, '', cli_id)
+            repositorio = os_repositorio.Os_repositorio()
+            repositorio.nova_os(cli_id, nova_os, sessao)
+            sessao.commit()
+            self.mostrarMensagem("1", "OS Cadastrado com Sucesso!")
+            self.popular()
+        except:
+            sessao.rollback()
+            raise
+        finally:
+            sessao.close()
 
     def atualizandoDados(self):
         cliente_selecionado = self.tree_cliente.focus()
@@ -2805,10 +2867,10 @@ class Castelo:
         subframe_prod1.pack(fill=BOTH)
 
         tree_est_venda = ttk.Treeview(subframe_prod1,
-                                            columns=('item', 'desc', 'valorUni', 'quantidade', 'valorTotal'),
-                                            show='headings',
-                                            selectmode='browse',
-                                            height=15)
+                                      columns=('item', 'desc', 'valorUni', 'quantidade', 'valorTotal'),
+                                      show='headings',
+                                      selectmode='browse',
+                                      height=15)
 
         tree_est_venda.column('item', width=50, minwidth=50, stretch=False)
         tree_est_venda.column('desc', width=422, minwidth=100, stretch=False)
@@ -2828,26 +2890,31 @@ class Castelo:
         labelframe_form_pag.grid(row=0, column=1, sticky=NW, padx=10)
         subframe_form_pag1 = Frame(labelframe_form_pag)
         subframe_form_pag1.pack(padx=15, pady=18)
-        Label(subframe_form_pag1, text="Descrição", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=0, column=0,
-                                                                                                        padx=5)
+        Label(subframe_form_pag1, text="Descrição", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=0,
+                                                                                                         column=0,
+                                                                                                         padx=5)
         Entry(subframe_form_pag1, width=18, justify=RIGHT, state=DISABLED).grid(row=0, column=1, padx=5)
-        Label(subframe_form_pag1, text="Categoria", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=1, column=0,
-                                                                                                      padx=5, pady=5)
+        Label(subframe_form_pag1, text="Categoria", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=1,
+                                                                                                         column=0,
+                                                                                                         padx=5, pady=5)
         Entry(subframe_form_pag1, width=18, justify=RIGHT, state=DISABLED).grid(row=1, column=1, padx=5)
         Label(subframe_form_pag1, text="Estoque Atual", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=2,
-                                                                                                                 column=0,
-                                                                                                                 padx=5)
+                                                                                                             column=0,
+                                                                                                             padx=5)
         Entry(subframe_form_pag1, width=18, justify=RIGHT, state=DISABLED).grid(row=2, column=1, padx=5)
         Label(subframe_form_pag1, text="Preço de Custo", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=3,
-                                                                                                                column=0,
-                                                                                                                padx=5,
-                                                                                                                pady=5)
+                                                                                                              column=0,
+                                                                                                              padx=5,
+                                                                                                              pady=5)
         Entry(subframe_form_pag1, width=18, justify=RIGHT).grid(row=3, column=1, padx=5)
-        Label(subframe_form_pag1, text="Preço de Venda", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=4, column=0,
-                                                                                                   padx=5)
+        Label(subframe_form_pag1, text="Preço de Venda", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=4,
+                                                                                                              column=0,
+                                                                                                              padx=5)
         Entry(subframe_form_pag1, width=18, justify=RIGHT).grid(row=4, column=1, padx=5)
-        Label(subframe_form_pag1, text="Revendedor", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=5, column=0,
-                                                                                                      padx=5, pady=5)
+        Label(subframe_form_pag1, text="Revendedor", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=5,
+                                                                                                          column=0,
+                                                                                                          padx=5,
+                                                                                                          pady=5)
         Entry(subframe_form_pag1, width=18, justify=RIGHT, state=DISABLED).grid(row=5, column=1, padx=5)
         subframe_form_pag2 = Frame(labelframe_form_pag)
         subframe_form_pag2.pack(padx=10, fill=X, side=LEFT)
@@ -2855,7 +2922,7 @@ class Castelo:
         labelframe_valor_rec.grid(row=0, column=0, sticky=W, pady=5)
         Label(labelframe_valor_rec, text="Estoque Miníno:").pack()
         Label(labelframe_valor_rec, text="0", anchor=E, font=("", "12", ""), fg="red").pack(fill=X, pady=5,
-                                                                                                  padx=30)
+                                                                                            padx=30)
         Button(subframe_form_pag2, text="Editar", width=8).grid(row=1, column=0, sticky=W, pady=5, padx=30)
         subframe_form_pag3 = Frame(labelframe_form_pag)
         subframe_form_pag3.pack(padx=5, fill=BOTH, side=LEFT, pady=7)
@@ -2912,7 +2979,8 @@ class Castelo:
         subframe_fornecedor.pack(fill=X)
         Label(subframe_fornecedor, text='Fornecedor').grid(row=0, column=0, sticky=W)
         Entry(subframe_fornecedor, width=150).grid(row=1, column=0, sticky=W)
-        Button(subframe_fornecedor, text='Buscar', command=self.janelaBuscaFornecedor).grid(row=1, column=1, padx=10, ipadx=10)
+        Button(subframe_fornecedor, text='Buscar', command=self.janelaBuscaFornecedor).grid(row=1, column=1, padx=10,
+                                                                                            ipadx=10)
 
         subframe_prod = Frame(frame_princ1)
         subframe_prod.pack(fill=X, pady=10)
@@ -3047,7 +3115,8 @@ class Castelo:
         subframe_fornecedor.pack(fill=X)
         Label(subframe_fornecedor, text='Fornecedor').grid(row=0, column=0, sticky=W)
         Entry(subframe_fornecedor, width=150).grid(row=1, column=0, sticky=W)
-        Button(subframe_fornecedor, text='Buscar', command=self.janelaBuscaFornecedor).grid(row=1, column=1, padx=10, ipadx=10)
+        Button(subframe_fornecedor, text='Buscar', command=self.janelaBuscaFornecedor).grid(row=1, column=1, padx=10,
+                                                                                            ipadx=10)
 
         subframe_prod = Frame(frame_princ1)
         subframe_prod.pack(fill=X, pady=10)
@@ -3162,6 +3231,7 @@ class Castelo:
         jan.transient(root2)
         jan.focus_force()
         jan.grab_set()
+
     # --------------------------------------------------------------------------------------
     def abrirJanelaVendas(self):
         self.nome_frame.pack_forget()
@@ -3186,7 +3256,8 @@ class Castelo:
         subframe_cliente.pack(fill=X)
         Label(subframe_cliente, text='Cliente').grid(row=0, column=0, sticky=W)
         Entry(subframe_cliente, width=150).grid(row=1, column=0, sticky=W)
-        Button(subframe_cliente, text='Buscar', command=self.janelaBuscaCliente).grid(row=1, column=1, padx=10, ipadx=10)
+        Button(subframe_cliente, text='Buscar', command=self.janelaBuscaCliente).grid(row=1, column=1, padx=10,
+                                                                                      ipadx=10)
 
         subframe_prod = Frame(frame_princ1)
         subframe_prod.pack(fill=X, pady=10)
@@ -3208,10 +3279,10 @@ class Castelo:
         subframe_prod1.pack(fill=BOTH)
 
         tree_est_venda = ttk.Treeview(subframe_prod1,
-                                            columns=('item', 'desc', 'valorUni', 'quantidade', 'valorTotal'),
-                                            show='headings',
-                                            selectmode='browse',
-                                            height=15)
+                                      columns=('item', 'desc', 'valorUni', 'quantidade', 'valorTotal'),
+                                      show='headings',
+                                      selectmode='browse',
+                                      height=15)
 
         tree_est_venda.column('item', width=50, minwidth=50, stretch=False)
         tree_est_venda.column('desc', width=422, minwidth=100, stretch=False)
@@ -3286,7 +3357,7 @@ class Castelo:
 
         frame_orcamento = Frame(subframe_prod1)
         frame_orcamento.grid(row=2, column=0, sticky=W)
-        Button(frame_orcamento, text='Orçamento').grid(row=0, column=0, ipady=10, ipadx=10,sticky=W)
+        Button(frame_orcamento, text='Orçamento').grid(row=0, column=0, ipady=10, ipadx=10, sticky=W)
         Label(frame_orcamento, width=56).grid(row=0, column=1)
         Label(frame_orcamento, text="Vendedor:").grid(row=0, column=2, padx=10)
         Entry(frame_orcamento, width=15, justify=RIGHT, relief=SUNKEN, bd=2, show='*').grid(row=0, column=3)
@@ -3318,7 +3389,8 @@ class Castelo:
         subframe_cliente.pack(fill=X)
         Label(subframe_cliente, text='Cliente').grid(row=0, column=0, sticky=W)
         Entry(subframe_cliente, width=150).grid(row=1, column=0, sticky=W)
-        Button(subframe_cliente, text='Buscar', command=self.janelaBuscaCliente).grid(row=1, column=1, padx=10, ipadx=10)
+        Button(subframe_cliente, text='Buscar', command=self.janelaBuscaCliente).grid(row=1, column=1, padx=10,
+                                                                                      ipadx=10)
 
         subframe_prod = Frame(frame_princ1)
         subframe_prod.pack(fill=X, pady=10)
@@ -3553,7 +3625,7 @@ class Castelo:
         Entry(frame_prod, width=90).grid(row=0, column=0, sticky=W, padx=10)
         Button(frame_prod, text='1', height=2).grid(row=0, column=1, padx=10, ipadx=15)
         Button(subframe2, text='Novo', command=self.janelaCadastroCliente).grid(row=0, column=1, padx=15, ipadx=20,
-                                                                                 ipady=5)
+                                                                                ipady=5)
         Button(subframe2, text='Fechar', command=jan.destroy).grid(row=0, column=2, ipadx=20, ipady=5)
 
         jan.transient(root2)
@@ -3614,7 +3686,7 @@ class Castelo:
         Entry(frame_prod, width=90).grid(row=0, column=0, sticky=W, padx=10)
         Button(frame_prod, text='1', height=2).grid(row=0, column=1, padx=10, ipadx=15)
         Button(subframe2, text='Novo', command=self.janelaCadastroFornecedor).grid(row=0, column=1, padx=15, ipadx=20,
-                                                                                 ipady=5)
+                                                                                   ipady=5)
         Button(subframe2, text='Fechar', command=jan.destroy).grid(row=0, column=2, ipadx=20, ipady=5)
 
         jan.transient(root2)

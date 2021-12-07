@@ -1,6 +1,7 @@
 class Cliente():
-    def __init__(self, nome, operador, celular=' ', cpf_cnpj=' ', tel_fixo=' ', rg_ie=' ', logradouro=' ', uf='SP', bairro=' ', complemento=' ',
-                 cep=0000, cidade=' ', email=' ', whats=' ', contato=' ', indicacao=' '):
+    def __init__(self, nome, operador, celular=' ', cpf_cnpj=' ', tel_fixo=' ', rg_ie=' ',
+                 logradouro=' ', uf='SP', bairro=' ', complemento=' ',
+                 cep=0000, cidade=' ', email=' ', whats=' ', indicacao=' ', tel_comercial=' '):
         self.__nome = nome
         self.__operador = operador
         self.__celular = celular
@@ -10,17 +11,22 @@ class Cliente():
         self.__logradouro = logradouro
         self.__uf = uf
         self.__bairro = bairro
+        self.__tel_comercial = tel_comercial
         self.__complemento = complemento
         self.__cep = cep
         self.__cidade = cidade
         self.__email = email
         self.__whats = whats
-        self.__contato = contato
         self.__indicacao = indicacao
+
 
     @property
     def nome(self):
         return self.__nome
+
+    @property
+    def tel_comercial(self):
+        return self.__tel_comercial
 
     @property
     def operador(self):
@@ -75,16 +81,16 @@ class Cliente():
         return self.__whats
 
     @property
-    def contato(self):
-        return self.__contato
-
-    @property
     def indicacao(self):
         return self.__indicacao
 
     @nome.setter
     def nome(self, nome):
         self.__nome = nome
+
+    @tel_comercial.setter
+    def tel_comercial(self, tel_comercial):
+        self.__tel_comercial = tel_comercial
 
     @operador.setter
     def operador(self, operador):
@@ -137,10 +143,6 @@ class Cliente():
     @whats.setter
     def whats(self, whats):
         self.__whats = whats
-
-    @contato.setter
-    def contato(self, contato):
-        self.__contato = contato
 
     @indicacao.setter
     def indicacao(self, indicacao):
