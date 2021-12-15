@@ -136,8 +136,10 @@ class OS(Base):
     obs_pagamento2 = Column(String(50))
     obs_pagamento3 = Column(String(50))
     data_garantia = Column(Date)
-
-    garantia_fabr = relationship('GarantiaFabrica', back_populates='os_gar')
+    notaFiscal = Column(Integer)
+    loja = Column(String(50))
+    garantia_compl = Column(Integer)
+    data_compra = Column(Date)
 
     tecnico_id = Column(Integer, ForeignKey('tecnico.id'))
     tecnico = relationship('Tecnico', back_populates='ostec')
@@ -162,16 +164,6 @@ class Tecnico(Base):
     def __repr__(self):
         return f"Nome: {self.nome}  Senha: {self.senha_tecnico}"
 
-class GarantiaFabrica(Base):
-    __tablename__ = 'garantia_fabrica'
-    loja = Column(String(30), nullable=False)
-    nun_nota = Column(Integer, nullable=False)
-    tempo_garantia = Column(Integer, nullable=False)
-    data_compra = Column(Date, nullable=False)
-    garantia_compl = Column(Integer, nullable=False)
-
-    os_id = Column(Integer, ForeignKey('ordem_de_servico.id'), primary_key=True, nullable=False)
-    os_gar = relationship('OS', back_populates='garantia_fabr')
 
 
 class OsVenda(Base):

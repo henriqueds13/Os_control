@@ -13,10 +13,14 @@ class Os():
                  valor_uni6=0, valor_uni7=0, valor_uni8=0, valor_uni9=0, valor_total1=0, valor_total2=0, valor_total3=0,
                  valor_total4=0, valor_total5=0, valor_total6=0, valor_total7=0, valor_total8=0, valor_total9=0,
                  caixa_peca1=0, caixa_peca2=0, caixa_peca3=0, caixa_peca4=0, caixa_peca5=0, caixa_peca6=0,
-                 caixa_peca7=0, caixa_peca8=0, caixa_peca9=0, caixa_peca_total=0, tecnico='', total=0, defeitos='',
+                 caixa_peca7=0, caixa_peca8=0, caixa_peca9=0, caixa_peca_total=0, tecnico=0, total=0, defeitos='',
                  cheque=0, ccredito=0, cdebito=0, pix=0, dinheiro=0, outros=0, obs_pagamento1='', obs_pagamento2='',
-                 obs_pagamento3='', data_garantia=None, nota_fiscal='', cli_id = 0):
+                 obs_pagamento3='', data_garantia=None, nota_fiscal=0, cli_id=0, loja='', garantia_compl=0,
+                 data_compra=None):
 
+        self.__loja = loja
+        self.__garantia_compl = garantia_compl
+        self.__data_compra = data_compra
         self.__total = total
         self.__defeitos = defeitos
         self.__cheque = cheque
@@ -110,6 +114,18 @@ class Os():
         self.__tecnico = tecnico
         self.__nota_fiscal = nota_fiscal
         self.__cli_id = cli_id
+
+    @property
+    def loja(self):
+        return self.__loja
+
+    @property
+    def garantiaCompl(self):
+        return self.__garantia_compl
+
+    @property
+    def dataCompra(self):
+        return self.__data_compra
 
     @property
     def total(self):
@@ -855,3 +871,15 @@ class Os():
     @tecnico.setter
     def tecnico(self, tecnico):
         self.__tecnico = tecnico
+
+    @loja.setter
+    def loja(self, loja):
+        self.__loja = loja
+
+    @garantiaCompl.setter
+    def garantiaCompl(self, garant):
+        self.__garantia_compl = garant
+
+    @dataCompra.setter
+    def dataCompra(self, dataCompra):
+        self.__data_compra = dataCompra

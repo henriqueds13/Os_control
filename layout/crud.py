@@ -5,7 +5,6 @@ import entidades
 from fabricas import fabrica_conexao
 from repositorios import cliente_repositorio, os_repositorio
 from entidades import cliente, os
-import os
 
 
 # class Application:
@@ -366,7 +365,6 @@ class Castelo:
         self.widget_orc2 = Label(self.subframe_orc1, text="Ordem De Serviço:", fg="white", bg="#110066",
                                  font=('Verdana', '12', 'bold'))
         self.widget_orc2.pack(side=RIGHT)
-
         self.frame1_orc = Frame(self.subframe_orc2, bg=color_orc2)
         self.frame1_orc.pack(fill=X)
         self.labelframe_dadoscli = LabelFrame(self.frame1_orc, text="Dados do Cliente", bg=color_orc2)
@@ -549,7 +547,6 @@ class Castelo:
 
         self.scrollbar_manut_v = Scrollbar(self.subframe_ap_manut1, orient=VERTICAL)  # Scrollbar da treeview vert
         self.scrollbar_manut_h = Scrollbar(self.subframe_ap_manut1, orient=HORIZONTAL)  # Scrollbar da treeview horiz
-
         self.tree_ap_manut = ttk.Treeview(self.subframe_ap_manut1,
                                           columns=('os', 'entrada', 'cliente', 'aparelho', 'marca', 'modelo', 'tipo',
                                                    'status', 'dias', 'valor', 'tecnico', 'operador', 'defeito',
@@ -601,6 +598,7 @@ class Castelo:
         self.tree_ap_manut.heading('data_entreg', text='DATA ENTREGA')
         self.tree_ap_manut.heading('hora', text='HORA')
         self.tree_ap_manut.heading('id_cliente', text='ID CLIENTE')
+        self.popularOsConserto()
 
         self.scrollbar_manut_v.config(command=self.tree_ap_manut.yview)
         self.scrollbar_manut_v.pack(fill=Y, side=RIGHT)
@@ -1097,7 +1095,8 @@ class Castelo:
             sessao.close()
 
     def deletarCliente(self):
-        res = messagebox.askyesno(None, "Deseja Realmente Deletar o Cadastro?")
+        res = messagebox.askyesno(None, "ATENÇÃO:Deletar o Cadastro Apagará Tambem Todas as Ordem de Serviço deste Cliente. "
+                                        "Deseja Realmente Deletar o Cadastro?")
         if res:
             try:
                 item_selecionado = self.tree_cliente.selection()[0]
@@ -1286,7 +1285,7 @@ class Castelo:
     def janelaCriarOs(self):
         lista_aparelhos = ["Roçadeira", "Lav.Alta Pressão", "Cort.Grama Elétrico"]
         lista_marca = ["Karcher", "Stihl", "Trapp"]
-        lista_tecnicos = ["Henrique", "Hugo"]
+        lista_tecnicos = [1, 2]
         radio_loc_text_os = StringVar()
         font_dados1 = ('Verdana', '8', '')
         font_dados2 = ('Verdana', '8', 'bold')
@@ -1322,50 +1321,50 @@ class Castelo:
                              sticky=W)
         Label(sub_frame_dc_os1, text="Endereço", fg=color_fd_labels, font=font_dados1).grid(row=1, column=0, sticky=W,
                                                                                             columnspan=2, pady=2)
-        Label(sub_frame_dc_os1, text="Rua Nossa Senhora das Dores", bg=color_bgdc_labels,
+        Label(sub_frame_dc_os1, text=cliente_dados.logradouro, bg=color_bgdc_labels,
               width=27, font=font_dados2, anchor=W).grid(row=1, column=1, sticky=E)
         Label(sub_frame_dc_os1, text="Complemento", fg=color_fd_labels, font=font_dados1).grid(row=2, column=0,
                                                                                                sticky=W, columnspan=2)
-        Label(sub_frame_dc_os1, text="", bg=color_bgdc_labels, width=23, font=font_dados2, anchor=W).grid(row=2,
+        Label(sub_frame_dc_os1, text=cliente_dados.complemento, bg=color_bgdc_labels, width=23, font=font_dados2, anchor=W).grid(row=2,
                                                                                                           column=1,
                                                                                                           sticky=E)
         Label(sub_frame_dc_os1, text="Bairro", fg=color_fd_labels, font=font_dados1).grid(row=3, column=0, sticky=W,
                                                                                           columnspan=2, pady=2)
-        Label(sub_frame_dc_os1, text="", bg=color_bgdc_labels, width=18, font=font_dados2, anchor=W).grid(row=3,
+        Label(sub_frame_dc_os1, text=cliente_dados.bairro, bg=color_bgdc_labels, width=18, font=font_dados2, anchor=W).grid(row=3,
                                                                                                           column=1,
                                                                                                           sticky=W)
         frame_sub_dc = Frame(sub_frame_dc_os1)
         frame_sub_dc.grid(row=4, column=0, columnspan=2, sticky=W)
         Label(frame_sub_dc, text="Cidade", fg=color_fd_labels, font=font_dados1).pack(side=LEFT)
-        Label(frame_sub_dc, text="", bg=color_bgdc_labels, width=11, font=font_dados2, anchor=W).pack(side=LEFT)
+        Label(frame_sub_dc, text=cliente_dados.cidade, bg=color_bgdc_labels, width=11, font=font_dados2, anchor=W).pack(side=LEFT)
         frame_sub_dc1 = Frame(frame_sub_dc)
         frame_sub_dc1.pack(side=LEFT, padx=10)
         Label(frame_sub_dc1, text="Estado", fg=color_fd_labels, font=font_dados1).pack(side=LEFT)
-        Label(frame_sub_dc1, text="", bg=color_bgdc_labels, width=3, font=font_dados2, anchor=W).pack(side=LEFT)
+        Label(frame_sub_dc1, text=cliente_dados.uf, bg=color_bgdc_labels, width=3, font=font_dados2, anchor=W).pack(side=LEFT)
 
         Label(sub_frame_dc_os2, text="Tel.Res.", fg=color_fd_labels, font=font_dados1).grid(row=0, column=0, sticky=W)
-        Label(sub_frame_dc_os2, text="", bg=color_bgdc_labels, width=16, font=font_dados2, anchor=W).grid(row=0,
+        Label(sub_frame_dc_os2, text=cliente_dados.tel_fixo, bg=color_bgdc_labels, width=16, font=font_dados2, anchor=W).grid(row=0,
                                                                                                           column=1)
         Label(sub_frame_dc_os2, text="Tel.Com.", fg=color_fd_labels, font=font_dados1).grid(row=1, column=0, sticky=W)
-        Label(sub_frame_dc_os2, text="", bg=color_bgdc_labels, width=16, font=font_dados2, anchor=W).grid(row=1,
+        Label(sub_frame_dc_os2, text=cliente_dados.tel_comercial, bg=color_bgdc_labels, width=16, font=font_dados2, anchor=W).grid(row=1,
                                                                                                           column=1,
                                                                                                           pady=2)
         Label(sub_frame_dc_os2, text="Celular", fg=color_fd_labels, font=font_dados1).grid(row=2, column=0, sticky=W)
-        Label(sub_frame_dc_os2, text="", bg=color_bgdc_labels, width=16, font=font_dados2, anchor=W).grid(row=2,
+        Label(sub_frame_dc_os2, text=cliente_dados.celular, bg=color_bgdc_labels, width=16, font=font_dados2, anchor=W).grid(row=2,
                                                                                                           column=1)
         Label(sub_frame_dc_os2, text="Whatsapp.", fg=color_fd_labels, font=font_dados1).grid(row=3, column=0, sticky=W)
-        Label(sub_frame_dc_os2, text="", bg=color_bgdc_labels, width=16, font=font_dados2, anchor=W).grid(row=3,
+        Label(sub_frame_dc_os2, text=cliente_dados.whats, bg=color_bgdc_labels, width=16, font=font_dados2, anchor=W).grid(row=3,
                                                                                                           column=1,
                                                                                                           pady=2)
         Label(sub_frame_dc_os2, text="Id.", fg=color_fd_labels, font=font_dados1).grid(row=4, column=0, sticky=W)
-        Label(sub_frame_dc_os2, text="", bg=color_bgdc_labels, width=16, font=font_dados2, anchor=W).grid(row=4,
+        Label(sub_frame_dc_os2, text=cliente_dados.id, bg=color_bgdc_labels, width=16, font=font_dados2, anchor=W).grid(row=4,
                                                                                                           column=1)
 
         labelframe_os = LabelFrame(frame_princ_jan_os, text="Ordem de Serviço", fg=self.color_fg_label)
         labelframe_os.grid(row=0, column=1, padx=15)
         Label(labelframe_os, text=cliente_dados.id, fg="red", font=('Verdana', '20', 'bold')).pack(padx=10, pady=8)
-        Button(labelframe_os, text="Confirmar Entrada", wraplength=70, command=self.cadastrarOs).pack(pady=10, padx=10,
-                                                                                                      ipadx=10)
+        Button(labelframe_os, text="Confirmar Entrada", wraplength=70,
+               command=lambda: [self.cadastrarOs(), jan.destroy()]).pack(pady=10, padx=10, ipadx=10)
 
         labelframe_dadosapare_os = LabelFrame(frame_princ_jan_os, text="Dados do Aparelho", fg=self.color_fg_label)
         labelframe_dadosapare_os.grid(row=1, column=0, sticky=W, ipady=5)
@@ -1453,6 +1452,18 @@ class Castelo:
         jan.focus_force()
         jan.grab_set()
 
+    def popularOsConserto(self):
+        self.tree_ap_manut.delete(*self.tree_ap_manut.get_children())
+        repositorio = os_repositorio.Os_repositorio()
+        repositorio_cliente = cliente_repositorio.ClienteRepositorio()
+        oss = repositorio.listar_os(sessao)
+        cliente_os = repositorio_cliente.listar_clientes(sessao)
+        for i in oss:
+            self.tree_ap_manut.insert("", "end", values=(i.id, i.dataEntrada, i.cliente[1], i.equipamento, i.marca,
+                                                         i.modelo, "Orçamento", i.status, i.dataEntrada, i.total,
+                                                         i.tecnico, i.operador, i.defeito, i.n_serie, i.chassi,
+                                                         i.dias, 0, i.horaEntrada, i.cliente[0]))
+
     def cadastrarOs(self):
 
         try:
@@ -1478,12 +1489,11 @@ class Castelo:
                             '', '',
                             '', '', '', '', '', '', '', '', '', '', '', 0, '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, tecnico, 0,
-                            '', 0, 0, 0, 0, 0, 0, '', '', '', None, '', cli_id)
+                            '', 0, 0, 0, 0, 0, 0, '', '', '', None, 0, cli_id, loja, 0, None)
             repositorio = os_repositorio.Os_repositorio()
-            repositorio.nova_os(cli_id, nova_os, sessao)
+            repositorio.nova_os(cli_id, tecnico, nova_os, sessao)
             sessao.commit()
             self.mostrarMensagem("1", "OS Cadastrado com Sucesso!")
-            self.popular()
         except:
             sessao.rollback()
             raise
