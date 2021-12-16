@@ -41,4 +41,9 @@ class Os_repositorio():
     def listar_os(self, sessao):
         query_os = os_query.OsQuery()
         os = query_os.listar_os(sessao)
-        return
+        return os
+
+    def listar_os_id(self, id_os, sessao):
+        query_os = os_query.OsQuery()
+        os = query_os.listar_os_id(id_os, sessao)
+        return os
