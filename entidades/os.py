@@ -16,8 +16,9 @@ class Os():
                  caixa_peca7=0, caixa_peca8=0, caixa_peca9=0, caixa_peca_total=0, tecnico=0, total=0, defeitos='',
                  cheque=0, ccredito=0, cdebito=0, pix=0, dinheiro=0, outros=0, obs_pagamento1='', obs_pagamento2='',
                  obs_pagamento3='', data_garantia=None, nota_fiscal=0, cli_id=0, loja='', garantia_compl=0,
-                 data_compra=None):
+                 data_compra=None, aparelho_na_oficina=1):
 
+        self.__aparelho_na_oficina = aparelho_na_oficina
         self.__loja = loja
         self.__garantia_compl = garantia_compl
         self.__data_compra = data_compra
@@ -114,6 +115,10 @@ class Os():
         self.__tecnico = tecnico
         self.__nota_fiscal = nota_fiscal
         self.__cli_id = cli_id
+
+    @property
+    def aparelhoNaOficina(self):
+        return self.__aparelho_na_oficina
 
     @property
     def loja(self):
@@ -883,3 +888,7 @@ class Os():
     @dataCompra.setter
     def dataCompra(self, dataCompra):
         self.__data_compra = dataCompra
+
+    @aparelhoNaOficina.setter
+    def aparelhoNaOficina(self, ap):
+        self.__aparelho_na_oficina = ap

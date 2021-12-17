@@ -140,6 +140,7 @@ class OS(Base):
     loja = Column(String(50))
     garantia_compl = Column(Integer)
     data_compra = Column(Date)
+    aparelho_na_oficina = Column(Integer)
 
     tecnico_id = Column(Integer, ForeignKey('tecnico.id'))
     tecnico = relationship('Tecnico', back_populates='ostec')

@@ -599,7 +599,6 @@ class Castelo:
         self.tree_ap_manut.heading('hora', text='HORA')
         self.tree_ap_manut.heading('id_cliente', text='ID CLIENTE')
 
-
         self.scrollbar_manut_v.config(command=self.tree_ap_manut.yview)
         self.scrollbar_manut_v.pack(fill=Y, side=RIGHT)
         self.tree_ap_manut.pack()
@@ -647,7 +646,7 @@ class Castelo:
         self.tree_ap_entr = ttk.Treeview(self.subframe_ap_entr1,
                                          columns=('os', 'saida', 'cliente', 'aparelho', 'marca', 'modelo', 'tipo',
                                                   'status', 'dias', 'valor', 'tecnico', 'operador', 'defeito',
-                                                  'num_serie', 'chassis', 'data_orc', 'data_entreg', 'hora',
+                                                  'num_serie', 'chassis', 'data_orc', 'data_entrad', 'hora',
                                                   'id_cliente'),
                                          show='headings',
                                          xscrollcommand=self.scrollbar_entr_h.set,
@@ -671,7 +670,7 @@ class Castelo:
         self.tree_ap_entr.column('num_serie', width=100, minwidth=10, stretch=False)
         self.tree_ap_entr.column('chassis', width=100, minwidth=10, stretch=False)
         self.tree_ap_entr.column('data_orc', width=100, minwidth=10, stretch=False)
-        self.tree_ap_entr.column('data_entreg', width=100, minwidth=10, stretch=False)
+        self.tree_ap_entr.column('data_entrad', width=100, minwidth=10, stretch=False)
         self.tree_ap_entr.column('hora', width=100, minwidth=10, stretch=False)
         self.tree_ap_entr.column('id_cliente', width=100, minwidth=10, stretch=False)
 
@@ -692,7 +691,7 @@ class Castelo:
         self.tree_ap_entr.heading('num_serie', text='NUM SERIE')
         self.tree_ap_entr.heading('chassis', text='CHASSI')
         self.tree_ap_entr.heading('data_orc', text='DATA ORÇAMENTO')
-        self.tree_ap_entr.heading('data_entreg', text='DATA ENTREGA')
+        self.tree_ap_entr.heading('data_entrad', text='DATA ENTRADA')
         self.tree_ap_entr.heading('hora', text='HORA')
         self.tree_ap_entr.heading('id_cliente', text='ID CLIENTE')
 
@@ -702,12 +701,14 @@ class Castelo:
         self.scrollbar_entr_h.config(command=self.tree_ap_entr.xview)
         self.scrollbar_entr_h.pack(fill=X)
 
+        self.popularOsEntregue()
+
         self.label_pesquisa_entr = LabelFrame(self.subframe_ap_entr2, text="Digite um Nome para Pesquisar",
                                               bg="#F2E8B3")
         self.label_pesquisa_entr.pack(side=LEFT, padx=10, pady=5)
         self.entr_pesq_entr = Entry(self.label_pesquisa_entr, relief=SUNKEN, width=35)
         self.entr_pesq_entr.pack(side=LEFT, padx=5)
-        self.botao_pesqu_entr = Button(self.label_pesquisa_entr, text="C", width=5)
+        self.botao_pesqu_entr = Button(self.label_pesquisa_entr, text="C", width=5, command=self.popularOsEntregue)
         self.botao_pesqu_entr.pack(side=RIGHT, padx=5, ipady=5, pady=2)
 
         self.label_n_aparelhos_entr = LabelFrame(self.subframe_ap_entr2, text="N Aparelhos", bg="#F2E8B3")
@@ -1097,8 +1098,9 @@ class Castelo:
             sessao.close()
 
     def deletarCliente(self):
-        res = messagebox.askyesno(None, "ATENÇÃO:Deletar o Cadastro Apagará Tambem Todas as Ordem de Serviço deste Cliente. "
-                                        "Deseja Realmente Deletar o Cadastro?")
+        res = messagebox.askyesno(None,
+                                  "ATENÇÃO:Deletar o Cadastro Apagará Tambem Todas as Ordem de Serviço deste Cliente. "
+                                  "Deseja Realmente Deletar o Cadastro?")
         if res:
             try:
                 item_selecionado = self.tree_cliente.selection()[0]
@@ -1327,40 +1329,49 @@ class Castelo:
               width=27, font=font_dados2, anchor=W).grid(row=1, column=1, sticky=E)
         Label(sub_frame_dc_os1, text="Complemento", fg=color_fd_labels, font=font_dados1).grid(row=2, column=0,
                                                                                                sticky=W, columnspan=2)
-        Label(sub_frame_dc_os1, text=cliente_dados.complemento, bg=color_bgdc_labels, width=23, font=font_dados2, anchor=W).grid(row=2,
-                                                                                                          column=1,
-                                                                                                          sticky=E)
+        Label(sub_frame_dc_os1, text=cliente_dados.complemento, bg=color_bgdc_labels, width=23, font=font_dados2,
+              anchor=W).grid(row=2,
+                             column=1,
+                             sticky=E)
         Label(sub_frame_dc_os1, text="Bairro", fg=color_fd_labels, font=font_dados1).grid(row=3, column=0, sticky=W,
                                                                                           columnspan=2, pady=2)
-        Label(sub_frame_dc_os1, text=cliente_dados.bairro, bg=color_bgdc_labels, width=18, font=font_dados2, anchor=W).grid(row=3,
-                                                                                                          column=1,
-                                                                                                          sticky=W)
+        Label(sub_frame_dc_os1, text=cliente_dados.bairro, bg=color_bgdc_labels, width=18, font=font_dados2,
+              anchor=W).grid(row=3,
+                             column=1,
+                             sticky=W)
         frame_sub_dc = Frame(sub_frame_dc_os1)
         frame_sub_dc.grid(row=4, column=0, columnspan=2, sticky=W)
         Label(frame_sub_dc, text="Cidade", fg=color_fd_labels, font=font_dados1).pack(side=LEFT)
-        Label(frame_sub_dc, text=cliente_dados.cidade, bg=color_bgdc_labels, width=11, font=font_dados2, anchor=W).pack(side=LEFT)
+        Label(frame_sub_dc, text=cliente_dados.cidade, bg=color_bgdc_labels, width=11, font=font_dados2, anchor=W).pack(
+            side=LEFT)
         frame_sub_dc1 = Frame(frame_sub_dc)
         frame_sub_dc1.pack(side=LEFT, padx=10)
         Label(frame_sub_dc1, text="Estado", fg=color_fd_labels, font=font_dados1).pack(side=LEFT)
-        Label(frame_sub_dc1, text=cliente_dados.uf, bg=color_bgdc_labels, width=3, font=font_dados2, anchor=W).pack(side=LEFT)
+        Label(frame_sub_dc1, text=cliente_dados.uf, bg=color_bgdc_labels, width=3, font=font_dados2, anchor=W).pack(
+            side=LEFT)
 
         Label(sub_frame_dc_os2, text="Tel.Res.", fg=color_fd_labels, font=font_dados1).grid(row=0, column=0, sticky=W)
-        Label(sub_frame_dc_os2, text=cliente_dados.tel_fixo, bg=color_bgdc_labels, width=16, font=font_dados2, anchor=W).grid(row=0,
-                                                                                                          column=1)
+        Label(sub_frame_dc_os2, text=cliente_dados.tel_fixo, bg=color_bgdc_labels, width=16, font=font_dados2,
+              anchor=W).grid(row=0,
+                             column=1)
         Label(sub_frame_dc_os2, text="Tel.Com.", fg=color_fd_labels, font=font_dados1).grid(row=1, column=0, sticky=W)
-        Label(sub_frame_dc_os2, text=cliente_dados.tel_comercial, bg=color_bgdc_labels, width=16, font=font_dados2, anchor=W).grid(row=1,
-                                                                                                          column=1,
-                                                                                                          pady=2)
+        Label(sub_frame_dc_os2, text=cliente_dados.tel_comercial, bg=color_bgdc_labels, width=16, font=font_dados2,
+              anchor=W).grid(row=1,
+                             column=1,
+                             pady=2)
         Label(sub_frame_dc_os2, text="Celular", fg=color_fd_labels, font=font_dados1).grid(row=2, column=0, sticky=W)
-        Label(sub_frame_dc_os2, text=cliente_dados.celular, bg=color_bgdc_labels, width=16, font=font_dados2, anchor=W).grid(row=2,
-                                                                                                          column=1)
+        Label(sub_frame_dc_os2, text=cliente_dados.celular, bg=color_bgdc_labels, width=16, font=font_dados2,
+              anchor=W).grid(row=2,
+                             column=1)
         Label(sub_frame_dc_os2, text="Whatsapp.", fg=color_fd_labels, font=font_dados1).grid(row=3, column=0, sticky=W)
-        Label(sub_frame_dc_os2, text=cliente_dados.whats, bg=color_bgdc_labels, width=16, font=font_dados2, anchor=W).grid(row=3,
-                                                                                                          column=1,
-                                                                                                          pady=2)
+        Label(sub_frame_dc_os2, text=cliente_dados.whats, bg=color_bgdc_labels, width=16, font=font_dados2,
+              anchor=W).grid(row=3,
+                             column=1,
+                             pady=2)
         Label(sub_frame_dc_os2, text="Id.", fg=color_fd_labels, font=font_dados1).grid(row=4, column=0, sticky=W)
-        Label(sub_frame_dc_os2, text=cliente_dados.id, bg=color_bgdc_labels, width=16, font=font_dados2, anchor=W).grid(row=4,
-                                                                                                          column=1)
+        Label(sub_frame_dc_os2, text=cliente_dados.id, bg=color_bgdc_labels, width=16, font=font_dados2, anchor=W).grid(
+            row=4,
+            column=1)
 
         labelframe_os = LabelFrame(frame_princ_jan_os, text="Ordem de Serviço", fg=self.color_fg_label)
         labelframe_os.grid(row=0, column=1, padx=15)
@@ -1461,11 +1472,13 @@ class Castelo:
         repositorio_cliente = cliente_repositorio.ClienteRepositorio()
         oss = repositorio.listar_os(sessao)
         for i in oss:
-            cliente_os = repositorio_cliente.listar_cliente_id(i.cliente_id, sessao)
-            self.tree_ap_manut.insert("", "end", values=(i.id, i.data_entrada, cliente_os.nome, i.equipamento, i.marca,
-                                                         i.modelo, "Orçamento", i.status, i.dias, i.total,
-                                                         i.tecnico, i.operador, i.defeito, i.n_serie, i.chassi,
-                                                         i.dias, 0, i.hora_entrada, i.cliente_id))
+            if i.aparelho_na_oficina == 1:
+                cliente_os = repositorio_cliente.listar_cliente_id(i.cliente_id, sessao)
+                self.tree_ap_manut.insert("", "end",
+                                          values=(i.id, i.data_entrada, cliente_os.nome, i.equipamento, i.marca,
+                                                  i.modelo, "Orçamento", i.status, i.dias, i.total,
+                                                  i.tecnico, i.operador, i.defeito, i.n_serie, i.chassi,
+                                                  i.dias, 0, i.hora_entrada, i.cliente_id))
 
     def cadastrarOs(self):
 
@@ -1492,7 +1505,7 @@ class Castelo:
                             '', '',
                             '', '', '', '', '', '', '', '', '', '', '', 0, '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, tecnico, 0,
-                            '', 0, 0, 0, 0, 0, 0, '', '', '', None, 0, cli_id, loja, 0, None)
+                            '', 0, 0, 0, 0, 0, 0, '', '', '', None, 0, cli_id, loja, 0, None, 1)
             repositorio = os_repositorio.Os_repositorio()
             repositorio.nova_os(cli_id, tecnico, nova_os, sessao)
             sessao.commit()
@@ -1594,8 +1607,8 @@ class Castelo:
         dado_os = self.tree_ap_manut.item(os_selecionada, "values")
         os_dados = os_repositorio.Os_repositorio.listar_os_id(dado_os[0], dado_os[0], sessao)
 
-        cliente_os_atual= cliente_repositorio.ClienteRepositorio.listar_cliente_id(os_dados.cliente_id,
-                                                                                   os_dados.cliente_id, sessao)
+        cliente_os_atual = cliente_repositorio.ClienteRepositorio.listar_cliente_id(os_dados.cliente_id,
+                                                                                    os_dados.cliente_id, sessao)
 
         labelframe_dadoscli_os = LabelFrame(frame_princ_jan_os, text="Dados do Cliente", fg=self.color_fg_label)
         labelframe_dadoscli_os.grid(row=0, column=0, sticky=W)
@@ -1617,38 +1630,46 @@ class Castelo:
               anchor=W).grid(row=0, column=1, sticky=E)
         Label(frame_sub_dc, text="Bairro", fg=color_fg_labels, font=font_dados1).grid(row=1, column=0, sticky=W,
                                                                                       pady=2)
-        Label(frame_sub_dc, text=cliente_os_atual.bairro, bg=color_bgdc_labels, width=15, font=font_dados2, anchor=W).grid(row=1,
-                                                                                                      column=1,
-                                                                                                      sticky=W)
+        Label(frame_sub_dc, text=cliente_os_atual.bairro, bg=color_bgdc_labels, width=15, font=font_dados2,
+              anchor=W).grid(row=1,
+                             column=1,
+                             sticky=W)
         Label(frame_sub_dc, text="Cidade", fg=color_fg_labels, font=font_dados1).grid(row=2, column=0, sticky=W)
-        Label(frame_sub_dc, text=cliente_os_atual.cidade, bg=color_bgdc_labels, width=15, font=font_dados2, anchor=W).grid(row=2, column=1,
-                                                                                                      sticky=W)
+        Label(frame_sub_dc, text=cliente_os_atual.cidade, bg=color_bgdc_labels, width=15, font=font_dados2,
+              anchor=W).grid(row=2, column=1,
+                             sticky=W)
         frame_sub_dc1 = Frame(frame_sub_dc)
         frame_sub_dc1.grid(row=0, column=2, rowspan=3, sticky=S, ipadx=13)
         Button(frame_sub_dc1, text="1", width=7).pack(ipady=8, side=RIGHT)
 
         Label(sub_frame_dc_os2, text="Tel.Res.", fg=color_fg_labels, font=font_dados1).grid(row=0, column=0, sticky=W)
-        Label(sub_frame_dc_os2, text=cliente_os_atual.tel_fixo, bg=color_bgdc_labels, width=16, font=font_dados2, anchor=W).grid(row=0,
-                                                                                                          column=1)
+        Label(sub_frame_dc_os2, text=cliente_os_atual.tel_fixo, bg=color_bgdc_labels, width=16, font=font_dados2,
+              anchor=W).grid(row=0,
+                             column=1)
         Label(sub_frame_dc_os2, text="Tel.Com.", fg=color_fg_labels, font=font_dados1).grid(row=1, column=0, sticky=W)
-        Label(sub_frame_dc_os2, text=cliente_os_atual.tel_comercial, bg=color_bgdc_labels, width=16, font=font_dados2, anchor=W).grid(row=1,
-                                                                                                          column=1,
-                                                                                                          pady=2)
+        Label(sub_frame_dc_os2, text=cliente_os_atual.tel_comercial, bg=color_bgdc_labels, width=16, font=font_dados2,
+              anchor=W).grid(row=1,
+                             column=1,
+                             pady=2)
         Label(sub_frame_dc_os2, text="Celular", fg=color_fg_labels, font=font_dados1).grid(row=2, column=0, sticky=W)
-        Label(sub_frame_dc_os2, text=cliente_os_atual.celular, bg=color_bgdc_labels, width=16, font=font_dados2, anchor=W).grid(row=2,
-                                                                                                          column=1)
+        Label(sub_frame_dc_os2, text=cliente_os_atual.celular, bg=color_bgdc_labels, width=16, font=font_dados2,
+              anchor=W).grid(row=2,
+                             column=1)
         Label(sub_frame_dc_os2, text="Whatsapp.", fg=color_fg_labels, font=font_dados1).grid(row=3, column=0, sticky=W)
-        Label(sub_frame_dc_os2, text=cliente_os_atual.whats, bg=color_bgdc_labels, width=16, font=font_dados2, anchor=W).grid(row=3,
-                                                                                                          column=1,
-                                                                                                          pady=2)
+        Label(sub_frame_dc_os2, text=cliente_os_atual.whats, bg=color_bgdc_labels, width=16, font=font_dados2,
+              anchor=W).grid(row=3,
+                             column=1,
+                             pady=2)
         Label(sub_frame_dc_os2, text="Id.", fg=color_fg_labels, font=font_dados1).grid(row=4, column=0, sticky=W)
-        Label(sub_frame_dc_os2, text=cliente_os_atual.id, bg=color_bgdc_labels, width=16, font=font_dados2, anchor=W).grid(row=4,
-                                                                                                          column=1)
+        Label(sub_frame_dc_os2, text=cliente_os_atual.id, bg=color_bgdc_labels, width=16, font=font_dados2,
+              anchor=W).grid(row=4,
+                             column=1)
 
         labelframe_os = LabelFrame(frame_princ_jan_os, text="Ordem de Serviço", fg=self.color_fg_label)
         labelframe_os.grid(row=0, column=1, padx=15, rowspan=4, ipadx=3, sticky=N)
         Label(labelframe_os, text=os_dados.id, fg="red", font=('Verdana', '20', 'bold')).grid(row=0, column=0,
-                                                                                       columnspan=2, padx=10, pady=5)
+                                                                                              columnspan=2, padx=10,
+                                                                                              pady=5)
         Label(labelframe_os, text="Entrada:", fg=color_fg_labels2, font=font_dados2).grid(row=1, column=0, sticky=E,
                                                                                           padx=5)
         Label(labelframe_os, text="19/10/2021", fg=color_fg_labels, font=font_dados2).grid(row=1, column=1, sticky=W)
@@ -1743,7 +1764,7 @@ class Castelo:
         self.jan_os_loja.grid(row=1, column=0, sticky=W, padx=13)
         Label(labelframe_garantia, text='Data Compra').grid(row=0, column=1, sticky=W)
         self.jan_os_data_compra = Entry(labelframe_garantia, width=15)
-        #self.jan_os_data_compra.insert(0, os_dados.data_compra)
+        # self.jan_os_data_compra.insert(0, os_dados.data_compra)
         self.jan_os_data_compra.grid(row=1, column=1, sticky=W)
         Label(labelframe_garantia, text='Nota Fiscal').grid(row=0, column=2, sticky=W, padx=13)
         self.jan_os_nota_fiscal = Entry(labelframe_garantia, width=15)
@@ -2103,7 +2124,8 @@ class Castelo:
 
         botoes_os = Frame(frame_princ_os2)
         botoes_os.pack(fill=X, padx=10, pady=25)
-        Button(botoes_os, text="Confirmar Saída", wraplength=70, width=15, height=2).pack(side=LEFT, padx=20)
+        Button(botoes_os, text="Confirmar Saída", wraplength=70, width=15, height=2,
+               command=lambda: [self.saidaDeOs(jan)]).pack(side=LEFT, padx=20)
         Button(botoes_os, text="Fechar", width=15, height=2, command=jan.destroy).pack(side=LEFT)
 
         jan.transient(root2)
@@ -2147,6 +2169,40 @@ class Castelo:
         jan.transient(root2)
         jan.focus_force()
         jan.grab_set()
+
+    def popularOsEntregue(self):
+        self.tree_ap_entr.delete(*self.tree_ap_entr.get_children())
+        repositorio = os_repositorio.Os_repositorio()
+        repositorio_cliente = cliente_repositorio.ClienteRepositorio()
+        oss = repositorio.listar_os(sessao)
+        for i in oss:
+            if i.aparelho_na_oficina == 0:
+                cliente_os = repositorio_cliente.listar_cliente_id(i.cliente_id, sessao)
+                self.tree_ap_entr.insert("", "end",
+                                         values=(i.id, i.data_entrada, cliente_os.nome, i.equipamento, i.marca,
+                                                 i.modelo, "Orçamento", i.status, i.dias, i.total,
+                                                 i.tecnico, i.operador, i.defeito, i.n_serie, i.chassi,
+                                                 i.data_orc, i.data_entrada, i.hora_entrada, i.cliente_id))
+
+    def saidaDeOs(self, jan):
+        res = messagebox.askyesno(None, "Deseja Realmente Dar Saída do Aparelho?")
+        if res:
+            try:
+                os_selecionado = self.tree_ap_manut.focus()
+                dados_os = self.tree_ap_manut.item(os_selecionado, "values")
+
+                repositorio = os_repositorio.Os_repositorio()
+                repositorio.saida_de_aparelho(dados_os[0], sessao)
+                sessao.commit()
+                self.mostrarMensagem("1", "Foi Dado Saída do Aparelho com Sucesso!")
+                jan.destroy()
+                self.popularOsConserto()
+            except:
+                messagebox.showinfo(title="ERRO", message="ERRO")
+            finally:
+                sessao.close()
+        else:
+            pass
 
     def janelaAbrirOsEntregue(self):
 

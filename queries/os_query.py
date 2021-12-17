@@ -14,3 +14,7 @@ class OsQuery():
     def listar_os_id(self, id_os, sessao):
         os = sessao.query(OS).filter(OS.id == id_os).first()
         return os
+
+    def saida_de_aparelho(self, id_os, sessao):
+        ordem_de_servico = self.listar_os_id(id_os, sessao)
+        ordem_de_servico.aparelho_na_oficina = 0
