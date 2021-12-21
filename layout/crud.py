@@ -1,10 +1,10 @@
 from tkinter import *
 from tkinter import ttk, messagebox
 
-import entidades
+
 from fabricas import fabrica_conexao
-from repositorios import cliente_repositorio, os_repositorio
-from entidades import cliente, os
+from repositorios import cliente_repositorio, os_repositorio, os_saida_repositorio
+from entidades import cliente, os, os_saida
 
 
 # class Application:
@@ -2172,35 +2172,93 @@ class Castelo:
 
     def popularOsEntregue(self):
         self.tree_ap_entr.delete(*self.tree_ap_entr.get_children())
-        repositorio = os_repositorio.Os_repositorio()
+        repositorio = os_saida_repositorio.OsSaidaRepositorio()
         repositorio_cliente = cliente_repositorio.ClienteRepositorio()
         oss = repositorio.listar_os(sessao)
         for i in oss:
-            if i.aparelho_na_oficina == 0:
                 cliente_os = repositorio_cliente.listar_cliente_id(i.cliente_id, sessao)
                 self.tree_ap_entr.insert("", "end",
-                                         values=(i.id, i.data_entrada, cliente_os.nome, i.equipamento, i.marca,
+                                         values=(i.os_saida, i.data_saida, cliente_os.nome, i.equipamento, i.marca,
                                                  i.modelo, "Orçamento", i.status, i.dias, i.total,
-                                                 i.tecnico, i.operador, i.defeito, i.n_serie, i.chassi,
+                                                 i.tecnico_id, i.operador, i.defeito, i.n_serie, i.chassi,
                                                  i.data_orc, i.data_entrada, i.hora_entrada, i.cliente_id))
 
     def saidaDeOs(self, jan):
         res = messagebox.askyesno(None, "Deseja Realmente Dar Saída do Aparelho?")
         if res:
-            try:
-                os_selecionado = self.tree_ap_manut.focus()
-                dados_os = self.tree_ap_manut.item(os_selecionado, "values")
+            #try:
+            os_selecionado = self.tree_ap_manut.focus()
+            dados_os = self.tree_ap_manut.item(os_selecionado, "values")
 
-                repositorio = os_repositorio.Os_repositorio()
-                repositorio.saida_de_aparelho(dados_os[0], sessao)
-                sessao.commit()
-                self.mostrarMensagem("1", "Foi Dado Saída do Aparelho com Sucesso!")
-                jan.destroy()
-                self.popularOsConserto()
-            except:
-                messagebox.showinfo(title="ERRO", message="ERRO")
-            finally:
-                sessao.close()
+            repositorio = os_repositorio.Os_repositorio()
+            repositorio_saida = os_saida_repositorio.OsSaidaRepositorio()
+            os_atual_db = repositorio.listar_os_id(dados_os[0], sessao)
+            os_objeto = os_saida.OsSaida(equipamento=os_atual_db.equipamento, marca=os_atual_db.marca,
+                                         modelo=os_atual_db.modelo, acessorios=os_atual_db.acessorios,
+                                         defeito=os_atual_db.defeito, estado_aparelho=os_atual_db.estado_aparelho,
+                                         n_serie=os_atual_db.n_serie, tensao=os_atual_db.tensao,
+                                         status=os_atual_db.status, chassi=os_atual_db.chassi,
+                                         andamento=os_atual_db.andamento, data_entrada=os_atual_db.data_entrada,
+                                         hora_entrada=os_atual_db.hora_entrada, dias=os_atual_db.dias,
+                                         data_orc=os_atual_db.data_orc, conclusao=os_atual_db.conclusão,
+                                         operador=os_atual_db.operador, log=os_atual_db.log,
+                                         codigo1=os_atual_db.codigo1, codigo2=os_atual_db.codigo2,
+                                         codigo3=os_atual_db.codigo3, codigo4=os_atual_db.codigo4,
+                                         codigo5=os_atual_db.codigo5, codigo6=os_atual_db.codigo6,
+                                         codigo7=os_atual_db.codigo7, codigo8=os_atual_db.codigo8,
+                                         codigo9=os_atual_db.codigo9, desc_serv1=os_atual_db.desc_serv1,
+                                         desc_serv2=os_atual_db.desc_serv2, desc_serv3=os_atual_db.desc_serv3,
+                                         desc_serv4=os_atual_db.desc_serv4, desc_serv5=os_atual_db.desc_serv5,
+                                         desc_serv6=os_atual_db.desc_serv6, desc_serv7=os_atual_db.desc_serv7,
+                                         desc_serv8=os_atual_db.desc_serv8, desc_serv9=os_atual_db.desc_serv9,
+                                         desconto=os_atual_db.desconto,
+                                         obs1=os_atual_db.obs1, obs2=os_atual_db.obs2, obs3=os_atual_db.obs3,
+                                         valor_mao_obra=os_atual_db.valor_mao_obra, qtd1=os_atual_db.qtd1,
+                                         qtd2=os_atual_db.qtd2, qtd3=os_atual_db.qtd3, qtd4=os_atual_db.qtd4,
+                                         qtd5=os_atual_db.qtd5, qtd6=os_atual_db.qtd6, qtd7=os_atual_db.qtd7,
+                                         qtd8=os_atual_db.qtd8,
+                                         qtd9=os_atual_db.qtd9, valor_uni1=os_atual_db.valor_uni1,
+                                         valor_uni2=os_atual_db.valor_uni2, valor_uni3=os_atual_db.valor_uni3,
+                                         valor_uni4=os_atual_db.valor_uni4, valor_uni5=os_atual_db.valor_uni5,
+                                         valor_uni6=os_atual_db.valor_uni6,
+                                         valor_uni7=os_atual_db.valor_uni7, valor_uni8=os_atual_db.valor_uni8,
+                                         valor_uni9=os_atual_db.valor_uni9,
+                                         valor_total1=os_atual_db.valor_tot1, valor_total2=os_atual_db.valor_tot2,
+                                         valor_total3=os_atual_db.valor_tot3,
+                                         valor_total4=os_atual_db.valor_tot4, valor_total5=os_atual_db.valor_tot5,
+                                         valor_total6=os_atual_db.valor_tot6,
+                                         valor_total7=os_atual_db.valor_tot7, valor_total8=os_atual_db.valor_tot8,
+                                         valor_total9=os_atual_db.valor_tot9,
+                                         caixa_peca1=os_atual_db.caixa_peca1, caixa_peca2=os_atual_db.caixa_peca2,
+                                         caixa_peca3=os_atual_db.caixa_peca3,
+                                         caixa_peca4=os_atual_db.caixa_peca4, caixa_peca5=os_atual_db.caixa_peca5,
+                                         caixa_peca6=os_atual_db.caixa_peca6,
+                                         caixa_peca7=os_atual_db.caixa_peca7, caixa_peca8=os_atual_db.caixa_peca8,
+                                         caixa_peca9=os_atual_db.caixa_peca9,
+                                         caixa_peca_total=os_atual_db.caixa_peca_total, tecnico=os_atual_db.tecnico_id,
+                                         total=os_atual_db.total, defeitos=os_atual_db.defeitos,
+                                         cheque=os_atual_db.cheque, ccredito=os_atual_db.ccredito,
+                                         cdebito=os_atual_db.cdebito, pix=os_atual_db.pix,
+                                         dinheiro=os_atual_db.dinheiro,
+                                         outros=os_atual_db.outros, obs_pagamento1=os_atual_db.obs_pagamento1,
+                                         obs_pagamento2=os_atual_db.obs_pagamento2,
+                                         obs_pagamento3=os_atual_db.obs_pagamento3,
+                                         data_garantia=os_atual_db.data_garantia, nota_fiscal=0,
+                                         cli_id=os_atual_db.cliente_id,
+                                         loja=os_atual_db.loja, garantia_compl=os_atual_db.garantia_compl,
+                                         data_compra=os_atual_db.data_compra,
+                                         aparelho_na_oficina=os_atual_db.aparelho_na_oficina, data_saida=None,
+                                         hora_saida='', os=os_atual_db.id)
+            repositorio_saida.nova_os(dados_os[18], dados_os[10], os_objeto, sessao)
+            repositorio.remover_os(dados_os[0], sessao)
+            sessao.commit()
+            self.mostrarMensagem("1", "Foi Dado Saída do Aparelho com Sucesso!")
+            jan.destroy()
+            self.popularOsConserto()
+            #except:
+                #messagebox.showinfo(title="ERRO", message="ERRO")
+            #finally:
+            sessao.close()
         else:
             pass
 

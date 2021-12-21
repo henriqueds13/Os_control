@@ -49,6 +49,6 @@ class Os_repositorio():
         os = query_os.listar_os_id(id_os, sessao)
         return os
 
-    def saida_de_aparelho(self, id_os, sessao):
+    def remover_os(self, id_os, sessao):
         query_os = os_query.OsQuery()
-        query_os.saida_de_aparelho(id_os, sessao)
+        query_os.remover_os(id_os, sessao)
