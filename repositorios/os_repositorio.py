@@ -52,3 +52,11 @@ class Os_repositorio():
     def remover_os(self, id_os, sessao):
         query_os = os_query.OsQuery()
         query_os.remover_os(id_os, sessao)
+
+    def editar_os(self, id_os, os, sessao):
+        query_os = os_query.OsQuery()
+        query_os.editar_os(id_os, os, sessao)
+
+    def editar_orcamento(self, id_os, os, num, sessao):
+        query_os = os_query.OsQuery()
+        query_os.editar_orcamento(id_os, os, num, sessao)
