@@ -99,6 +99,7 @@ class OsQuery():
             oss.obs3 = os.obs3
             oss.caixa_peca_total = os.caixaPecaTotal
             oss.defeitos = os.defeitos
+            oss.total = os.total
 
         elif num == 2:
             oss.dinheiro = os.dinheiro
@@ -182,3 +183,4 @@ class OsQuery():
             oss.obs_pagamento1 = os.obsPagamento1
             oss.obs_pagamento2 = os.obsPagamento2
             oss.obs_pagamento3 = os.obsPagamento3
+            oss.total = os.total

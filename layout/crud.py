@@ -1898,9 +1898,157 @@ class Castelo:
         else:
             valor = str(valor).replace('.', ',')
             valor1 = locale.atof(valor)
-            print(valor1)
             valor_separado = locale.currency(valor1).split()
             return valor_separado[1]
+
+    def insereTotalConvertido(self, valor):
+
+            valor = str(valor).replace('.', ',')
+            valor1 = locale.atof(valor)
+            valor_separado = locale.currency(valor1)
+            return valor_separado
+
+    def insereNumMultiplicado(self, valor, multiplicador):
+
+        if valor == '' or multiplicador == "":
+            return ''
+
+        valor = valor.replace(',', '.')
+        valor = float(valor)
+        valor_final = valor * int(multiplicador)
+
+        if valor_final == 0:
+            return ''
+        else:
+            valor_final = str(valor_final).replace('.', ',')
+            valor1 = locale.atof(valor_final)
+            valor_separado = locale.currency(valor1).split()
+            return valor_separado[1]
+
+    def somaValorTotal(self, valores, num):
+
+        valor_final = 0.0
+        if num == 1:
+            for i in range(0, len(valores)):
+                valor_atual = valores[i]
+
+                if valor_atual == '':
+                    valor_atual = '0,0'
+
+                valor = float(valor_atual.replace(',', '.'))
+                valor_final += valor
+
+            valor_final = str(valor_final).replace('.', ',')
+            valor1 = locale.atof(valor_final)
+            valor_separado = locale.currency(valor1).split()
+            return valor_separado[1]
+
+        else:
+            for i in range(1, len(valores)):
+                valor_atual = valores[i]
+
+                if valor_atual == '':
+                    valor_atual = '0,0'
+
+                valor = float(valor_atual.replace(',', '.'))
+                valor_final += valor
+            valor_final -= float(valores[0].replace(',', '.'))
+            valor_final = str(valor_final).replace('.', ',')
+            valor1 = locale.atof(valor_final)
+            valor_separado = locale.currency(valor1).split()
+            return valor_separado[1]
+
+
+    def insereNumAoClicar(self):
+
+        valor_uni1 = self.orc_val_uni_entry1.get()
+        valor_uni2 = self.orc_val_uni_entry2.get()
+        valor_uni3 = self.orc_val_uni_entry3.get()
+        valor_uni4 = self.orc_val_uni_entry4.get()
+        valor_uni5 = self.orc_val_uni_entry5.get()
+        valor_uni6 = self.orc_val_uni_entry6.get()
+        valor_uni7 = self.orc_val_uni_entry7.get()
+        valor_uni8 = self.orc_val_uni_entry8.get()
+        valor_uni9 = self.orc_val_uni_entry9.get()
+
+        qtd1 = self.orc_quant_entry1.get()
+        qtd2 = self.orc_quant_entry2.get()
+        qtd3 = self.orc_quant_entry3.get()
+        qtd4 = self.orc_quant_entry4.get()
+        qtd5 = self.orc_quant_entry5.get()
+        qtd6 = self.orc_quant_entry6.get()
+        qtd7 = self.orc_quant_entry7.get()
+        qtd8 = self.orc_quant_entry8.get()
+        qtd9 = self.orc_quant_entry9.get()
+
+
+        cp1 = self.orc_id_entry1.get()
+        cp2 = self.orc_id_entry2.get()
+        cp3 = self.orc_id_entry3.get()
+        cp4 = self.orc_id_entry4.get()
+        cp5 = self.orc_id_entry5.get()
+        cp6 = self.orc_id_entry6.get()
+        cp7 = self.orc_id_entry7.get()
+        cp8 = self.orc_id_entry8.get()
+        cp9 = self.orc_id_entry9.get()
+
+        caixa_peca = [cp1, cp2, cp3, cp4, cp5, cp6, cp7, cp8, cp9]
+
+        self.orc_val_total_entry1.delete(0, 'end')
+        self.orc_val_total_entry2.delete(0, 'end')
+        self.orc_val_total_entry3.delete(0, 'end')
+        self.orc_val_total_entry4.delete(0, 'end')
+        self.orc_val_total_entry5.delete(0, 'end')
+        self.orc_val_total_entry6.delete(0, 'end')
+        self.orc_val_total_entry7.delete(0, 'end')
+        self.orc_val_total_entry8.delete(0, 'end')
+        self.orc_val_total_entry9.delete(0, 'end')
+
+        self.orc_val_total_entry1.insert(0, self.insereNumMultiplicado(valor_uni1, qtd1))
+        self.orc_val_total_entry2.insert(0, self.insereNumMultiplicado(valor_uni2, qtd2))
+        self.orc_val_total_entry3.insert(0, self.insereNumMultiplicado(valor_uni3, qtd3))
+        self.orc_val_total_entry4.insert(0, self.insereNumMultiplicado(valor_uni4, qtd4))
+        self.orc_val_total_entry5.insert(0, self.insereNumMultiplicado(valor_uni5, qtd5))
+        self.orc_val_total_entry6.insert(0, self.insereNumMultiplicado(valor_uni6, qtd6))
+        self.orc_val_total_entry7.insert(0, self.insereNumMultiplicado(valor_uni7, qtd7))
+        self.orc_val_total_entry8.insert(0, self.insereNumMultiplicado(valor_uni8, qtd8))
+        self.orc_val_total_entry9.insert(0, self.insereNumMultiplicado(valor_uni9, qtd9))
+
+        valor_tot1 = self.orc_val_total_entry1.get()
+        valor_tot2 = self.orc_val_total_entry2.get()
+        valor_tot3 = self.orc_val_total_entry3.get()
+        valor_tot4 = self.orc_val_total_entry4.get()
+        valor_tot5 = self.orc_val_total_entry5.get()
+        valor_tot6 = self.orc_val_total_entry6.get()
+        valor_tot7 = self.orc_val_total_entry7.get()
+        valor_tot8 = self.orc_val_total_entry8.get()
+        valor_tot9 = self.orc_val_total_entry9.get()
+
+        desconto = self.orc_entry_desconto_material.get()
+        mao_obra = self.orc_entry_mao_obra_material.get()
+
+        valores = [valor_tot1, valor_tot2, valor_tot3, valor_tot4, valor_tot5, valor_tot6, valor_tot7, valor_tot8,
+                   valor_tot9]
+
+
+
+        caixa_total = self.somaValorTotal(caixa_peca, 1)
+        valor_subtotal = self.somaValorTotal(valores, 1)
+
+        total = [desconto, mao_obra, valor_subtotal]
+
+        valor_total = self.somaValorTotal(total, 2)
+
+        self.orc_entry_mao_obra_material.delete(0, 'end')
+        self.orc_entry_desconto_material.delete(0, 'end')
+
+
+        self.orc_entry_mao_obra_material.insert(0, self.insereNumConvertido(self.formataParaREal(mao_obra)))
+        self.orc_entry_desconto_material.insert(0, self.insereNumConvertido(self.formataParaREal(desconto)))
+
+        self.orc_entry_subtotal_material.config(text=self.insereTotalConvertido(valor_subtotal))
+        self.orc_entry_cp_total.config(text=self.insereTotalConvertido(caixa_total))
+        self.orc_entry_total_material.config(text=self.insereTotalConvertido(valor_total))
 
     def janelaOrçamento(self):
 
@@ -2003,12 +2151,14 @@ class Castelo:
         self.orc_id_entry1.insert(0, self.insereNumConvertido(dados_orc.caixa_peca1))
         self.orc_id_entry1.grid(row=1, column=3)
         self.orc_descr_entry1 = Entry(subframe_material1, width=50, relief=SUNKEN)
+        self.orc_descr_entry1.insert(0, dados_orc.desc_serv1)
         self.orc_descr_entry1.grid(row=1, column=4, padx=5)
         self.orc_val_uni_entry1 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all',
                                         validatecommand=(testa_float, '%P'))
         self.orc_val_uni_entry1.insert(0, self.insereNumConvertido(dados_orc.valor_uni1))
         self.orc_val_uni_entry1.grid(row=1, column=5)
         self.orc_val_total_entry1 = Entry(subframe_material1, width=10, relief=SUNKEN)
+        self.orc_val_total_entry1.insert(0, self.insereNumConvertido(dados_orc.valor_tot1))
         self.orc_val_total_entry1.grid(row=1, column=6, padx=5)
         self.orc_quant_entry2 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all',
                                       validatecommand=(testa_inteiro, '%P'))
@@ -2019,12 +2169,14 @@ class Castelo:
         self.orc_id_entry2.insert(0, self.insereNumConvertido(dados_orc.caixa_peca2))
         self.orc_id_entry2.grid(row=2, column=3)
         self.orc_descr_entry2 = Entry(subframe_material1, width=50, relief=SUNKEN)
+        self.orc_descr_entry2.insert(0, dados_orc.desc_serv2)
         self.orc_descr_entry2.grid(row=2, column=4, padx=5)
         self.orc_val_uni_entry2 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all',
                                         validatecommand=(testa_float, '%P'))
         self.orc_val_uni_entry2.insert(0, self.insereNumConvertido(dados_orc.valor_uni2))
         self.orc_val_uni_entry2.grid(row=2, column=5)
         self.orc_val_total_entry2 = Entry(subframe_material1, width=10, relief=SUNKEN)
+        # self.orc_val_total_entry2.insert(0, self.insereNumMultiplicado(dados_orc.valor_uni2, dados_orc.qtd2))
         self.orc_val_total_entry2.grid(row=2, column=6, padx=5)
         self.orc_quant_entry3 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all',
                                       validatecommand=(testa_inteiro, '%P'))
@@ -2035,12 +2187,14 @@ class Castelo:
         self.orc_id_entry3.insert(0, self.insereNumConvertido(dados_orc.caixa_peca3))
         self.orc_id_entry3.grid(row=3, column=3)
         self.orc_descr_entry3 = Entry(subframe_material1, width=50, relief=SUNKEN)
+        self.orc_descr_entry3.insert(0, dados_orc.desc_serv3)
         self.orc_descr_entry3.grid(row=3, column=4, padx=5)
         self.orc_val_uni_entry3 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all',
                                         validatecommand=(testa_float, '%P'))
         self.orc_val_uni_entry3.insert(0, self.insereNumConvertido(dados_orc.valor_uni3))
         self.orc_val_uni_entry3.grid(row=3, column=5)
         self.orc_val_total_entry3 = Entry(subframe_material1, width=10, relief=SUNKEN)
+        # self.orc_val_total_entry3.insert(0, self.insereNumMultiplicado(dados_orc.valor_uni3, dados_orc.qtd3))
         self.orc_val_total_entry3.grid(row=3, column=6, padx=5)
         self.orc_quant_entry4 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all',
                                       validatecommand=(testa_inteiro, '%P'))
@@ -2048,15 +2202,17 @@ class Castelo:
         self.orc_quant_entry4.grid(row=4, column=2, padx=5)
         self.orc_id_entry4 = Entry(subframe_material1, width=6, relief=SUNKEN, validate='all',
                                    validatecommand=(testa_float, '%P'))
-        self.orc_id_entry4.insert(0,self.insereNumConvertido(dados_orc.caixa_peca4))
+        self.orc_id_entry4.insert(0, self.insereNumConvertido(dados_orc.caixa_peca4))
         self.orc_id_entry4.grid(row=4, column=3)
         self.orc_descr_entry4 = Entry(subframe_material1, width=50, relief=SUNKEN)
+        self.orc_descr_entry4.insert(0, dados_orc.desc_serv4)
         self.orc_descr_entry4.grid(row=4, column=4, padx=5)
         self.orc_val_uni_entry4 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all',
                                         validatecommand=(testa_float, '%P'))
         self.orc_val_uni_entry4.insert(0, self.insereNumConvertido(dados_orc.valor_uni4))
         self.orc_val_uni_entry4.grid(row=4, column=5)
         self.orc_val_total_entry4 = Entry(subframe_material1, width=10, relief=SUNKEN)
+        # self.orc_val_total_entry4.insert(0, self.insereNumMultiplicado(dados_orc.valor_uni4, dados_orc.qtd4))
         self.orc_val_total_entry4.grid(row=4, column=6, padx=5)
         self.orc_quant_entry5 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all',
                                       validatecommand=(testa_inteiro, '%P'))
@@ -2067,12 +2223,14 @@ class Castelo:
         self.orc_id_entry5.insert(0, self.insereNumConvertido(dados_orc.caixa_peca5))
         self.orc_id_entry5.grid(row=5, column=3)
         self.orc_descr_entry5 = Entry(subframe_material1, width=50, relief=SUNKEN)
+        self.orc_descr_entry5.insert(0, dados_orc.desc_serv5)
         self.orc_descr_entry5.grid(row=5, column=4, padx=5)
         self.orc_val_uni_entry5 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all',
                                         validatecommand=(testa_float, '%P'))
         self.orc_val_uni_entry5.insert(0, self.insereNumConvertido(dados_orc.valor_uni5))
         self.orc_val_uni_entry5.grid(row=5, column=5)
         self.orc_val_total_entry5 = Entry(subframe_material1, width=10, relief=SUNKEN)
+        # self.orc_val_total_entry5.insert(0, self.insereNumMultiplicado(dados_orc.valor_uni5, dados_orc.qtd5))
         self.orc_val_total_entry5.grid(row=5, column=6, padx=5)
         self.orc_quant_entry6 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all',
                                       validatecommand=(testa_inteiro, '%P'))
@@ -2083,12 +2241,14 @@ class Castelo:
         self.orc_id_entry6.insert(0, self.insereNumConvertido(dados_orc.caixa_peca6))
         self.orc_id_entry6.grid(row=6, column=3)
         self.orc_descr_entry6 = Entry(subframe_material1, width=50, relief=SUNKEN)
+        self.orc_descr_entry6.insert(0, dados_orc.desc_serv6)
         self.orc_descr_entry6.grid(row=6, column=4, padx=5)
         self.orc_val_uni_entry6 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all',
                                         validatecommand=(testa_float, '%P'))
         self.orc_val_uni_entry6.insert(0, self.insereNumConvertido(dados_orc.valor_uni6))
         self.orc_val_uni_entry6.grid(row=6, column=5)
         self.orc_val_total_entry6 = Entry(subframe_material1, width=10, relief=SUNKEN)
+        # self.orc_val_total_entry6.insert(0, self.insereNumMultiplicado(dados_orc.valor_uni6, dados_orc.qtd6))
         self.orc_val_total_entry6.grid(row=6, column=6, padx=5)
         self.orc_quant_entry7 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all',
                                       validatecommand=(testa_inteiro, '%P'))
@@ -2099,12 +2259,14 @@ class Castelo:
         self.orc_id_entry7.insert(0, self.insereNumConvertido(dados_orc.caixa_peca7))
         self.orc_id_entry7.grid(row=7, column=3)
         self.orc_descr_entry7 = Entry(subframe_material1, width=50, relief=SUNKEN)
+        self.orc_descr_entry7.insert(0, dados_orc.desc_serv7)
         self.orc_descr_entry7.grid(row=7, column=4, padx=5)
         self.orc_val_uni_entry7 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all',
                                         validatecommand=(testa_float, '%P'))
         self.orc_val_uni_entry7.insert(0, self.insereNumConvertido(dados_orc.valor_uni7))
         self.orc_val_uni_entry7.grid(row=7, column=5)
         self.orc_val_total_entry7 = Entry(subframe_material1, width=10, relief=SUNKEN)
+        # self.orc_val_total_entry7.insert(0, self.insereNumMultiplicado(dados_orc.valor_uni7, dados_orc.qtd7))
         self.orc_val_total_entry7.grid(row=7, column=6, padx=5)
         self.orc_quant_entry8 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all',
                                       validatecommand=(testa_inteiro, '%P'))
@@ -2115,12 +2277,14 @@ class Castelo:
         self.orc_id_entry8.insert(0, self.insereNumConvertido(dados_orc.caixa_peca8))
         self.orc_id_entry8.grid(row=8, column=3)
         self.orc_descr_entry8 = Entry(subframe_material1, width=50, relief=SUNKEN)
+        self.orc_descr_entry8.insert(0, dados_orc.desc_serv8)
         self.orc_descr_entry8.grid(row=8, column=4, padx=5)
         self.orc_val_uni_entry8 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all',
                                         validatecommand=(testa_float, '%P'))
         self.orc_val_uni_entry8.insert(0, self.insereNumConvertido(dados_orc.valor_uni8))
         self.orc_val_uni_entry8.grid(row=8, column=5)
         self.orc_val_total_entry8 = Entry(subframe_material1, width=10, relief=SUNKEN)
+        # self.orc_val_total_entry8.insert(0, self.insereNumMultiplicado(dados_orc.valor_uni8, dados_orc.qtd8))
         self.orc_val_total_entry8.grid(row=8, column=6, padx=5)
         self.orc_quant_entry9 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all',
                                       validatecommand=(testa_inteiro, '%P'))
@@ -2131,12 +2295,14 @@ class Castelo:
         self.orc_id_entry9.insert(0, self.insereNumConvertido(dados_orc.caixa_peca9))
         self.orc_id_entry9.grid(row=9, column=3)
         self.orc_descr_entry9 = Entry(subframe_material1, width=50, relief=SUNKEN)
+        self.orc_descr_entry9.insert(0, dados_orc.desc_serv9)
         self.orc_descr_entry9.grid(row=9, column=4, padx=5)
         self.orc_val_uni_entry9 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all',
                                         validatecommand=(testa_float, '%P'))
         self.orc_val_uni_entry9.insert(0, self.insereNumConvertido(dados_orc.valor_uni9))
         self.orc_val_uni_entry9.grid(row=9, column=5)
         self.orc_val_total_entry9 = Entry(subframe_material1, width=10, relief=SUNKEN)
+        # self.orc_val_total_entry9.insert(0, self.insereNumMultiplicado(dados_orc.valor_uni9, dados_orc.qtd9))
         self.orc_val_total_entry9.grid(row=9, column=6, padx=5)
         subframe_material2 = Frame(labelframe_material)
         subframe_material2.pack(fill=BOTH)
@@ -2147,28 +2313,37 @@ class Castelo:
         Button(labelframe_buttons_material, text="1", width=5).grid(row=0, column=0, ipady=7, padx=5, pady=5)
         Button(labelframe_buttons_material, text="2", width=5).grid(row=0, column=1, ipady=7, padx=5, pady=5)
         Button(labelframe_buttons_material, text="3", width=5).grid(row=0, column=2, ipady=7, padx=5, pady=5)
-        Button(labelframe_buttons_material, text="Calcular", width=10).grid(row=0, column=4, ipady=7, padx=15)
+        Button(labelframe_buttons_material, text="Calcular", width=10,
+               command=self.insereNumAoClicar).grid(row=0, column=4, ipady=7, padx=15)
         introframe_material2 = Frame(subframe_material2)
         introframe_material2.pack(side=RIGHT, fill=Y, padx=5)
         introframe_material3 = Frame(introframe_material2)
         introframe_material3.pack()
         self.orc_entry_mao_obra_material = Entry(introframe_material3, width=15)
+        self.orc_entry_mao_obra_material.insert(0, self.insereNumConvertido(dados_orc.valor_mao_obra))
         self.orc_entry_mao_obra_material.pack(side=RIGHT)
         Label(introframe_material3, text="Mão de Obra(+)").pack(side=RIGHT, padx=10)
         introframe_material4 = Frame(introframe_material2)
         introframe_material4.pack(fill=X, pady=5)
-        self.orc_entry_subtotal_material = Entry(introframe_material4, width=15)
+        self.orc_valor_subtotal_material = dados_orc.total - dados_orc.valor_mao_obra + dados_orc.desconto
+        self.orc_entry_subtotal_material = Label(introframe_material4,
+                                                 text=self.insereTotalConvertido(self.orc_valor_subtotal_material),
+                                                 width=15,  relief=SUNKEN, bd=2)
         self.orc_entry_subtotal_material.pack(side=RIGHT)
         Label(introframe_material4, text="Sub Total(=)").pack(side=RIGHT, padx=10)
         introframe_material5 = Frame(introframe_material2)
         introframe_material5.pack(fill=X)
         self.orc_entry_desconto_material = Entry(introframe_material5, width=15)
+        self.orc_entry_desconto_material.insert(0, self.insereNumConvertido(dados_orc.desconto))
         self.orc_entry_desconto_material.pack(side=RIGHT)
         Label(introframe_material5, text="Desconto(-)").pack(side=RIGHT, padx=10)
 
         subframe_material3 = Frame(labelframe_material)
         subframe_material3.pack(fill=X, padx=5, pady=5)
-        self.orc_entry_total_material = Entry(subframe_material3, width=10, fg="blue", font=("", 14, ""), justify=RIGHT)
+        self.orc_valor_total_material = dados_orc.total
+        self.orc_entry_total_material = Label(subframe_material3, width=10, fg="blue", font=("", 14, ""),
+                                              justify=RIGHT, relief=SUNKEN, bd=2,
+                                              text=self.insereTotalConvertido(dados_orc.total))
         self.orc_entry_total_material.pack(side=RIGHT)
         Label(subframe_material3, text="Total do Serviço").pack(side=RIGHT, padx=15)
 
@@ -2176,10 +2351,11 @@ class Castelo:
         desc_frame.pack(side=LEFT, pady=10, padx=5, fill=X)
         Entry(desc_frame, width=5).pack(side=LEFT)
         Label(desc_frame, text="%").pack(padx=5, side=LEFT)
-        Label(desc_frame, text="R$ 0,00", bg="yellow", width=15, relief=SUNKEN, bd=2).pack(side=LEFT)
+        Label(desc_frame, text="R$0,00", bg="yellow", width=15, relief=SUNKEN, bd=2).pack(side=LEFT)
         desc_frame1 = Frame(subframe_material3)
         desc_frame1.pack(side=RIGHT, pady=10, padx=20, fill=X)
-        self.orc_entry_cp_total = Entry(desc_frame1, bg="#FF8C64", width=15, relief=SUNKEN, bd=2)
+        self.orc_entry_cp_total = Label(desc_frame1, bg="#FF8C64", width=15, relief=SUNKEN, bd=2,
+                                        text=self.insereTotalConvertido(dados_orc.caixa_peca_total))
         self.orc_entry_cp_total.pack(side=RIGHT)
         Label(desc_frame1, text="CP:").pack(side=RIGHT, padx=5)
 
@@ -2295,7 +2471,7 @@ class Castelo:
         cp7 = self.formataParaREal(self.orc_id_entry7.get())
         cp8 = self.formataParaREal(self.orc_id_entry8.get())
         cp9 = self.formataParaREal(self.orc_id_entry9.get())
-        cp_total = self.formataParaREal(self.orc_entry_cp_total.get())
+        cp_total = self.formataParaREal(self.orc_entry_cp_total.cget('text').split()[1])
         descr1 = self.orc_descr_entry1.get()
         descr2 = self.orc_descr_entry2.get()
         descr3 = self.orc_descr_entry3.get()
@@ -2325,7 +2501,7 @@ class Castelo:
         val_tot9 = self.formataParaREal(self.orc_val_total_entry9.get())
         mao_obra = self.formataParaREal(self.orc_entry_mao_obra_material.get())
         desconto = self.formataParaREal(self.orc_entry_desconto_material.get())
-        total = self.formataParaREal(self.orc_entry_total_material.get())
+        total = self.formataParaREal(self.orc_entry_total_material.cget('text').split()[1])
         comentario1 = self.orc_comentario1.get()
         comentario2 = self.orc_comentario2.get()
         comentario3 = self.orc_comentario3.get()
