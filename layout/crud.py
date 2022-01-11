@@ -1710,8 +1710,9 @@ class Castelo:
         Label(labelframe_os, text="21/10/2021", fg=color_fg_labels, font=font_dados2).grid(row=13, column=1, sticky=W)
         Label(labelframe_os, text="Valor:", fg=color_fg_labels2,
               font=font_dados2).grid(row=14, column=0, sticky=E, padx=1)
-        Label(labelframe_os, text="R$ 0,00", fg=color_fg_labels,
-              font=('', '14', 'bold')).grid(row=14, column=1, sticky=W)
+        self.os_valor_final = Label(labelframe_os, text=self.insereTotalConvertido(os_dados.total), fg=color_fg_labels,
+              font=('', '14', 'bold'))
+        self.os_valor_final.grid(row=14, column=1, sticky=W)
 
         labelframe_dadosapare_os = LabelFrame(frame_princ_jan_os, text="Dados do Aparelho", fg=self.color_fg_label)
         labelframe_dadosapare_os.grid(row=1, column=0, sticky=W, ipady=5)
@@ -1952,6 +1953,8 @@ class Castelo:
 
                 valor = float(valor_atual.replace(',', '.'))
                 valor_final += valor
+            if valores[0] == '':
+                valores[0] = '0,0'
             valor_final -= float(valores[0].replace(',', '.'))
             valor_final = str(valor_final).replace('.', ',')
             valor1 = locale.atof(valor_final)
@@ -1992,37 +1995,36 @@ class Castelo:
         cp8 = self.orc_id_entry8.get()
         cp9 = self.orc_id_entry9.get()
 
-        caixa_peca = [cp1, cp2, cp3, cp4, cp5, cp6, cp7, cp8, cp9]
+        caixa_peca = [self.insereNumMultiplicado(cp1, qtd1),
+                      self.insereNumMultiplicado(cp2, qtd2),
+                      self.insereNumMultiplicado(cp3, qtd3),
+                      self.insereNumMultiplicado(cp4, qtd4),
+                      self.insereNumMultiplicado(cp5, qtd5),
+                      self.insereNumMultiplicado(cp6, qtd6),
+                      self.insereNumMultiplicado(cp7, qtd7),
+                      self.insereNumMultiplicado(cp8, qtd8),
+                      self.insereNumMultiplicado(cp9, qtd9)]
 
-        self.orc_val_total_entry1.delete(0, 'end')
-        self.orc_val_total_entry2.delete(0, 'end')
-        self.orc_val_total_entry3.delete(0, 'end')
-        self.orc_val_total_entry4.delete(0, 'end')
-        self.orc_val_total_entry5.delete(0, 'end')
-        self.orc_val_total_entry6.delete(0, 'end')
-        self.orc_val_total_entry7.delete(0, 'end')
-        self.orc_val_total_entry8.delete(0, 'end')
-        self.orc_val_total_entry9.delete(0, 'end')
 
-        self.orc_val_total_entry1.insert(0, self.insereNumMultiplicado(valor_uni1, qtd1))
-        self.orc_val_total_entry2.insert(0, self.insereNumMultiplicado(valor_uni2, qtd2))
-        self.orc_val_total_entry3.insert(0, self.insereNumMultiplicado(valor_uni3, qtd3))
-        self.orc_val_total_entry4.insert(0, self.insereNumMultiplicado(valor_uni4, qtd4))
-        self.orc_val_total_entry5.insert(0, self.insereNumMultiplicado(valor_uni5, qtd5))
-        self.orc_val_total_entry6.insert(0, self.insereNumMultiplicado(valor_uni6, qtd6))
-        self.orc_val_total_entry7.insert(0, self.insereNumMultiplicado(valor_uni7, qtd7))
-        self.orc_val_total_entry8.insert(0, self.insereNumMultiplicado(valor_uni8, qtd8))
-        self.orc_val_total_entry9.insert(0, self.insereNumMultiplicado(valor_uni9, qtd9))
+        self.orc_val_total_entry1.config(text=self.insereNumMultiplicado(valor_uni1, qtd1))
+        self.orc_val_total_entry2.config(text=self.insereNumMultiplicado(valor_uni2, qtd2))
+        self.orc_val_total_entry3.config(text=self.insereNumMultiplicado(valor_uni3, qtd3))
+        self.orc_val_total_entry4.config(text=self.insereNumMultiplicado(valor_uni4, qtd4))
+        self.orc_val_total_entry5.config(text=self.insereNumMultiplicado(valor_uni5, qtd5))
+        self.orc_val_total_entry6.config(text=self.insereNumMultiplicado(valor_uni6, qtd6))
+        self.orc_val_total_entry7.config(text=self.insereNumMultiplicado(valor_uni7, qtd7))
+        self.orc_val_total_entry8.config(text=self.insereNumMultiplicado(valor_uni8, qtd8))
+        self.orc_val_total_entry9.config(text=self.insereNumMultiplicado(valor_uni9, qtd9))
 
-        valor_tot1 = self.orc_val_total_entry1.get()
-        valor_tot2 = self.orc_val_total_entry2.get()
-        valor_tot3 = self.orc_val_total_entry3.get()
-        valor_tot4 = self.orc_val_total_entry4.get()
-        valor_tot5 = self.orc_val_total_entry5.get()
-        valor_tot6 = self.orc_val_total_entry6.get()
-        valor_tot7 = self.orc_val_total_entry7.get()
-        valor_tot8 = self.orc_val_total_entry8.get()
-        valor_tot9 = self.orc_val_total_entry9.get()
+        valor_tot1 = self.orc_val_total_entry1.cget('text')
+        valor_tot2 = self.orc_val_total_entry2.cget('text')
+        valor_tot3 = self.orc_val_total_entry3.cget('text')
+        valor_tot4 = self.orc_val_total_entry4.cget('text')
+        valor_tot5 = self.orc_val_total_entry5.cget('text')
+        valor_tot6 = self.orc_val_total_entry6.cget('text')
+        valor_tot7 = self.orc_val_total_entry7.cget('text')
+        valor_tot8 = self.orc_val_total_entry8.cget('text')
+        valor_tot9 = self.orc_val_total_entry9.cget('text')
 
         desconto = self.orc_entry_desconto_material.get()
         mao_obra = self.orc_entry_mao_obra_material.get()
@@ -2036,7 +2038,6 @@ class Castelo:
         valor_subtotal = self.somaValorTotal(valores, 1)
 
         total = [desconto, mao_obra, valor_subtotal]
-
         valor_total = self.somaValorTotal(total, 2)
 
         self.orc_entry_mao_obra_material.delete(0, 'end')
@@ -2049,6 +2050,12 @@ class Castelo:
         self.orc_entry_subtotal_material.config(text=self.insereTotalConvertido(valor_subtotal))
         self.orc_entry_cp_total.config(text=self.insereTotalConvertido(caixa_total))
         self.orc_entry_total_material.config(text=self.insereTotalConvertido(valor_total))
+
+        valor_total2 = self.orc_entry_total_material.cget('text').split()[1]
+        self.orc_porcentagem_atual = float(self.formataParaREal(self.orc_porcentagem.get()))
+        porcent = self.formataParaREal(valor_total2) * (self.orc_porcentagem_atual / 100)
+
+        self.orc_porcentagem_result.config(text=self.insereTotalConvertido(porcent))
 
     def janelaOrçamento(self):
 
@@ -2157,8 +2164,8 @@ class Castelo:
                                         validatecommand=(testa_float, '%P'))
         self.orc_val_uni_entry1.insert(0, self.insereNumConvertido(dados_orc.valor_uni1))
         self.orc_val_uni_entry1.grid(row=1, column=5)
-        self.orc_val_total_entry1 = Entry(subframe_material1, width=10, relief=SUNKEN)
-        self.orc_val_total_entry1.insert(0, self.insereNumConvertido(dados_orc.valor_tot1))
+        self.orc_val_total_entry1 = Label(subframe_material1, text=self.insereNumConvertido(dados_orc.valor_tot1),
+                                          width=10, relief=SUNKEN, bd=2)
         self.orc_val_total_entry1.grid(row=1, column=6, padx=5)
         self.orc_quant_entry2 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all',
                                       validatecommand=(testa_inteiro, '%P'))
@@ -2175,8 +2182,8 @@ class Castelo:
                                         validatecommand=(testa_float, '%P'))
         self.orc_val_uni_entry2.insert(0, self.insereNumConvertido(dados_orc.valor_uni2))
         self.orc_val_uni_entry2.grid(row=2, column=5)
-        self.orc_val_total_entry2 = Entry(subframe_material1, width=10, relief=SUNKEN)
-        # self.orc_val_total_entry2.insert(0, self.insereNumMultiplicado(dados_orc.valor_uni2, dados_orc.qtd2))
+        self.orc_val_total_entry2 = Label(subframe_material1, text=self.insereNumConvertido(dados_orc.valor_tot2),
+                                          width=10, relief=SUNKEN, bd=2)
         self.orc_val_total_entry2.grid(row=2, column=6, padx=5)
         self.orc_quant_entry3 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all',
                                       validatecommand=(testa_inteiro, '%P'))
@@ -2193,8 +2200,8 @@ class Castelo:
                                         validatecommand=(testa_float, '%P'))
         self.orc_val_uni_entry3.insert(0, self.insereNumConvertido(dados_orc.valor_uni3))
         self.orc_val_uni_entry3.grid(row=3, column=5)
-        self.orc_val_total_entry3 = Entry(subframe_material1, width=10, relief=SUNKEN)
-        # self.orc_val_total_entry3.insert(0, self.insereNumMultiplicado(dados_orc.valor_uni3, dados_orc.qtd3))
+        self.orc_val_total_entry3 = Label(subframe_material1, text=self.insereNumConvertido(dados_orc.valor_tot3),
+                                          width=10, relief=SUNKEN, bd=2)
         self.orc_val_total_entry3.grid(row=3, column=6, padx=5)
         self.orc_quant_entry4 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all',
                                       validatecommand=(testa_inteiro, '%P'))
@@ -2211,8 +2218,8 @@ class Castelo:
                                         validatecommand=(testa_float, '%P'))
         self.orc_val_uni_entry4.insert(0, self.insereNumConvertido(dados_orc.valor_uni4))
         self.orc_val_uni_entry4.grid(row=4, column=5)
-        self.orc_val_total_entry4 = Entry(subframe_material1, width=10, relief=SUNKEN)
-        # self.orc_val_total_entry4.insert(0, self.insereNumMultiplicado(dados_orc.valor_uni4, dados_orc.qtd4))
+        self.orc_val_total_entry4 = Label(subframe_material1, text=self.insereNumConvertido(dados_orc.valor_tot4),
+                                          width=10, relief=SUNKEN, bd=2)
         self.orc_val_total_entry4.grid(row=4, column=6, padx=5)
         self.orc_quant_entry5 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all',
                                       validatecommand=(testa_inteiro, '%P'))
@@ -2229,8 +2236,8 @@ class Castelo:
                                         validatecommand=(testa_float, '%P'))
         self.orc_val_uni_entry5.insert(0, self.insereNumConvertido(dados_orc.valor_uni5))
         self.orc_val_uni_entry5.grid(row=5, column=5)
-        self.orc_val_total_entry5 = Entry(subframe_material1, width=10, relief=SUNKEN)
-        # self.orc_val_total_entry5.insert(0, self.insereNumMultiplicado(dados_orc.valor_uni5, dados_orc.qtd5))
+        self.orc_val_total_entry5 = Label(subframe_material1, text=self.insereNumConvertido(dados_orc.valor_tot5),
+                                          width=10, relief=SUNKEN, bd=2)
         self.orc_val_total_entry5.grid(row=5, column=6, padx=5)
         self.orc_quant_entry6 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all',
                                       validatecommand=(testa_inteiro, '%P'))
@@ -2247,8 +2254,8 @@ class Castelo:
                                         validatecommand=(testa_float, '%P'))
         self.orc_val_uni_entry6.insert(0, self.insereNumConvertido(dados_orc.valor_uni6))
         self.orc_val_uni_entry6.grid(row=6, column=5)
-        self.orc_val_total_entry6 = Entry(subframe_material1, width=10, relief=SUNKEN)
-        # self.orc_val_total_entry6.insert(0, self.insereNumMultiplicado(dados_orc.valor_uni6, dados_orc.qtd6))
+        self.orc_val_total_entry6 = Label(subframe_material1, text=self.insereNumConvertido(dados_orc.valor_tot6),
+                                          width=10, relief=SUNKEN, bd=2)
         self.orc_val_total_entry6.grid(row=6, column=6, padx=5)
         self.orc_quant_entry7 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all',
                                       validatecommand=(testa_inteiro, '%P'))
@@ -2265,8 +2272,8 @@ class Castelo:
                                         validatecommand=(testa_float, '%P'))
         self.orc_val_uni_entry7.insert(0, self.insereNumConvertido(dados_orc.valor_uni7))
         self.orc_val_uni_entry7.grid(row=7, column=5)
-        self.orc_val_total_entry7 = Entry(subframe_material1, width=10, relief=SUNKEN)
-        # self.orc_val_total_entry7.insert(0, self.insereNumMultiplicado(dados_orc.valor_uni7, dados_orc.qtd7))
+        self.orc_val_total_entry7 = Label(subframe_material1, text=self.insereNumConvertido(dados_orc.valor_tot7),
+                                          width=10, relief=SUNKEN, bd=2)
         self.orc_val_total_entry7.grid(row=7, column=6, padx=5)
         self.orc_quant_entry8 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all',
                                       validatecommand=(testa_inteiro, '%P'))
@@ -2283,8 +2290,8 @@ class Castelo:
                                         validatecommand=(testa_float, '%P'))
         self.orc_val_uni_entry8.insert(0, self.insereNumConvertido(dados_orc.valor_uni8))
         self.orc_val_uni_entry8.grid(row=8, column=5)
-        self.orc_val_total_entry8 = Entry(subframe_material1, width=10, relief=SUNKEN)
-        # self.orc_val_total_entry8.insert(0, self.insereNumMultiplicado(dados_orc.valor_uni8, dados_orc.qtd8))
+        self.orc_val_total_entry8 = Label(subframe_material1, text=self.insereNumConvertido(dados_orc.valor_tot8),
+                                          width=10, relief=SUNKEN, bd=2)
         self.orc_val_total_entry8.grid(row=8, column=6, padx=5)
         self.orc_quant_entry9 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all',
                                       validatecommand=(testa_inteiro, '%P'))
@@ -2301,8 +2308,8 @@ class Castelo:
                                         validatecommand=(testa_float, '%P'))
         self.orc_val_uni_entry9.insert(0, self.insereNumConvertido(dados_orc.valor_uni9))
         self.orc_val_uni_entry9.grid(row=9, column=5)
-        self.orc_val_total_entry9 = Entry(subframe_material1, width=10, relief=SUNKEN)
-        # self.orc_val_total_entry9.insert(0, self.insereNumMultiplicado(dados_orc.valor_uni9, dados_orc.qtd9))
+        self.orc_val_total_entry9 = Label(subframe_material1, text=self.insereNumConvertido(dados_orc.valor_tot9),
+                                          width=10, relief=SUNKEN, bd=2)
         self.orc_val_total_entry9.grid(row=9, column=6, padx=5)
         subframe_material2 = Frame(labelframe_material)
         subframe_material2.pack(fill=BOTH)
@@ -2328,7 +2335,7 @@ class Castelo:
         self.orc_valor_subtotal_material = dados_orc.total - dados_orc.valor_mao_obra + dados_orc.desconto
         self.orc_entry_subtotal_material = Label(introframe_material4,
                                                  text=self.insereTotalConvertido(self.orc_valor_subtotal_material),
-                                                 width=15,  relief=SUNKEN, bd=2)
+                                                 width=13,  relief=SUNKEN, bd=2)
         self.orc_entry_subtotal_material.pack(side=RIGHT)
         Label(introframe_material4, text="Sub Total(=)").pack(side=RIGHT, padx=10)
         introframe_material5 = Frame(introframe_material2)
@@ -2349,9 +2356,13 @@ class Castelo:
 
         desc_frame = Frame(subframe_material3)
         desc_frame.pack(side=LEFT, pady=10, padx=5, fill=X)
-        Entry(desc_frame, width=5).pack(side=LEFT)
+        self.orc_porcentagem = Entry(desc_frame, width=5, validate='all',
+                                   validatecommand=(testa_float, '%P'))
+        self.orc_porcentagem.insert(0,5)
+        self.orc_porcentagem.pack(side=LEFT)
         Label(desc_frame, text="%").pack(padx=5, side=LEFT)
-        Label(desc_frame, text="R$0,00", bg="yellow", width=15, relief=SUNKEN, bd=2).pack(side=LEFT)
+        self.orc_porcentagem_result = Label(desc_frame, text="R$0,00", bg="yellow", width=15, relief=SUNKEN, bd=2)
+        self.orc_porcentagem_result.pack(side=LEFT)
         desc_frame1 = Frame(subframe_material3)
         desc_frame1.pack(side=RIGHT, pady=10, padx=20, fill=X)
         self.orc_entry_cp_total = Label(desc_frame1, bg="#FF8C64", width=15, relief=SUNKEN, bd=2,
@@ -2362,10 +2373,13 @@ class Castelo:
         labelframe_orc_coment = LabelFrame(frame_princ_os1, text="Comentários")
         labelframe_orc_coment.grid(row=2, column=0, columnspan=4, pady=5)
         self.orc_comentario1 = Entry(labelframe_orc_coment, width=104)
+        self.orc_comentario1.insert(0, dados_orc.obs1)
         self.orc_comentario1.pack(padx=5, pady=5)
         self.orc_comentario2 = Entry(labelframe_orc_coment, width=104)
+        self.orc_comentario2.insert(0, dados_orc.obs2)
         self.orc_comentario2.pack()
         self.orc_comentario3 = Entry(labelframe_orc_coment, width=104)
+        self.orc_comentario3.insert(0, dados_orc.obs3)
         self.orc_comentario3.pack(pady=5)
 
         frame_princ_os2 = Frame(jan)
@@ -2377,6 +2391,7 @@ class Castelo:
         scroll_os = Scrollbar(sub_frame_coment)
         scroll_os.pack(side=RIGHT, fill=Y)
         self.orc_text_os = Text(sub_frame_coment, relief=SUNKEN, yscrollcommand=scroll_os, height=5)
+        self.orc_text_os.insert('end', dados_orc.defeitos)
         self.orc_text_os.pack(side=RIGHT)
         scroll_os.config(command=self.orc_text_os.yview)
 
@@ -2386,47 +2401,66 @@ class Castelo:
         subframe_form_pag1.pack(padx=15, pady=5)
         Label(subframe_form_pag1, text="Dinheiro", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=0, column=0,
                                                                                                         padx=5)
-        self.orc_dinheiro = Entry(subframe_form_pag1, width=18, justify=RIGHT)
+        self.orc_dinheiro = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all',
+                                   validatecommand=(testa_float, '%P'))
+        self.orc_dinheiro.insert(0, self.insereNumConvertido(dados_orc.dinheiro))
         self.orc_dinheiro.grid(row=0, column=1, padx=5)
         Label(subframe_form_pag1, text="Cheque", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=1, column=0,
                                                                                                       padx=5, pady=5)
-        self.orc_cheque = Entry(subframe_form_pag1, width=18, justify=RIGHT)
+        self.orc_cheque = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all',
+                                   validatecommand=(testa_float, '%P'))
+        self.orc_cheque.insert(0, self.insereNumConvertido(dados_orc.cheque))
         self.orc_cheque.grid(row=1, column=1, padx=5)
         Label(subframe_form_pag1, text="Cartão de Crédito", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=2,
                                                                                                                  column=0,
                                                                                                                  padx=5)
-        self.orc_ccredito = Entry(subframe_form_pag1, width=18, justify=RIGHT)
+        self.orc_ccredito = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all',
+                                   validatecommand=(testa_float, '%P'))
+        self.orc_ccredito.insert(0, self.insereNumConvertido(dados_orc.ccredito))
         self.orc_ccredito.grid(row=2, column=1, padx=5)
         Label(subframe_form_pag1, text="Cartão de Débito", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=3,
                                                                                                                 column=0,
                                                                                                                 padx=5,
                                                                                                                 pady=5)
-        self.orc_cdebito = Entry(subframe_form_pag1, width=18, justify=RIGHT)
+        self.orc_cdebito = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all',
+                                   validatecommand=(testa_float, '%P'))
+        self.orc_cdebito.insert(0, self.insereNumConvertido(dados_orc.cdebito))
         self.orc_cdebito.grid(row=3, column=1, padx=5)
         Label(subframe_form_pag1, text="PIX", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=4, column=0,
                                                                                                    padx=5)
-        self.orc_pix = Entry(subframe_form_pag1, width=18, justify=RIGHT)
+        self.orc_pix = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all',
+                                   validatecommand=(testa_float, '%P'))
+        self.orc_pix.insert(0, self.insereNumConvertido(dados_orc.pix))
         self.orc_pix.grid(row=4, column=1, padx=5)
         Label(subframe_form_pag1, text="Outros", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=5, column=0,
                                                                                                       padx=5, pady=5)
-        self.orc_outros = Entry(subframe_form_pag1, width=18, justify=RIGHT)
+        self.orc_outros = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all',
+                                   validatecommand=(testa_float, '%P'))
+        self.orc_outros.insert(0, self.insereNumConvertido(dados_orc.outros))
         self.orc_outros.grid(row=5, column=1, padx=5)
         labelframe_pag_coment = LabelFrame(labelframe_form_pag, text="Observações de Pagamento")
         labelframe_pag_coment.pack(padx=10, pady=4)
         self.orc_obs_pagamento1 = Entry(labelframe_pag_coment, width=47)
+        self.orc_obs_pagamento1.insert(0,dados_orc.obs_pagamento1)
         self.orc_obs_pagamento1.pack(padx=5, pady=5)
         self.orc_obs_pagamento2 = Entry(labelframe_pag_coment, width=47)
+        self.orc_obs_pagamento2.insert(0, dados_orc.obs_pagamento2)
         self.orc_obs_pagamento2.pack(padx=5)
         self.orc_obs_pagamento3 = Entry(labelframe_pag_coment, width=47)
+        self.orc_obs_pagamento3.insert(0, dados_orc.obs_pagamento3)
         self.orc_obs_pagamento3.pack(pady=5, padx=5)
         subframe_form_pag2 = Frame(labelframe_form_pag)
         subframe_form_pag2.pack(padx=10, fill=X, side=LEFT)
         labelframe_valor_rec = LabelFrame(subframe_form_pag2)
         labelframe_valor_rec.grid(row=0, column=0, sticky=W, pady=5)
         Label(labelframe_valor_rec, text="Valor à Receber:").pack()
-        Label(labelframe_valor_rec, text="R$ 0,00", anchor=E, font=("", "12", ""), fg="red").pack(fill=X, pady=5,
-                                                                                                  padx=30)
-        Button(subframe_form_pag2, text="Salvar", width=8).grid(row=1, column=0, sticky=W, pady=5, padx=30)
+        self.orc_valor_receber = Label(labelframe_valor_rec, text="R$ 0,00", anchor=E, font=("", "12", ""), fg="red")
+        self.orc_valor_receber.pack(fill=X, pady=5, padx=30)
+        Button(subframe_form_pag2, text="Salvar", width=8, command=lambda: [self.editar_orc(jan, 2)]).grid(row=1,
+                                                                                                           column=0,
+                                                                                                           sticky=W,
+                                                                                                           pady=5,
+                                                                                                           padx=30)
         subframe_form_pag3 = Frame(labelframe_form_pag)
         subframe_form_pag3.pack(padx=5, fill=BOTH, side=LEFT, pady=5)
         Label(subframe_form_pag3, bg="grey", text=3, width=21, height=6).pack()
@@ -2490,22 +2524,22 @@ class Castelo:
         val_uni7 = self.formataParaREal(self.orc_val_uni_entry7.get())
         val_uni8 = self.formataParaREal(self.orc_val_uni_entry8.get())
         val_uni9 = self.formataParaREal(self.orc_val_uni_entry9.get())
-        val_tot1 = self.formataParaREal(self.orc_val_total_entry1.get())
-        val_tot2 = self.formataParaREal(self.orc_val_total_entry2.get())
-        val_tot3 = self.formataParaREal(self.orc_val_total_entry3.get())
-        val_tot4 = self.formataParaREal(self.orc_val_total_entry4.get())
-        val_tot5 = self.formataParaREal(self.orc_val_total_entry5.get())
-        val_tot6 = self.formataParaREal(self.orc_val_total_entry6.get())
-        val_tot7 = self.formataParaREal(self.orc_val_total_entry7.get())
-        val_tot8 = self.formataParaREal(self.orc_val_total_entry8.get())
-        val_tot9 = self.formataParaREal(self.orc_val_total_entry9.get())
+        val_tot1 = self.formataParaREal(self.orc_val_total_entry1.cget('text'))
+        val_tot2 = self.formataParaREal(self.orc_val_total_entry2.cget('text'))
+        val_tot3 = self.formataParaREal(self.orc_val_total_entry3.cget('text'))
+        val_tot4 = self.formataParaREal(self.orc_val_total_entry4.cget('text'))
+        val_tot5 = self.formataParaREal(self.orc_val_total_entry5.cget('text'))
+        val_tot6 = self.formataParaREal(self.orc_val_total_entry6.cget('text'))
+        val_tot7 = self.formataParaREal(self.orc_val_total_entry7.cget('text'))
+        val_tot8 = self.formataParaREal(self.orc_val_total_entry8.cget('text'))
+        val_tot9 = self.formataParaREal(self.orc_val_total_entry9.cget('text'))
         mao_obra = self.formataParaREal(self.orc_entry_mao_obra_material.get())
         desconto = self.formataParaREal(self.orc_entry_desconto_material.get())
         total = self.formataParaREal(self.orc_entry_total_material.cget('text').split()[1])
         comentario1 = self.orc_comentario1.get()
         comentario2 = self.orc_comentario2.get()
         comentario3 = self.orc_comentario3.get()
-        defeitos = " self.orc_text_os.get()"
+        defeitos = self.orc_text_os.get('1.0', 'end-1c')
         cheque = self.formataParaREal(self.orc_cheque.get())
         dinheiro = self.formataParaREal(self.orc_dinheiro.get())
         cdebito = self.formataParaREal(self.orc_cdebito.get())
@@ -2515,6 +2549,8 @@ class Castelo:
         obs_pagamento1 = self.orc_obs_pagamento1.get()
         obs_pagamento2 = self.orc_obs_pagamento2.get()
         obs_pagamento3 = self.orc_obs_pagamento3.get()
+
+        self.os_valor_final.config(text=self.insereTotalConvertido(total))
 
         if num == 1:
             nova_os = os.Os('', '', '', '', '', '', '', None, '', '', '', None, None, '', None, None, '', '', codigo1,
@@ -2548,6 +2584,11 @@ class Castelo:
                             dinheiro,
                             pag_outros, obs_pagamento1,
                             obs_pagamento2, obs_pagamento3, None, 0, 0, '', 0, None, 0)
+
+            valores_pagamentos = [self.orc_dinheiro.get(), self.orc_cdebito.get(), self.orc_ccredito.get(),
+                                  self.orc_cheque.get(), self.orc_pix.get(), self.orc_outros.get()]
+            pagamento_total = self.somaValorTotal(valores_pagamentos, 1)
+            self.orc_valor_receber.config(text=self.insereTotalConvertido(pagamento_total))
             repositorio = os_repositorio.Os_repositorio()
             repositorio.editar_orcamento(self.num_os, nova_os, 2, sessao)
             sessao.commit()
@@ -2629,83 +2670,86 @@ class Castelo:
                                              i.data_orc, i.data_entrada, i.hora_entrada, i.cliente_id))
 
     def saidaDeOs(self, jan):
-        res = messagebox.askyesno(None, "Deseja Realmente Dar Saída do Aparelho?")
-        if res:
-            # try:
-            os_selecionado = self.tree_ap_manut.focus()
-            dados_os = self.tree_ap_manut.item(os_selecionado, "values")
-
-            repositorio = os_repositorio.Os_repositorio()
-            repositorio_saida = os_saida_repositorio.OsSaidaRepositorio()
-            os_atual_db = repositorio.listar_os_id(dados_os[0], sessao)
-            os_objeto = os_saida.OsSaida(equipamento=os_atual_db.equipamento, marca=os_atual_db.marca,
-                                         modelo=os_atual_db.modelo, acessorios=os_atual_db.acessorios,
-                                         defeito=os_atual_db.defeito, estado_aparelho=os_atual_db.estado_aparelho,
-                                         n_serie=os_atual_db.n_serie, tensao=os_atual_db.tensao,
-                                         status=os_atual_db.status, chassi=os_atual_db.chassi,
-                                         andamento=os_atual_db.andamento, data_entrada=os_atual_db.data_entrada,
-                                         hora_entrada=os_atual_db.hora_entrada, dias=os_atual_db.dias,
-                                         data_orc=os_atual_db.data_orc, conclusao=os_atual_db.conclusão,
-                                         operador=os_atual_db.operador, log=os_atual_db.log,
-                                         codigo1=os_atual_db.codigo1, codigo2=os_atual_db.codigo2,
-                                         codigo3=os_atual_db.codigo3, codigo4=os_atual_db.codigo4,
-                                         codigo5=os_atual_db.codigo5, codigo6=os_atual_db.codigo6,
-                                         codigo7=os_atual_db.codigo7, codigo8=os_atual_db.codigo8,
-                                         codigo9=os_atual_db.codigo9, desc_serv1=os_atual_db.desc_serv1,
-                                         desc_serv2=os_atual_db.desc_serv2, desc_serv3=os_atual_db.desc_serv3,
-                                         desc_serv4=os_atual_db.desc_serv4, desc_serv5=os_atual_db.desc_serv5,
-                                         desc_serv6=os_atual_db.desc_serv6, desc_serv7=os_atual_db.desc_serv7,
-                                         desc_serv8=os_atual_db.desc_serv8, desc_serv9=os_atual_db.desc_serv9,
-                                         desconto=os_atual_db.desconto,
-                                         obs1=os_atual_db.obs1, obs2=os_atual_db.obs2, obs3=os_atual_db.obs3,
-                                         valor_mao_obra=os_atual_db.valor_mao_obra, qtd1=os_atual_db.qtd1,
-                                         qtd2=os_atual_db.qtd2, qtd3=os_atual_db.qtd3, qtd4=os_atual_db.qtd4,
-                                         qtd5=os_atual_db.qtd5, qtd6=os_atual_db.qtd6, qtd7=os_atual_db.qtd7,
-                                         qtd8=os_atual_db.qtd8,
-                                         qtd9=os_atual_db.qtd9, valor_uni1=os_atual_db.valor_uni1,
-                                         valor_uni2=os_atual_db.valor_uni2, valor_uni3=os_atual_db.valor_uni3,
-                                         valor_uni4=os_atual_db.valor_uni4, valor_uni5=os_atual_db.valor_uni5,
-                                         valor_uni6=os_atual_db.valor_uni6,
-                                         valor_uni7=os_atual_db.valor_uni7, valor_uni8=os_atual_db.valor_uni8,
-                                         valor_uni9=os_atual_db.valor_uni9,
-                                         valor_total1=os_atual_db.valor_tot1, valor_total2=os_atual_db.valor_tot2,
-                                         valor_total3=os_atual_db.valor_tot3,
-                                         valor_total4=os_atual_db.valor_tot4, valor_total5=os_atual_db.valor_tot5,
-                                         valor_total6=os_atual_db.valor_tot6,
-                                         valor_total7=os_atual_db.valor_tot7, valor_total8=os_atual_db.valor_tot8,
-                                         valor_total9=os_atual_db.valor_tot9,
-                                         caixa_peca1=os_atual_db.caixa_peca1, caixa_peca2=os_atual_db.caixa_peca2,
-                                         caixa_peca3=os_atual_db.caixa_peca3,
-                                         caixa_peca4=os_atual_db.caixa_peca4, caixa_peca5=os_atual_db.caixa_peca5,
-                                         caixa_peca6=os_atual_db.caixa_peca6,
-                                         caixa_peca7=os_atual_db.caixa_peca7, caixa_peca8=os_atual_db.caixa_peca8,
-                                         caixa_peca9=os_atual_db.caixa_peca9,
-                                         caixa_peca_total=os_atual_db.caixa_peca_total, tecnico=os_atual_db.tecnico_id,
-                                         total=os_atual_db.total, defeitos=os_atual_db.defeitos,
-                                         cheque=os_atual_db.cheque, ccredito=os_atual_db.ccredito,
-                                         cdebito=os_atual_db.cdebito, pix=os_atual_db.pix,
-                                         dinheiro=os_atual_db.dinheiro,
-                                         outros=os_atual_db.outros, obs_pagamento1=os_atual_db.obs_pagamento1,
-                                         obs_pagamento2=os_atual_db.obs_pagamento2,
-                                         obs_pagamento3=os_atual_db.obs_pagamento3,
-                                         data_garantia=os_atual_db.data_garantia, nota_fiscal=0,
-                                         cli_id=os_atual_db.cliente_id,
-                                         loja=os_atual_db.loja, garantia_compl=os_atual_db.garantia_compl,
-                                         data_compra=os_atual_db.data_compra,
-                                         aparelho_na_oficina=os_atual_db.aparelho_na_oficina, data_saida=None,
-                                         hora_saida='', os=os_atual_db.id)
-            repositorio_saida.nova_os(dados_os[18], dados_os[10], os_objeto, sessao)
-            repositorio.remover_os(dados_os[0], sessao)
-            sessao.commit()
-            self.mostrarMensagem("1", "Foi Dado Saída do Aparelho com Sucesso!")
-            jan.destroy()
-            self.popularOsConserto()
-            # except:
-            # messagebox.showinfo(title="ERRO", message="ERRO")
-            # finally:
-            sessao.close()
+        if self.orc_valor_receber.cget('text') != self.orc_entry_total_material.cget('text'):
+            messagebox.showinfo(title="ERRO", message="Valor a Receber Diferente do Valor Total do Serviço")
         else:
-            pass
+            res = messagebox.askyesno(None, "Deseja Realmente Dar Saída do Aparelho?")
+            if res:
+                # try:
+                os_selecionado = self.tree_ap_manut.focus()
+                dados_os = self.tree_ap_manut.item(os_selecionado, "values")
+
+                repositorio = os_repositorio.Os_repositorio()
+                repositorio_saida = os_saida_repositorio.OsSaidaRepositorio()
+                os_atual_db = repositorio.listar_os_id(dados_os[0], sessao)
+                os_objeto = os_saida.OsSaida(equipamento=os_atual_db.equipamento, marca=os_atual_db.marca,
+                                             modelo=os_atual_db.modelo, acessorios=os_atual_db.acessorios,
+                                             defeito=os_atual_db.defeito, estado_aparelho=os_atual_db.estado_aparelho,
+                                             n_serie=os_atual_db.n_serie, tensao=os_atual_db.tensao,
+                                             status=os_atual_db.status, chassi=os_atual_db.chassi,
+                                             andamento=os_atual_db.andamento, data_entrada=os_atual_db.data_entrada,
+                                             hora_entrada=os_atual_db.hora_entrada, dias=os_atual_db.dias,
+                                             data_orc=os_atual_db.data_orc, conclusao=os_atual_db.conclusão,
+                                             operador=os_atual_db.operador, log=os_atual_db.log,
+                                             codigo1=os_atual_db.codigo1, codigo2=os_atual_db.codigo2,
+                                             codigo3=os_atual_db.codigo3, codigo4=os_atual_db.codigo4,
+                                             codigo5=os_atual_db.codigo5, codigo6=os_atual_db.codigo6,
+                                             codigo7=os_atual_db.codigo7, codigo8=os_atual_db.codigo8,
+                                             codigo9=os_atual_db.codigo9, desc_serv1=os_atual_db.desc_serv1,
+                                             desc_serv2=os_atual_db.desc_serv2, desc_serv3=os_atual_db.desc_serv3,
+                                             desc_serv4=os_atual_db.desc_serv4, desc_serv5=os_atual_db.desc_serv5,
+                                             desc_serv6=os_atual_db.desc_serv6, desc_serv7=os_atual_db.desc_serv7,
+                                             desc_serv8=os_atual_db.desc_serv8, desc_serv9=os_atual_db.desc_serv9,
+                                             desconto=os_atual_db.desconto,
+                                             obs1=os_atual_db.obs1, obs2=os_atual_db.obs2, obs3=os_atual_db.obs3,
+                                             valor_mao_obra=os_atual_db.valor_mao_obra, qtd1=os_atual_db.qtd1,
+                                             qtd2=os_atual_db.qtd2, qtd3=os_atual_db.qtd3, qtd4=os_atual_db.qtd4,
+                                             qtd5=os_atual_db.qtd5, qtd6=os_atual_db.qtd6, qtd7=os_atual_db.qtd7,
+                                             qtd8=os_atual_db.qtd8,
+                                             qtd9=os_atual_db.qtd9, valor_uni1=os_atual_db.valor_uni1,
+                                             valor_uni2=os_atual_db.valor_uni2, valor_uni3=os_atual_db.valor_uni3,
+                                             valor_uni4=os_atual_db.valor_uni4, valor_uni5=os_atual_db.valor_uni5,
+                                             valor_uni6=os_atual_db.valor_uni6,
+                                             valor_uni7=os_atual_db.valor_uni7, valor_uni8=os_atual_db.valor_uni8,
+                                             valor_uni9=os_atual_db.valor_uni9,
+                                             valor_total1=os_atual_db.valor_tot1, valor_total2=os_atual_db.valor_tot2,
+                                             valor_total3=os_atual_db.valor_tot3,
+                                             valor_total4=os_atual_db.valor_tot4, valor_total5=os_atual_db.valor_tot5,
+                                             valor_total6=os_atual_db.valor_tot6,
+                                             valor_total7=os_atual_db.valor_tot7, valor_total8=os_atual_db.valor_tot8,
+                                             valor_total9=os_atual_db.valor_tot9,
+                                             caixa_peca1=os_atual_db.caixa_peca1, caixa_peca2=os_atual_db.caixa_peca2,
+                                             caixa_peca3=os_atual_db.caixa_peca3,
+                                             caixa_peca4=os_atual_db.caixa_peca4, caixa_peca5=os_atual_db.caixa_peca5,
+                                             caixa_peca6=os_atual_db.caixa_peca6,
+                                             caixa_peca7=os_atual_db.caixa_peca7, caixa_peca8=os_atual_db.caixa_peca8,
+                                             caixa_peca9=os_atual_db.caixa_peca9,
+                                             caixa_peca_total=os_atual_db.caixa_peca_total, tecnico=os_atual_db.tecnico_id,
+                                             total=os_atual_db.total, defeitos=os_atual_db.defeitos,
+                                             cheque=os_atual_db.cheque, ccredito=os_atual_db.ccredito,
+                                             cdebito=os_atual_db.cdebito, pix=os_atual_db.pix,
+                                             dinheiro=os_atual_db.dinheiro,
+                                             outros=os_atual_db.outros, obs_pagamento1=os_atual_db.obs_pagamento1,
+                                             obs_pagamento2=os_atual_db.obs_pagamento2,
+                                             obs_pagamento3=os_atual_db.obs_pagamento3,
+                                             data_garantia=os_atual_db.data_garantia, nota_fiscal=0,
+                                             cli_id=os_atual_db.cliente_id,
+                                             loja=os_atual_db.loja, garantia_compl=os_atual_db.garantia_compl,
+                                             data_compra=os_atual_db.data_compra,
+                                             aparelho_na_oficina=os_atual_db.aparelho_na_oficina, data_saida=None,
+                                             hora_saida='', os=os_atual_db.id)
+                repositorio_saida.nova_os(dados_os[18], dados_os[10], os_objeto, sessao)
+                repositorio.remover_os(dados_os[0], sessao)
+                sessao.commit()
+                self.mostrarMensagem("1", "Foi Dado Saída do Aparelho com Sucesso!")
+                jan.destroy()
+                self.popularOsConserto()
+                # except:
+                # messagebox.showinfo(title="ERRO", message="ERRO")
+                # finally:
+                sessao.close()
+            else:
+                pass
 
     def janelaAbrirOsEntregue(self):
 
