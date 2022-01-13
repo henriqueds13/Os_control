@@ -1496,7 +1496,7 @@ class Castelo:
             chassi = self.os_chassis.get()
             dias = self.os_dias.get()
             operador = self.os_operador.get()
-            tecnico = self.os_tecnico.get()
+            tecnico = int(self.os_tecnico.get())
             loja = self.os_loja.get()
             garantia_complementar = self.os_garantiacompl.get()
             data_compra = self.os_datacompra.get()
@@ -1587,6 +1587,7 @@ class Castelo:
         jan.focus_force()
         jan.grab_set()
 
+
     def janelaAbrirOs(self):
 
         font_dados1 = ('Verdana', '8', '')
@@ -1611,6 +1612,55 @@ class Castelo:
         os_dados = os_repositorio.Os_repositorio.listar_os_id(dado_os[0], dado_os[0], sessao)
         cliente_os_atual = cliente_repositorio.ClienteRepositorio.listar_cliente_id(os_dados.cliente_id,
                                                                                     os_dados.cliente_id, sessao)
+
+        def seleciona_status(num):
+
+            if num == 1:
+                status = str(self.list_status_os.get(ACTIVE))
+
+                nova_os = os.Os('', '', '', '', '', '', '', None, status, '', '', None, None, '', None, None, '', '',
+                                '',
+                                '',
+                                '', '', '', '', '', '', '', '', '', '',
+                                '', '', '', '', '', '', 0, '', '',
+                                '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                0, 0, 0, 0, 0, 0, 0, 0,
+                                0,
+                                0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                0,
+                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 0, 0, 0, 0,
+                                0, '',
+                                '', '', None, 0, 0, '', 0, None, 0)
+
+                repositorio = os_repositorio.Os_repositorio()
+                repositorio.editar_orcamento(dado_os[0], nova_os, 3, sessao)
+                sessao.commit()
+
+                self.os_status.configure(text=os_dados.status)
+                self.os_status_most.configure(text=os_dados.status)
+
+        def salvaAoFechar():
+
+            andamento = text_andamento_os.get('1.0', 'end-1c')
+            log = text_prob_os.get('1.0', 'end-1c')
+
+            nova_os = os.Os('', '', '', '', '', '', '', None, '', '', andamento, None, None, '', None, None, '', log,
+                            '',
+                            '',
+                            '', '', '', '', '', '', '', '', '', '',
+                            '', '', '', '', '', '', 0, '', '',
+                            '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                            0, 0, 0, 0, 0, 0, 0, 0,
+                            0,
+                            0, 0, 0, 0, 0, 0, 0, 0, 0,
+                            0,
+                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 0, 0, 0, 0,
+                            0, '',
+                            '', '', None, 0, 0, '', 0, None, 0)
+
+            repositorio = os_repositorio.Os_repositorio()
+            repositorio.editar_orcamento(dado_os[0], nova_os, 4, sessao)
+            sessao.commit()
 
         labelframe_dadoscli_os = LabelFrame(frame_princ_jan_os, text="Dados do Cliente", fg=self.color_fg_label)
         labelframe_dadoscli_os.grid(row=0, column=0, sticky=W)
@@ -1701,10 +1751,11 @@ class Castelo:
                                                                                                      columnspan=2)
         Label(labelframe_os, text="Status", fg=color_fg_labels2,
               font=font_dados2).grid(row=11, column=0, sticky=E, padx=1)
-        Label(labelframe_os, text="EM SERVIÇO", fg=color_fg_labels, font=font_dados2).grid(row=11, column=1, sticky=W)
+        self.os_status_most = Label(labelframe_os, text=os_dados.status, fg=color_fg_labels, font=font_dados2)
+        self.os_status_most.grid(row=11, column=1, sticky=W)
         Label(labelframe_os, text="Técnico:", fg=color_fg_labels2,
               font=font_dados2).grid(row=12, column=0, sticky=E, padx=1)
-        Label(labelframe_os, text="HENRIQUE", fg=color_fg_labels, font=font_dados2).grid(row=12, column=1, sticky=W)
+        Label(labelframe_os, text=os_dados.tecnico, fg=color_fg_labels, font=font_dados2).grid(row=12, column=1, sticky=W)
         Label(labelframe_os, text="Conclusão:", fg=color_fg_labels2,
               font=font_dados2).grid(row=13, column=0, sticky=E, padx=1)
         Label(labelframe_os, text="21/10/2021", fg=color_fg_labels, font=font_dados2).grid(row=13, column=1, sticky=W)
@@ -1800,6 +1851,7 @@ class Castelo:
         scroll_prob_os = Scrollbar(frame_prob_os)
         scroll_prob_os.pack(side=RIGHT, fill=Y)
         text_prob_os = Text(frame_prob_os, relief=SUNKEN, yscrollcommand=scroll_prob_os, bg="#A3CDD9")
+        text_prob_os.insert(END, os_dados.log)
         text_prob_os.pack(side=LEFT)
         scroll_prob_os.config(command=text_prob_os.yview)
 
@@ -1808,22 +1860,24 @@ class Castelo:
         scroll_andamento_os = Scrollbar(frame_andamento_os)
         scroll_andamento_os.pack(side=RIGHT, fill=Y)
         text_andamento_os = Text(frame_andamento_os, relief=SUNKEN, yscrollcommand=scroll_andamento_os, bg="#F2E18D")
+        text_andamento_os.insert(END, os_dados.andamento)
         text_andamento_os.pack(side=LEFT)
         scroll_andamento_os.config(command=text_andamento_os.yview)
 
-        list_status_os = Listbox(labelframe_os_status)
-        list_status_os.insert(1, "EM ANDAMENTO")
-        list_status_os.insert(2, "EM SERVIÇO")
-        list_status_os.insert(3, "NÃO AUTORIZADO")
-        list_status_os.insert(4, "PENDENTE")
-        list_status_os.insert(5, "PRONTO")
-        list_status_os.insert(6, "SEM CONSERTO")
-        list_status_os.pack(side=LEFT, padx=5, pady=5)
+        self.list_status_os = Listbox(labelframe_os_status)
+        self.list_status_os.insert(1, "EM ANDAMENTO")
+        self.list_status_os.insert(2, "EM SERVIÇO")
+        self.list_status_os.insert(3, "NÃO AUTORIZADO")
+        self.list_status_os.insert(4, "PENDENTE")
+        self.list_status_os.insert(5, "PRONTO")
+        self.list_status_os.insert(6, "SEM CONSERTO")
+        self.list_status_os.pack(side=LEFT, padx=5, pady=5)
         frame_status_os = Frame(labelframe_os_status)
         frame_status_os.pack(side=LEFT, padx=5, fill=Y)
-        Label(frame_status_os, text="EM ANDAMENTO", fg="blue",
-              bg=color_bgdc_labels, bd=2, relief=SUNKEN, width=15).grid(row=0, column=0, ipadx=10, padx=5)
-        Button(frame_status_os, text="Salvar").grid(row=1, column=0, pady=20, ipadx=10)
+        self.os_status = Label(frame_status_os, text=os_dados.status, fg="blue",
+              bg=color_bgdc_labels, bd=2, relief=SUNKEN, width=15)
+        self.os_status.grid(row=0, column=0, ipadx=10, padx=5)
+        Button(frame_status_os, text="Salvar", command=lambda: [seleciona_status(1)]).grid(row=1, column=0, pady=20, ipadx=10)
 
         list_tecnicos_os = Listbox(labelframe_os_tecnicos)
         list_tecnicos_os.insert(1, "HENRIQUE")
@@ -1848,7 +1902,7 @@ class Castelo:
         Button(labelframe_os_buttons, text="Imprimir OS", wraplength=50, height=2, width=7,
                bg="#BEC7C7").grid(row=1, column=0, ipadx=10)
         Button(labelframe_os_buttons, text="Fechar", height=2, width=7, bg="#BEC7C7",
-               command=jan.destroy).grid(row=1, column=1, ipadx=10)
+               command=lambda: [salvaAoFechar(), jan.destroy()]).grid(row=1, column=1, ipadx=10)
 
         jan.transient(root2)
         jan.focus_force()
@@ -2971,7 +3025,7 @@ class Castelo:
                                                                                                  sticky=W)
         Label(labelframe_saida, text="Valor Cobrado:",
               font=("Verdana", "11", "bold")).grid(row=4, column=0, sticky=E, padx=1, pady=10)
-        Label(labelframe_saida, text="R$" + str(os_dados.total), fg=color_fg_labels,
+        Label(labelframe_saida, text=self.insereTotalConvertido(os_dados.total), fg=color_fg_labels,
               font=("Verdana", "11", "bold")).grid(row=4, column=1, sticky=W, pady=10)
 
         frame_os_buttons = Frame(frame_os_final)
@@ -2991,6 +3045,13 @@ class Castelo:
     def janelaOrçamentoEntregue(self):
 
         jan = Toplevel()
+
+        os_selecionada = self.tree_ap_entr.focus()
+        dado_os = self.tree_ap_entr.item(os_selecionada, "values")
+        os_saida_repo = os_saida_repositorio.OsSaidaRepositorio()
+        cliente_repo = cliente_repositorio.ClienteRepositorio()
+        os_dados = os_saida_repo.listar_os_id(dado_os[0], sessao)
+        cliente_os_atual = cliente_repo.listar_cliente_id(os_dados.cliente_id, sessao)
 
         # Centraliza a janela
         x_cordinate = int((self.w / 2) - (1000 / 2))
@@ -3047,113 +3108,114 @@ class Castelo:
         Button(subframe_material1, width=3, text="E", state=DISABLED).grid(row=7, column=0)
         Button(subframe_material1, width=3, text="E", state=DISABLED).grid(row=8, column=0, pady=2)
         Button(subframe_material1, width=3, text="E", state=DISABLED).grid(row=9, column=0)
-        cod_entry1 = Entry(subframe_material1, width=10, relief=SUNKEN, state=DISABLED)
+        cod_entry1 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2, text=os_dados.codigo1)
         cod_entry1.grid(row=1, column=1)
-        cod_entry2 = Entry(subframe_material1, width=10, relief=SUNKEN, state=DISABLED)
+        cod_entry2 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2, text=os_dados.codigo2)
         cod_entry2.grid(row=2, column=1)
-        cod_entry3 = Entry(subframe_material1, width=10, relief=SUNKEN, state=DISABLED)
+        cod_entry3 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2, text=os_dados.codigo3)
         cod_entry3.grid(row=3, column=1)
-        cod_entry4 = Entry(subframe_material1, width=10, relief=SUNKEN, state=DISABLED)
+        cod_entry4 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2, text=os_dados.codigo4)
         cod_entry4.grid(row=4, column=1)
-        cod_entry5 = Entry(subframe_material1, width=10, relief=SUNKEN, state=DISABLED)
+        cod_entry5 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2, text=os_dados.codigo5)
         cod_entry5.grid(row=5, column=1)
-        cod_entry6 = Entry(subframe_material1, width=10, relief=SUNKEN, state=DISABLED)
+        cod_entry6 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2, text=os_dados.codigo6)
         cod_entry6.grid(row=6, column=1)
-        cod_entry7 = Entry(subframe_material1, width=10, relief=SUNKEN, state=DISABLED)
+        cod_entry7 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2, text=os_dados.codigo7)
         cod_entry7.grid(row=7, column=1)
-        cod_entry8 = Entry(subframe_material1, width=10, relief=SUNKEN, state=DISABLED)
+        cod_entry8 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2, text=os_dados.codigo8)
         cod_entry8.grid(row=8, column=1)
-        cod_entry9 = Entry(subframe_material1, width=10, relief=SUNKEN, state=DISABLED)
+        cod_entry9 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2, text=os_dados.codigo9)
         cod_entry9.grid(row=9, column=1)
-        quant_entry1 = Entry(subframe_material1, width=4, relief=SUNKEN, state=DISABLED)
+        quant_entry1 = Label(subframe_material1, width=4, relief=SUNKEN, bd=2, text=self.insereNumConvertido(os_dados.qtd1))
         quant_entry1.grid(row=1, column=2, padx=5)
-        id_entry1 = Entry(subframe_material1, width=6, relief=SUNKEN, state=DISABLED)
+        id_entry1 = Label(subframe_material1, width=5, relief=SUNKEN, bd=2, text=self.insereNumConvertido(os_dados.caixa_peca1))
         id_entry1.grid(row=1, column=3)
-        descr_entry1 = Entry(subframe_material1, width=50, relief=SUNKEN, state=DISABLED)
+        id_entry1.config(state=DISABLED)
+        descr_entry1 = Label(subframe_material1, width=43, relief=SUNKEN, bd=2, text=os_dados.desc_serv1)
         descr_entry1.grid(row=1, column=4, padx=5)
-        val_uni_entry1 = Entry(subframe_material1, width=10, relief=SUNKEN, state=DISABLED)
+        val_uni_entry1 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2, text=self.insereNumConvertido(os_dados.valor_uni1))
         val_uni_entry1.grid(row=1, column=5)
-        val_total_entry1 = Entry(subframe_material1, width=10, relief=SUNKEN, state=DISABLED)
+        val_total_entry1 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2, text=self.insereNumConvertido(os_dados.valor_tot1))
         val_total_entry1.grid(row=1, column=6, padx=5)
-        quant_entry2 = Entry(subframe_material1, width=4, relief=SUNKEN, state=DISABLED)
+        quant_entry2 = Label(subframe_material1, width=4, relief=SUNKEN, bd=2, text=self.insereNumConvertido(os_dados.qtd2))
         quant_entry2.grid(row=2, column=2, padx=5)
-        id_entry2 = Entry(subframe_material1, width=6, relief=SUNKEN, state=DISABLED)
+        id_entry2 = Label(subframe_material1, width=5, relief=SUNKEN, bd=2, text=self.insereNumConvertido(os_dados.caixa_peca2))
         id_entry2.grid(row=2, column=3)
-        descr_entry2 = Entry(subframe_material1, width=50, relief=SUNKEN, state=DISABLED)
+        descr_entry2 = Label(subframe_material1, width=43, relief=SUNKEN, bd=2, text=os_dados.desc_serv2)
         descr_entry2.grid(row=2, column=4, padx=5)
-        val_uni_entry2 = Entry(subframe_material1, width=10, relief=SUNKEN, state=DISABLED)
+        val_uni_entry2 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2, text=self.insereNumConvertido(os_dados.valor_uni2))
         val_uni_entry2.grid(row=2, column=5)
-        val_total_entry2 = Entry(subframe_material1, width=10, relief=SUNKEN, state=DISABLED)
+        val_total_entry2 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2, text=self.insereNumConvertido(os_dados.valor_tot2))
         val_total_entry2.grid(row=2, column=6, padx=5)
-        quant_entry3 = Entry(subframe_material1, width=4, relief=SUNKEN, state=DISABLED)
+        quant_entry3 = Label(subframe_material1, width=4, relief=SUNKEN, bd=2, text=self.insereNumConvertido(os_dados.qtd3))
         quant_entry3.grid(row=3, column=2, padx=5)
-        id_entry3 = Entry(subframe_material1, width=6, relief=SUNKEN, state=DISABLED)
+        id_entry3 = Label(subframe_material1, width=5, relief=SUNKEN, bd=2, text=self.insereNumConvertido(os_dados.caixa_peca3))
         id_entry3.grid(row=3, column=3)
-        descr_entry3 = Entry(subframe_material1, width=50, relief=SUNKEN, state=DISABLED)
+        descr_entry3 = Label(subframe_material1, width=43, relief=SUNKEN, bd=2, text=os_dados.desc_serv3)
         descr_entry3.grid(row=3, column=4, padx=5)
-        val_uni_entry3 = Entry(subframe_material1, width=10, relief=SUNKEN, state=DISABLED)
+        val_uni_entry3 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2, text=self.insereNumConvertido(os_dados.valor_uni3))
         val_uni_entry3.grid(row=3, column=5)
-        val_total_entry3 = Entry(subframe_material1, width=10, relief=SUNKEN, state=DISABLED)
+        val_total_entry3 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2, text=self.insereNumConvertido(os_dados.valor_tot3))
         val_total_entry3.grid(row=3, column=6, padx=5)
-        quant_entry4 = Entry(subframe_material1, width=4, relief=SUNKEN, state=DISABLED)
+        quant_entry4 = Label(subframe_material1, width=4, relief=SUNKEN, bd=2, text=self.insereNumConvertido(os_dados.qtd4))
         quant_entry4.grid(row=4, column=2, padx=5)
-        id_entry4 = Entry(subframe_material1, width=6, relief=SUNKEN, state=DISABLED)
+        id_entry4 = Label(subframe_material1, width=5, relief=SUNKEN, bd=2, text=self.insereNumConvertido(os_dados.caixa_peca4))
         id_entry4.grid(row=4, column=3)
-        descr_entry4 = Entry(subframe_material1, width=50, relief=SUNKEN, state=DISABLED)
+        descr_entry4 = Label(subframe_material1, width=43, relief=SUNKEN, bd=2, text=os_dados.desc_serv4)
         descr_entry4.grid(row=4, column=4, padx=5)
-        val_uni_entry4 = Entry(subframe_material1, width=10, relief=SUNKEN, state=DISABLED)
+        val_uni_entry4 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2, text=self.insereNumConvertido(os_dados.valor_uni4))
         val_uni_entry4.grid(row=4, column=5)
-        val_total_entry4 = Entry(subframe_material1, width=10, relief=SUNKEN, state=DISABLED)
+        val_total_entry4 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2, text=self.insereNumConvertido(os_dados.valor_tot4))
         val_total_entry4.grid(row=4, column=6, padx=5)
-        quant_entry5 = Entry(subframe_material1, width=4, relief=SUNKEN, state=DISABLED)
+        quant_entry5 = Label(subframe_material1, width=4, relief=SUNKEN, bd=2, text=self.insereNumConvertido(os_dados.qtd5))
         quant_entry5.grid(row=5, column=2, padx=5)
-        id_entry5 = Entry(subframe_material1, width=6, relief=SUNKEN, state=DISABLED)
+        id_entry5 = Label(subframe_material1, width=5, relief=SUNKEN, bd=2, text=self.insereNumConvertido(os_dados.caixa_peca5))
         id_entry5.grid(row=5, column=3)
-        descr_entry5 = Entry(subframe_material1, width=50, relief=SUNKEN, state=DISABLED)
+        descr_entry5 = Label(subframe_material1, width=43, relief=SUNKEN, bd=2, text=os_dados.desc_serv5)
         descr_entry5.grid(row=5, column=4, padx=5)
-        val_uni_entry5 = Entry(subframe_material1, width=10, relief=SUNKEN, state=DISABLED)
+        val_uni_entry5 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2, text=self.insereNumConvertido(os_dados.valor_uni5))
         val_uni_entry5.grid(row=5, column=5)
-        val_total_entry5 = Entry(subframe_material1, width=10, relief=SUNKEN, state=DISABLED)
+        val_total_entry5 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2, text=self.insereNumConvertido(os_dados.valor_tot5))
         val_total_entry5.grid(row=5, column=6, padx=5)
-        quant_entry6 = Entry(subframe_material1, width=4, relief=SUNKEN, state=DISABLED)
+        quant_entry6 = Label(subframe_material1, width=4, relief=SUNKEN, bd=2, text=self.insereNumConvertido(os_dados.qtd6))
         quant_entry6.grid(row=6, column=2, padx=5)
-        id_entry6 = Entry(subframe_material1, width=6, relief=SUNKEN, state=DISABLED)
+        id_entry6 = Label(subframe_material1, width=5, relief=SUNKEN, bd=2, text=self.insereNumConvertido(os_dados.caixa_peca6))
         id_entry6.grid(row=6, column=3)
-        descr_entry6 = Entry(subframe_material1, width=50, relief=SUNKEN, state=DISABLED)
+        descr_entry6 = Label(subframe_material1, width=43, relief=SUNKEN, bd=2, text=os_dados.desc_serv6)
         descr_entry6.grid(row=6, column=4, padx=5)
-        val_uni_entry6 = Entry(subframe_material1, width=10, relief=SUNKEN, state=DISABLED)
+        val_uni_entry6 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2, text=self.insereNumConvertido(os_dados.valor_uni6))
         val_uni_entry6.grid(row=6, column=5)
-        val_total_entry6 = Entry(subframe_material1, width=10, relief=SUNKEN, state=DISABLED)
+        val_total_entry6 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2, text=self.insereNumConvertido(os_dados.valor_tot6))
         val_total_entry6.grid(row=6, column=6, padx=5)
-        quant_entry7 = Entry(subframe_material1, width=4, relief=SUNKEN, state=DISABLED)
+        quant_entry7 = Label(subframe_material1, width=4, relief=SUNKEN, bd=2, text=self.insereNumConvertido(os_dados.qtd7))
         quant_entry7.grid(row=7, column=2, padx=5)
-        id_entry7 = Entry(subframe_material1, width=6, relief=SUNKEN, state=DISABLED)
+        id_entry7 = Label(subframe_material1, width=5, relief=SUNKEN, bd=2, text=self.insereNumConvertido(os_dados.caixa_peca7))
         id_entry7.grid(row=7, column=3)
-        descr_entry7 = Entry(subframe_material1, width=50, relief=SUNKEN, state=DISABLED)
+        descr_entry7 = Label(subframe_material1, width=43, relief=SUNKEN, bd=2, text=os_dados.desc_serv7)
         descr_entry7.grid(row=7, column=4, padx=5)
-        val_uni_entry7 = Entry(subframe_material1, width=10, relief=SUNKEN, state=DISABLED)
+        val_uni_entry7 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2, text=self.insereNumConvertido(os_dados.valor_uni7))
         val_uni_entry7.grid(row=7, column=5)
-        val_total_entry7 = Entry(subframe_material1, width=10, relief=SUNKEN, state=DISABLED)
+        val_total_entry7 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2, text=self.insereNumConvertido(os_dados.valor_tot7))
         val_total_entry7.grid(row=7, column=6, padx=5)
-        quant_entry8 = Entry(subframe_material1, width=4, relief=SUNKEN, state=DISABLED)
+        quant_entry8 = Label(subframe_material1, width=4, relief=SUNKEN, bd=2, text=self.insereNumConvertido(os_dados.qtd8))
         quant_entry8.grid(row=8, column=2, padx=5)
-        id_entry8 = Entry(subframe_material1, width=6, relief=SUNKEN, state=DISABLED)
+        id_entry8 = Label(subframe_material1, width=5, relief=SUNKEN, bd=2, text=self.insereNumConvertido(os_dados.caixa_peca8))
         id_entry8.grid(row=8, column=3)
-        descr_entry8 = Entry(subframe_material1, width=50, relief=SUNKEN, state=DISABLED)
+        descr_entry8 = Label(subframe_material1, width=43, relief=SUNKEN, bd=2, text=os_dados.desc_serv8)
         descr_entry8.grid(row=8, column=4, padx=5)
-        val_uni_entry8 = Entry(subframe_material1, width=10, relief=SUNKEN, state=DISABLED)
+        val_uni_entry8 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2, text=self.insereNumConvertido(os_dados.valor_uni8))
         val_uni_entry8.grid(row=8, column=5)
-        val_total_entry8 = Entry(subframe_material1, width=10, relief=SUNKEN, state=DISABLED)
+        val_total_entry8 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2, text=self.insereNumConvertido(os_dados.valor_tot8))
         val_total_entry8.grid(row=8, column=6, padx=5)
-        quant_entry9 = Entry(subframe_material1, width=4, relief=SUNKEN, state=DISABLED)
+        quant_entry9 = Label(subframe_material1, width=4, relief=SUNKEN, bd=2, text=self.insereNumConvertido(os_dados.qtd9))
         quant_entry9.grid(row=9, column=2, padx=5)
-        id_entry9 = Entry(subframe_material1, width=6, relief=SUNKEN, state=DISABLED)
+        id_entry9 = Label(subframe_material1, width=5, relief=SUNKEN, bd=2, text=self.insereNumConvertido(os_dados.caixa_peca9))
         id_entry9.grid(row=9, column=3)
-        descr_entry9 = Entry(subframe_material1, width=50, relief=SUNKEN, state=DISABLED)
+        descr_entry9 = Label(subframe_material1, width=43, relief=SUNKEN, bd=2, text=os_dados.desc_serv9)
         descr_entry9.grid(row=9, column=4, padx=5)
-        val_uni_entry9 = Entry(subframe_material1, width=10, relief=SUNKEN, state=DISABLED)
+        val_uni_entry9 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2, text=self.insereNumConvertido(os_dados.valor_uni9))
         val_uni_entry9.grid(row=9, column=5)
-        val_total_entry9 = Entry(subframe_material1, width=10, relief=SUNKEN, state=DISABLED)
+        val_total_entry9 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2, text=self.insereNumConvertido(os_dados.valor_tot9))
         val_total_entry9.grid(row=9, column=6, padx=5)
         subframe_material2 = Frame(labelframe_material)
         subframe_material2.pack(fill=BOTH)
@@ -3173,24 +3235,25 @@ class Castelo:
         introframe_material2.pack(side=RIGHT, fill=Y, padx=5)
         introframe_material3 = Frame(introframe_material2)
         introframe_material3.pack()
-        entry_mao_obra_material = Entry(introframe_material3, width=15, state=DISABLED)
+        entry_mao_obra_material = Label(introframe_material3, width=13, relief=SUNKEN, bd=2, text=self.insereNumConvertido(os_dados.valor_mao_obra))
         entry_mao_obra_material.pack(side=RIGHT)
         Label(introframe_material3, text="Mão de Obra(+)").pack(side=RIGHT, padx=10)
         introframe_material4 = Frame(introframe_material2)
         introframe_material4.pack(fill=X, pady=5)
-        entry_subtotal_material = Entry(introframe_material4, width=15, state=DISABLED)
+        orc_valor_subtotal_material = os_dados.total - os_dados.valor_mao_obra + os_dados.desconto
+        entry_subtotal_material = Label(introframe_material4, width=13, relief=SUNKEN, bd=2, text=self.insereTotalConvertido(orc_valor_subtotal_material))
         entry_subtotal_material.pack(side=RIGHT)
         Label(introframe_material4, text="Sub Total(=)").pack(side=RIGHT, padx=10)
         introframe_material5 = Frame(introframe_material2)
         introframe_material5.pack(fill=X)
-        entry_desconto_material = Entry(introframe_material5, width=15, state=DISABLED)
+        entry_desconto_material = Label(introframe_material5, width=13, relief=SUNKEN, bd=2, text=self.insereNumConvertido(os_dados.desconto))
         entry_desconto_material.pack(side=RIGHT)
         Label(introframe_material5, text="Desconto(-)").pack(side=RIGHT, padx=10)
 
         subframe_material3 = Frame(labelframe_material)
         subframe_material3.pack(fill=X, padx=5, pady=5)
-        entry_total_material = Entry(subframe_material3, width=10, fg="blue", font=("", 14, ""), justify=RIGHT,
-                                     state=DISABLED)
+        entry_total_material = Label(subframe_material3, width=13, fg="blue", font=("", 14, ""), justify=RIGHT,
+                                     relief=SUNKEN, bd=2, text=self.insereTotalConvertido(os_dados.total))
         entry_total_material.pack(side=RIGHT)
         Label(subframe_material3, text="Total do Serviço").pack(side=RIGHT, padx=15)
 
@@ -3198,17 +3261,20 @@ class Castelo:
         desc_frame.pack(side=LEFT, pady=10, padx=5, fill=X)
         Entry(desc_frame, width=5, state=DISABLED).pack(side=LEFT)
         Label(desc_frame, text="%").pack(padx=5, side=LEFT)
-        Label(desc_frame, text="R$ 0,00", bg="yellow", width=15, relief=SUNKEN, bd=2).pack(side=LEFT)
+        Label(desc_frame, width=15, relief=SUNKEN, bd=2).pack(side=LEFT)
         desc_frame1 = Frame(subframe_material3)
         desc_frame1.pack(side=RIGHT, pady=10, padx=20, fill=X)
-        Label(desc_frame1, text="R$ 0,00", bg="#FF8C64", width=15, relief=SUNKEN, bd=2).pack(side=RIGHT)
+        Label(desc_frame1, text=self.insereTotalConvertido(os_dados.caixa_peca_total), bg="#FF8C64", width=15, relief=SUNKEN, bd=2).pack(side=RIGHT)
         Label(desc_frame1, text="CP:").pack(side=RIGHT, padx=5)
 
         labelframe_orc_coment = LabelFrame(frame_princ_os1, text="Comentários")
         labelframe_orc_coment.grid(row=2, column=0, columnspan=4, pady=5)
-        Entry(labelframe_orc_coment, width=104, state=DISABLED).pack(padx=5, pady=5)
-        Entry(labelframe_orc_coment, width=104, state=DISABLED).pack()
-        Entry(labelframe_orc_coment, width=104, state=DISABLED).pack(pady=5)
+        comentario1 = Label(labelframe_orc_coment, width=93, relief=SUNKEN, bd=2, text=os_dados.obs1)
+        comentario1.pack(padx=5, pady=5)
+        comentario2 = Label(labelframe_orc_coment, width=93, relief=SUNKEN, bd=2, text=os_dados.obs2)
+        comentario2.pack()
+        comentario3 = Label(labelframe_orc_coment, width=93, relief=SUNKEN, bd=2, text=os_dados.obs3)
+        comentario3.pack(pady=5)
 
         frame_princ_os2 = Frame(jan)
         frame_princ_os2.pack(fill=Y, side=LEFT, padx=10, pady=9)
@@ -3218,8 +3284,10 @@ class Castelo:
         sub_frame_coment.pack(fill=BOTH, padx=5, pady=5)
         scroll_os = Scrollbar(sub_frame_coment)
         scroll_os.pack(side=RIGHT, fill=Y)
-        text_os = Text(sub_frame_coment, relief=SUNKEN, yscrollcommand=scroll_os, height=5, state=DISABLED)
+        text_os = Text(sub_frame_coment, relief=SUNKEN, yscrollcommand=scroll_os, height=5)
+        text_os.insert('end', os_dados.defeitos)
         text_os.pack(side=RIGHT)
+        text_os.config(state=DISABLED)
         scroll_os.config(command=text_os.yview)
 
         labelframe_form_pag = LabelFrame(frame_princ_os2, text="Forma de Pagamento")
@@ -3228,36 +3296,45 @@ class Castelo:
         subframe_form_pag1.pack(padx=15, pady=5)
         Label(subframe_form_pag1, text="Dinheiro", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=0, column=0,
                                                                                                         padx=5)
-        Entry(subframe_form_pag1, width=18, justify=RIGHT, state=DISABLED).grid(row=0, column=1, padx=5)
+        oss_dinheiro = Label(subframe_form_pag1, width=15, justify=RIGHT, relief=SUNKEN, bd=2, text=self.insereNumConvertido(os_dados.dinheiro))
+        oss_dinheiro.grid(row=0, column=1, padx=5)
         Label(subframe_form_pag1, text="Cheque", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=1, column=0,
                                                                                                       padx=5, pady=5)
-        Entry(subframe_form_pag1, width=18, justify=RIGHT, state=DISABLED).grid(row=1, column=1, padx=5)
+        oss_cheque = Label(subframe_form_pag1, width=15, justify=RIGHT, relief=SUNKEN, bd=2, text=self.insereNumConvertido(os_dados.cheque))
+        oss_cheque.grid(row=1, column=1, padx=5)
         Label(subframe_form_pag1, text="Cartão de Crédito", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=2,
                                                                                                                  column=0,
                                                                                                                  padx=5)
-        Entry(subframe_form_pag1, width=18, justify=RIGHT, state=DISABLED).grid(row=2, column=1, padx=5)
+        oss_ccredito = Label(subframe_form_pag1, width=15, justify=RIGHT, relief=SUNKEN, bd=2, text=self.insereNumConvertido(os_dados.ccredito))
+        oss_ccredito.grid(row=2, column=1, padx=5)
         Label(subframe_form_pag1, text="Cartão de Débito", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=3,
                                                                                                                 column=0,
                                                                                                                 padx=5,
                                                                                                                 pady=5)
-        Entry(subframe_form_pag1, width=18, justify=RIGHT, state=DISABLED).grid(row=3, column=1, padx=5)
+        oss_cdebito = Label(subframe_form_pag1, width=15, justify=RIGHT, relief=SUNKEN, bd=2, text=self.insereNumConvertido(os_dados.cdebito))
+        oss_cdebito.grid(row=3, column=1, padx=5)
         Label(subframe_form_pag1, text="PIX", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=4, column=0,
                                                                                                    padx=5)
-        Entry(subframe_form_pag1, width=18, justify=RIGHT, state=DISABLED).grid(row=4, column=1, padx=5)
+        oss_pix = Label(subframe_form_pag1, width=15, justify=RIGHT, relief=SUNKEN, bd=2, text=self.insereNumConvertido(os_dados.pix))
+        oss_pix.grid(row=4, column=1, padx=5)
         Label(subframe_form_pag1, text="Outros", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=5, column=0,
                                                                                                       padx=5, pady=5)
-        Entry(subframe_form_pag1, width=18, justify=RIGHT, state=DISABLED).grid(row=5, column=1, padx=5)
+        oss_outros = Label(subframe_form_pag1, width=15, justify=RIGHT, relief=SUNKEN, bd=2, text=self.insereNumConvertido(os_dados.outros))
+        oss_outros.grid(row=5, column=1, padx=5)
         labelframe_pag_coment = LabelFrame(labelframe_form_pag, text="Observações de Pagamento")
         labelframe_pag_coment.pack(padx=10, pady=4)
-        Entry(labelframe_pag_coment, width=47, state=DISABLED).pack(padx=5, pady=5)
-        Entry(labelframe_pag_coment, width=47, state=DISABLED).pack(padx=5)
-        Entry(labelframe_pag_coment, width=47, state=DISABLED).pack(pady=5, padx=5)
+        oss_obs1 = Label(labelframe_pag_coment, width=40, justify=RIGHT, relief=SUNKEN, bd=2, text=os_dados.obs_pagamento1)
+        oss_obs1.pack(padx=5, pady=5)
+        oss_obs2 = Label(labelframe_pag_coment, width=40, justify=RIGHT, relief=SUNKEN, bd=2, text=os_dados.obs_pagamento2)
+        oss_obs2.pack(padx=5)
+        oss_obs3 = Label(labelframe_pag_coment, width=40, justify=RIGHT, relief=SUNKEN, bd=2, text=os_dados.obs_pagamento3)
+        oss_obs3.pack(pady=5, padx=5)
         subframe_form_pag2 = Frame(labelframe_form_pag)
         subframe_form_pag2.pack(padx=10, fill=X, side=LEFT)
         labelframe_valor_rec = LabelFrame(subframe_form_pag2)
         labelframe_valor_rec.grid(row=0, column=0, sticky=W, pady=5)
         Label(labelframe_valor_rec, text="Valor à Receber:").pack()
-        Label(labelframe_valor_rec, text="R$ 0,00", anchor=E, font=("", "12", ""), fg="red").pack(fill=X, pady=5,
+        Label(labelframe_valor_rec, text=self.insereTotalConvertido(os_dados.total), anchor=E, font=("", "12", ""), fg="red").pack(fill=X, pady=5,
                                                                                                   padx=30)
         Button(subframe_form_pag2, text="Salvar", width=8, state=DISABLED).grid(row=1, column=0, sticky=W, pady=5,
                                                                                 padx=30)

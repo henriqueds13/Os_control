@@ -112,6 +112,13 @@ class OsQuery():
             oss.obs_pagamento2 = os.obsPagamento2
             oss.obs_pagamento3 = os.obsPagamento3
 
+        elif num == 3:
+            oss.status = os.status
+
+        elif num ==4:
+            oss.log = os.log
+            oss.andamento = os.andamento
+
         else:
             oss.codigo1 = os.codigo1
             oss.codigo2 = os.codigo2
