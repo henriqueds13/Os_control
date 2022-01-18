@@ -291,21 +291,50 @@ class OsVenda(Base):
 class Produto(Base):
     __tablename__ = 'produto'
     id_prod = Column(Integer, primary_key=True)
-    id_fabr = Column(Integer)
+    id_fabr = Column(String(15))
     descricao = Column(String(50), nullable=False)
+    categoria = Column(String(20))
+    localizacao = Column(String(5))
+    un_medida = Column(String(3))
+    estoque_min = Column(Integer)
     qtd = Column(Integer, nullable=False)
     marca = Column(String(20))
-    valor_compra = Column(Integer)
-    valor_venda = Column(Integer)
+    valor_compra = Column(Float)
+    valor_venda = Column(Float)
+    caixa_peca = Column(Float)
     obs = Column(String(50), nullable=True)
-    localizacao = Column(String(15))
+    utilizado = Column(String(50))
+    revendedor_id = Column(Integer, ForeignKey('revendedor.id'))
 
     os_prod = relationship('OS', secondary='produto_os', back_populates='produtos')
 
     venda_prod = relationship('OsVenda', secondary='produto_venda', back_populates='produto')
 
+    prod_revend = relationship('Revendedor', back_populates='revend_prod')
+
     def __repr__(self):
         return f"Produto: {self.descricao} Quantidade: {self.qtd} Valor: {self.valor_venda}"
+
+class Revendedor(Base):
+    __tablename__ = 'revendedor'
+    id = Column(Integer, primary_key=True)
+    Empresa = Column(String(50), nullable=False)
+    operador = Column(Integer, nullable=False)
+    celular = Column(String(15), nullable=True)
+    cnpj = Column(String(18), nullable=True)
+    tel_fixo = Column(String(15), nullable=True)
+    incricao_estadual = Column(String(15), nullable=True)
+    logradouro = Column(String(50), nullable=True)
+    uf = Column(String(2), nullable=True)
+    bairro = Column(String(20), nullable=True)
+    cep = Column(Integer, nullable=True)
+    cidade = Column(String(15), nullable=True)
+    email = Column(String(50), nullable=True)
+    whats = Column(String(15), nullable=True)
+    tel_comercial = Column(String(15), nullable=True)
+    Contato = Column(String(15), nullable=True)
+
+    revend_prod = relationship('Produto', back_populates='prod_revend')
 
 Base.metadata.create_all(engine)
 

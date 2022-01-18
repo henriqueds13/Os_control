@@ -1,6 +1,7 @@
 class Produto():
     def __init__(self, id_fabr, descricao, qtd=0, marca='', valor_compra=0, valor_venda=0,
-               obs='', localizacao=''):
+               obs='', localizacao='', categoria='', un_medida='', estoque_min=0, caixa_peca=0, revendedor_id=0,
+               utilizado = ''):
         self.__id_fabr = id_fabr
         self.__descricao = descricao
         self.__qtd = qtd
@@ -9,6 +10,36 @@ class Produto():
         self.__valor_venda = valor_venda
         self.__obs = obs
         self.__localizacao = localizacao
+        self.__categoria = categoria
+        self.__un_medida = un_medida
+        self.__estoque_min = estoque_min
+        self.__caixa_peca = caixa_peca
+        self.__revendedor_id = revendedor_id
+        self.__utilizado = utilizado
+
+    @property
+    def categoria(self):
+        return self.__categoria
+
+    @property
+    def unMedida(self):
+        return self.__un_medida
+
+    @property
+    def estoqueMin(self):
+        return self.__estoque_min
+
+    @property
+    def caixaPeca(self):
+        return self.__caixa_peca
+
+    @property
+    def revendedorId(self):
+        return self.__revendedor_id
+
+    @property
+    def utilizado(self):
+        return self.__utilizado
 
     @property
     def id_fabr(self):
@@ -45,6 +76,30 @@ class Produto():
     @property
     def localizacao(self):
         return self.__localizacao
+
+    @categoria.setter
+    def categoria(self, categoria):
+        self.__categoria = categoria
+
+    @unMedida.setter
+    def unMedida(self, un_medida):
+        self.__un_medida = un_medida
+
+    @estoqueMin.setter
+    def estoqueMin(self, estoque):
+        self.__estoque_min = estoque
+
+    @revendedorId.setter
+    def revendedorId(self, revendedor):
+        self.__revendedor_id = revendedor
+
+    @utilizado.setter
+    def utlizado(self, utililizado):
+        self.__utilizado = utililizado
+
+    @id_fabr.setter
+    def id_fabr(self, id_fabr):
+        self.__id_fabr = id_fabr
 
     @id_fabr.setter
     def id_fabr(self, id_fabr):
