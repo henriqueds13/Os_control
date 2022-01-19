@@ -1,7 +1,7 @@
 class Produto():
     def __init__(self, id_fabr, descricao, qtd=0, marca='', valor_compra=0, valor_venda=0,
                obs='', localizacao='', categoria='', un_medida='', estoque_min=0, caixa_peca=0, revendedor_id=0,
-               utilizado = ''):
+               utilizado=''):
         self.__id_fabr = id_fabr
         self.__descricao = descricao
         self.__qtd = qtd

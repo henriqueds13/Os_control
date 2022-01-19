@@ -8,7 +8,10 @@ class ProdutoRepositorio():
         query_produto = produto_query.ProdutoQuery()
         novo_produto = Produto(id_fabr=produto.id_fabr, descricao=produto.descricao, qtd=produto.qtd, marca=produto.marca,
                                valor_compra=produto.valor_compra, valor_venda=produto.valor_venda,
-                               obs=produto.obs, localizacao=produto.localizacao)
+                               obs=produto.obs, localizacao=produto.localizacao, categoria=produto.categoria,
+                               un_medida=produto.unMedida,
+                               estoque_min=produto.estoqueMin, caixa_peca=produto.caixaPeca,
+                               utilizado=produto.utilizado)
         query_produto.inserir_produto(novo_produto, sessao)
 
     def editar_produto(self, id_produto, produto, sessao):
