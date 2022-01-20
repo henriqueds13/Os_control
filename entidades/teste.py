@@ -127,3 +127,7 @@ if res:
         self.mostrarMensagem("1", "Cadastro Editado com Sucesso!")
         jan.destroy()
         self.popular()
+
+    (i.id_fabr, i.descricao, i.qtd, self.insereTotalConvertido(i.valor_venda),
+     i.localizacao, i.marca,
+     i.utilizado, "revendedor_prod.Empresa", i.id_prod))

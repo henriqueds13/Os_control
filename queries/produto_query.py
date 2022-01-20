@@ -21,7 +21,6 @@ class ProdutoQuery():
         produt.obs = produto.obs
         produt.localizacao = produto.localizacao
         produt.utilizado = produto.utilizado
-        produt.revendedor_id = produto.revendedorId
 
     def listar_produtos(self, sessao):
         produtos = sessao.query(Produto).all()
