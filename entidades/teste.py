@@ -131,3 +131,9 @@ if res:
     (i.id_fabr, i.descricao, i.qtd, self.insereTotalConvertido(i.valor_venda),
      i.localizacao, i.marca,
      i.utilizado, "revendedor_prod.Empresa", i.id_prod))
+    -----------------------------------------------------------------
+
+
+    produto_selecionado = self.tree_est_prod.focus()
+    dado_prod = self.tree_est_prod.item(produto_selecionado, 'values')
+    produto_dados = produto_repositorio.ProdutoRepositorio().listar_produto_id(dado_prod[8], sessao)

@@ -97,6 +97,8 @@ class Castelo:
 
         self.color_fg_label = "blue"
 
+        self.id_produto_selecionado = ''
+
         def on_enter(e):
             e.widget['relief'] = 'raised'
 
@@ -3623,7 +3625,7 @@ class Castelo:
 
     def janelaEditarProduto(self):
 
-        def encontraIndexLista(lista, obj):
+        def encontraIndexLista(lista, obj): #Metodo para poder capturar valor dos combobox no BD
             try:
                 ind = lista.index(obj)
                 return ind
@@ -4119,19 +4121,26 @@ class Castelo:
         Entry(subframe_fornecedor, width=150).grid(row=1, column=0, sticky=W)
         Button(subframe_fornecedor, text='Buscar', command=self.janelaBuscaFornecedor).grid(row=1, column=1, padx=10,
                                                                                             ipadx=10)
+        testa_float = jan.register(self.testaEntradaFloat)
+        testa_inteiro = jan.register(self.testaEntradaInteiro)
 
         subframe_prod = Frame(frame_princ1)
         subframe_prod.pack(fill=X, pady=10)
         frame_prod = LabelFrame(subframe_prod)
         frame_prod.grid(row=0, column=0, sticky=W, ipady=3)
         Label(frame_prod, text='Cód. do item').grid(sticky=W, padx=10)
-        Entry(frame_prod, width=15).grid(row=1, column=0, sticky=W, padx=10)
+        self.est_cod_item = Entry(frame_prod, width=15)
+        self.est_cod_item.grid(row=1, column=0, sticky=W, padx=10)
         Label(frame_prod, text='Descrição do item').grid(row=0, column=1, sticky=W)
-        Entry(frame_prod, width=90).grid(row=1, column=1, sticky=W)
+        self.est_desc_item = Entry(frame_prod, width=90)
+        self.est_desc_item.grid(row=1, column=1, sticky=W)
         Label(frame_prod, text='Preço Unit.').grid(row=0, column=2, sticky=W, padx=10)
-        Entry(frame_prod, width=10).grid(row=1, column=2, sticky=W, padx=10)
+        self.est_preco_item = Entry(frame_prod, width=10, validate='all', validatecommand=(testa_float, '%P'))
+        self.est_preco_item.grid(row=1, column=2, sticky=W, padx=10)
+
         Label(frame_prod, text='Qtd.').grid(row=0, column=3, sticky=W)
-        Entry(frame_prod, width=5).grid(row=1, column=3, sticky=W)
+        self.est_qtd_prod = Entry(frame_prod, width=5, validate='all', validatecommand=(testa_inteiro, '%P'))
+        self.est_qtd_prod.grid(row=1, column=3, sticky=W)
         Button(frame_prod, text='Buscar', command=self.janelaBuscaProduto).grid(row=1, column=4, padx=10, ipadx=10)
         Button(subframe_prod, text='1', width=3, height=2).grid(row=0, column=1, padx=10, ipadx=10)
         Button(subframe_prod, text='2', width=3, height=2).grid(row=0, column=2, padx=0, ipadx=10)
@@ -4166,36 +4175,44 @@ class Castelo:
         Label(subframe_form_pag1, text="Descrição", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=0,
                                                                                                          column=0,
                                                                                                          padx=5)
-        Entry(subframe_form_pag1, width=18, justify=RIGHT, state=DISABLED).grid(row=0, column=1, padx=5)
+        self.desc_prod_est = Entry(subframe_form_pag1, width=18, justify=RIGHT, state=DISABLED)
+        self.desc_prod_est.grid(row=0, column=1, padx=5)
         Label(subframe_form_pag1, text="Categoria", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=1,
                                                                                                          column=0,
                                                                                                          padx=5,
                                                                                                          pady=5)
-        Entry(subframe_form_pag1, width=18, justify=RIGHT, state=DISABLED).grid(row=1, column=1, padx=5)
+        self.categoria_prod_est = Entry(subframe_form_pag1, width=18, justify=RIGHT, state=DISABLED)
+        self.categoria_prod_est.grid(row=1, column=1, padx=5)
         Label(subframe_form_pag1, text="Estoque Atual", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=2,
                                                                                                              column=0,
                                                                                                              padx=5)
-        Entry(subframe_form_pag1, width=18, justify=RIGHT, state=DISABLED).grid(row=2, column=1, padx=5)
+        self.estoque_prod_est = Entry(subframe_form_pag1, width=18, justify=RIGHT, state=DISABLED)
+        self.estoque_prod_est.grid(row=2, column=1, padx=5)
         Label(subframe_form_pag1, text="Preço de Custo", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=3,
                                                                                                               column=0,
                                                                                                               padx=5,
                                                                                                               pady=5)
-        Entry(subframe_form_pag1, width=18, justify=RIGHT).grid(row=3, column=1, padx=5)
+        self.preco_prod_est = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all',
+                                    validatecommand=(testa_float, '%P'))
+        self.preco_prod_est.grid(row=3, column=1, padx=5)
         Label(subframe_form_pag1, text="Preço de Venda", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=4,
                                                                                                               column=0,
                                                                                                               padx=5)
-        Entry(subframe_form_pag1, width=18, justify=RIGHT).grid(row=4, column=1, padx=5)
+        self.custo_prod_est = Entry(subframe_form_pag1, width=18, justify=RIGHT)
+        self.custo_prod_est.grid(row=4, column=1, padx=5)
         Label(subframe_form_pag1, text="Revendedor", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=5,
                                                                                                           column=0,
                                                                                                           padx=5,
                                                                                                           pady=5)
-        Entry(subframe_form_pag1, width=18, justify=RIGHT, state=DISABLED).grid(row=5, column=1, padx=5)
+        self.revend_prod_est = Entry(subframe_form_pag1, width=18, justify=RIGHT, state=DISABLED)
+        self.revend_prod_est.grid(row=5, column=1, padx=5)
         subframe_form_pag2 = Frame(labelframe_form_pag)
         subframe_form_pag2.pack(padx=10, fill=X, side=LEFT)
         labelframe_valor_rec = LabelFrame(subframe_form_pag2)
         labelframe_valor_rec.grid(row=0, column=0, sticky=W, pady=5)
-        Label(labelframe_valor_rec, text="Estoque Miníno:").pack()
-        Label(labelframe_valor_rec, text="0", anchor=E, font=("", "12", ""), fg="red").pack(fill=X, pady=5,
+        Label(labelframe_valor_rec, text="Estoque Mínimo:").pack()
+        self.est_min_produto = Label(labelframe_valor_rec, text="0", anchor=E, font=("", "12", ""), fg="red")
+        self.est_min_produto.pack(fill=X, pady=5,
                                                                                             padx=30)
         Button(subframe_form_pag2, text="Editar", width=8).grid(row=1, column=0, sticky=W, pady=5, padx=30)
         subframe_form_pag3 = Frame(labelframe_form_pag)
@@ -4654,6 +4671,7 @@ class Castelo:
         frame_principal = Frame(jan)
         frame_principal.pack(pady=10, fill=BOTH)
 
+
         subframe1 = Frame(frame_principal)
         subframe1.pack(fill=X)
         scrollbar_busca_y = Scrollbar(subframe1, orient=VERTICAL)
@@ -4697,6 +4715,43 @@ class Castelo:
         subframe2 = Frame(frame_principal)
         subframe2.pack(padx=10, pady=10, side=LEFT)
 
+        def elegeProduto():
+            produto_selecionado = self.treeview_busca_produto.focus()
+            dado_prod = self.treeview_busca_produto.item(produto_selecionado, 'values')
+            produto_dados = produto_repositorio.ProdutoRepositorio().listar_produto_id(dado_prod[8], sessao)
+            self.id_produto_selecionado = produto_dados.id_prod
+            self.est_cod_item.delete(0, END)
+            self.est_cod_item.insert(0,produto_dados.id_fabr)
+            self.est_desc_item.delete(0, END)
+            self.est_desc_item.insert(0, produto_dados.descricao)
+            self.est_preco_item.delete(0, END)
+            self.est_preco_item.insert(0, self.insereNumConvertido(produto_dados.valor_venda))
+            self.est_qtd_prod.delete(0, END)
+            self.est_qtd_prod.insert(0, 1)
+            self.desc_prod_est.config(state=NORMAL)
+            self.desc_prod_est.delete(0, END)
+            self.desc_prod_est.insert(0, produto_dados.descricao)
+            self.desc_prod_est.config(state=DISABLED)
+            self.categoria_prod_est.config(state=NORMAL)
+            self.categoria_prod_est.delete(0, END)
+            self.categoria_prod_est.insert(0, produto_dados.categoria)
+            self.categoria_prod_est.config(state=DISABLED)
+            self.estoque_prod_est.config(state=NORMAL)
+            self.estoque_prod_est.delete(0, END)
+            self.estoque_prod_est.insert(0, produto_dados.qtd)
+            self.estoque_prod_est.config(state=DISABLED)
+            self.custo_prod_est.delete(0, END)
+            self.custo_prod_est.insert(0, self.insereNumConvertido(produto_dados.valor_compra))
+            self.preco_prod_est.delete(0, END)
+            self.preco_prod_est.insert(0, self.insereNumConvertido(produto_dados.valor_venda))
+            self.revend_prod_est.config(state=NORMAL)
+            self.revend_prod_est.delete(0, END)
+            #self.revend_prod_est.insert(0, produto_dados.revendedor_id)
+            self.revend_prod_est.config(state=DISABLED)
+            self.est_min_produto.config(text=produto_dados.estoque_min)
+
+
+
         frame_prod = LabelFrame(subframe2)
         frame_prod.grid(row=0, column=0, sticky=W, ipady=3)
         subframe_prod = Frame(frame_prod)
@@ -4708,12 +4763,13 @@ class Castelo:
         subframe_button = Frame(subframe_prod)
         subframe_button.grid(row=0, column=4, rowspan=2)
         Button(subframe_button, text='1', height=2).pack(padx=10, ipadx=15, side=BOTTOM)
-        Button(subframe2, text='Selecionar').grid(row=0, column=2, ipadx=10, ipady=5)
+        Button(subframe2, text='Selecionar', command=lambda: [elegeProduto(), jan.destroy()]).grid(row=0, column=2, ipadx=10, ipady=5)
         Button(subframe2, text='Fechar', command=jan.destroy).grid(row=0, column=1, ipadx=20, ipady=5, padx=15)
 
         jan.transient(root2)
         jan.focus_force()
         jan.grab_set()
+
 
     def janelaBuscaCliente(self):
 
