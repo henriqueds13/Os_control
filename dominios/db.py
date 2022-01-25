@@ -16,6 +16,9 @@ produto_venda = Table('produto_venda', Base.metadata,
                       Column('id_produto', Integer, ForeignKey('produto.id_prod')),
                       Column('id_venda', Integer, ForeignKey('os_venda.id_venda'))
                       )
+estoque_produto = Table('estoque_produto', Base.metadata,
+                        Column('id_produto', Integer, ForeignKey('produto.id_prod')),
+                        Column('id_estoque', Integer, ForeignKey('estoque.id')))
 
 
 class Cliente(Base):
@@ -312,8 +315,8 @@ class Produto(Base):
 
     prod_revend = relationship('Revendedor', back_populates='revend_prod')
 
-    def __repr__(self):
-        return f"Produto: {self.descricao} Quantidade: {self.qtd} Valor: {self.valor_venda}"
+    entrada_estoque = relationship('Estoque', secondary='estoque_produto', back_populates='entrada_produto')
+
 
 class Revendedor(Base):
     __tablename__ = 'revendedor'
@@ -335,6 +338,24 @@ class Revendedor(Base):
     Contato = Column(String(15), nullable=True)
 
     revend_prod = relationship('Produto', back_populates='prod_revend')
+    revend_est = relationship('Estoque', back_populates='est_revend')
+
+class Estoque(Base):
+    __tablename__ = 'estoque'
+    id = Column(Integer, primary_key=True)
+    revendedor_id = Column(Integer, ForeignKey('revendedor.id'))
+    obs1 = Column(String(50))
+    obs2 = Column(String(50))
+    obs3 = Column(String(50))
+    nota = Column(Integer)
+    frete = Column(Float)
+    total = Column(Float)
+    operador = Column(Integer)
+    tipo_operacao = Column(Integer)            # 1=Entrada, 2=Saida
+
+    est_revend = relationship('Revendedor', back_populates='revend_est')
+    entrada_produto = relationship('Produto', secondary='estoque_produto', back_populates='entrada_estoque')
+
 
 Base.metadata.create_all(engine)
 
