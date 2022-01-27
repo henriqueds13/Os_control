@@ -137,3 +137,58 @@ if res:
     produto_selecionado = self.tree_est_prod.focus()
     dado_prod = self.tree_est_prod.item(produto_selecionado, 'values')
     produto_dados = produto_repositorio.ProdutoRepositorio().listar_produto_id(dado_prod[8], sessao)
+
+
+    class ItemPedido(Base):
+        __tablename__ = 'item_pedido'
+        id = Column(Integer, primary_key=True)
+        id_est = Column(Integer, ForeignKey('estoque.id'))
+        id_prod = Column(Integer, ForeignKey('produto.id_prod'))
+        qtd = Column(Integer)
+
+        item_pedido_est = relationship('Estoque', back_populates='est_item_pedido')
+        item_pedido_prod = relationship('Produto', back_populates='prod_item_pedido')
+
+        def popularOsEntregue(self):
+            self.tree_ap_entr.delete(*self.tree_ap_entr.get_children())
+            repositorio = os_saida_repositorio.OsSaidaRepositorio()
+            repositorio_cliente = cliente_repositorio.ClienteRepositorio()
+            oss = repositorio.listar_os(sessao)
+            for i in oss:
+                cliente_os = repositorio_cliente.listar_cliente_id(i.cliente_id, sessao)
+                self.tree_ap_entr.insert("", "end",
+                                         values=(i.os_saida, i.data_saida, cliente_os.nome, i.equipamento, i.marca,
+                                                 i.modelo, "Orçamento", i.status, i.dias, i.total,
+                                                 i.tecnico_id, i.operador, i.defeito, i.n_serie, i.chassi,
+                                                 i.data_orc, i.data_entrada, i.hora_entrada, i.cliente_id))
+
+self.frame_tree_registro = Frame(self.frame_estoque, bg=color_est1)
+        self.frame_tree_registro.pack(fill=X)
+        self.scrollbar_reg_h = Scrollbar(self.frame_tree_registro, orient=HORIZONTAL)  # Scrollbar da treeview horiz
+        self.tree_est_reg = ttk.Treeview(self.frame_tree_registro,
+                                         columns=('data', 'hora', 'cliente_forn', 'custo', 'qtde', 'operador',
+                                                  'observações'),
+                                         show='headings',
+                                         xscrollcommand=self.scrollbar_reg_h.set,
+                                         selectmode='browse',
+                                         height=10)  # TreeView listagem de registro em estoque
+
+        self.tree_est_reg.column('data', width=100, minwidth=50, stretch=False)
+        self.tree_est_reg.column('hora', width=100, minwidth=100, stretch=False)
+        self.tree_est_reg.column('cliente_forn', width=400, minwidth=50, stretch=False)
+        self.tree_est_reg.column('custo', width=150, minwidth=100, stretch=False)
+        self.tree_est_reg.column('qtde', width=100, minwidth=50, stretch=False)
+        self.tree_est_reg.column('operador', width=200, minwidth=10, stretch=False)
+        self.tree_est_reg.column('observações', width=900, minwidth=10, stretch=False)
+
+        self.tree_est_reg.heading('data', text='DATA')
+        self.tree_est_reg.heading('hora', text='HORA')
+        self.tree_est_reg.heading('cliente_forn', text='CLIENTE/ FORNECEDOR')
+        self.tree_est_reg.heading('custo', text='CUSTO')
+        self.tree_est_reg.heading('qtde', text='QTDE.')
+        self.tree_est_reg.heading('operador', text='OPERADOR')
+        self.tree_est_reg.heading('observações', text='OBSERVAÇÕES')
+
+        self.tree_est_reg.pack(padx=5)
+        self.scrollbar_reg_h.config(command=self.tree_est_reg.xview)
+        self.scrollbar_reg_h.pack(fill=X, padx=5)

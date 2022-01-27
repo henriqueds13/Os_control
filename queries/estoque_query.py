@@ -1,3 +1,5 @@
+from sqlalchemy.orm import joinedload
+
 from dominios.db import Estoque
 
 class EstoqueQuery():
@@ -6,7 +8,7 @@ class EstoqueQuery():
         sessao.add(novo_estoque)
 
     def listar_estoques(self, sessao):
-        estoques = sessao.query(Estoque).all()
+        estoques = sessao.query(Estoque).options(joinedload(Estoque.entrada_produto)).all()
         return estoques
 
     def listar_estoque_id(self, id_estoque, sessao):

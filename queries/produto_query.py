@@ -30,6 +30,10 @@ class ProdutoQuery():
         produto = sessao.query(Produto).filter(Produto.id_prod == id_produto).first()
         return produto
 
+    def listar_produto_id_fabr(self, id_produto, sessao):
+        produto = sessao.query(Produto).filter(Produto.id_fabr == id_produto).first()
+        return produto
+
     def listar_produto_nome(self, nome_produto, sessao):
         produtos = sessao.query(Produto).filter(Produto.descricao == nome_produto).all()
         return produtos

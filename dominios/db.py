@@ -45,7 +45,6 @@ class Cliente(Base):
     oss_saida = relationship('OSSaida', back_populates='cliente_saida', cascade='delete')
 
 
-
 class OS(Base):
     __tablename__ = 'ordem_de_servico'
     id = Column(Integer, primary_key=True)
@@ -276,7 +275,6 @@ class Tecnico(Base):
         return f"Nome: {self.nome}  Senha: {self.senha_tecnico}"
 
 
-
 class OsVenda(Base):
     __tablename__ = 'os_venda'
     id_venda = Column(Integer, primary_key=True)
@@ -317,6 +315,22 @@ class Produto(Base):
 
     entrada_estoque = relationship('Estoque', secondary='estoque_produto', back_populates='entrada_produto')
 
+class Estoque(Base):
+    __tablename__ = 'estoque'
+    id = Column(Integer, primary_key=True)
+    revendedor_id = Column(Integer, ForeignKey('revendedor.id'))
+    obs1 = Column(String(110))
+    obs2 = Column(String(110))
+    obs3 = Column(String(110))
+    nota = Column(Integer)
+    frete = Column(Float)
+    total = Column(Float)
+    operador = Column(Integer)
+    tipo_operacao = Column(Integer)  # 1=Entrada, 2=Saida
+
+    est_revend = relationship('Revendedor', back_populates='revend_est')
+    entrada_produto = relationship('Produto', secondary='estoque_produto', back_populates='entrada_estoque')
+
 
 class Revendedor(Base):
     __tablename__ = 'revendedor'
@@ -340,22 +354,5 @@ class Revendedor(Base):
     revend_prod = relationship('Produto', back_populates='prod_revend')
     revend_est = relationship('Estoque', back_populates='est_revend')
 
-class Estoque(Base):
-    __tablename__ = 'estoque'
-    id = Column(Integer, primary_key=True)
-    revendedor_id = Column(Integer, ForeignKey('revendedor.id'))
-    obs1 = Column(String(50))
-    obs2 = Column(String(50))
-    obs3 = Column(String(50))
-    nota = Column(Integer)
-    frete = Column(Float)
-    total = Column(Float)
-    operador = Column(Integer)
-    tipo_operacao = Column(Integer)            # 1=Entrada, 2=Saida
-
-    est_revend = relationship('Revendedor', back_populates='revend_est')
-    entrada_produto = relationship('Produto', secondary='estoque_produto', back_populates='entrada_estoque')
-
 
 Base.metadata.create_all(engine)
-
