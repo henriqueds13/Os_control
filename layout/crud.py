@@ -3985,18 +3985,80 @@ class Castelo:
 
         self.lista_produto_est = []
 
+        repositorio = produto_repositorio.ProdutoRepositorio()
+
         def popularEntradaProdutoVenda(id_prod):
             repositorio = produto_repositorio.ProdutoRepositorio()
             produto = repositorio.listar_produto_id_fabr(id_prod, sessao)
             tree_est_venda.insert('', 'end',
                                        values=(
-                                       produto.id_fabr, produto.descricao, produto.valor_venda, self.est_qtd_prod.get(),
-                                       int(self.est_qtd_prod.get()) * produto.valor_venda))
+                                       produto.id_fabr, produto.descricao,
+                                       self.insereTotalConvertido(produto.valor_venda), self.est_qtd_prod.get(),
+                                       self.insereTotalConvertido(int(self.est_qtd_prod.get()) * produto.valor_venda)))
 
         def addProdutoestoque(id_prod, qtd):
             if id_prod != '' and qtd != 0:
                 self.lista_produto_est.append([id_prod, qtd])
                 popularEntradaProdutoVenda(self.est_cod_item.get())
+                self.est_cod_item.config(state=NORMAL)
+                self.est_cod_item.delete(0, END)
+                self.est_cod_item.config(stat=DISABLED)
+                self.est_desc_item.config(state=NORMAL)
+                self.est_desc_item.delete(0, END)
+                self.est_desc_item.config(stat=DISABLED)
+                self.est_preco_item.config(state=NORMAL)
+                self.est_preco_item.delete(0, END)
+                self.est_preco_item.config(stat=DISABLED)
+                self.est_qtd_prod.delete(0, END)
+
+        def cadastraProduto(event):
+            addProdutoestoque(self.est_cod_item.get(), self.formataParaIteiro(self.est_qtd_prod.get()))
+
+        def habilitaEntry(event):
+            self.est_cod_item.config(state=NORMAL)
+            self.est_cod_item.config(bg='white')
+
+        def procuraCod(event):
+            codigo = self.est_cod_item.get()
+
+            try:
+                produto = repositorio.listar_produto_id_fabr(codigo, sessao)
+                produto.id_fabr
+                self.est_cod_item.config(state=DISABLED)
+                self.est_desc_item.config(state=NORMAL)
+                self.est_desc_item.delete(0, END)
+                self.est_desc_item.insert(0, produto.descricao)
+                self.est_desc_item.config(state=DISABLED)
+                self.est_preco_item.config(state=NORMAL)
+                self.est_preco_item.delete(0, END)
+                self.est_preco_item.insert(0, self.insereNumConvertido(produto.valor_venda))
+                self.est_preco_item.config(state=DISABLED)
+                self.est_qtd_prod.delete(0, END)
+                self.est_qtd_prod.insert(0, 1)
+                self.desc_prod_est.config(state=NORMAL)
+                self.desc_prod_est.delete(0, END)
+                self.desc_prod_est.insert(0, produto.descricao)
+                self.desc_prod_est.config(state=DISABLED)
+                self.categoria_prod_est.config(state=NORMAL)
+                self.categoria_prod_est.delete(0, END)
+                self.categoria_prod_est.insert(0, produto.categoria)
+                self.categoria_prod_est.config(state=DISABLED)
+                self.estoque_prod_est.config(state=NORMAL)
+                self.estoque_prod_est.delete(0, END)
+                self.estoque_prod_est.insert(0, produto.qtd)
+                self.estoque_prod_est.config(state=DISABLED)
+                self.custo_prod_est.delete(0, END)
+                self.custo_prod_est.insert(0, self.insereNumConvertido(produto.valor_venda))
+                self.preco_prod_est.delete(0, END)
+                self.preco_prod_est.insert(0, self.insereNumConvertido(produto.valor_compra))
+                self.revend_prod_est.config(state=NORMAL)
+                self.revend_prod_est.delete(0, END)
+                # self.revend_prod_est.insert(0, produto_dados.revendedor_id)
+                self.revend_prod_est.config(state=DISABLED)
+                self.est_min_produto.config(text=produto.estoque_min)
+
+            except:
+                self.est_cod_item.config(bg='red')
 
         subframe_fornecedor = Frame(frame_princ1)
         subframe_fornecedor.pack(fill=X)
@@ -4013,19 +4075,22 @@ class Castelo:
         frame_prod.grid(row=0, column=0, sticky=W, ipady=3)
         Label(frame_prod, text='Cód. do item').grid(sticky=W, padx=10)
         self.est_cod_item = Entry(frame_prod, width=15)
+        self.est_cod_item.config(state=DISABLED)
         self.est_cod_item.grid(row=1, column=0, sticky=W, padx=10)
         Label(frame_prod, text='Descrição do item').grid(row=0, column=1, sticky=W)
         self.est_desc_item = Entry(frame_prod, width=90)
+        self.est_desc_item.config(state=DISABLED)
         self.est_desc_item.grid(row=1, column=1, sticky=W)
         Label(frame_prod, text='Preço Unit.').grid(row=0, column=2, sticky=W, padx=10)
         self.est_preco_item = Entry(frame_prod, width=10, validate='all', validatecommand=(testa_float, '%P'))
+        self.est_preco_item.config(state=DISABLED)
         self.est_preco_item.grid(row=1, column=2, sticky=W, padx=10)
 
         Label(frame_prod, text='Qtd.').grid(row=0, column=3, sticky=W)
         self.est_qtd_prod = Entry(frame_prod, width=5, validate='all', validatecommand=(testa_inteiro, '%P'))
         self.est_qtd_prod.grid(row=1, column=3, sticky=W)
         Button(frame_prod, text='Buscar', command=self.janelaBuscaProduto).grid(row=1, column=4, padx=10, ipadx=10)
-        Button(subframe_prod, text='1', width=3, height=2,
+        Button(subframe_prod, text='+', width=3, height=2,
                command=lambda: [addProdutoestoque(self.est_cod_item.get(),
                                                   self.formataParaIteiro(self.est_qtd_prod.get()))]).grid(row=0,
                                                                                                           column=1,
@@ -4142,7 +4207,13 @@ class Castelo:
         frame_button_confirma = Frame(subframe_prod1)
         frame_button_confirma.grid(row=2, column=1, pady=10, sticky=E)
         Button(frame_button_confirma, text='Fechar', command=jan.destroy).pack(side=LEFT, ipady=10, ipadx=30)
-        Button(frame_button_confirma, text='Confirmar Entrada', command=lambda: [self.cadastroEstoque(1, jan)]).pack(side=LEFT, ipady=10, padx=15)
+        Button(frame_button_confirma, text='Confirmar Entrada',
+               command=lambda: [self.cadastroEstoque(1, jan)]).pack(side=LEFT, ipady=10, padx=15)
+
+        self.est_cod_item.bind('<Button-1>', habilitaEntry)
+        self.est_cod_item.bind('<Return>', procuraCod)
+        self.est_qtd_prod.bind('<Return>', cadastraProduto)
+        jan.bind('<Shift-Return>', cadastraProduto)
 
         jan.transient(root2)
         jan.focus_force()
@@ -4178,9 +4249,11 @@ class Castelo:
     def popularEntradaProdutoVenda(self, id_prod):
         repositorio = produto_repositorio.ProdutoRepositorio()
         produto = repositorio.listar_produto_id_fabr(id_prod, sessao)
+        valor = self.insereNumConvertido(produto.valor_venda)
         self.tree_est_venda.insert('', 'end',
-                                 values=(produto.id_fabr, produto.descricao, produto.valor_venda, self.est_qtd_prod.get(),
-                                         int(self.est_qtd_prod.get())*produto.valor_venda))
+                                 values=(produto.id_fabr, produto.descricao,
+                                         valor, self.est_qtd_prod.get(),
+                                         self.insereTotalConvertido(int(self.est_qtd_prod.get())*produto.valor_venda)))
 
     def popularEntradaEstoque(self):
         self.tree_est_reg.delete(*self.tree_est_reg.get_children())
@@ -4657,12 +4730,18 @@ class Castelo:
             dado_prod = self.treeview_busca_produto.item(produto_selecionado, 'values')
             produto_dados = produto_repositorio.ProdutoRepositorio().listar_produto_id(dado_prod[8], sessao)
             self.id_produto_selecionado = produto_dados.id_prod
+            self.est_cod_item.config(state=NORMAL)
             self.est_cod_item.delete(0, END)
             self.est_cod_item.insert(0,produto_dados.id_fabr)
+            self.est_cod_item.config(state=DISABLED)
+            self.est_desc_item.config(state=NORMAL)
             self.est_desc_item.delete(0, END)
             self.est_desc_item.insert(0, produto_dados.descricao)
+            self.est_desc_item.config(state=DISABLED)
+            self.est_preco_item.config(state=NORMAL)
             self.est_preco_item.delete(0, END)
             self.est_preco_item.insert(0, self.insereNumConvertido(produto_dados.valor_venda))
+            self.est_preco_item.config(state=DISABLED)
             self.est_qtd_prod.delete(0, END)
             self.est_qtd_prod.insert(0, 1)
             self.desc_prod_est.config(state=NORMAL)
