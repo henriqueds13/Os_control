@@ -14,9 +14,9 @@ class ProdutoRepositorio():
                                utilizado=produto.utilizado)
         query_produto.inserir_produto(novo_produto, sessao)
 
-    def editar_produto(self, id_produto, produto, sessao):
+    def editar_produto(self, id_produto, produto, opt, sessao):
         query_produto = produto_query.ProdutoQuery()
-        query_produto.editar_produto(id_produto, produto, sessao)
+        query_produto.editar_produto(id_produto, produto, opt, sessao)
 
     def listar_produtos(self, sessao):
         query_produtos = produto_query.ProdutoQuery()

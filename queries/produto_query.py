@@ -6,21 +6,26 @@ class ProdutoQuery():
     def inserir_produto(self, novo_produto, sessao):
         sessao.add(novo_produto)
 
-    def editar_produto(self, id_produto, produto, sessao):
-        produt = self.listar_produto_id(id_produto, sessao)
-        produt.id_fabr = produto.id_fabr
-        produt.descricao = produto.descricao
-        produt.categoria = produto.categoria
-        produt.un_medida = produto.unMedida
-        produt.estoque_min = produto.estoqueMin
-        produt.qtd = produto.qtd
-        produt.marca = produto.marca
-        produt.valor_compra = produto.valor_compra
-        produt.valor_venda = produto.valor_venda
-        produt.caixa_peca = produto.caixaPeca
-        produt.obs = produto.obs
-        produt.localizacao = produto.localizacao
-        produt.utilizado = produto.utilizado
+    def editar_produto(self, id_produto, produto, opt, sessao):
+        if opt == 1:
+            produt = self.listar_produto_id(id_produto, sessao)
+            produt.id_fabr = produto.id_fabr
+            produt.descricao = produto.descricao
+            produt.categoria = produto.categoria
+            produt.un_medida = produto.unMedida
+            produt.estoque_min = produto.estoqueMin
+            produt.qtd = produto.qtd
+            produt.marca = produto.marca
+            produt.valor_compra = produto.valor_compra
+            produt.valor_venda = produto.valor_venda
+            produt.caixa_peca = produto.caixaPeca
+            produt.obs = produto.obs
+            produt.localizacao = produto.localizacao
+            produt.utilizado = produto.utilizado
+        else:
+            produt = self.listar_produto_id_fabr(id_produto, sessao)
+            produt.valor_compra = produto.valor_compra
+            produt.valor_venda = produto.valor_venda
 
     def listar_produtos(self, sessao):
         produtos = sessao.query(Produto).all()
