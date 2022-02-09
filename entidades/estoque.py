@@ -1,5 +1,6 @@
 class Estoque():
-    def __init__(self, revendedor, obs1, obs2, obs3, nota, frete, tipo_op, operador, total, produtos):
+    def __init__(self, revendedor, obs1, obs2, obs3, nota, frete, tipo_op, operador, total, produtos, data,
+                 hora):
         self.__revendedor = revendedor
         self.__obs1 = obs1
         self.__obs2 = obs2
@@ -10,10 +11,20 @@ class Estoque():
         self.__operador = operador
         self.__total = total
         self.__produtos = produtos
+        self.__data = data
+        self.__hora = hora
 
     @property
     def revendedor(self):
         return self.__revendedor
+
+    @property
+    def data(self):
+        return self.__data
+
+    @property
+    def hora(self):
+        return self.__hora
 
     @property
     def obs1(self):
@@ -25,7 +36,7 @@ class Estoque():
 
     @property
     def obs3(self):
-        return self.__obs1
+        return self.__obs3
 
     @property
     def nota(self):
@@ -55,6 +66,14 @@ class Estoque():
     def revendedor(self, revend):
         self.__revendedor = revend
 
+    @data.setter
+    def data(self, data):
+        self.__data = data
+
+    @hora.setter
+    def hora(self, hora):
+        self.__hora = hora
+
     @obs1.setter
     def obs1(self, obs):
         self.__obs1 = obs
@@ -63,7 +82,7 @@ class Estoque():
     def obs2(self, obs):
         self.__obs2 = obs
 
-    @revendedor.setter
+    @obs3.setter
     def obs3(self, obs):
         self.obs3 = obs
 

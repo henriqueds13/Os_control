@@ -27,5 +27,4 @@ class EstoqueQuery():
         estoq.obs3 = estoque.obs3
         estoq.nota = estoque.nota
         estoq.frete = estoque.frete
-        estoq.produtos = estoque.produtos
         estoq.total = estoque.total

@@ -1,4 +1,5 @@
-from sqlalchemy import Column, String, Integer, ForeignKey, Float, Table, Date
+import sqlalchemy
+from sqlalchemy import Column, String, Integer, ForeignKey, Float, Table, Date, Time
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from fabricas import fabrica_conexao
@@ -19,6 +20,8 @@ produto_venda = Table('produto_venda', Base.metadata,
 estoque_produto = Table('estoque_produto', Base.metadata,
                         Column('id_produto', Integer, ForeignKey('produto.id_prod')),
                         Column('id_estoque', Integer, ForeignKey('estoque.id')))
+
+
 
 
 class Cliente(Base):
@@ -287,6 +290,7 @@ class OsVenda(Base):
     valor_final = Column(Integer, nullable=False)
 
     produto = relationship('Produto', secondary='produto_venda', back_populates='venda_prod')
+    venda_produto = relationship('ProdutoVenda', back_populates='prod_venda', cascade='delete')
 
 
 class Produto(Base):
@@ -315,6 +319,10 @@ class Produto(Base):
 
     entrada_estoque = relationship('Estoque', secondary='estoque_produto', back_populates='entrada_produto')
 
+
+    def __repr__(self):
+        return f'{[self.id_fabr]}'
+
 class Estoque(Base):
     __tablename__ = 'estoque'
     id = Column(Integer, primary_key=True)
@@ -325,11 +333,31 @@ class Estoque(Base):
     nota = Column(Integer)
     frete = Column(Float)
     total = Column(Float)
+    data = Column(Date)
+    hora = Column(Time)
     operador = Column(Integer)
     tipo_operacao = Column(Integer)  # 1=Entrada, 2=Saida
 
-    est_revend = relationship('Revendedor', back_populates='revend_est')
-    entrada_produto = relationship('Produto', secondary='estoque_produto', back_populates='entrada_estoque')
+    estoque_prod = relationship('ProdutoVenda', back_populates='prod_estoque', cascade='delete')
+    est_revend = relationship('Revendedor', back_populates='revend_est', cascade='delete')
+    entrada_produto = relationship('Produto', secondary='estoque_produto', back_populates='entrada_estoque',
+                                   cascade='delete')
+
+    # def __repr__(self):
+    #     return f'{self.entrada_produto}'
+
+class ProdutoVenda(Base):
+    __tablename__ = 'produto_vendas'
+    id = Column(Integer, primary_key=True)
+    id_fabr = Column(Integer)
+    descricao = Column(String(50))
+    qtd = Column(Integer)
+    valor_un = Column(Float)
+    id_estoque = Column(Integer, ForeignKey('estoque.id'))
+    id_venda = Column(Integer, ForeignKey('os_venda.id_venda'))
+
+    prod_venda = relationship('OsVenda', back_populates='venda_produto')
+    prod_estoque = relationship('Estoque', back_populates='estoque_prod')
 
 
 class Revendedor(Base):

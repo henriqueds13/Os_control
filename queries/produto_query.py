@@ -22,10 +22,14 @@ class ProdutoQuery():
             produt.obs = produto.obs
             produt.localizacao = produto.localizacao
             produt.utilizado = produto.utilizado
-        else:
+        elif opt == 2:
             produt = self.listar_produto_id_fabr(id_produto, sessao)
             produt.valor_compra = produto.valor_compra
             produt.valor_venda = produto.valor_venda
+
+        else:
+            produt = self.listar_produto_id(id_produto, sessao)
+            produt.qtd = produto.qtd
 
     def listar_produtos(self, sessao):
         produtos = sessao.query(Produto).all()

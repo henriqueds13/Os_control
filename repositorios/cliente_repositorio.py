@@ -38,3 +38,4 @@ class ClienteRepositorio():
     def remover_cliente(self, id_cliente, sessao):
         query_cliente = cliente_query.ClienteQuery()
         query_cliente.remover_cliente(id_cliente, sessao)
+

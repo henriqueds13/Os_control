@@ -11,7 +11,7 @@ class EstoqueRepositorio():
         revendedor = repositorio_revendedor.listar_revendedor_id(estoque.revendedor, sessao)
         novo_estoque = Estoque(obs1=estoque.obs1, obs2=estoque.obs2, obs3=estoque.obs3,
                                nota=estoque.nota, frete=estoque.frete, tipo_operacao=estoque.tipoOp,
-                               operador=estoque.operador, total=estoque.total)
+                               operador=estoque.operador, total=estoque.total, data=None, hora=None)
         for i in produtos:
             produto = query_produto.listar_produto_id_fabr(i[0], sessao)
             for j in range(0, i[1]):
@@ -35,3 +35,4 @@ class EstoqueRepositorio():
     def editar_estoque(self, id_estoque, estoque, sessao):
         query_estoque = estoque_query.EstoqueQuery()
         query_estoque.editar_estoque(id_estoque, estoque, sessao)
+
