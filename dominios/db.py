@@ -17,9 +17,6 @@ produto_venda = Table('produto_venda', Base.metadata,
                       Column('id_produto', Integer, ForeignKey('produto.id_prod')),
                       Column('id_venda', Integer, ForeignKey('os_venda.id_venda'))
                       )
-estoque_produto = Table('estoque_produto', Base.metadata,
-                        Column('id_produto', Integer, ForeignKey('produto.id_prod')),
-                        Column('id_estoque', Integer, ForeignKey('estoque.id')))
 
 
 
@@ -317,8 +314,6 @@ class Produto(Base):
 
     prod_revend = relationship('Revendedor', back_populates='revend_prod')
 
-    entrada_estoque = relationship('Estoque', secondary='estoque_produto', back_populates='entrada_produto')
-
 
     def __repr__(self):
         return f'{[self.id_fabr]}'
@@ -339,9 +334,7 @@ class Estoque(Base):
     tipo_operacao = Column(Integer)  # 1=Entrada, 2=Saida
 
     estoque_prod = relationship('ProdutoVenda', back_populates='prod_estoque', cascade='delete')
-    est_revend = relationship('Revendedor', back_populates='revend_est', cascade='delete')
-    entrada_produto = relationship('Produto', secondary='estoque_produto', back_populates='entrada_estoque',
-                                   cascade='delete')
+    est_revend = relationship('Revendedor', back_populates='revend_est')
 
     # def __repr__(self):
     #     return f'{self.entrada_produto}'
@@ -380,7 +373,7 @@ class Revendedor(Base):
     Contato = Column(String(15), nullable=True)
 
     revend_prod = relationship('Produto', back_populates='prod_revend')
-    revend_est = relationship('Estoque', back_populates='est_revend')
+    revend_est = relationship('Estoque', back_populates='est_revend', cascade='delete')
 
 
 Base.metadata.create_all(engine)
