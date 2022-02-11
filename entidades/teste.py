@@ -194,3 +194,165 @@ self.frame_tree_registro = Frame(self.frame_estoque, bg=color_est1)
         self.tree_est_reg.pack(padx=5)
         self.scrollbar_reg_h.config(command=self.tree_est_reg.xview)
         self.scrollbar_reg_h.pack(fill=X, padx=5)
+#-----------------
+subframe_fornecedor = Frame(frame_princ1)
+subframe_fornecedor.pack(fill=X)
+Label(subframe_fornecedor, text='Fornecedor').grid(row=0, column=0, sticky=W)
+self.est_fornec = Entry(subframe_fornecedor, width=150)
+self.est_fornec.grid(row=1, column=0, sticky=W)
+self.est_busca_forn = Button(subframe_fornecedor, text='Buscar', command=self.janelaBuscaFornecedor)
+self.est_busca_forn.grid(row=1, column=1, padx=10, ipadx=10)
+
+testa_float = jan.register(self.testaEntradaFloat)
+testa_inteiro = jan.register(self.testaEntradaInteiro)
+
+subframe_prod = Frame(frame_princ1)
+subframe_prod.pack(fill=X, pady=10)
+frame_prod = LabelFrame(subframe_prod)
+frame_prod.grid(row=0, column=0, sticky=W, ipady=3)
+Label(frame_prod, text='Cód. do item').grid(sticky=W, padx=10)
+self.est_cod_item = Entry(frame_prod, width=15)
+self.est_cod_item.config(state=DISABLED)
+self.est_cod_item.grid(row=1, column=0, sticky=W, padx=10)
+Label(frame_prod, text='Descrição do item').grid(row=0, column=1, sticky=W)
+self.est_desc_item = Entry(frame_prod, width=90)
+self.est_desc_item.config(state=DISABLED)
+self.est_desc_item.grid(row=1, column=1, sticky=W)
+Label(frame_prod, text='Preço Unit.').grid(row=0, column=2, sticky=W, padx=10)
+self.est_preco_item = Entry(frame_prod, width=10, validate='all', validatecommand=(testa_float, '%P'))
+self.est_preco_item.config(state=DISABLED)
+self.est_preco_item.grid(row=1, column=2, sticky=W, padx=10)
+
+Label(frame_prod, text='Qtd.').grid(row=0, column=3, sticky=W)
+self.est_qtd_prod = Entry(frame_prod, width=5, validate='all', validatecommand=(testa_inteiro, '%P'))
+self.est_qtd_prod.grid(row=1, column=3, sticky=W)
+busca_prod_button = Button(frame_prod, text='Buscar', command=lambda: [self.janelaBuscaProduto(opt)])
+busca_prod_button.grid(row=1, column=4, padx=10, ipadx=10)
+adiciona_prod_button = Button(subframe_prod, text='+', width=3, height=2,
+                              command=lambda: [addProdutoestoque(self.est_cod_item.get(),
+                                                                 self.formataParaIteiro(self.est_qtd_prod.get()))])
+adiciona_prod_button.grid(row=0, column=1, padx=10, ipadx=10)
+remove_produto_button = Button(subframe_prod, text='-', width=3, height=2, command=removeProdutoEstoque)
+remove_produto_button.grid(row=0, column=2, padx=0, ipadx=10)
+
+subframe_prod1 = Frame(frame_princ1)
+subframe_prod1.pack(fill=BOTH)
+
+tree_est_venda = ttk.Treeview(subframe_prod1,
+                              columns=('item', 'desc', 'valorUni', 'quantidade', 'valorTotal'),
+                              show='headings',
+                              selectmode='browse',
+                              height=15)
+
+tree_est_venda.column('item', width=50, minwidth=50, stretch=False)
+tree_est_venda.column('desc', width=422, minwidth=100, stretch=False)
+tree_est_venda.column('valorUni', width=70, minwidth=50, stretch=False)
+tree_est_venda.column('quantidade', width=50, minwidth=100, stretch=False)
+tree_est_venda.column('valorTotal', width=70, minwidth=50, stretch=False)
+
+tree_est_venda.heading('item', text='Item')
+tree_est_venda.heading('desc', text='Descrição')
+tree_est_venda.heading('valorUni', text='Valor Uni.')
+tree_est_venda.heading('quantidade', text='Qtd.')
+tree_est_venda.heading('valorTotal', text='Total')
+
+tree_est_venda.grid(sticky=W)
+
+labelframe_form_pag = LabelFrame(subframe_prod1, text="Dados do produto")
+labelframe_form_pag.grid(row=0, column=1, sticky=NW, padx=10)
+subframe_form_pag1 = Frame(labelframe_form_pag)
+subframe_form_pag1.pack(padx=15, pady=18)
+Label(subframe_form_pag1, text="Descrição", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=0,
+                                                                                                 column=0,
+                                                                                                 padx=5)
+self.desc_prod_est = Entry(subframe_form_pag1, width=18, justify=RIGHT, state=DISABLED)
+self.desc_prod_est.grid(row=0, column=1, padx=5)
+Label(subframe_form_pag1, text="Categoria", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=1,
+                                                                                                 column=0,
+                                                                                                 padx=5,
+                                                                                                 pady=5)
+self.categoria_prod_est = Entry(subframe_form_pag1, width=18, justify=RIGHT, state=DISABLED)
+self.categoria_prod_est.grid(row=1, column=1, padx=5)
+Label(subframe_form_pag1, text="Estoque Atual", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=2,
+                                                                                                     column=0,
+                                                                                                     padx=5)
+self.estoque_prod_est = Entry(subframe_form_pag1, width=18, justify=RIGHT, state=DISABLED)
+self.estoque_prod_est.grid(row=2, column=1, padx=5)
+Label(subframe_form_pag1, text="Preço de Custo", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=3,
+                                                                                                      column=0,
+                                                                                                      padx=5,
+                                                                                                      pady=5)
+self.preco_prod_est = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all',
+                            validatecommand=(testa_float, '%P'))
+self.preco_prod_est.grid(row=3, column=1, padx=5)
+Label(subframe_form_pag1, text="Preço de Venda", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=4,
+                                                                                                      column=0,
+                                                                                                      padx=5)
+self.custo_prod_est = Entry(subframe_form_pag1, width=18, justify=RIGHT)
+self.custo_prod_est.grid(row=4, column=1, padx=5)
+Label(subframe_form_pag1, text="Revendedor", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=5,
+                                                                                                  column=0,
+                                                                                                  padx=5,
+                                                                                                  pady=5)
+self.revend_prod_est = Entry(subframe_form_pag1, width=18, justify=RIGHT, state=DISABLED)
+self.revend_prod_est.grid(row=5, column=1, padx=5)
+subframe_form_pag2 = Frame(labelframe_form_pag)
+subframe_form_pag2.pack(padx=10, fill=X, side=LEFT)
+labelframe_valor_rec = LabelFrame(subframe_form_pag2)
+labelframe_valor_rec.grid(row=0, column=0, sticky=W, pady=5)
+Label(labelframe_valor_rec, text="Estoque Mínimo:").pack()
+self.est_min_produto = Label(labelframe_valor_rec, text="0", anchor=E, font=("", "12", ""), fg="red")
+self.est_min_produto.pack(fill=X, pady=5,
+                          padx=30)
+self.est_edit_button = Button(subframe_form_pag2, text="Editar", width=8,
+                              command=lambda: [editarProduto(self.est_cod_item.get())])
+self.est_edit_button.grid(row=1, column=0, sticky=W, pady=5, padx=30)
+subframe_form_pag3 = Frame(labelframe_form_pag)
+subframe_form_pag3.pack(padx=5, fill=BOTH, side=LEFT, pady=7)
+Label(subframe_form_pag3, bg="grey", text=3, width=21, height=6).pack()
+
+labelframe_pag_coment = LabelFrame(subframe_prod1, text="Observações")
+labelframe_pag_coment.grid(row=1, column=0, sticky=W)
+self.est_obs1 = Entry(labelframe_pag_coment, width=108)
+self.est_obs1.pack(padx=5, pady=5)
+self.est_obs2 = Entry(labelframe_pag_coment, width=108)
+self.est_obs2.pack(padx=5)
+self.est_obs3 = Entry(labelframe_pag_coment, width=108)
+self.est_obs3.pack(pady=5, padx=5)
+
+labelframe_desc_vend = LabelFrame(subframe_prod1)
+labelframe_desc_vend.grid(row=1, column=1, sticky=SW, padx=10, ipady=1)
+frame_descr_vend = Frame(labelframe_desc_vend)
+frame_descr_vend.pack(fill=BOTH, padx=10, pady=10)
+Label(frame_descr_vend, text='N° Nota:').grid()
+self.est_nota = Entry(frame_descr_vend, fg='blue', width=10)
+self.est_nota.grid(row=0, column=1)
+Label(frame_descr_vend, text='Frete:').grid(row=1, column=0)
+self.est_frete = Entry(frame_descr_vend, width=10, validate='all', validatecommand=(testa_float, '%P'))
+self.est_frete.grid(row=1, column=1)
+Label(frame_descr_vend, width=2).grid(row=0, column=2, padx=5)
+frame_valor_total = LabelFrame(frame_descr_vend)
+frame_valor_total.grid(row=0, column=3, rowspan=2, padx=5)
+Label(frame_valor_total, text='TOTAL:', font=('verdana', '12', 'bold')).pack(pady=1)
+self.est_total = Label(frame_valor_total, text=self.insereTotalConvertido(self.est_valor_total_add),
+                       font=('verdana', '15', 'bold'), fg='red')
+self.est_total.pack(padx=10, pady=1)
+
+frame_orcamento = Frame(subframe_prod1)
+frame_orcamento.grid(row=2, column=0, sticky=W)
+Label(frame_orcamento, text="Vendedor:").grid(row=0, column=2, padx=10)
+self.est_vendedor = Entry(frame_orcamento, width=15, justify=RIGHT, relief=SUNKEN, bd=2, show='*')
+self.est_vendedor.grid(row=0, column=3)
+
+frame_button_confirma = Frame(subframe_prod1)
+frame_button_confirma.grid(row=2, column=1, pady=10, sticky=E)
+Button(frame_button_confirma, text='Fechar', command=jan.destroy).pack(side=LEFT, ipady=10, ipadx=30)
+self.est_button_entr = Button(frame_button_confirma,
+                              text='Confirmar Entrada',
+                              command=lambda: [self.cadastroEstoque(opt, jan)])
+self.est_button_entr.pack(side=LEFT, ipady=10, padx=15)
+
+self.est_cod_item.bind('<Button-1>', habilitaEntry)
+self.est_cod_item.bind('<Return>', procuraCod)
+self.est_qtd_prod.bind('<Return>', cadastraProduto)
+jan.bind('<Shift-Return>', cadastraProduto)
