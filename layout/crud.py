@@ -3,8 +3,8 @@ from tkinter import ttk, messagebox
 
 from fabricas import fabrica_conexao
 from repositorios import cliente_repositorio, os_repositorio, os_saida_repositorio, produto_repositorio, \
-    revendedor_repositorio, estoque_repositorio, produto_venda_repositorio
-from entidades import cliente, os, os_saida, produto, revendedor, estoque, produto_venda
+    revendedor_repositorio, estoque_repositorio, produto_venda_repositorio, os_venda_repositorio
+from entidades import cliente, os, os_saida, produto, revendedor, estoque, produto_venda, os_venda
 import locale
 
 locale.setlocale(locale.LC_ALL, '')
@@ -908,7 +908,7 @@ class Castelo:
                               bg=color_est2, command=lambda: [self.janelaNovaVenda(1)], height=2)
         button_vend1.pack(side=LEFT)
         button_vend2 = Button(self.frame_buttons_prod_vendas, text="Editar", width=15, relief=FLAT,
-                              bg=color_est2, command=self.janelaEditarVenda, height=2)
+                              bg=color_est2, command=lambda: [self.janelaNovaVenda(2)], height=2)
         button_vend2.pack(side=LEFT)
         ttk.Separator(self.frame_buttons_prod_vendas, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
         button_vend3 = Button(self.frame_buttons_prod_vendas, text="Imprimir Recibo", width=15, relief=FLAT,
@@ -916,7 +916,7 @@ class Castelo:
         button_vend3.pack(side=LEFT)
         ttk.Separator(self.frame_buttons_prod_vendas, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
         button_vend4 = Button(self.frame_buttons_prod_vendas, text="Cancelar Venda", width=15, relief=FLAT,
-                              bg=color_est2, height=2)
+                              bg=color_est2, height=2, command=self.excluirRegistroVenda)
         button_vend4.pack(side=LEFT)
         ttk.Separator(self.frame_buttons_prod_vendas, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
         button_vend5 = Button(self.frame_buttons_prod_vendas, text="Fechar", width=15, relief=FLAT,
@@ -934,8 +934,8 @@ class Castelo:
         self.scrollbar_vend_h = Scrollbar(self.frame_vendas, orient=HORIZONTAL)  # Scrollbar da treeview horiz
 
         self.tree_est_vendas = ttk.Treeview(self.frame_vendas,
-                                            columns=('id', 'data', 'itens', 'cliente', 'vendedor', 'vtotal',
-                                                     'desconto', 'subtotal', 'valorpago', 'meiopagamento'),
+                                            columns=('id', 'data', 'cliente', 'subtotal', 'desconto', 'vtotal',
+                                                     'hora', 'vendedor', 'obs'),
                                             show='headings',
                                             xscrollcommand=self.scrollbar_entr_h.set,
                                             selectmode='browse',
@@ -943,29 +943,29 @@ class Castelo:
 
         self.tree_est_vendas.column('id', width=100, minwidth=50, stretch=False)
         self.tree_est_vendas.column('data', width=100, minwidth=100, stretch=False)
-        self.tree_est_vendas.column('itens', width=500, minwidth=50, stretch=False)
-        self.tree_est_vendas.column('cliente', width=200, minwidth=100, stretch=False)
-        self.tree_est_vendas.column('vendedor', width=200, minwidth=50, stretch=False)
-        self.tree_est_vendas.column('vtotal', width=200, minwidth=10, stretch=False)
-        self.tree_est_vendas.column('desconto', width=200, minwidth=10, stretch=False)
+        self.tree_est_vendas.column('cliente', width=400, minwidth=100, stretch=False)
         self.tree_est_vendas.column('subtotal', width=200, minwidth=10, stretch=False)
-        self.tree_est_vendas.column('valorpago', width=200, minwidth=10, stretch=False)
-        self.tree_est_vendas.column('meiopagamento', width=150, minwidth=50, stretch=False)
+        self.tree_est_vendas.column('desconto', width=200, minwidth=10, stretch=False)
+        self.tree_est_vendas.column('vtotal', width=200, minwidth=10, stretch=False)
+        self.tree_est_vendas.column('hora', width=100, minwidth=50, stretch=False)
+        self.tree_est_vendas.column('vendedor', width=200, minwidth=50, stretch=False)
+        self.tree_est_vendas.column('obs', width=700, minwidth=50, stretch=False)
 
         self.tree_est_vendas.heading('id', text='CÓDIGO')
         self.tree_est_vendas.heading('data', text='DATA')
-        self.tree_est_vendas.heading('itens', text='ITENS')
         self.tree_est_vendas.heading('cliente', text='CLIENTE')
-        self.tree_est_vendas.heading('vendedor', text='VENDEDOR')
-        self.tree_est_vendas.heading('vtotal', text='TOTAL')
-        self.tree_est_vendas.heading('desconto', text='DESCONTO')
         self.tree_est_vendas.heading('subtotal', text='SUBTOTAL')
-        self.tree_est_vendas.heading('valorpago', text='VALOR PAGO')
-        self.tree_est_vendas.heading('meiopagamento', text='MEIO PAGAMENTO')
+        self.tree_est_vendas.heading('desconto', text='DESCONTO')
+        self.tree_est_vendas.heading('vtotal', text='TOTAL')
+        self.tree_est_vendas.heading('hora', text='HORA')
+        self.tree_est_vendas.heading('vendedor', text='VENDEDOR')
+        self.tree_est_vendas.heading('obs', text='OBS')
 
         self.tree_est_vendas.pack()
         self.scrollbar_vend_h.config(command=self.tree_est_vendas.xview)
         self.scrollbar_vend_h.pack(fill=X, padx=5)
+
+        self.popularEntradaVenda()
 
         button_vend1.bind('<Enter>', on_enter)
         button_vend1.bind('<Leave>', on_leave)
@@ -4494,19 +4494,19 @@ class Castelo:
     def excluirRegistroEstoque(self):
         res = messagebox.askyesno(None, 'Deseja Realmente Excluir o Registro?')
         if res:
-            #try:
-            estoque_selecionado = self.tree_est_reg.focus()
-            dado_est = self.tree_est_reg.item(estoque_selecionado, 'values')
-            repositorio = estoque_repositorio.EstoqueRepositorio()
-            repositorio.remover_estoque(dado_est[8], sessao)
-            sessao.commit()
-            self.popularEntradaEstoque()
+            try:
+                estoque_selecionado = self.tree_est_reg.focus()
+                dado_est = self.tree_est_reg.item(estoque_selecionado, 'values')
+                repositorio = estoque_repositorio.EstoqueRepositorio()
+                repositorio.remover_estoque(dado_est[8], sessao)
+                sessao.commit()
+                self.popularEntradaEstoque()
 
-            # except:
-            #     sessao.rollback()
-            #
-            # finally:
-            #     sessao.close()
+            except:
+                 sessao.rollback()
+
+            finally:
+                 sessao.close()
 
 
     # --------------------------------------------------------------------------------------
@@ -4547,7 +4547,7 @@ class Castelo:
 
         def popularEditProdutoVendaEstoque(id_est):
             repositorio = produto_venda_repositorio.ProdutoVendaRepositorio()
-            produtos = repositorio.listar_produtos_venda_id_estoque(id_est, sessao)
+            produtos = repositorio.listar_produtos_venda_id_venda(id_est, sessao)
             for i in produtos:
                 tree_est_venda.insert('', 'end',
                                       values=(i.id_fabr, i.descricao,
@@ -4588,7 +4588,7 @@ class Castelo:
             addProdutoestoque(self.venda_cod_item.get(), self.formataParaIteiro(self.venda_qtd_item.get()))
 
         def habilitaEntryOption(opt):
-            if opt != 3:
+            if opt != 2:
                 self.venda_cod_item.config(state=NORMAL)
                 self.venda_cod_item.config(bg='white')
 
@@ -4623,6 +4623,21 @@ class Castelo:
                 self.venda_preco_item.config(state=DISABLED)
                 self.venda_qtd_item.delete(0, END)
                 self.venda_qtd_item.insert(0, 1)
+
+        def atualizaValorAreceber():
+            dinheiro = self.formataParaFloat(self.venda_entry_dinh.get())
+            cheque = self.formataParaFloat(self.venda_entry_cheque.get())
+            cdebito = self.formataParaFloat(self.venda_entry_cdebito.get())
+            ccredito = self.formataParaFloat(self.venda_entry_ccredito.get())
+            pix = self.formataParaFloat(self.venda_entry_pix.get())
+            outros = self.formataParaFloat(self.venda_entry_outros.get())
+
+            soma_total = dinheiro+cheque+cdebito+ccredito+pix+outros
+
+            self.venda_valor_areceber.config(text=self.insereTotalConvertido(soma_total))
+
+        def atualizaValorArecebeButton(event):
+            atualizaValorAreceber()
 
         frame_princ = Frame(jan)
         frame_princ.pack(fill=BOTH)
@@ -4735,7 +4750,7 @@ class Castelo:
         Label(labelframe_valor_rec, text="Valor à Receber:").pack()
         self.venda_valor_areceber = Label(labelframe_valor_rec, text="R$ 0,00", anchor=E, font=("", "12", ""), fg="red")
         self.venda_valor_areceber.pack(fill=X, pady=5, padx=30)
-        self.venda_button_salvar = Button(subframe_form_pag2, text="Salvar", width=8)
+        self.venda_button_salvar = Button(subframe_form_pag2, text="Salvar", width=8, command=atualizaValorAreceber)
         self.venda_button_salvar.grid(row=1, column=0, sticky=W, pady=5, padx=30)
         subframe_form_pag3 = Frame(labelframe_form_pag)
         subframe_form_pag3.pack(padx=5, fill=BOTH, side=LEFT, pady=7)
@@ -4780,151 +4795,201 @@ class Castelo:
         frame_button_confirma.grid(row=2, column=1, pady=10, sticky=E)
         self.venda_button_fechar = Button(frame_button_confirma, text='Fechar', command=jan.destroy)
         self.venda_button_fechar.pack(side=LEFT, ipady=10, ipadx=30)
-        self.venda_button_confirma = Button(frame_button_confirma, text='Confirmar Venda')
+        self.venda_button_confirma = Button(frame_button_confirma, text='Confirmar Venda',
+                                            command=lambda: [atualizaValorAreceber(),
+                                                             atualizarValorFinal(),
+                                                             self.cadastroVenda(opt, jan)])
         self.venda_button_confirma.pack(side=LEFT, ipady=10, padx=15)
 
         self.venda_cod_item.bind('<Button-1>', habilitaEntry)
         self.venda_cod_item.bind('<Return>', procuraCod)
         self.venda_qtd_item.bind('<Return>', cadastraProduto)
         self.venda_desconto.bind('<Return>', atualizarValorFinalDesc)
+        self.venda_entry_dinh.bind('<Return>', atualizaValorArecebeButton)
+        self.venda_entry_cheque.bind('<Return>', atualizaValorArecebeButton)
+        self.venda_entry_cdebito.bind('<Return>', atualizaValorArecebeButton)
+        self.venda_entry_ccredito.bind('<Return>', atualizaValorArecebeButton)
+        self.venda_entry_pix.bind('<Return>', atualizaValorArecebeButton)
+        self.venda_entry_outros.bind('<Return>', atualizaValorArecebeButton)
         jan.bind('<Shift-Return>', cadastraProduto)
 
-        jan.transient(root2)
-        jan.focus_force()
-        jan.grab_set()
+        if opt == 2:  # Edição de venda
 
-    def janelaEditarVenda(self):
+            venda_selecionada = self.tree_est_vendas.focus()
+            dado_est = self.tree_est_vendas.item(venda_selecionada, 'values')
 
-        jan = Toplevel()
+            repositorio_venda = os_venda_repositorio.OsVendaRepositorio()
+            venda_atual = repositorio_venda.listar_venda_id(dado_est[0], sessao)
 
-        # Centraliza a janela
-        x_cordinate = int((self.w / 2) - (1010 / 2))
-        y_cordinate = int((self.h / 2) - (625 / 2))
-        jan.geometry("{}x{}+{}+{}".format(1010, 625, x_cordinate, y_cordinate))
-
-        frame_princ = Frame(jan)
-        frame_princ.pack(fill=BOTH)
-        frame_princ1 = Frame(frame_princ)
-        frame_princ1.pack(fill=BOTH, padx=10, pady=10)
-
-        subframe_cliente = Frame(frame_princ1)
-        subframe_cliente.pack(fill=X)
-        Label(subframe_cliente, text='Cliente').grid(row=0, column=0, sticky=W)
-        Entry(subframe_cliente, width=150).grid(row=1, column=0, sticky=W)
-        Button(subframe_cliente, text='Buscar', command=self.janelaBuscaCliente).grid(row=1, column=1, padx=10,
-                                                                                      ipadx=10)
-
-        subframe_prod = Frame(frame_princ1)
-        subframe_prod.pack(fill=X, pady=10)
-        frame_prod = LabelFrame(subframe_prod)
-        frame_prod.grid(row=0, column=0, sticky=W, ipady=3)
-        Label(frame_prod, text='Cód. do item').grid(sticky=W, padx=10)
-        Entry(frame_prod, width=15).grid(row=1, column=0, sticky=W, padx=10)
-        Label(frame_prod, text='Descrição do item').grid(row=0, column=1, sticky=W)
-        Entry(frame_prod, width=90).grid(row=1, column=1, sticky=W)
-        Label(frame_prod, text='Preço Unit.').grid(row=0, column=2, sticky=W, padx=10)
-        Entry(frame_prod, width=10).grid(row=1, column=2, sticky=W, padx=10)
-        Label(frame_prod, text='Qtd.').grid(row=0, column=3, sticky=W)
-        Entry(frame_prod, width=5).grid(row=1, column=3, sticky=W)
-        Button(frame_prod, text='Buscar', command=self.janelaBuscaProduto).grid(row=1, column=4, padx=10, ipadx=10)
-        Button(subframe_prod, text='1', width=3, height=2).grid(row=0, column=1, padx=10, ipadx=10)
-        Button(subframe_prod, text='2', width=3, height=2).grid(row=0, column=2, padx=0, ipadx=10)
-
-        subframe_prod1 = Frame(frame_princ1)
-        subframe_prod1.pack(fill=BOTH)
-
-        tree_est_venda = ttk.Treeview(subframe_prod1,
-                                      columns=('item', 'desc', 'valorUni', 'quantidade', 'valorTotal'),
-                                      show='headings',
-                                      selectmode='browse',
-                                      height=15)
-
-        tree_est_venda.column('item', width=50, minwidth=50, stretch=False)
-        tree_est_venda.column('desc', width=422, minwidth=100, stretch=False)
-        tree_est_venda.column('valorUni', width=70, minwidth=50, stretch=False)
-        tree_est_venda.column('quantidade', width=50, minwidth=100, stretch=False)
-        tree_est_venda.column('valorTotal', width=70, minwidth=50, stretch=False)
-
-        tree_est_venda.heading('item', text='Item')
-        tree_est_venda.heading('desc', text='Descrição')
-        tree_est_venda.heading('valorUni', text='Valor Uni.')
-        tree_est_venda.heading('quantidade', text='Qtd.')
-        tree_est_venda.heading('valorTotal', text='Total')
-
-        tree_est_venda.grid(sticky=W)
-
-        labelframe_form_pag = LabelFrame(subframe_prod1, text="Forma de Pagamento")
-        labelframe_form_pag.grid(row=0, column=1, sticky=NW, padx=10)
-        subframe_form_pag1 = Frame(labelframe_form_pag)
-        subframe_form_pag1.pack(padx=15, pady=18)
-        Label(subframe_form_pag1, text="Dinheiro", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=0, column=0,
-                                                                                                        padx=5)
-        Entry(subframe_form_pag1, width=18, justify=RIGHT).grid(row=0, column=1, padx=5)
-        Label(subframe_form_pag1, text="Cheque", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=1, column=0,
-                                                                                                      padx=5, pady=5)
-        Entry(subframe_form_pag1, width=18, justify=RIGHT).grid(row=1, column=1, padx=5)
-        Label(subframe_form_pag1, text="Cartão de Crédito", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=2,
-                                                                                                                 column=0,
-                                                                                                                 padx=5)
-        Entry(subframe_form_pag1, width=18, justify=RIGHT).grid(row=2, column=1, padx=5)
-        Label(subframe_form_pag1, text="Cartão de Débito", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=3,
-                                                                                                                column=0,
-                                                                                                                padx=5,
-                                                                                                                pady=5)
-        Entry(subframe_form_pag1, width=18, justify=RIGHT).grid(row=3, column=1, padx=5)
-        Label(subframe_form_pag1, text="PIX", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=4, column=0,
-                                                                                                   padx=5)
-        Entry(subframe_form_pag1, width=18, justify=RIGHT).grid(row=4, column=1, padx=5)
-        Label(subframe_form_pag1, text="Outros", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=5, column=0,
-                                                                                                      padx=5, pady=5)
-        Entry(subframe_form_pag1, width=18, justify=RIGHT).grid(row=5, column=1, padx=5)
-        subframe_form_pag2 = Frame(labelframe_form_pag)
-        subframe_form_pag2.pack(padx=10, fill=X, side=LEFT)
-        labelframe_valor_rec = LabelFrame(subframe_form_pag2)
-        labelframe_valor_rec.grid(row=0, column=0, sticky=W, pady=5)
-        Label(labelframe_valor_rec, text="Valor à Receber:").pack()
-        Label(labelframe_valor_rec, text="R$ 0,00", anchor=E, font=("", "12", ""), fg="red").pack(fill=X, pady=5,
-                                                                                                  padx=30)
-        Button(subframe_form_pag2, text="Salvar", width=8).grid(row=1, column=0, sticky=W, pady=5, padx=30)
-        subframe_form_pag3 = Frame(labelframe_form_pag)
-        subframe_form_pag3.pack(padx=5, fill=BOTH, side=LEFT, pady=7)
-        Label(subframe_form_pag3, bg="grey", text=3, width=21, height=6).pack()
-
-        labelframe_pag_coment = LabelFrame(subframe_prod1, text="Observações de Pagamento")
-        labelframe_pag_coment.grid(row=1, column=0, sticky=W)
-        Entry(labelframe_pag_coment, width=108).pack(padx=5, pady=5)
-        Entry(labelframe_pag_coment, width=108).pack(padx=5)
-        Entry(labelframe_pag_coment, width=108).pack(pady=5, padx=5)
-
-        labelframe_desc_vend = LabelFrame(subframe_prod1)
-        labelframe_desc_vend.grid(row=1, column=1, sticky=SW, padx=10, ipady=1)
-        frame_descr_vend = Frame(labelframe_desc_vend)
-        frame_descr_vend.pack(fill=BOTH, padx=10, pady=10)
-        Label(frame_descr_vend, text='SubTotal:').grid()
-        Label(frame_descr_vend, text='R$20,00', fg='blue', font=('', '12', '')).grid(row=0, column=1)
-        Label(frame_descr_vend, text='desconto:').grid(row=1, column=0)
-        Entry(frame_descr_vend, width=10).grid(row=1, column=1)
-        Label(frame_descr_vend, width=2).grid(row=0, column=2, padx=5)
-        frame_valor_total = LabelFrame(frame_descr_vend)
-        frame_valor_total.grid(row=0, column=3, rowspan=2, padx=5)
-        Label(frame_valor_total, text='TOTAL:', font=('verdana', '12', 'bold')).pack(pady=1)
-        Label(frame_valor_total, text='R$50,00', font=('verdana', '15', 'bold'), fg='red').pack(padx=10, pady=1)
-
-        frame_orcamento = Frame(subframe_prod1)
-        frame_orcamento.grid(row=2, column=0, sticky=W)
-        Button(frame_orcamento, text='Orçamento', state=DISABLED).grid(row=0, column=0, ipady=10, ipadx=10, sticky=W)
-        Label(frame_orcamento, width=56).grid(row=0, column=1)
-        Label(frame_orcamento, text="Vendedor:").grid(row=0, column=2, padx=10)
-        Entry(frame_orcamento, width=15, justify=RIGHT, relief=SUNKEN, bd=2, show='*').grid(row=0, column=3)
-
-        frame_button_confirma = Frame(subframe_prod1)
-        frame_button_confirma.grid(row=2, column=1, pady=10, sticky=E)
-        Button(frame_button_confirma, text='Fechar', command=jan.destroy).pack(side=LEFT, ipady=10, ipadx=30)
-        Button(frame_button_confirma, text='Editar Venda').pack(side=LEFT, ipady=10, padx=15, ipadx=15)
+            popularEditProdutoVendaEstoque(dado_est[0])
+            self.venda_button_busca_prod.config(state=DISABLED)
+            self.venda_button_add_prod.config(state=DISABLED)
+            self.venda_button_remove_prod.config(state=DISABLED)
+            self.venda_qtd_item.config(state=DISABLED)
+            self.venda_button_confirma.config(text='Editar Venda')
+            self.venda_label_total.config(text=dado_est[5])
+            self.venda_cliente.insert(0, venda_atual.cliente)
+            self.venda_obs1.insert(0, venda_atual.obs1)
+            self.venda_obs2.insert(0, venda_atual.obs2)
+            self.venda_obs3.insert(0, venda_atual.obs3)
+            self.venda_entry_dinh.insert(0, self.insereNumConvertido(venda_atual.dinheiro))
+            self.venda_entry_cheque.insert(0, self.insereNumConvertido(venda_atual.cheque))
+            self.venda_entry_cdebito.insert(0, self.insereNumConvertido(venda_atual.cdebito))
+            self.venda_entry_ccredito.insert(0, self.insereNumConvertido(venda_atual.ccredito))
+            self.venda_entry_pix.insert(0, self.insereNumConvertido(venda_atual.pix))
+            self.venda_entry_outros.insert(0, self.insereNumConvertido(venda_atual.outros))
+            self.venda_desconto.insert(0, self.insereNumConvertido(venda_atual.desconto))
+            self.venda_label_subtotal.config(text=self.insereTotalConvertido(venda_atual.sub_total))
+            self.venda_valor_total_add = venda_atual.sub_total
 
         jan.transient(root2)
         jan.focus_force()
         jan.grab_set()
+
+    def cadastroVenda(self, op, jan):
+        total = self.formataParaFloat(self.venda_label_total.cget('text').split()[1])
+        receber = self.formataParaFloat(self.venda_valor_areceber.cget('text').split()[1])
+        if receber < total:
+            messagebox.showinfo(title="ERRO", message="Valor a Receber Menor do Valor Total da Venda!")
+        else:
+            res = messagebox.askyesno(None, "Deseja Concluir a Venda?")
+            if res:
+                try:
+                    while True:
+                        self.lista_produto_venda.remove(0)
+                except ValueError:
+                    pass
+                try:
+                    cliente = self.venda_cliente.get()
+                    obs1 = self.venda_obs1.get()
+                    obs2 = self.venda_obs2.get()
+                    obs3 = self.venda_obs3.get()
+                    dinheiro = self.formataParaFloat(self.venda_entry_dinh.get())
+                    cheque = self.formataParaFloat(self.venda_entry_cheque.get())
+                    cdebito = self.formataParaFloat(self.venda_entry_cdebito.get())
+                    ccredito = self.formataParaFloat(self.venda_entry_ccredito.get())
+                    pix = self.formataParaFloat(self.venda_entry_pix.get())
+                    outros = self.formataParaFloat(self.venda_entry_outros.get())
+                    sub_total = self.formataParaFloat(self.venda_label_subtotal.cget('text').split()[1])
+                    desconto = self.formataParaFloat(self.venda_desconto.get())
+                    operador = self.formataParaIteiro(self.venda_vendedor.get())
+                    total = self.formataParaFloat(self.venda_label_total.cget('text').split()[1])
+
+                    nova_venda = os_venda.OsVenda(cliente, operador, obs1, obs2, obs3, dinheiro, cheque, cdebito, ccredito,
+                                                  pix, outros, desconto, sub_total, None, None, total)
+
+                    repositorio = os_venda_repositorio.OsVendaRepositorio()
+
+                    if op == 2: # op == 2 editar estoque
+
+                        venda_selecionada = self.tree_est_vendas.focus()
+                        dado_est = self.tree_est_vendas.item(venda_selecionada, 'values')
+                        repositorio.editar_venda(dado_est[0], nova_venda, sessao)
+                        self.popularEntradaVenda()
+                        sessao.commit()
+                        jan.destroy()
+
+                    else:
+                        repositorio.inserir_venda(nova_venda, sessao)
+
+                        sessao.commit()
+                        self.cadastroProdutosVenda(op)
+                        self.mostrarMensagem('1', f'Venda Concluida! Troco: {self.insereTotalConvertido(receber - total)}')
+                        self.popularEntradaVenda()
+                        jan.destroy()
+                except:
+                    sessao.rollback()
+                    raise
+                finally:
+                    sessao.close()
+
+    def cadastroProdutosVenda(self, op):
+        try:
+            repositorio = os_venda_repositorio.OsVendaRepositorio()
+            repositorio_prod = produto_repositorio.ProdutoRepositorio()
+            repositoriio_produtos_venda = produto_venda_repositorio.ProdutoVendaRepositorio()
+            ultima_venda = repositorio.listar_vendas(sessao)[-1].id_venda
+
+            for i in self.lista_produto_venda:  # Adiciona produtos em Produtos_Venda
+                produto_atual = repositorio_prod.listar_produto_id_fabr(i[0], sessao)
+                id_fabr = produto_atual.id_fabr
+                qtd_atual = i[1]
+                descricao = produto_atual.descricao
+                valor_un = produto_atual.valor_venda
+
+                nova_lista_produtos = produto_venda.ProdutoVenda(id_fabr, descricao, qtd_atual, valor_un, 0, ultima_venda)
+
+                repositoriio_produtos_venda.inserir_produtos_venda(nova_lista_produtos, sessao)
+
+                if op == 1:
+                    nova_qtd = produto_atual.qtd - int(i[1])
+                    novo_produto = produto.Produto(0, 0, nova_qtd, 0, 0, 0,
+                                                   0,
+                                                   0, 0, 0, 0, 0,
+                                                   0,
+                                                   0)
+                    repositorio_prod.editar_produto(produto_atual.id_prod, novo_produto, 3, sessao)
+
+                sessao.commit()
+
+            self.popularProdutoEstoque()
+
+        except:
+            sessao.rollback()
+            repositorio.remover_venda(ultima_venda, sessao)
+            sessao.commit()
+        finally:
+            sessao.close()
+
+    def popularEntradaVenda(self):
+        self.tree_est_vendas.delete(*self.tree_est_vendas.get_children())
+        repositorio = os_venda_repositorio.OsVendaRepositorio()
+        vend = repositorio.listar_vendas(sessao)
+        for i in vend:
+            self.tree_est_vendas.insert('', 'end',
+                                     values=(i.id_venda,
+                                             i.data,
+                                             i.cliente,
+                                             self.insereTotalConvertido(i.sub_total),
+                                             self.insereTotalConvertido(i.desconto),
+                                             self.insereTotalConvertido(i.total),
+                                             i.hora,
+                                             i.operador,
+                                             i.obs1))
+
+    def excluirRegistroVenda(self):
+        res = messagebox.askyesno(None, 'Deseja Realmente Excluir o Registro?')
+        if res:
+            try:
+                prod_repositorio = produto_venda_repositorio.ProdutoVendaRepositorio()
+                repositorio_produto = produto_repositorio.ProdutoRepositorio()
+
+                venda_selecionada = self.tree_est_vendas.focus()
+                dado_est = self.tree_est_vendas.item(venda_selecionada, 'values')
+
+                produtos = prod_repositorio.listar_produtos_venda_id_venda(dado_est[0], sessao)
+                for i in produtos:
+                    produto_atual = repositorio_produto.listar_produto_id_fabr(i.id_fabr, sessao)
+                    nova_qtd = produto_atual.qtd + i.qtd
+                    novo_produto = produto.Produto(0, 0, nova_qtd, 0, 0, 0,
+                                                   0,
+                                                   0, 0, 0, 0, 0,
+                                                   0,
+                                                   0)
+                    repositorio_produto.editar_produto(produto_atual.id_prod, novo_produto, 3, sessao)
+
+                repositorio = os_venda_repositorio.OsVendaRepositorio()
+                repositorio.remover_venda(dado_est[0], sessao)
+                sessao.commit()
+                self.mostrarMensagem('1', 'Venda Cancelada!')
+                self.popularEntradaVenda()
+                self.popularProdutoEstoque()
+
+            except:
+                sessao.rollback()
+
+            finally:
+                sessao.close()
 
     def janelaBuscaProduto(self, opt):
 
@@ -5112,6 +5177,20 @@ class Castelo:
         y_cordinate = int((self.h / 2) - (900 / 2))
         jan.geometry("{}x{}+{}+{}".format(860, 550, x_cordinate, y_cordinate))
 
+        def popularEntradaBuscaCliente():
+            treeview_busca_cliente.delete(*treeview_busca_cliente.get_children())
+            repositorio = cliente_repositorio.ClienteRepositorio()
+            clientes = repositorio.listar_clientes(sessao)
+            for i in clientes:
+                treeview_busca_cliente.insert('', 'end',
+                                              values=(i.id,
+                                                      i.nome,
+                                                      i.logradouro,
+                                                      i.cidade,
+                                                      i.whats,
+                                                      i.tel_fixo,
+                                                      i.email))
+
         frame_principal = Frame(jan)
         frame_principal.pack(pady=10, fill=BOTH)
 
@@ -5119,7 +5198,7 @@ class Castelo:
         subframe1.pack(fill=X)
         scrollbar_busca_y = Scrollbar(subframe1, orient=VERTICAL)
         scrollbar_busca_x = Scrollbar(subframe1, orient=HORIZONTAL)
-        treeview_busca_produto = ttk.Treeview(subframe1,
+        treeview_busca_cliente = ttk.Treeview(subframe1,
                                               columns=("id", 'cliente', 'endereco', 'cidade', 'whats',
                                                        'telefone', 'email'),
                                               show='headings',
@@ -5127,27 +5206,29 @@ class Castelo:
                                               yscrollcommand=scrollbar_busca_y,
                                               selectmode='browse',
                                               height=20)
-        treeview_busca_produto.column('id', width=100, minwidth=50, stretch=False)
-        treeview_busca_produto.column('cliente', width=500, minwidth=50, stretch=False)
-        treeview_busca_produto.column('endereco', width=200, minwidth=50, stretch=False)
-        treeview_busca_produto.column('cidade', width=150, minwidth=50, stretch=False)
-        treeview_busca_produto.column('whats', width=200, minwidth=50, stretch=False)
-        treeview_busca_produto.column('telefone', width=200, minwidth=50, stretch=False)
-        treeview_busca_produto.column('email', width=200, minwidth=50, stretch=False)
+        treeview_busca_cliente .column('id', width=100, minwidth=50, stretch=False)
+        treeview_busca_cliente .column('cliente', width=500, minwidth=50, stretch=False)
+        treeview_busca_cliente .column('endereco', width=200, minwidth=50, stretch=False)
+        treeview_busca_cliente .column('cidade', width=150, minwidth=50, stretch=False)
+        treeview_busca_cliente .column('whats', width=200, minwidth=50, stretch=False)
+        treeview_busca_cliente .column('telefone', width=200, minwidth=50, stretch=False)
+        treeview_busca_cliente .column('email', width=200, minwidth=50, stretch=False)
 
-        treeview_busca_produto.heading('id', text='ID')
-        treeview_busca_produto.heading('cliente', text='CLIENTE')
-        treeview_busca_produto.heading('endereco', text='ENDEREÇO.')
-        treeview_busca_produto.heading('cidade', text='CIDADE')
-        treeview_busca_produto.heading('whats', text='WHATSAPP')
-        treeview_busca_produto.heading('telefone', text='TELEFONE')
-        treeview_busca_produto.heading('email', text='EMAIL')
+        treeview_busca_cliente .heading('id', text='ID')
+        treeview_busca_cliente .heading('cliente', text='CLIENTE')
+        treeview_busca_cliente .heading('endereco', text='ENDEREÇO.')
+        treeview_busca_cliente .heading('cidade', text='CIDADE')
+        treeview_busca_cliente .heading('whats', text='WHATSAPP')
+        treeview_busca_cliente .heading('telefone', text='TELEFONE')
+        treeview_busca_cliente .heading('email', text='EMAIL')
 
-        scrollbar_busca_y.config(command=treeview_busca_produto.yview)
+        scrollbar_busca_y.config(command=treeview_busca_cliente .yview)
         scrollbar_busca_y.pack(fill=Y, side=RIGHT)
-        treeview_busca_produto.pack()
-        scrollbar_busca_x.config(command=treeview_busca_produto.xview)
+        treeview_busca_cliente .pack()
+        scrollbar_busca_x.config(command=treeview_busca_cliente .xview)
         scrollbar_busca_x.pack(fill=X)
+
+        popularEntradaBuscaCliente()
 
         subframe2 = Frame(frame_principal)
         subframe2.pack(padx=10, pady=10, side=LEFT)
@@ -5155,7 +5236,7 @@ class Castelo:
         frame_prod = LabelFrame(subframe2, text='Digite um Nome para Pesquisar')
         frame_prod.grid(row=0, column=0, sticky=W, ipady=3)
         Entry(frame_prod, width=90).grid(row=0, column=0, sticky=W, padx=10)
-        Button(frame_prod, text='1', height=2).grid(row=0, column=1, padx=10, ipadx=15)
+        Button(frame_prod, text='1', height=2, command=popularEntradaBuscaCliente).grid(row=0, column=1, padx=10, ipadx=15)
         Button(subframe2, text='Novo', command=self.janelaCadastroCliente).grid(row=0, column=1, padx=15, ipadx=20,
                                                                                 ipady=5)
         Button(subframe2, text='Fechar', command=jan.destroy).grid(row=0, column=2, ipadx=20, ipady=5)
@@ -5163,6 +5244,7 @@ class Castelo:
         jan.transient(root2)
         jan.focus_force()
         jan.grab_set()
+
 
     def janelaBuscaFornecedor(self):
 

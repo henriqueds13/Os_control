@@ -1,5 +1,5 @@
 from dominios.db import Estoque
-from queries import estoque_query, produto_query
+from queries import estoque_query
 from repositorios import revendedor_repositorio
 
 class EstoqueRepositorio():

@@ -1,4 +1,4 @@
-from sqlalchemy.orm import joinedload
+
 
 from dominios.db import Estoque
 

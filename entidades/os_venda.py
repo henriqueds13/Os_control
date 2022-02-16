@@ -1,25 +1,62 @@
 class OsVenda():
-    def __init(self, id_prod, operador, qtd=0, form_pag='', desconto=None,id_cliente=None ):
-        self.__id_prod = id_prod
-        self.__qtd = qtd
-        self.__form_pag = form_pag
+    def __init__(self, cliente, operador, obs1, obs2, obs3, dinheiro, cheque, cdebito, ccredito, pix, outros,
+               desconto, sub_total, data, hora, total):
+        self.__cliente = cliente
+        self.__obs1 = obs1
+        self.__obs2 = obs2
+        self.__obs3 = obs3
+        self.__dinheiro = dinheiro
+        self.__cheque = cheque
+        self.__cdebito = cdebito
+        self.__ccredito = ccredito
+        self.__pix = pix
         self.__desconto = desconto
+        self.__outros = outros
         self.__operador = operador
-        self.__id_cliente = id_cliente
-        self.__subvalor = 0
-        self.__valor_final = 0
+        self.__sub_total = sub_total
+        self.__total = total
+        self.__data = data
+        self.__hora = hora
 
     @property
-    def id_prod(self):
-        return self.__id_prod
+    def cliente(self):
+        return self.__cliente
 
     @property
-    def qtd(self):
-        return self.__qtd
+    def obs1(self):
+        return self.__obs1
 
     @property
-    def form_pag(self):
-        return self.__form_pag
+    def obs2(self):
+        return self.__obs2
+
+    @property
+    def obs3(self):
+        return self.__obs3
+
+    @property
+    def dinheiro(self):
+        return self.__dinheiro
+
+    @property
+    def cheque(self):
+        return self.__cheque
+
+    @property
+    def cdebito(self):
+        return self.__cdebito
+
+    @property
+    def ccredito(self):
+        return self.__ccredito
+
+    @property
+    def pix(self):
+        return self.__pix
+
+    @property
+    def outros(self):
+        return self.__outros
 
     @property
     def desconto(self):
@@ -34,24 +71,60 @@ class OsVenda():
         return self.__id_cliente
 
     @property
-    def subvalor(self):
-        return self.__subvalor
+    def sub_total(self):
+        return self.__sub_total
 
     @property
-    def valor_final(self):
-        return self.__valor_final
+    def total(self):
+        return self.__total
 
-    @id_prod.setter
-    def id_prod(self, id):
-        self.__id_prod = id
+    @property
+    def data(self):
+        return self.__data
 
-    @qtd.setter
-    def qtd(self, qtd):
-        self.qtd = qtd
+    @property
+    def hora(self):
+        return self.__hora
 
-    @form_pag.setter
-    def form_pag(self, pag):
-        self.__form_pag = pag
+    @cliente.setter
+    def cliente(self, cliente):
+        self.__cliente = cliente
+
+    @obs1.setter
+    def obs1(self, obs):
+        self.__obs1 = obs
+
+    @obs2.setter
+    def obs2(self, obs):
+        self.__obs2 = obs
+
+    @obs3.setter
+    def obs3(self, obs):
+        self.__obs3 = obs
+
+    @dinheiro.setter
+    def dinheiro(self, pag):
+        self.__dinheiro = pag
+
+    @cheque.setter
+    def cheque(self, pag):
+        self.__cheque = pag
+
+    @cdebito.setter
+    def cdebito(self, pag):
+        self.__cdebito = pag
+
+    @ccredito.setter
+    def ccredito(self, pag):
+        self.__ccredito = pag
+
+    @pix.setter
+    def pix(self, pag):
+        self.__pix = pag
+
+    @outros.setter
+    def outros(self, pag):
+        self.__outros = pag
 
     @desconto.setter
     def desconto(self, desc):
@@ -61,14 +134,18 @@ class OsVenda():
     def operador(self, op):
         self.__operador = op
 
-    @id_cliente.setter
-    def id_cliente(self, id):
-        self.__id_cliente = id
+    @data.setter
+    def data(self, data):
+        self.__data = data
 
-    @subvalor.setter
-    def subvalor(self, valor):
-        self.__subvalor = valor
+    @hora.setter
+    def hora(self, hora):
+        self.__hora = hora
 
-    @valor_final.setter
-    def valor_final(self, valor):
-        self.__valor_final = valor
+    @sub_total.setter
+    def sub_total(self, valor):
+        self.__sub_total = valor
+
+    @total.setter
+    def total(self, valor):
+        self.total = valor

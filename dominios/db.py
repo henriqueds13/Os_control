@@ -13,12 +13,6 @@ produto_os = Table('produto_os', Base.metadata,
                    Column('id_produto', Integer, ForeignKey('produto.id_prod')),
                    Column('id_os', Integer, ForeignKey('ordem_de_servico.id'))
                    )
-produto_venda = Table('produto_venda', Base.metadata,
-                      Column('id_produto', Integer, ForeignKey('produto.id_prod')),
-                      Column('id_venda', Integer, ForeignKey('os_venda.id_venda'))
-                      )
-
-
 
 
 class Cliente(Base):
@@ -278,15 +272,23 @@ class Tecnico(Base):
 class OsVenda(Base):
     __tablename__ = 'os_venda'
     id_venda = Column(Integer, primary_key=True)
-    id_cliente = Column(Integer, ForeignKey('cliente.id'))
-    id_prod = Column(Integer, nullable=False)
-    qtd = Column(Integer, nullable=False)
-    desconto = Column(Integer)
-    form_pag = Column(String(20), nullable=False)
-    subvalor = Column(Integer, nullable=False)
-    valor_final = Column(Integer, nullable=False)
+    cliente = Column(String(50))
+    obs1 = Column(String(110))
+    obs2 = Column(String(110))
+    obs3 = Column(String(110))
+    sub_total = Column(Float)
+    desconto = Column(Float)
+    total = Column(Float)
+    cheque = Column(Float)
+    ccredito = Column(Float)
+    cdebito = Column(Float)
+    pix = Column(Float)
+    dinheiro = Column(Float)
+    outros = Column(Float)
+    data = Column(Date)
+    hora = Column(Time)
+    operador = Column(Integer)
 
-    produto = relationship('Produto', secondary='produto_venda', back_populates='venda_prod')
     venda_produto = relationship('ProdutoVenda', back_populates='prod_venda', cascade='delete')
 
 
@@ -310,13 +312,11 @@ class Produto(Base):
 
     os_prod = relationship('OS', secondary='produto_os', back_populates='produtos')
 
-    venda_prod = relationship('OsVenda', secondary='produto_venda', back_populates='produto')
-
     prod_revend = relationship('Revendedor', back_populates='revend_prod')
-
 
     def __repr__(self):
         return f'{[self.id_fabr]}'
+
 
 class Estoque(Base):
     __tablename__ = 'estoque'
@@ -338,6 +338,7 @@ class Estoque(Base):
 
     # def __repr__(self):
     #     return f'{self.entrada_produto}'
+
 
 class ProdutoVenda(Base):
     __tablename__ = 'produto_vendas'

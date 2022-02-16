@@ -356,3 +356,12 @@ self.est_cod_item.bind('<Button-1>', habilitaEntry)
 self.est_cod_item.bind('<Return>', procuraCod)
 self.est_qtd_prod.bind('<Return>', cadastraProduto)
 jan.bind('<Shift-Return>', cadastraProduto)
+
+values=(i.id_venda,
+     i.data,
+     i.cliente,
+     self.insereTotalConvertido(i.sub_total),
+     self.insereTotalConvertido(i.desconto),
+     self.insereTotalConvertido(i.total),
+     i.hora,
+     i.operador))
