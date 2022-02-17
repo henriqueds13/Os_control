@@ -6,12 +6,12 @@ class RevendedorRepositorio():
 
     def inserir_revendedor(self, revendedor, sessao):
         query_revendedor = revendedor_query.RevendedorQuery()
-        novo_revendedor = Revendedor(Empresa=revendedor.nome, operador=revendedor.operador, celular=revendedor.celular,
+        novo_revendedor = Revendedor(Empresa=revendedor.empresa, operador=revendedor.operador, celular=revendedor.celular,
                                cnpj=revendedor.cnpj,
-                               tel_fixo=revendedor.tel_fixo, inscricao_estadual=revendedor.ie,
+                               tel_fixo=revendedor.tel_fixo, incricao_estadual=revendedor.ie,
                                logradouro=revendedor.logradouro,
                                uf=revendedor.uf,
-                               bairro=revendedor.bairro, complemento=revendedor.complemento, cep=revendedor.cep,
+                               bairro=revendedor.bairro, cep=revendedor.cep,
                                cidade=revendedor.cidade,
                                email=revendedor.email, whats=revendedor.whats,
                                Contato=revendedor.contato, tel_comercial=revendedor.tel_comercial)

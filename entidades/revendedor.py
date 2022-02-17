@@ -46,7 +46,7 @@ class Revendedor():
 
     @property
     def ie(self):
-        return self.ie
+        return self.__ie
 
     @property
     def logradouro(self):

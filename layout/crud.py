@@ -2182,6 +2182,96 @@ class Castelo:
         y_cordinate = int((self.h / 2) - (650 / 2))
         jan.geometry("{}x{}+{}+{}".format(1000, 650, x_cordinate, y_cordinate))
 
+        def apagaAba1():
+            if self.orc_cod_entry1.get() == '':
+                self.orc_descr_entry1.delete(0, END)
+                self.orc_id_entry1.delete(0, END)
+                self.orc_quant_entry1.delete(0, END)
+                self.orc_val_uni_entry1.delete(0, END)
+
+        def apagaAba2():
+            if self.orc_cod_entry2.get() == '':
+                self.orc_descr_entry2.delete(0, END)
+                self.orc_id_entry2.delete(0, END)
+                self.orc_quant_entry2.delete(0, END)
+                self.orc_val_uni_entry2.delete(0, END)
+
+        def apagaAba3():
+            if self.orc_cod_entry3.get() == '':
+                self.orc_descr_entry3.delete(0, END)
+                self.orc_id_entry3.delete(0, END)
+                self.orc_quant_entry3.delete(0, END)
+                self.orc_val_uni_entry3.delete(0, END)
+
+        def apagaAba4():
+            if self.orc_cod_entry4.get() == '':
+                self.orc_descr_entry4.delete(0, END)
+                self.orc_id_entry4.delete(0, END)
+                self.orc_quant_entry4.delete(0, END)
+                self.orc_val_uni_entry4.delete(0, END)
+
+        def apagaAba5():
+            if self.orc_cod_entry5.get() == '':
+                self.orc_descr_entry5.delete(0, END)
+                self.orc_id_entry5.delete(0, END)
+                self.orc_quant_entry5.delete(0, END)
+                self.orc_val_uni_entry5.delete(0, END)
+
+        def apagaAba6():
+            if self.orc_cod_entry6.get() == '':
+                self.orc_descr_entry6.delete(0, END)
+                self.orc_id_entry6.delete(0, END)
+                self.orc_quant_entry6.delete(0, END)
+                self.orc_val_uni_entry6.delete(0, END)
+
+        def apagaAba7():
+            if self.orc_cod_entry7.get() == '':
+                self.orc_descr_entry7.delete(0, END)
+                self.orc_id_entry7.delete(0, END)
+                self.orc_quant_entry7.delete(0, END)
+                self.orc_val_uni_entry7.delete(0, END)
+
+        def apagaAba8():
+            if self.orc_cod_entry8.get() == '':
+                self.orc_descr_entry8.delete(0, END)
+                self.orc_id_entry8.delete(0, END)
+                self.orc_quant_entry8.delete(0, END)
+                self.orc_val_uni_entry8.delete(0, END)
+
+        def apagaAba9():
+            if self.orc_cod_entry9.get() == '':
+                self.orc_descr_entry9.delete(0, END)
+                self.orc_id_entry9.delete(0, END)
+                self.orc_quant_entry9.delete(0, END)
+                self.orc_val_uni_entry9.delete(0, END)
+
+        def elegeProduto1(event):
+            apagaAba1()
+
+        def elegeProduto2(event):
+            apagaAba2()
+
+        def elegeProduto3(event):
+            apagaAba3()
+
+        def elegeProduto4(event):
+            apagaAba4()
+
+        def elegeProduto5(event):
+            apagaAba5()
+
+        def elegeProduto6(event):
+            apagaAba6()
+
+        def elegeProduto7(event):
+            apagaAba7()
+
+        def elegeProduto8(event):
+            apagaAba8()
+
+        def elegeProduto9(event):
+            apagaAba9()
+
         dados_orc = os_repositorio.Os_repositorio().listar_os_id(self.num_os, sessao)
         frame_princ_os1 = Frame(jan)
         frame_princ_os1.pack(fill=Y, side=LEFT)
@@ -2228,15 +2318,15 @@ class Castelo:
         Label(subframe_material1, text="Descrição").grid(row=0, column=4, pady=2, sticky=W, ipadx=10)
         Label(subframe_material1, text="Valor Un.").grid(row=0, column=5)
         Label(subframe_material1, text="Valor (R$)").grid(row=0, column=6, pady=2)
-        Button(subframe_material1, width=3, text="E").grid(row=1, column=0)
-        Button(subframe_material1, width=3, text="E").grid(row=2, column=0, pady=2)
-        Button(subframe_material1, width=3, text="E").grid(row=3, column=0)
-        Button(subframe_material1, width=3, text="E").grid(row=4, column=0, pady=2)
-        Button(subframe_material1, width=3, text="E").grid(row=5, column=0)
-        Button(subframe_material1, width=3, text="E").grid(row=6, column=0, pady=2)
-        Button(subframe_material1, width=3, text="E").grid(row=7, column=0)
-        Button(subframe_material1, width=3, text="E").grid(row=8, column=0, pady=2)
-        Button(subframe_material1, width=3, text="E").grid(row=9, column=0)
+        Button(subframe_material1, width=3, text="E", command=lambda: [self.janelaBuscaProduto(5)]).grid(row=1, column=0)
+        Button(subframe_material1, width=3, text="E", command=lambda: [self.janelaBuscaProduto(6)]).grid(row=2, column=0, pady=2)
+        Button(subframe_material1, width=3, text="E", command=lambda: [self.janelaBuscaProduto(7)]).grid(row=3, column=0)
+        Button(subframe_material1, width=3, text="E", command=lambda: [self.janelaBuscaProduto(8)]).grid(row=4, column=0, pady=2)
+        Button(subframe_material1, width=3, text="E", command=lambda: [self.janelaBuscaProduto(9)]).grid(row=5, column=0)
+        Button(subframe_material1, width=3, text="E", command=lambda: [self.janelaBuscaProduto(10)]).grid(row=6, column=0, pady=2)
+        Button(subframe_material1, width=3, text="E", command=lambda: [self.janelaBuscaProduto(11)]).grid(row=7, column=0)
+        Button(subframe_material1, width=3, text="E", command=lambda: [self.janelaBuscaProduto(12)]).grid(row=8, column=0, pady=2)
+        Button(subframe_material1, width=3, text="E", command=lambda: [self.janelaBuscaProduto(13)]).grid(row=9, column=0)
         self.orc_cod_entry1 = Entry(subframe_material1, width=10, relief=SUNKEN)
         self.orc_cod_entry1.insert(0, dados_orc.codigo1)
         self.orc_cod_entry1.grid(row=1, column=1)
@@ -2586,6 +2676,16 @@ class Castelo:
                command=lambda: [self.editar_orc(jan, 3)]).pack(side=LEFT, padx=20)
         Button(botoes_os, text="Fechar", width=15, height=2,
                command=lambda: [self.editar_orc(jan, 1), jan.destroy()]).pack(side=LEFT)
+
+        self.orc_cod_entry1.bind('<Return>', elegeProduto1)
+        self.orc_cod_entry2.bind('<Return>', elegeProduto2)
+        self.orc_cod_entry3.bind('<Return>', elegeProduto3)
+        self.orc_cod_entry4.bind('<Return>', elegeProduto4)
+        self.orc_cod_entry5.bind('<Return>', elegeProduto5)
+        self.orc_cod_entry6.bind('<Return>', elegeProduto6)
+        self.orc_cod_entry7.bind('<Return>', elegeProduto7)
+        self.orc_cod_entry8.bind('<Return>', elegeProduto8)
+        self.orc_cod_entry9.bind('<Return>', elegeProduto9)
 
         jan.transient(root2)
         jan.focus_force()
@@ -5047,107 +5147,6 @@ class Castelo:
         subframe2 = Frame(frame_principal)
         subframe2.pack(padx=10, pady=10, side=LEFT)
 
-        def elegeProduto():
-            produto_selecionado = self.treeview_busca_produto.focus()
-            dado_prod = self.treeview_busca_produto.item(produto_selecionado, 'values')
-            produto_dados = produto_repositorio.ProdutoRepositorio().listar_produto_id(dado_prod[8], sessao)
-            if opt == 1:
-                self.id_produto_selecionado = produto_dados.id_prod
-                self.est_cod_item.config(state=NORMAL)
-                self.est_cod_item.delete(0, END)
-                self.est_cod_item.insert(0, produto_dados.id_fabr)
-                self.est_cod_item.config(state=DISABLED)
-                self.est_desc_item.config(state=NORMAL)
-                self.est_desc_item.delete(0, END)
-                self.est_desc_item.insert(0, produto_dados.descricao)
-                self.est_desc_item.config(state=DISABLED)
-                self.est_preco_item.config(state=NORMAL)
-                self.est_preco_item.delete(0, END)
-                self.est_preco_item.insert(0, self.insereNumConvertido(produto_dados.valor_venda))
-                self.est_preco_item.config(state=DISABLED)
-                self.est_qtd_prod.delete(0, END)
-                self.est_qtd_prod.insert(0, 1)
-                self.desc_prod_est.config(state=NORMAL)
-                self.desc_prod_est.delete(0, END)
-                self.desc_prod_est.insert(0, produto_dados.descricao)
-                self.desc_prod_est.config(state=DISABLED)
-                self.categoria_prod_est.config(state=NORMAL)
-                self.categoria_prod_est.delete(0, END)
-                self.categoria_prod_est.insert(0, produto_dados.categoria)
-                self.categoria_prod_est.config(state=DISABLED)
-                self.estoque_prod_est.config(state=NORMAL)
-                self.estoque_prod_est.delete(0, END)
-                self.estoque_prod_est.insert(0, produto_dados.qtd)
-                self.estoque_prod_est.config(state=DISABLED)
-                self.custo_prod_est.delete(0, END)
-                self.custo_prod_est.insert(0, self.insereNumConvertido(produto_dados.valor_venda))
-                self.preco_prod_est.delete(0, END)
-                self.preco_prod_est.insert(0, self.insereNumConvertido(produto_dados.valor_compra))
-                self.revend_prod_est.config(state=NORMAL)
-                self.revend_prod_est.delete(0, END)
-                # self.revend_prod_est.insert(0, produto_dados.revendedor_id)
-                self.revend_prod_est.config(state=DISABLED)
-                self.est_min_produto.config(text=produto_dados.estoque_min)
-
-            elif opt == 2:
-                self.id_produto_selecionado = produto_dados.id_prod
-                self.est_cod_item.config(state=NORMAL)
-                self.est_cod_item.delete(0, END)
-                self.est_cod_item.insert(0, produto_dados.id_fabr)
-                self.est_cod_item.config(state=DISABLED)
-                self.est_desc_item.config(state=NORMAL)
-                self.est_desc_item.delete(0, END)
-                self.est_desc_item.insert(0, produto_dados.descricao)
-                self.est_desc_item.config(state=DISABLED)
-                self.est_preco_item.config(state=NORMAL)
-                self.est_preco_item.delete(0, END)
-                self.est_preco_item.insert(0, self.insereNumConvertido(produto_dados.valor_venda))
-                self.est_preco_item.config(state=DISABLED)
-                self.est_qtd_prod.delete(0, END)
-                self.est_qtd_prod.insert(0, 1)
-                self.desc_prod_est.config(state=NORMAL)
-                self.desc_prod_est.delete(0, END)
-                self.desc_prod_est.insert(0, produto_dados.descricao)
-                self.desc_prod_est.config(state=DISABLED)
-                self.categoria_prod_est.config(state=NORMAL)
-                self.categoria_prod_est.delete(0, END)
-                self.categoria_prod_est.insert(0, produto_dados.categoria)
-                self.categoria_prod_est.config(state=DISABLED)
-                self.estoque_prod_est.config(state=NORMAL)
-                self.estoque_prod_est.delete(0, END)
-                self.estoque_prod_est.insert(0, produto_dados.qtd)
-                self.estoque_prod_est.config(state=DISABLED)
-                self.custo_prod_est.config(state=NORMAL)
-                self.custo_prod_est.delete(0, END)
-                self.custo_prod_est.insert(0, self.insereNumConvertido(produto_dados.valor_venda))
-                self.custo_prod_est.config(state=DISABLED)
-                self.preco_prod_est.config(state=NORMAL)
-                self.preco_prod_est.delete(0, END)
-                self.preco_prod_est.insert(0, self.insereNumConvertido(produto_dados.valor_compra))
-                self.preco_prod_est.config(state=DISABLED)
-                self.revend_prod_est.config(state=NORMAL)
-                self.revend_prod_est.delete(0, END)
-                # self.revend_prod_est.insert(0, produto_dados.revendedor_id)
-                self.revend_prod_est.config(state=DISABLED)
-                self.est_min_produto.config(text=produto_dados.estoque_min)
-
-            elif opt == 4:
-                self.id_produto_selecionado = produto_dados.id_prod
-                self.venda_cod_item.config(state=NORMAL)
-                self.venda_cod_item.delete(0, END)
-                self.venda_cod_item.insert(0, produto_dados.id_fabr)
-                self.venda_cod_item.config(state=DISABLED)
-                self.venda_descr_item.config(state=NORMAL)
-                self.venda_descr_item.delete(0, END)
-                self.venda_descr_item.insert(0, produto_dados.descricao)
-                self.venda_descr_item.config(state=DISABLED)
-                self.venda_preco_item.config(state=NORMAL)
-                self.venda_preco_item.delete(0, END)
-                self.venda_preco_item.insert(0, self.insereNumConvertido(produto_dados.valor_venda))
-                self.venda_preco_item.config(state=DISABLED)
-                self.venda_qtd_item.delete(0, END)
-                self.venda_qtd_item.insert(0, 1)
-
         frame_prod = LabelFrame(subframe2)
         frame_prod.grid(row=0, column=0, sticky=W, ipady=3)
         subframe_prod = Frame(frame_prod)
@@ -5159,7 +5158,7 @@ class Castelo:
         subframe_button = Frame(subframe_prod)
         subframe_button.grid(row=0, column=4, rowspan=2)
         Button(subframe_button, text='1', height=2).pack(padx=10, ipadx=15, side=BOTTOM)
-        Button(subframe2, text='Selecionar', command=lambda: [elegeProduto(), jan.destroy()]).grid(row=0, column=2,
+        Button(subframe2, text='Selecionar', command=lambda: [self.elegeProduto(opt), jan.destroy()]).grid(row=0, column=2,
                                                                                                    ipadx=10, ipady=5)
         Button(subframe2, text='Fechar', command=jan.destroy).grid(row=0, column=1, ipadx=20, ipady=5, padx=15)
 
@@ -5167,6 +5166,214 @@ class Castelo:
         jan.focus_force()
         jan.grab_set()
 
+    def elegeProduto(self, opt):
+        produto_selecionado = self.treeview_busca_produto.focus()
+        dado_prod = self.treeview_busca_produto.item(produto_selecionado, 'values')
+        produto_dados = produto_repositorio.ProdutoRepositorio().listar_produto_id(dado_prod[8], sessao)
+        if opt == 1:
+            self.id_produto_selecionado = produto_dados.id_prod
+            self.est_cod_item.config(state=NORMAL)
+            self.est_cod_item.delete(0, END)
+            self.est_cod_item.insert(0, produto_dados.id_fabr)
+            self.est_cod_item.config(state=DISABLED)
+            self.est_desc_item.config(state=NORMAL)
+            self.est_desc_item.delete(0, END)
+            self.est_desc_item.insert(0, produto_dados.descricao)
+            self.est_desc_item.config(state=DISABLED)
+            self.est_preco_item.config(state=NORMAL)
+            self.est_preco_item.delete(0, END)
+            self.est_preco_item.insert(0, self.insereNumConvertido(produto_dados.valor_venda))
+            self.est_preco_item.config(state=DISABLED)
+            self.est_qtd_prod.delete(0, END)
+            self.est_qtd_prod.insert(0, 1)
+            self.desc_prod_est.config(state=NORMAL)
+            self.desc_prod_est.delete(0, END)
+            self.desc_prod_est.insert(0, produto_dados.descricao)
+            self.desc_prod_est.config(state=DISABLED)
+            self.categoria_prod_est.config(state=NORMAL)
+            self.categoria_prod_est.delete(0, END)
+            self.categoria_prod_est.insert(0, produto_dados.categoria)
+            self.categoria_prod_est.config(state=DISABLED)
+            self.estoque_prod_est.config(state=NORMAL)
+            self.estoque_prod_est.delete(0, END)
+            self.estoque_prod_est.insert(0, produto_dados.qtd)
+            self.estoque_prod_est.config(state=DISABLED)
+            self.custo_prod_est.delete(0, END)
+            self.custo_prod_est.insert(0, self.insereNumConvertido(produto_dados.valor_venda))
+            self.preco_prod_est.delete(0, END)
+            self.preco_prod_est.insert(0, self.insereNumConvertido(produto_dados.valor_compra))
+            self.revend_prod_est.config(state=NORMAL)
+            self.revend_prod_est.delete(0, END)
+            # self.revend_prod_est.insert(0, produto_dados.revendedor_id)
+            self.revend_prod_est.config(state=DISABLED)
+            self.est_min_produto.config(text=produto_dados.estoque_min)
+
+        elif opt == 2:
+            self.id_produto_selecionado = produto_dados.id_prod
+            self.est_cod_item.config(state=NORMAL)
+            self.est_cod_item.delete(0, END)
+            self.est_cod_item.insert(0, produto_dados.id_fabr)
+            self.est_cod_item.config(state=DISABLED)
+            self.est_desc_item.config(state=NORMAL)
+            self.est_desc_item.delete(0, END)
+            self.est_desc_item.insert(0, produto_dados.descricao)
+            self.est_desc_item.config(state=DISABLED)
+            self.est_preco_item.config(state=NORMAL)
+            self.est_preco_item.delete(0, END)
+            self.est_preco_item.insert(0, self.insereNumConvertido(produto_dados.valor_venda))
+            self.est_preco_item.config(state=DISABLED)
+            self.est_qtd_prod.delete(0, END)
+            self.est_qtd_prod.insert(0, 1)
+            self.desc_prod_est.config(state=NORMAL)
+            self.desc_prod_est.delete(0, END)
+            self.desc_prod_est.insert(0, produto_dados.descricao)
+            self.desc_prod_est.config(state=DISABLED)
+            self.categoria_prod_est.config(state=NORMAL)
+            self.categoria_prod_est.delete(0, END)
+            self.categoria_prod_est.insert(0, produto_dados.categoria)
+            self.categoria_prod_est.config(state=DISABLED)
+            self.estoque_prod_est.config(state=NORMAL)
+            self.estoque_prod_est.delete(0, END)
+            self.estoque_prod_est.insert(0, produto_dados.qtd)
+            self.estoque_prod_est.config(state=DISABLED)
+            self.custo_prod_est.config(state=NORMAL)
+            self.custo_prod_est.delete(0, END)
+            self.custo_prod_est.insert(0, self.insereNumConvertido(produto_dados.valor_venda))
+            self.custo_prod_est.config(state=DISABLED)
+            self.preco_prod_est.config(state=NORMAL)
+            self.preco_prod_est.delete(0, END)
+            self.preco_prod_est.insert(0, self.insereNumConvertido(produto_dados.valor_compra))
+            self.preco_prod_est.config(state=DISABLED)
+            self.revend_prod_est.config(state=NORMAL)
+            self.revend_prod_est.delete(0, END)
+            # self.revend_prod_est.insert(0, produto_dados.revendedor_id)
+            self.revend_prod_est.config(state=DISABLED)
+            self.est_min_produto.config(text=produto_dados.estoque_min)
+
+        elif opt == 4:
+            self.id_produto_selecionado = produto_dados.id_prod
+            self.venda_cod_item.config(state=NORMAL)
+            self.venda_cod_item.delete(0, END)
+            self.venda_cod_item.insert(0, produto_dados.id_fabr)
+            self.venda_cod_item.config(state=DISABLED)
+            self.venda_descr_item.config(state=NORMAL)
+            self.venda_descr_item.delete(0, END)
+            self.venda_descr_item.insert(0, produto_dados.descricao)
+            self.venda_descr_item.config(state=DISABLED)
+            self.venda_preco_item.config(state=NORMAL)
+            self.venda_preco_item.delete(0, END)
+            self.venda_preco_item.insert(0, self.insereNumConvertido(produto_dados.valor_venda))
+            self.venda_preco_item.config(state=DISABLED)
+            self.venda_qtd_item.delete(0, END)
+            self.venda_qtd_item.insert(0, 1)
+
+        elif opt == 5:
+            self.orc_cod_entry1.delete(0, END)
+            self.orc_cod_entry1.insert(0, produto_dados.id_fabr)
+            self.orc_quant_entry1.delete(0, END)
+            self.orc_quant_entry1.insert(0, 1)
+            self.orc_descr_entry1.delete(0, END)
+            self.orc_descr_entry1.insert(0, produto_dados.descricao)
+            self.orc_id_entry1.delete(0, END)
+            self.orc_id_entry1.insert(0, self.insereNumConvertido(produto_dados.caixa_peca))
+            self.orc_val_uni_entry1.delete(0, END)
+            self.orc_val_uni_entry1.insert(0, self.insereNumConvertido(produto_dados.valor_venda))
+
+        elif opt == 6:
+            self.orc_cod_entry2.delete(0, END)
+            self.orc_cod_entry2.insert(0, produto_dados.id_fabr)
+            self.orc_quant_entry2.delete(0, END)
+            self.orc_quant_entry2.insert(0, 1)
+            self.orc_descr_entry2.delete(0, END)
+            self.orc_descr_entry2.insert(0, produto_dados.descricao)
+            self.orc_id_entry2.delete(0, END)
+            self.orc_id_entry2.insert(0, self.insereNumConvertido(produto_dados.caixa_peca))
+            self.orc_val_uni_entry2.delete(0, END)
+            self.orc_val_uni_entry2.insert(0, self.insereNumConvertido(produto_dados.valor_venda))
+
+        elif opt == 7:
+            self.orc_cod_entry3.delete(0, END)
+            self.orc_cod_entry3.insert(0, produto_dados.id_fabr)
+            self.orc_quant_entry3.delete(0, END)
+            self.orc_quant_entry3.insert(0, 1)
+            self.orc_descr_entry3.delete(0, END)
+            self.orc_descr_entry3.insert(0, produto_dados.descricao)
+            self.orc_id_entry3.delete(0, END)
+            self.orc_id_entry3.insert(0, self.insereNumConvertido(produto_dados.caixa_peca))
+            self.orc_val_uni_entry3.delete(0, END)
+            self.orc_val_uni_entry3.insert(0, self.insereNumConvertido(produto_dados.valor_venda))
+
+        elif opt == 8:
+            self.orc_cod_entry4.delete(0, END)
+            self.orc_cod_entry4.insert(0, produto_dados.id_fabr)
+            self.orc_quant_entry4.delete(0, END)
+            self.orc_quant_entry4.insert(0, 1)
+            self.orc_descr_entry4.delete(0, END)
+            self.orc_descr_entry4.insert(0, produto_dados.descricao)
+            self.orc_id_entry4.delete(0, END)
+            self.orc_id_entry4.insert(0, self.insereNumConvertido(produto_dados.caixa_peca))
+            self.orc_val_uni_entry4.delete(0, END)
+            self.orc_val_uni_entry4.insert(0, self.insereNumConvertido(produto_dados.valor_venda))
+
+        elif opt == 9:
+            self.orc_cod_entry5.delete(0, END)
+            self.orc_cod_entry5.insert(0, produto_dados.id_fabr)
+            self.orc_quant_entry5.delete(0, END)
+            self.orc_quant_entry5.insert(0, 1)
+            self.orc_descr_entry5.delete(0, END)
+            self.orc_descr_entry5.insert(0, produto_dados.descricao)
+            self.orc_id_entry5.delete(0, END)
+            self.orc_id_entry5.insert(0, self.insereNumConvertido(produto_dados.caixa_peca))
+            self.orc_val_uni_entry5.delete(0, END)
+            self.orc_val_uni_entry5.insert(0, self.insereNumConvertido(produto_dados.valor_venda))
+
+        elif opt == 10:
+            self.orc_cod_entry6.delete(0, END)
+            self.orc_cod_entry6.insert(0, produto_dados.id_fabr)
+            self.orc_quant_entry6.delete(0, END)
+            self.orc_quant_entry6.insert(0, 1)
+            self.orc_descr_entry6.delete(0, END)
+            self.orc_descr_entry6.insert(0, produto_dados.descricao)
+            self.orc_id_entry6.delete(0, END)
+            self.orc_id_entry6.insert(0, self.insereNumConvertido(produto_dados.caixa_peca))
+            self.orc_val_uni_entry6.delete(0, END)
+            self.orc_val_uni_entry6.insert(0, self.insereNumConvertido(produto_dados.valor_venda))
+
+        elif opt == 11:
+            self.orc_cod_entry7.delete(0, END)
+            self.orc_cod_entry7.insert(0, produto_dados.id_fabr)
+            self.orc_quant_entry7.delete(0, END)
+            self.orc_quant_entry7.insert(0, 1)
+            self.orc_descr_entry7.delete(0, END)
+            self.orc_descr_entry7.insert(0, produto_dados.descricao)
+            self.orc_id_entry7.delete(0, END)
+            self.orc_id_entry7.insert(0, self.insereNumConvertido(produto_dados.caixa_peca))
+            self.orc_val_uni_entry7.delete(0, END)
+            self.orc_val_uni_entry7.insert(0, self.insereNumConvertido(produto_dados.valor_venda))
+
+        elif opt == 12:
+            self.orc_cod_entry8.delete(0, END)
+            self.orc_cod_entry8.insert(0, produto_dados.id_fabr)
+            self.orc_quant_entry8.delete(0, END)
+            self.orc_quant_entry8.insert(0, 1)
+            self.orc_descr_entry8.delete(0, END)
+            self.orc_descr_entry8.insert(0, produto_dados.descricao)
+            self.orc_id_entry8.delete(0, END)
+            self.orc_id_entry8.insert(0, self.insereNumConvertido(produto_dados.caixa_peca))
+            self.orc_val_uni_entry8.delete(0, END)
+            self.orc_val_uni_entry8.insert(0, self.insereNumConvertido(produto_dados.valor_venda))
+
+        elif opt == 13:
+            self.orc_cod_entry9.delete(0, END)
+            self.orc_cod_entry9.insert(0, produto_dados.id_fabr)
+            self.orc_quant_entry9.delete(0, END)
+            self.orc_quant_entry9.insert(0, 1)
+            self.orc_descr_entry9.delete(0, END)
+            self.orc_descr_entry9.insert(0, produto_dados.descricao)
+            self.orc_id_entry9.delete(0, END)
+            self.orc_id_entry9.insert(0, self.insereNumConvertido(produto_dados.caixa_peca))
+            self.orc_val_uni_entry9.delete(0, END)
+            self.orc_val_uni_entry9.insert(0, self.insereNumConvertido(produto_dados.valor_venda))
 
     def janelaBuscaCliente(self):
 
@@ -5175,7 +5382,7 @@ class Castelo:
         # Centraliza a janela
         x_cordinate = int((self.w / 2) - (1200 / 2))
         y_cordinate = int((self.h / 2) - (900 / 2))
-        jan.geometry("{}x{}+{}+{}".format(860, 550, x_cordinate, y_cordinate))
+        jan.geometry("{}x{}+{}+{}".format(890, 550, x_cordinate, y_cordinate))
 
         def popularEntradaBuscaCliente():
             treeview_busca_cliente.delete(*treeview_busca_cliente.get_children())
@@ -5190,6 +5397,16 @@ class Castelo:
                                                       i.whats,
                                                       i.tel_fixo,
                                                       i.email))
+
+        def selecionaCliente():
+            cliente_selecionado = treeview_busca_cliente.focus()
+            dado_cli = treeview_busca_cliente.item(cliente_selecionado, 'values')
+            cliente_dados = cliente_repositorio.ClienteRepositorio().listar_cliente_id(dado_cli[0], sessao)
+
+            self.venda_cliente.delete(0, END)
+            self.venda_cliente.insert(0, cliente_dados.nome)
+
+            jan.destroy()
 
         frame_principal = Frame(jan)
         frame_principal.pack(pady=10, fill=BOTH)
@@ -5237,9 +5454,9 @@ class Castelo:
         frame_prod.grid(row=0, column=0, sticky=W, ipady=3)
         Entry(frame_prod, width=90).grid(row=0, column=0, sticky=W, padx=10)
         Button(frame_prod, text='1', height=2, command=popularEntradaBuscaCliente).grid(row=0, column=1, padx=10, ipadx=15)
-        Button(subframe2, text='Novo', command=self.janelaCadastroCliente).grid(row=0, column=1, padx=15, ipadx=20,
+        Button(subframe2, text='Fechar', command=jan.destroy).grid(row=0, column=1, padx=15, ipadx=20,
                                                                                 ipady=5)
-        Button(subframe2, text='Fechar', command=jan.destroy).grid(row=0, column=2, ipadx=20, ipady=5)
+        Button(subframe2, text='Selecionar', command=selecionaCliente).grid(row=0, column=2, ipadx=20, ipady=5)
 
         jan.transient(root2)
         jan.focus_force()
@@ -5255,6 +5472,9 @@ class Castelo:
         y_cordinate = int((self.h / 2) - (900 / 2))
         jan.geometry("{}x{}+{}+{}".format(860, 550, x_cordinate, y_cordinate))
 
+        def editaFornec(event):
+            self.janelaCadastroFornecedor(2)
+
         frame_principal = Frame(jan)
         frame_principal.pack(pady=10, fill=BOTH)
 
@@ -5262,7 +5482,7 @@ class Castelo:
         subframe1.pack(fill=X)
         scrollbar_busca_y = Scrollbar(subframe1, orient=VERTICAL)
         scrollbar_busca_x = Scrollbar(subframe1, orient=HORIZONTAL)
-        treeview_busca_produto = ttk.Treeview(subframe1,
+        self.treeview_busca_fornecedor = ttk.Treeview(subframe1,
                                               columns=("id", 'fornecedor', 'endereco', 'cidade', 'whats',
                                                        'telefone', 'email'),
                                               show='headings',
@@ -5270,27 +5490,28 @@ class Castelo:
                                               yscrollcommand=scrollbar_busca_y,
                                               selectmode='browse',
                                               height=20)
-        treeview_busca_produto.column('id', width=100, minwidth=50, stretch=False)
-        treeview_busca_produto.column('fornecedor', width=500, minwidth=50, stretch=False)
-        treeview_busca_produto.column('endereco', width=200, minwidth=50, stretch=False)
-        treeview_busca_produto.column('cidade', width=150, minwidth=50, stretch=False)
-        treeview_busca_produto.column('whats', width=200, minwidth=50, stretch=False)
-        treeview_busca_produto.column('telefone', width=200, minwidth=50, stretch=False)
-        treeview_busca_produto.column('email', width=200, minwidth=50, stretch=False)
+        self.treeview_busca_fornecedor.column('id', width=100, minwidth=50, stretch=False)
+        self.treeview_busca_fornecedor.column('fornecedor', width=500, minwidth=50, stretch=False)
+        self.treeview_busca_fornecedor.column('endereco', width=200, minwidth=50, stretch=False)
+        self.treeview_busca_fornecedor.column('cidade', width=150, minwidth=50, stretch=False)
+        self.treeview_busca_fornecedor.column('whats', width=200, minwidth=50, stretch=False)
+        self.treeview_busca_fornecedor.column('telefone', width=200, minwidth=50, stretch=False)
+        self.treeview_busca_fornecedor.column('email', width=200, minwidth=50, stretch=False)
 
-        treeview_busca_produto.heading('id', text='ID')
-        treeview_busca_produto.heading('fornecedor', text='FORNECEDOR')
-        treeview_busca_produto.heading('endereco', text='ENDEREÇO.')
-        treeview_busca_produto.heading('cidade', text='CIDADE')
-        treeview_busca_produto.heading('whats', text='WHATSAPP')
-        treeview_busca_produto.heading('telefone', text='TELEFONE')
-        treeview_busca_produto.heading('email', text='EMAIL')
+        self.treeview_busca_fornecedor.heading('id', text='ID')
+        self.treeview_busca_fornecedor.heading('fornecedor', text='FORNECEDOR')
+        self.treeview_busca_fornecedor.heading('endereco', text='ENDEREÇO.')
+        self.treeview_busca_fornecedor.heading('cidade', text='CIDADE')
+        self.treeview_busca_fornecedor.heading('whats', text='WHATSAPP')
+        self.treeview_busca_fornecedor.heading('telefone', text='TELEFONE')
+        self.treeview_busca_fornecedor.heading('email', text='EMAIL')
 
-        scrollbar_busca_y.config(command=treeview_busca_produto.yview)
+        scrollbar_busca_y.config(command=self.treeview_busca_fornecedor.yview)
         scrollbar_busca_y.pack(fill=Y, side=RIGHT)
-        treeview_busca_produto.pack()
-        scrollbar_busca_x.config(command=treeview_busca_produto.xview)
+        self.treeview_busca_fornecedor.pack()
+        scrollbar_busca_x.config(command=self.treeview_busca_fornecedor.xview)
         scrollbar_busca_x.pack(fill=X)
+        self.popularFornecedores()
 
         subframe2 = Frame(frame_principal)
         subframe2.pack(padx=10, pady=10, side=LEFT)
@@ -5299,149 +5520,143 @@ class Castelo:
         frame_prod.grid(row=0, column=0, sticky=W, ipady=3)
         Entry(frame_prod, width=90).grid(row=0, column=0, sticky=W, padx=10)
         Button(frame_prod, text='1', height=2).grid(row=0, column=1, padx=10, ipadx=15)
-        Button(subframe2, text='Novo', command=self.janelaCadastroFornecedor).grid(row=0, column=1, padx=15, ipadx=20,
+        Button(subframe2, text='Novo', command=lambda: [self.janelaCadastroFornecedor(1)]).grid(row=0, column=1, padx=15, ipadx=20,
                                                                                    ipady=5)
         Button(subframe2, text='Fechar', command=jan.destroy).grid(row=0, column=2, ipadx=20, ipady=5)
+
+        # item_selecionado = self.treeview_busca_fornecedor.item(self.treeview_busca_fornecedor.focus())
+        # item_selecionado.bind('<Double-Button-1>', editaFornec)
 
         jan.transient(root2)
         jan.focus_force()
         jan.grab_set()
 
-    def janelaCadastroFornecedor(self):
-        self.jan = Toplevel()
+    def janelaCadastroFornecedor(self, opt):
+        jan = Toplevel()
 
         # Centraliza a janela
         x_cordinate = int((self.w / 2) - (550 / 2))
         y_cordinate = int((self.h / 2) - (370 / 2))
-        self.jan.geometry("{}x{}+{}+{}".format(550, 370, x_cordinate, y_cordinate))
-        self.Nome = ''
-        Label(self.jan, text="Empresa:").grid(sticky=W, padx=10)
-        self.cad_cli_nome = Entry(self.jan, width=50)
-        self.cad_cli_nome.grid(row=1, column=0, stick=W, padx=10, columnspan=2)
-        Label(self.jan, text="CNPJ:").grid(row=0, column=2, sticky=W)
-        self.cad_cli_cpf = Entry(self.jan, width=25)
-        self.cad_cli_cpf.grid(row=1, column=2, stick=W)
-        Label(self.jan, text="Endereço:").grid(sticky=W, padx=10)
-        self.cad_cli_end = Entry(self.jan, width=50)
-        self.cad_cli_end.grid(row=3, column=0, padx=10, columnspan=2, sticky=W)
-        Label(self.jan, text="Complemento:").grid(row=2, column=2, sticky=W)
-        self.cad_cli_compl = Entry(self.jan, width=27)
-        self.cad_cli_compl.grid(row=3, column=2, sticky=W)
-        Label(self.jan, text="Bairro:").grid(sticky=W, padx=10)
-        self.cad_cli_bairro = Entry(self.jan, width=25)
-        self.cad_cli_bairro.grid(row=5, column=0, padx=10, sticky=W)
-        Label(self.jan, text="Cidade:").grid(row=4, column=1, sticky=W, padx=10)
-        self.cad_cli_cid = Entry(self.jan, width=25)
-        self.cad_cli_cid.grid(row=5, column=1)
-        Label(self.jan, text="Estado:").grid(row=4, column=2, sticky=W, padx=10)
-        self.cad_cli_estado = Entry(self.jan, width=15)
-        self.cad_cli_estado.grid(row=5, column=2, sticky=W, padx=10)
-        Label(self.jan, text="Cep:").grid(row=6, column=0, sticky=W, padx=10)
-        self.cep_frame = Frame(self.jan)
-        self.cep_frame.grid(row=7, column=0, columnspan=2, sticky=W)
-        self.cad_cli_cep = Entry(self.cep_frame, width=20, )
-        self.cad_cli_cep.grid(padx=10)
-        Button(self.cep_frame, text="CEP Online").grid(row=0, column=1)
-        self.contato_frame = Frame(self.jan)
-        self.contato_frame.grid(row=8, column=0, columnspan=2, sticky=W)
-        Label(self.contato_frame, text="Tel Comercial1:").grid(row=0, column=0, sticky=W, padx=10)
-        self.cad_cli_telfix = Entry(self.contato_frame, width=25, )
-        self.cad_cli_telfix.grid(padx=10)
-        Label(self.contato_frame, text="Tel Comercial2:").grid(row=0, column=1, sticky=W, padx=10)
-        self.cad_cli_telcomer = Entry(self.contato_frame, width=25, )
-        self.cad_cli_telcomer.grid(row=1, column=1, padx=10)
-        Label(self.contato_frame, text="Contato:").grid(row=2, column=0, sticky=W, padx=10)
-        self.cad_cli_cel = Entry(self.contato_frame, width=25, )
-        self.cad_cli_cel.grid(row=3, column=0, padx=10)
-        Label(self.contato_frame, text="Whatsapp:").grid(row=2, column=1, sticky=W, padx=10)
-        self.cad_cli_whats = Entry(self.contato_frame, width=25, )
-        self.cad_cli_whats.grid(row=3, column=1, padx=10)
-        Label(self.jan, text="Email:").grid(row=9, column=0, sticky=W, padx=10)
-        self.cad_cli_email = Entry(self.jan, width=40)
-        self.cad_cli_email.grid(row=10, column=0, sticky=W, padx=10, columnspan=2)
-        Label(self.jan, text="Operador:").grid(row=11, column=1, sticky=W, padx=10)
-        self.cad_cli_oper = Entry(self.jan, width=20)
-        self.cad_cli_oper.grid(row=12, column=1, sticky=W, padx=10)
-        self.botao_entr_frame = Frame(self.jan)
-        self.botao_entr_frame.grid(row=12, column=2, sticky=W)
-        Button(self.botao_entr_frame, text="Confirmar Cadastro", width=10, wraplength=70,
-               underline=0, font=('Verdana', '9', 'bold')).grid()
-        Button(self.botao_entr_frame, text="Cancelar", width=10, wraplength=70,
-               underline=0, font=('Verdana', '9', 'bold'), height=2, command=self.jan.destroy).grid(row=0, column=1,
+        jan.geometry("{}x{}+{}+{}".format(550, 370, x_cordinate, y_cordinate))
+
+        Label(jan, text="Empresa:").grid(sticky=W, padx=10)
+        self.cad_forn_nome = Entry(jan, width=50)
+        self.cad_forn_nome.grid(row=1, column=0, stick=W, padx=10, columnspan=2)
+        Label(jan, text="CNPJ:").grid(row=0, column=2, sticky=W)
+        self.cad_forn_cpf = Entry(jan, width=25)
+        self.cad_forn_cpf.grid(row=1, column=2, stick=W)
+        Label(jan, text="Endereço:").grid(sticky=W, padx=10)
+        self.cad_forn_end = Entry(jan, width=50)
+        self.cad_forn_end.grid(row=3, column=0, padx=10, columnspan=2, sticky=W)
+        Label(jan, text="Contato:").grid(row=2, column=2, sticky=W)
+        self.cad_forn_compl = Entry(jan, width=27)
+        self.cad_forn_compl.grid(row=3, column=2, sticky=W)
+        Label(jan, text="Bairro:").grid(sticky=W, padx=10)
+        self.cad_forn_bairro = Entry(jan, width=25)
+        self.cad_forn_bairro.grid(row=5, column=0, padx=10, sticky=W)
+        Label(jan, text="Cidade:").grid(row=4, column=1, sticky=W, padx=10)
+        self.cad_forn_cid = Entry(jan, width=25)
+        self.cad_forn_cid.grid(row=5, column=1)
+        Label(jan, text="Estado:").grid(row=4, column=2, sticky=W, padx=10)
+        self.cad_forn_estado = Entry(jan, width=15)
+        self.cad_forn_estado.grid(row=5, column=2, sticky=W, padx=10)
+        Label(jan, text="Cep:").grid(row=6, column=0, sticky=W, padx=10)
+        self.forn_cep_frame = Frame(jan)
+        self.forn_cep_frame.grid(row=7, column=0, columnspan=2, sticky=W)
+        self.cad_forn_cep = Entry(self.forn_cep_frame, width=20, )
+        self.cad_forn_cep.grid(padx=10)
+        Button(self.forn_cep_frame, text="CEP Online").grid(row=0, column=1)
+        self.forn_contato_frame = Frame(jan)
+        self.forn_contato_frame.grid(row=8, column=0, columnspan=2, sticky=W)
+        Label(self.forn_contato_frame, text="Tel Comercial1:").grid(row=0, column=0, sticky=W, padx=10)
+        self.cad_forn_telfix = Entry(self.forn_contato_frame, width=25, )
+        self.cad_forn_telfix.grid(padx=10)
+        Label(self.forn_contato_frame, text="Tel Comercial2:").grid(row=0, column=1, sticky=W, padx=10)
+        self.cad_forn_telcomer = Entry(self.forn_contato_frame, width=25, )
+        self.cad_forn_telcomer.grid(row=1, column=1, padx=10)
+        Label(self.forn_contato_frame, text="Contato:").grid(row=2, column=0, sticky=W, padx=10)
+        self.cad_forn_cel = Entry(self.forn_contato_frame, width=25, )
+        self.cad_forn_cel.grid(row=3, column=0, padx=10)
+        Label(self.forn_contato_frame, text="Whatsapp:").grid(row=2, column=1, sticky=W, padx=10)
+        self.cad_forn_whats = Entry(self.forn_contato_frame, width=25, )
+        self.cad_forn_whats.grid(row=3, column=1, padx=10)
+        Label(jan, text="Email:").grid(row=9, column=0, sticky=W, padx=10)
+        self.cad_forn_email = Entry(jan, width=54)
+        self.cad_forn_email.grid(row=10, column=0, sticky=W, padx=10, columnspan=2)
+        Label(jan, text="Operador:").grid(row=11, column=1, sticky=W, padx=10)
+        self.cad_forn_oper = Entry(jan, width=20)
+        self.cad_forn_oper.grid(row=12, column=1, sticky=W, padx=10)
+        self.forn_botao_entr_frame = Frame(jan)
+        self.forn_botao_entr_frame.grid(row=12, column=2, sticky=W)
+        Button(self.forn_botao_entr_frame, text="Confirmar Cadastro", width=10, wraplength=70,
+               underline=0, font=('Verdana', '9', 'bold'), command=lambda: [self.cadastroFornecedor(opt,jan)]).grid()
+        Button(self.forn_botao_entr_frame, text="Cancelar", width=10, wraplength=70,
+               underline=0, font=('Verdana', '9', 'bold'), height=2, command=jan.destroy).grid(row=0, column=1,
                                                                                                     padx=10)
 
-        self.jan.transient(root2)
-        self.jan.focus_force()
-        self.jan.grab_set()
+        if opt == 2:
+            revendedor_selecionado = self.treeview_busca_fornecedor.focus()
+            dado_revend = self.treeview_busca_fornecedor.item(revendedor_selecionado, 'values')
+            revendedor_dados = revendedor_repositorio.RevendedorRepositorio().listar_revendedor_id(dado_revend[0], sessao)
+            self.cad_forn_nome.insert(0, revendedor_dados.Empresa)
+            self.cad_forn_cpf.insert(0, revendedor_dados.cnpj)
+            self.cad_forn_end.insert(0, revendedor_dados.logradouro)
+            self.cad_forn_compl.insert(0, revendedor_dados.Contato)
+            self.cad_forn_bairro.insert(0, revendedor_dados.bairro)
+            self.cad_forn_cid.insert(0, revendedor_dados.cidade)
+            self.cad_forn_estado.insert(0, revendedor_dados.uf)
+            self.cad_forn_cep.insert(0, revendedor_dados.cep)
+            self.cad_forn_telfix.insert(0, revendedor_dados.tel_fixo)
+            self.cad_forn_telcomer.insert(0, revendedor_dados.tel_comercial)
+            self.cad_forn_cel.insert(0, revendedor_dados.celular)
+            self.cad_forn_whats.insert(0, revendedor_dados.whats)
+            self.cad_forn_email.insert(0, revendedor_dados.email)
 
-    def janelaEditarFornecedor(self):
-        self.jan = Toplevel()
+        jan.transient(root2)
+        jan.focus_force()
+        jan.grab_set()
 
-        # Centraliza a janela
-        x_cordinate = int((self.w / 2) - (550 / 2))
-        y_cordinate = int((self.h / 2) - (370 / 2))
-        self.jan.geometry("{}x{}+{}+{}".format(550, 370, x_cordinate, y_cordinate))
-        self.Nome = ''
-        Label(self.jan, text="Empresa:").grid(sticky=W, padx=10)
-        self.cad_cli_nome = Entry(self.jan, width=50)
-        self.cad_cli_nome.grid(row=1, column=0, stick=W, padx=10, columnspan=2)
-        Label(self.jan, text="CNPJ:").grid(row=0, column=2, sticky=W)
-        self.cad_cli_cpf = Entry(self.jan, width=25)
-        self.cad_cli_cpf.grid(row=1, column=2, stick=W)
-        Label(self.jan, text="Endereço:").grid(sticky=W, padx=10)
-        self.cad_cli_end = Entry(self.jan, width=50)
-        self.cad_cli_end.grid(row=3, column=0, padx=10, columnspan=2, sticky=W)
-        Label(self.jan, text="Complemento:").grid(row=2, column=2, sticky=W)
-        self.cad_cli_compl = Entry(self.jan, width=27)
-        self.cad_cli_compl.grid(row=3, column=2, sticky=W)
-        Label(self.jan, text="Bairro:").grid(sticky=W, padx=10)
-        self.cad_cli_bairro = Entry(self.jan, width=25)
-        self.cad_cli_bairro.grid(row=5, column=0, padx=10, sticky=W)
-        Label(self.jan, text="Cidade:").grid(row=4, column=1, sticky=W, padx=10)
-        self.cad_cli_cid = Entry(self.jan, width=25)
-        self.cad_cli_cid.grid(row=5, column=1)
-        Label(self.jan, text="Estado:").grid(row=4, column=2, sticky=W, padx=10)
-        self.cad_cli_estado = Entry(self.jan, width=15)
-        self.cad_cli_estado.grid(row=5, column=2, sticky=W, padx=10)
-        Label(self.jan, text="Cep:").grid(row=6, column=0, sticky=W, padx=10)
-        self.cep_frame = Frame(self.jan)
-        self.cep_frame.grid(row=7, column=0, columnspan=2, sticky=W)
-        self.cad_cli_cep = Entry(self.cep_frame, width=20, )
-        self.cad_cli_cep.grid(padx=10)
-        Button(self.cep_frame, text="CEP Online").grid(row=0, column=1)
-        self.contato_frame = Frame(self.jan)
-        self.contato_frame.grid(row=8, column=0, columnspan=2, sticky=W)
-        Label(self.contato_frame, text="Tel Comercial1:").grid(row=0, column=0, sticky=W, padx=10)
-        self.cad_cli_telfix = Entry(self.contato_frame, width=25, )
-        self.cad_cli_telfix.grid(padx=10)
-        Label(self.contato_frame, text="Tel Comercial2:").grid(row=0, column=1, sticky=W, padx=10)
-        self.cad_cli_telcomer = Entry(self.contato_frame, width=25, )
-        self.cad_cli_telcomer.grid(row=1, column=1, padx=10)
-        Label(self.contato_frame, text="Contato:").grid(row=2, column=0, sticky=W, padx=10)
-        self.cad_cli_cel = Entry(self.contato_frame, width=25, )
-        self.cad_cli_cel.grid(row=3, column=0, padx=10)
-        Label(self.contato_frame, text="Whatsapp:").grid(row=2, column=1, sticky=W, padx=10)
-        self.cad_cli_whats = Entry(self.contato_frame, width=25, )
-        self.cad_cli_whats.grid(row=3, column=1, padx=10)
-        Label(self.jan, text="Email:").grid(row=9, column=0, sticky=W, padx=10)
-        self.cad_cli_email = Entry(self.jan, width=40)
-        self.cad_cli_email.grid(row=10, column=0, sticky=W, padx=10, columnspan=2)
-        Label(self.jan, text="Operador:").grid(row=11, column=1, sticky=W, padx=10)
-        self.cad_cli_oper = Entry(self.jan, width=20)
-        self.cad_cli_oper.grid(row=12, column=1, sticky=W, padx=10)
-        self.botao_entr_frame = Frame(self.jan)
-        self.botao_entr_frame.grid(row=12, column=2, sticky=W)
-        Button(self.botao_entr_frame, text="Editar Cadastro", width=10, wraplength=70,
-               underline=0, font=('Verdana', '9', 'bold')).grid()
-        Button(self.botao_entr_frame, text="Cancelar", width=10, wraplength=70,
-               underline=0, font=('Verdana', '9', 'bold'), height=2, command=self.jan.destroy).grid(row=0, column=1,
-                                                                                                    padx=10)
+    def cadastroFornecedor(self, opt,jan):
+        try:
+            nome = self.cad_forn_nome.get()
+            cpf = self.cad_forn_cpf.get()
+            endereco = self.cad_forn_end.get()
+            contato = self.cad_forn_compl.get()
+            bairro = self.cad_forn_bairro.get()
+            cidade = self.cad_forn_cid.get()
+            estado = self.cad_forn_estado.get()
+            cep = self.insereZero(self.cad_forn_cep.get())
+            tel_fixo = self.cad_forn_telfix.get()
+            tel_comercial = self.cad_forn_telcomer.get()
+            celular = self.cad_forn_cel.get()
+            whats = self.cad_forn_whats.get()
+            email = self.cad_forn_email.get()
+            operador = self.insereZero(self.cad_forn_oper.get())
 
+            novo_revendedor = revendedor.Revendedor(nome, operador, celular, cpf, tel_fixo, '-', endereco, estado, bairro,
+                                           '', cep, cidade, email, whats, contato, tel_comercial)
+            repositorio = revendedor_repositorio.RevendedorRepositorio()
+            repositorio.inserir_revendedor(novo_revendedor, sessao)
+            sessao.commit()
+            self.mostrarMensagem("1", "Cliente Cadastrado com Sucesso!")
+            self.popularFornecedores()
+            jan.destroy()
 
-        self.jan.transient(root2)
-        self.jan.focus_force()
-        self.jan.grab_set()
+        except:
+            sessao.rollback()
+            print(ValueError)
+            raise
+        finally:
+            sessao.close()
 
+    def popularFornecedores(self):
+        self.treeview_busca_fornecedor.delete(*self.treeview_busca_fornecedor.get_children())
+        repositorio = revendedor_repositorio.RevendedorRepositorio()
+        revendedores = repositorio.listar_revendedores(sessao)
+        for i in revendedores:
+            self.treeview_busca_fornecedor.insert("", "end",
+                                      values=(i.id, i.Empresa, i.logradouro, i.cidade,
+                                              i.whats, i.tel_comercial, i.email))
 
 fabrica = fabrica_conexao.FabricaConexão()
 sessao = fabrica.criar_sessao()
