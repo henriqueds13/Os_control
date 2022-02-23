@@ -10,12 +10,19 @@ class ClienteQuery():
         clientes = sessao.query(Cliente).all()
         return clientes
 
+    def listar_clientes_ordenado(self, sessao):
+        clientes = sessao.query(Cliente).order_by(Cliente.nome).all()
+        return clientes
+
     def listar_cliente_id(self, id_cliente, sessao):
         cliente = sessao.query(Cliente).filter(Cliente.id == id_cliente).first()
         return cliente
 
-    def listar_cliente_nome(self, nome_cliente, sessao):
-        clientes = sessao.query(Cliente).filter(Cliente.nome.like( f'%{nome_cliente}%' )).all()
+    def listar_cliente_nome(self, nome_cliente, tipo, sessao):
+        if tipo == 1:
+            clientes = sessao.query(Cliente).filter(Cliente.nome.like(f'%{nome_cliente}%')).all()
+        else:
+            clientes = sessao.query(Cliente).filter(Cliente.nome.like(f'{nome_cliente}%')).all()
         return clientes
 
     def editar_cliente(self, id_cliente, cliente, sessao):

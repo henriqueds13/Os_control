@@ -37,7 +37,7 @@ class OsSaidaRepositorio():
                      obs_pagamento3=os.obsPagamento3, data_garantia=os.dataGarantia, notaFiscal=0, cliente_saida=cliente,
                      loja=os.loja, garantia_compl=os.garantiaCompl, data_compra=os.dataCompra,
                      aparelho_na_oficina=os.aparelhoNaOficina, data_saida=os.dataSaida, hora_saida=os.horaSaida,
-                     os_saida=os.osSaida)
+                     os_saida=os.osSaida, nome=cliente.nome)
         query_os_saida.nova_os(nova_os, sessao)
 
     def listar_os(self, sessao):
@@ -50,3 +50,21 @@ class OsSaidaRepositorio():
         os = query_os.listar_os_id(id_os, sessao)
         return os
 
+    def listar_os_id_entr(self, id_os, sessao):
+        query_os = os_saida_query.OsSaidaQuery()
+        os = query_os.listar_os_id_entr(id_os, sessao)
+        return os
+
+    def listar_os_nome(self, nome, tipo, sessao):
+        query_os = os_saida_query.OsSaidaQuery()
+        os = query_os.listar_os_nome(nome, tipo, sessao)
+        return os
+
+    def listar_os_cli_id(self, cli_id, sessao):
+        query_os = os_saida_query.OsSaidaQuery()
+        os = query_os.listar_os_cli_id(cli_id, sessao)
+        return os
+
+    def editar_os_saida(self, id_os, os, sessao):
+        query_os = os_saida_query.OsSaidaQuery()
+        query_os.editar_os_saida(id_os, os, sessao)

@@ -44,6 +44,7 @@ class OS(Base):
     id = Column(Integer, primary_key=True)
     equipamento = Column(String(20), nullable=False)
     marca = Column(String(15), nullable=False)
+    nome = Column(String(50))
     modelo = Column(String(15))
     n_serie = Column(String(20))
     chassi = Column(String(15))
@@ -141,6 +142,7 @@ class OS(Base):
     tecnico_id = Column(Integer, ForeignKey('tecnico.id'))
     tecnico = relationship('Tecnico', back_populates='ostec')
 
+
     cliente_id = Column(Integer, ForeignKey('cliente.id'), nullable=False)
     cliente = relationship('Cliente', back_populates='oss')
 
@@ -152,6 +154,7 @@ class OSSaida(Base):
     id = Column(Integer, primary_key=True)
     equipamento = Column(String(20), nullable=False)
     marca = Column(String(15), nullable=False)
+    nome = Column(String(50))
     modelo = Column(String(15))
     n_serie = Column(String(20))
     chassi = Column(String(15))

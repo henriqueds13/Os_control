@@ -36,7 +36,7 @@ class Os_repositorio():
                      outros=os.outros, obs_pagamento1=os.obsPagamento1, obs_pagamento2=os.obsPagamento2,
                      obs_pagamento3=os.obsPagamento3, data_garantia=os.dataGarantia, notaFiscal=0, cliente=cliente,
                      loja=os.loja, garantia_compl=os.garantiaCompl, data_compra=os.dataCompra,
-                     aparelho_na_oficina=os.aparelhoNaOficina)
+                     aparelho_na_oficina=os.aparelhoNaOficina, nome=cliente.nome)
         query_os.nova_os(nova_os, sessao)
 
     def listar_os(self, sessao):
@@ -44,18 +44,34 @@ class Os_repositorio():
         os = query_os.listar_os(sessao)
         return os
 
+    def listar_os_ordenado(self, sessao):
+        query_os = os_query.OsQuery()
+        os = query_os.listar_os_ordenado(sessao)
+        return os
+
     def listar_os_id(self, id_os, sessao):
         query_os = os_query.OsQuery()
         os = query_os.listar_os_id(id_os, sessao)
         return os
 
+    def listar_os_cli_id(self, cli_id, sessao):
+        query_os = os_query.OsQuery()
+        os = query_os.listar_os_cli_id(cli_id, sessao)
+        return os
+
+    def listar_os_nome(self, nome, tipo, sessao):
+        query_os = os_query.OsQuery()
+        os = query_os.listar_os_nome(nome, tipo, sessao)
+        return os
+
+
     def remover_os(self, id_os, sessao):
         query_os = os_query.OsQuery()
         query_os.remover_os(id_os, sessao)
 
-    def editar_os(self, id_os, os, sessao):
+    def editar_os(self, id_os, os, opt, sessao):
         query_os = os_query.OsQuery()
-        query_os.editar_os(id_os, os, sessao)
+        query_os.editar_os(id_os, os, opt, sessao)
 
     def editar_orcamento(self, id_os, os, num, sessao):
         query_os = os_query.OsQuery()

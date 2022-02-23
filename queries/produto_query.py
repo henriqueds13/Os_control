@@ -43,12 +43,11 @@ class ProdutoQuery():
         produto = sessao.query(Produto).filter(Produto.id_fabr == id_produto).first()
         return produto
 
-    def listar_produto_nome(self, nome_produto, sessao):
-        produtos = sessao.query(Produto).filter(Produto.descricao == nome_produto).all()
-        return produtos
-
-    def listar_produto_nome_avancado(self, nome_produto, sessao):
-        produtos = sessao.query(Produto).filter(Produto.descricao.like(f'%{nome_produto}%')).all()
+    def listar_produto_nome(self, nome_produto, tipo, sessao):
+        if tipo == 1:
+            produtos = sessao.query(Produto).filter(Produto.descricao.like(f'%{nome_produto}%')).all()
+        else:
+            produtos = sessao.query(Produto).filter(Produto.descricao.like(f'{nome_produto}%')).all()
         return produtos
 
     def remover_produtos(self, id_produto, sessao):

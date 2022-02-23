@@ -11,29 +11,48 @@ class OsQuery():
         os = sessao.query(OS).options(joinedload(OS.produtos)).all()
         return os
 
+    def listar_os_ordenado(self, sessao):
+        os = sessao.query(OS).order_by(OS.nome).all()
+        return os
+
+    def listar_os_nome(self, nome, tipo, sessao):
+        if tipo == 1:
+            os = sessao.query(OS).filter(OS.nome.like(f'%{nome}%')).all()
+        else:
+            os = sessao.query(OS).filter(OS.nome.like(f'{nome}%')).all()
+        return os
+
+
     def listar_os_id(self, id_os, sessao):
         os = sessao.query(OS).filter(OS.id == id_os).first()
+        return os
+
+    def listar_os_cli_id(self, cli_id, sessao):
+        os = sessao.query(OS).filter(OS.cliente_id == cli_id).all()
         return os
 
     def remover_os(self, id_os, sessao):
         os = self.listar_os_id(id_os, sessao)
         sessao.delete(os)
 
-    def editar_os(self, id_os, os, sessao):
+    def editar_os(self, id_os, os, opt, sessao):
         oss = self.listar_os_id(id_os, sessao)
-        oss.equipamento = os.equipamento
-        oss.marca = os.marca
-        oss.modelo = os.modelo
-        oss.n_serie = os.n_serie
-        oss.chassi = os.chassi
-        oss.tensao = os.tensao
-        oss.defeito = os.defeito
-        oss.estado_aparelho = os.estado_aparelho
-        oss.acessorios = os.acessorios
-        oss.loja = os.loja
-        oss.notaFiscal = os.notaFiscal
-        oss.garantia_compl = os.garantia_compl
-        oss.data_compra = os.data_compra
+        if opt == 1 :
+            oss.equipamento = os.equipamento
+            oss.marca = os.marca
+            oss.modelo = os.modelo
+            oss.n_serie = os.n_serie
+            oss.chassi = os.chassi
+            oss.tensao = os.tensao
+            oss.defeito = os.defeito
+            oss.estado_aparelho = os.estado_aparelho
+            oss.acessorios = os.acessorios
+            oss.loja = os.loja
+            oss.notaFiscal = os.notaFiscal
+            oss.garantia_compl = os.garantia_compl
+            oss.data_compra = os.data_compra
+        elif opt == 2:
+            oss.nome = os.nome
 
     def editar_orcamento(self, id_os, os, num, sessao):
         oss = self.listar_os_id(id_os, sessao)

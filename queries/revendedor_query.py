@@ -20,7 +20,7 @@ class RevendedorQuery():
 
     def editar_revendedores(self, id_revendedor, revendedor, sessao):
         revend = self.listar_revendedor_id(id_revendedor, sessao)
-        revend.empresa = revendedor.Empresa
+        revend.Empresa = revendedor.empresa
         revend.celular = revendedor.celular
         revend.cnpj = revendedor.cnpj
         revend.tel_fixo = revendedor.tel_fixo

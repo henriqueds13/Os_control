@@ -33,14 +33,9 @@ class ProdutoRepositorio():
         produto = query_produto.listar_produto_id_fabr(id_produto, sessao)
         return produto
 
-    def listar_produto_nome(self, nome_produto, sessao):
+    def listar_produto_nome(self, nome_produto, tipo, sessao):
         query_produto = produto_query.ProdutoQuery()
-        produtos = query_produto.listar_produto_nome(nome_produto, sessao)
-        return produtos
-
-    def listar_produto_nome_avancado(self, nome_produto, sessao):
-        query_produto = produto_query.ProdutoQuery()
-        produtos = query_produto.listar_produto_nome_avancado(nome_produto, sessao)
+        produtos = query_produto.listar_produto_nome(nome_produto, tipo, sessao)
         return produtos
 
     def remover_produto(self, id_produto, sessao):
