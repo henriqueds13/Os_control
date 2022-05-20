@@ -365,3 +365,5 @@ values=(i.id_venda,
      self.insereTotalConvertido(i.total),
      i.hora,
      i.operador))
+
+def popularPesquisaCliente(self):

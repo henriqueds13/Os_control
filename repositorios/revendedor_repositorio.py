@@ -32,6 +32,11 @@ class RevendedorRepositorio():
         revendedores = query_revendedor.listar_revendedor_nome(nome_revendedor, sessao)
         return revendedores
 
+    def pesquisa_revendedor_nome(self, nome_revendedor, sessao):
+        query_revendedor = revendedor_query.RevendedorQuery()
+        revendedor = query_revendedor.pequisa_revendedor_nome(nome_revendedor, sessao)
+        return revendedor
+
     def editar_revendedores(self, id_revendedor, revendedor, sessao):
         query_revendedor = revendedor_query.RevendedorQuery()
         query_revendedor.editar_revendedores(id_revendedor, revendedor, sessao)

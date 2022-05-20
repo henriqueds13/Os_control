@@ -101,6 +101,10 @@ class Castelo:
 
         self.revendedor_obj = None
 
+        self.lista_revendedor = ["CCM DO BRASIL", "INTERBRASIL"]
+
+        self.count = 0
+
         def on_enter(e):
             e.widget['relief'] = 'raised'
 
@@ -214,14 +218,29 @@ class Castelo:
         self.subframe2_entry_cliente = Frame(self.cadastro_label_frame)
         self.variable_int_cli = IntVar()
         self.entrada_pesquisa_cliente = Entry(self.subframe2_entry_cliente, width=40,
-                                              bg="#ffffe1")  # Entrada para pesquisa
+                                              bg="#FFF")  # Entrada para pesquisa
         self.check_pesq_avan_cli = Checkbutton(self.subframe2_entry_cliente, text='Busca Avançada',
-                                                  variable=self.variable_int_cli, onvalue=1, offvalue=0)
+                                               variable=self.variable_int_cli, onvalue=1, offvalue=0)
 
         self.frame_num_clientes = LabelFrame(self.subframe2_entry_cliente, text='Núm de Clientes')
         Label(self.frame_num_clientes, text=2, fg='blue', font='bold').pack()
 
         self.scrollbar = Scrollbar(self.cadastro_label_frame, orient=HORIZONTAL)  # Scrollbar da treeview
+
+        self.style = ttk.Style()
+
+        self.style.theme_use('alt')
+
+        self.style.configure('Treeview',
+                             background='#ffffe1',
+                             foreground='#000080',
+                             rowheight=20,
+                             font=('Verdana', '9'),
+                             fieldbackground='#f0f0f0')
+
+        self.style.map('Treeview',
+                       background=[('selected', 'black')],
+                       foreground=[('selected', '#FBFC8B')])
 
         self.tree_cliente = ttk.Treeview(self.cadastro_label_frame,
                                          columns=('id', 'nome', 'endereço', 'bairro', 'telefone'),
@@ -239,6 +258,9 @@ class Castelo:
         self.tree_cliente.heading('bairro', text='Bairro')
         self.tree_cliente.heading('telefone', text='Telefone')
         self.popular()
+
+        self.tree_cliente.tag_configure('oddrow', background='#D9D9D9')
+        self.tree_cliente.tag_configure('evenrow', background='#A6A6A6')
 
         self.subframe3_botoes_cliente = Frame(self.cadastro_label_frame)
         self.botao_novo_cliente = Button(self.subframe3_botoes_cliente, text="Novo Cliente", width=10, wraplength=50,
@@ -402,6 +424,9 @@ class Castelo:
         self.scrll_orc.config(command=self.tree_orc.xview)
         self.scrll_orc.pack(fill=X, padx=10, side=BOTTOM)
         self.tree_orc.pack(side=BOTTOM)
+
+        self.tree_orc.tag_configure('oddrow', background='#ffffe1')
+        self.tree_orc.tag_configure('evenrow', background='#F2EDDC')
 
         self.introframe_orc_material = Frame(self.frame1_orc, bg=color_orc2)
         self.introframe_orc_material.pack(side=LEFT, padx=10)
@@ -621,8 +646,13 @@ class Castelo:
         self.scrollbar_manut_h.config(command=self.tree_ap_manut.xview)
         self.scrollbar_manut_h.pack(fill=X)
 
+        self.tree_ap_manut.tag_configure('oddrow', background='#ffffe1')
+        self.tree_ap_manut.tag_configure('evenrow', background='#F2EDDC')
+
         self.popularOsConserto()
 
+        self.tree_ap_manut.tag_configure('oddrow', background='#ffffe1')
+        self.tree_ap_manut.tag_configure('evenrow', background='#D9D0C1')
 
         children = self.tree_ap_manut.get_children()
         if children:
@@ -737,6 +767,9 @@ class Castelo:
 
         self.popularOsEntregue()
 
+        self.tree_ap_entr.tag_configure('oddrow', background='#ffffe1')
+        self.tree_ap_entr.tag_configure('evenrow', background='#F2E8B3')
+
         self.label_pesquisa_entr = LabelFrame(self.subframe_ap_entr2, text="Digite um Nome para Pesquisar",
                                               bg="#F2E8B3")
         self.label_pesquisa_entr.pack(side=LEFT, padx=10, pady=5)
@@ -746,7 +779,8 @@ class Castelo:
         self.botao_pesqu_entr = Button(self.label_pesquisa_entr, text="C", width=5, command=self.popularOsEntregue)
         self.botao_pesqu_entr.pack(side=RIGHT, padx=5, ipady=5, pady=2)
         self.check_pesq_avan_os_ent = Checkbutton(self.label_pesquisa_entr, text='Busca Avançada',
-                                                  variable=self.variable_int_os_entr, onvalue=1, offvalue=0, bg="#F2E8B3")
+                                                  variable=self.variable_int_os_entr, onvalue=1, offvalue=0,
+                                                  bg="#F2E8B3")
         self.check_pesq_avan_os_ent.pack(side=RIGHT, padx=5, pady=2)
 
         self.label_n_aparelhos_entr = LabelFrame(self.subframe_ap_entr2, text="N Aparelhos", bg="#F2E8B3")
@@ -767,19 +801,20 @@ class Castelo:
         Button(self.label_botoes_ap_entr, text="4", width=5, command=self.frame_ap_entregue.forget).pack(side=LEFT,
                                                                                                          ipady=7,
                                                                                                          padx=5)
+
         def abreApEntrBind(event):
             self.janelaAbrirOsEntregue()
 
         def pesquisaOsEntregue(event):
-            self.popularOsEntregueOrdenado( self.variable_int_os_entr.get())
+            self.popularOsEntregueOrdenado(self.variable_int_os_entr.get())
 
         self.entr_pesq_entr.bind('<Return>', pesquisaOsEntregue)
 
         self.tree_ap_entr.bind('<Double-1>', abreApEntrBind)
 
         # ------------------------------- Janela Estoque Peças e Máquinas ----------------------------------------------
-        color_est1 = "#FCE196"
-        color_est2 = "#F2F0CE"
+        color_est1 = "#3F5957"
+        color_est2 = "#C5D0C1"
         self.frame_estoque = Frame(self.frame_princ, bg=color_est1)
         self.frame_nome_jan_estoque = Frame(self.frame_estoque, relief='raised', borderwidth=1)
         self.frame_nome_jan_estoque.pack(fill=X)
@@ -819,9 +854,10 @@ class Castelo:
         self.option_setor_esto = ttk.Combobox(self.frame_pesq_estoq, values=listaSetores, state="readonly")
         self.option_setor_esto.set("Todos")
         self.option_setor_esto.grid(row=1, column=2, padx=10)
-        Button(self.frame_pesq_estoq, text="Pesquisar").grid(row=1, column=3)
-        self.check_pesq_avan_estoq = Checkbutton(self.frame_pesq_estoq, text="Busca Avançada", bg=color_est1, variable=self.variable_int_produto,
-                    onvalue=1, offvalue=0)
+        Button(self.frame_pesq_estoq, text="!", command=self.popularProdutoEstoque).grid(row=1, column=3, ipadx=10)
+        self.check_pesq_avan_estoq = Checkbutton(self.frame_pesq_estoq, text="Busca Avançada", bg=color_est1,
+                                                 variable=self.variable_int_produto,
+                                                 onvalue=1, offvalue=0)
         self.check_pesq_avan_estoq.grid(row=1, column=4, padx=10)
 
         self.frame_tree_produtos = Frame(self.frame_estoque, bg=color_est1)
@@ -831,18 +867,20 @@ class Castelo:
 
         self.tree_est_prod = ttk.Treeview(self.frame_tree_produtos,
                                           columns=(
-                                              'codigo', 'descricao', 'unidade', 'preco', 'setor', 'marca', 'utilizado',
+                                              'codigo', 'descricao', 'unidade', 'preco', 'categoria', 'setor', 'marca',
+                                              'utilizado',
                                               'revendedor', 'cod_fabrica'),
                                           show='headings',
                                           xscrollcommand=self.scrollbar_entr_h.set,
                                           selectmode='browse',
                                           height=20)  # TreeView listagem de produtos em estoque
 
-        self.tree_est_prod.column('codigo', width=150, minwidth=50, stretch=False)
+        self.tree_est_prod.column('codigo', width=75, minwidth=50, stretch=False)
         self.tree_est_prod.column('descricao', width=500, minwidth=100, stretch=False)
-        self.tree_est_prod.column('unidade', width=100, minwidth=10, stretch=False)
+        self.tree_est_prod.column('unidade', width=75, minwidth=10, stretch=False)
         self.tree_est_prod.column('preco', width=100, minwidth=50, stretch=False)
-        self.tree_est_prod.column('setor', width=200, minwidth=100, stretch=False)
+        self.tree_est_prod.column('categoria', width=200, minwidth=50, stretch=False)
+        self.tree_est_prod.column('setor', width=50, minwidth=100, stretch=False)
         self.tree_est_prod.column('marca', width=200, minwidth=50, stretch=False)
         self.tree_est_prod.column('utilizado', width=400, minwidth=10, stretch=False)
         self.tree_est_prod.column('revendedor', width=200, minwidth=10, stretch=False)
@@ -852,6 +890,7 @@ class Castelo:
         self.tree_est_prod.heading('descricao', text='PRODUTO')
         self.tree_est_prod.heading('unidade', text='Qtde.')
         self.tree_est_prod.heading('preco', text='PREÇO')
+        self.tree_est_prod.heading('categoria', text='CATEGORIA')
         self.tree_est_prod.heading('setor', text='SETOR')
         self.tree_est_prod.heading('marca', text='MARCA')
         self.tree_est_prod.heading('utilizado', text='UTILIZADO')
@@ -863,6 +902,9 @@ class Castelo:
         self.scrollbar_prod_h.pack(fill=X, padx=5)
 
         self.popularProdutoEstoque()
+
+        self.tree_est_prod.tag_configure('evenrow', background='#828E8C')
+        self.tree_est_prod.tag_configure('oddrow', background='#C5D0C1')
 
         self.frame_reg_est = Frame(self.frame_estoque, bg=color_est1)
         self.frame_reg_est.pack(fill=X)
@@ -945,16 +987,20 @@ class Castelo:
             self.janelaEditarProduto()
 
         def pesquisaNomeProduto(event):
-            self.popularProdutoEstoquePesqNome(self.variable_int_produto.get())
+            self.popularProdutoEstoquePesqNome(self.variable_int_produto.get(), self.option_setor_esto.get())
+
+        def pesquisaIdProduto(event):
+            self.popularProdutoEstoquePesqId(self.option_setor_esto.get())
 
         self.tree_est_reg.bind('<Double-1>', abreEstBind)
         self.tree_est_prod.bind('<Double-1>', abreProdBind)
         self.entry_descr_esto.bind('<Return>', pesquisaNomeProduto)
+        self.entry_cod_esto.bind('<Return>', pesquisaIdProduto)
 
         # ------------------------------------------Janela de Vendas-----------------------------------------------------
 
-        color_est1 = "#FCE196"
-        color_est2 = "#F2F0CE"
+        color_est1 = "#5098A4"
+        color_est2 = "#C5D7D9"
         self.frame_vendas = Frame(self.frame_princ, bg=color_est1)
         self.frame_nome_jan_vendas = Frame(self.frame_vendas, relief='raised', borderwidth=1)
         self.frame_nome_jan_vendas.pack(fill=X)
@@ -1024,6 +1070,9 @@ class Castelo:
         self.scrollbar_vend_h.pack(fill=X, padx=5)
 
         self.popularEntradaVenda()
+
+        self.tree_est_vendas.tag_configure('evenrow', background='#C5D7D9')
+        self.tree_est_vendas.tag_configure('oddrow', background='#A5CAD3')
 
         button_vend1.bind('<Enter>', on_enter)
         button_vend1.bind('<Leave>', on_leave)
@@ -1141,7 +1190,14 @@ class Castelo:
         repositorio = cliente_repositorio.ClienteRepositorio()
         clientes = repositorio.listar_clientes(sessao)
         for i in clientes:
-            self.tree_cliente.insert("", "end", values=(i.id, i.nome, i.logradouro, i.bairro, i.tel_fixo))
+            if self.count % 2 == 0:
+                self.tree_cliente.insert("", "end", values=(i.id, i.nome, i.logradouro, i.bairro, i.tel_fixo),
+                                         tags=('oddrow',))
+            else:
+                self.tree_cliente.insert("", "end", values=(i.id, i.nome, i.logradouro, i.bairro, i.tel_fixo),
+                                         tags=('evenrow',))
+            self.count += 1
+        self.count == 0
 
     def popularPesquisaNome(self, tipo):
         self.tree_cliente.delete(*self.tree_cliente.get_children())
@@ -1149,7 +1205,14 @@ class Castelo:
         repositorio = cliente_repositorio.ClienteRepositorio()
         clientes = repositorio.listar_cliente_nome(nome, tipo, sessao)
         for i in clientes:
-            self.tree_cliente.insert("", "end", values=(i.id, i.nome, i.logradouro, i.bairro, i.tel_fixo))
+            if self.count % 2 == 0:
+                self.tree_cliente.insert("", "end", values=(i.id, i.nome, i.logradouro, i.bairro, i.tel_fixo),
+                                         tags=('evenrow',))
+            else:
+                self.tree_cliente.insert("", "end", values=(i.id, i.nome, i.logradouro, i.bairro, i.tel_fixo),
+                                         tags=('oddrow',))
+            self.count += 1
+        self.count == 0
 
     def cadastrarCliente(self):
 
@@ -1302,7 +1365,7 @@ class Castelo:
     def editarCliente(self, jan):
         res = messagebox.askyesno(None, "Deseja Realmente Editar o Cadastro?")
         if res:
-         #   try:
+            #   try:
             cliente_selecionado = self.tree_cliente.focus()
             dado_cli = self.tree_cliente.item(cliente_selecionado, "values")
             nome = self.cad_cli_nome.get()
@@ -1347,62 +1410,67 @@ class Castelo:
                 pass
 
             nova_os_entregue = os_saida.OsSaida(equipamento='', marca='',
-                                             modelo='', acessorios='',
-                                             defeito='', estado_aparelho='',
-                                             n_serie=0, tensao=0,
-                                             status='', chassi='',
-                                             andamento='', data_entrada=None,
-                                             hora_entrada=None, dias=0,
-                                             data_orc=None, conclusao=None,
-                                             operador=0, log='',
-                                             codigo1='os_atual_db.codigo1', codigo2='os_atual_db.codigo2',
-                                             codigo3='os_atual_db.codigo3', codigo4='os_atual_db.codigo4',
-                                             codigo5='os_atual_db.codigo5', codigo6='os_atual_db.codigo6',
-                                             codigo7='os_atual_db.codigo7', codigo8='os_atual_db.codigo8',
-                                             codigo9='os_atual_db.codigo9', desc_serv1='os_atual_db.desc_serv1',
-                                             desc_serv2='os_atual_db.desc_serv2', desc_serv3='os_atual_db.desc_serv3',
-                                             desc_serv4='os_atual_db.desc_serv4', desc_serv5='os_atual_db.desc_serv5',
-                                             desc_serv6='os_atual_db.desc_serv6', desc_serv7='os_atual_db.desc_serv7',
-                                             desc_serv8='os_atual_db.desc_serv8', desc_serv9='os_atual_db.desc_serv9',
-                                             desconto=0,
-                                             obs1='os_atual_db.obs1', obs2='os_atual_db.obs2', obs3='os_atual_db.obs3',
-                                             valor_mao_obra=0, qtd1=0,
-                                             qtd2=0, qtd3=0, qtd4=0,
-                                             qtd5=0, qtd6=0, qtd7=0,
-                                             qtd8=0,
-                                             qtd9=0, valor_uni1=0,
-                                             valor_uni2=0, valor_uni3=0,
-                                             valor_uni4=0, valor_uni5=0,
-                                             valor_uni6=0,
-                                             valor_uni7=0, valor_uni8=0,
-                                             valor_uni9=0,
-                                             valor_total1=0, valor_total2=0,
-                                             valor_total3=0,
-                                             valor_total4=0, valor_total5=0,
-                                             valor_total6=0,
-                                             valor_total7=0, valor_total8=0,
-                                             valor_total9=0,
-                                             caixa_peca1=0, caixa_peca2=0,
-                                             caixa_peca3=0,
-                                             caixa_peca4=0, caixa_peca5=0,
-                                             caixa_peca6=0,
-                                             caixa_peca7=0, caixa_peca8=0,
-                                             caixa_peca9=0,
-                                             caixa_peca_total=0,
-                                             tecnico=0,
-                                             total=0, defeitos='os_atual_db.defeitos',
-                                             cheque=0, ccredito=0,
-                                             cdebito=0, pix=0,
-                                             dinheiro=0,
-                                             outros=0, obs_pagamento1='',
-                                             obs_pagamento2='os_atual_db.obs_pagamento2',
-                                             obs_pagamento3='os_atual_db.obs_pagamento3',
-                                             data_garantia=None, nota_fiscal=0,
-                                             cli_id=0,
-                                             loja='os_atual_db.loja', garantia_compl=0,
-                                             data_compra=None,
-                                             aparelho_na_oficina=1, data_saida=None,
-                                             hora_saida='', os=0, nome=nome)
+                                                modelo='', acessorios='',
+                                                defeito='', estado_aparelho='',
+                                                n_serie=0, tensao=0,
+                                                status='', chassi='',
+                                                andamento='', data_entrada=None,
+                                                hora_entrada=None, dias=0,
+                                                data_orc=None, conclusao=None,
+                                                operador=0, log='',
+                                                codigo1='os_atual_db.codigo1', codigo2='os_atual_db.codigo2',
+                                                codigo3='os_atual_db.codigo3', codigo4='os_atual_db.codigo4',
+                                                codigo5='os_atual_db.codigo5', codigo6='os_atual_db.codigo6',
+                                                codigo7='os_atual_db.codigo7', codigo8='os_atual_db.codigo8',
+                                                codigo9='os_atual_db.codigo9', desc_serv1='os_atual_db.desc_serv1',
+                                                desc_serv2='os_atual_db.desc_serv2',
+                                                desc_serv3='os_atual_db.desc_serv3',
+                                                desc_serv4='os_atual_db.desc_serv4',
+                                                desc_serv5='os_atual_db.desc_serv5',
+                                                desc_serv6='os_atual_db.desc_serv6',
+                                                desc_serv7='os_atual_db.desc_serv7',
+                                                desc_serv8='os_atual_db.desc_serv8',
+                                                desc_serv9='os_atual_db.desc_serv9',
+                                                desconto=0,
+                                                obs1='os_atual_db.obs1', obs2='os_atual_db.obs2',
+                                                obs3='os_atual_db.obs3',
+                                                valor_mao_obra=0, qtd1=0,
+                                                qtd2=0, qtd3=0, qtd4=0,
+                                                qtd5=0, qtd6=0, qtd7=0,
+                                                qtd8=0,
+                                                qtd9=0, valor_uni1=0,
+                                                valor_uni2=0, valor_uni3=0,
+                                                valor_uni4=0, valor_uni5=0,
+                                                valor_uni6=0,
+                                                valor_uni7=0, valor_uni8=0,
+                                                valor_uni9=0,
+                                                valor_total1=0, valor_total2=0,
+                                                valor_total3=0,
+                                                valor_total4=0, valor_total5=0,
+                                                valor_total6=0,
+                                                valor_total7=0, valor_total8=0,
+                                                valor_total9=0,
+                                                caixa_peca1=0, caixa_peca2=0,
+                                                caixa_peca3=0,
+                                                caixa_peca4=0, caixa_peca5=0,
+                                                caixa_peca6=0,
+                                                caixa_peca7=0, caixa_peca8=0,
+                                                caixa_peca9=0,
+                                                caixa_peca_total=0,
+                                                tecnico=0,
+                                                total=0, defeitos='os_atual_db.defeitos',
+                                                cheque=0, ccredito=0,
+                                                cdebito=0, pix=0,
+                                                dinheiro=0,
+                                                outros=0, obs_pagamento1='',
+                                                obs_pagamento2='os_atual_db.obs_pagamento2',
+                                                obs_pagamento3='os_atual_db.obs_pagamento3',
+                                                data_garantia=None, nota_fiscal=0,
+                                                cli_id=0,
+                                                loja='os_atual_db.loja', garantia_compl=0,
+                                                data_compra=None,
+                                                aparelho_na_oficina=1, data_saida=None,
+                                                hora_saida='', os=0, nome=nome)
             repositorio_os_saida = os_saida_repositorio.OsSaidaRepositorio()
             ossaida = repositorio_os_saida.listar_os_cli_id(dado_cli[0], sessao)
             try:
@@ -1417,10 +1485,10 @@ class Castelo:
             jan.destroy()
             self.popular()
 
-            #except:
-           #     messagebox.showinfo(title="ERRO", message="ERRO")
-           # finally:
-           #     sessao.close()
+            # except:
+        #     messagebox.showinfo(title="ERRO", message="ERRO")
+        # finally:
+        #     sessao.close()
         else:
             pass
 
@@ -1653,16 +1721,25 @@ class Castelo:
         repositorio_cliente = cliente_repositorio.ClienteRepositorio()
         oss = repositorio.listar_os(sessao)
         for i in oss:
-            if i.aparelho_na_oficina == 1:
-                self.tree_ap_manut.insert("", "end",
-                                          values=(i.id, i.data_entrada, i.cliente.nome, i.equipamento, i.marca,
-                                                  i.modelo, "Orçamento", i.status, i.dias, i.total,
-                                                  i.tecnico, i.operador, i.defeito, i.n_serie, i.chassi,
-                                                  i.dias, 0, i.hora_entrada, i.cliente_id))
+            if self.count % 2 == 0:
+                if i.aparelho_na_oficina == 1:
+                    self.tree_ap_manut.insert("", "end",
+                                              values=(i.id, i.data_entrada, i.cliente.nome, i.equipamento, i.marca,
+                                                      i.modelo, "Orçamento", i.status, i.dias, i.total,
+                                                      i.tecnico, i.operador, i.defeito, i.n_serie, i.chassi,
+                                                      i.dias, 0, i.hora_entrada, i.cliente_id), tags=('evenrow',))
+            else:
+                if i.aparelho_na_oficina == 1:
+                    self.tree_ap_manut.insert("", "end",
+                                              values=(i.id, i.data_entrada, i.cliente.nome, i.equipamento, i.marca,
+                                                      i.modelo, "Orçamento", i.status, i.dias, i.total,
+                                                      i.tecnico, i.operador, i.defeito, i.n_serie, i.chassi,
+                                                      i.dias, 0, i.hora_entrada, i.cliente_id), tags=('oddrow',))
+            self.count += 1
+        self.count = 0
         children = self.tree_ap_manut.get_children()
         if children:
             self.tree_ap_manut.selection_set(children[0])
-
 
     def popularOsConsertoOrdenado(self, num):
         self.tree_ap_manut.delete(*self.tree_ap_manut.get_children())
@@ -1670,16 +1747,30 @@ class Castelo:
         repositorio = os_repositorio.Os_repositorio()
         lista_nomes = repositorio.listar_os_nome(nome, num, sessao)
         for dados_os in lista_nomes:
-            if dados_os.aparelho_na_oficina == 1:
-                 self.tree_ap_manut.insert("", "end",
-                                           values=(dados_os.id, dados_os.data_entrada, dados_os.cliente.nome,
-                                                   dados_os.equipamento, dados_os.marca,
-                                                   dados_os.modelo, "Orçamento", dados_os.status, dados_os.dias,
-                                                   dados_os.total,
-                                                   dados_os.tecnico, dados_os.operador, dados_os.defeito,
-                                                   dados_os.n_serie, dados_os.chassi,
-                                                   dados_os.dias, 0, dados_os.hora_entrada, dados_os.cliente_id))
-
+            if self.count % 2 == 0:
+                if dados_os.aparelho_na_oficina == 1:
+                    self.tree_ap_manut.insert("", "end",
+                                              values=(dados_os.id, dados_os.data_entrada, dados_os.cliente.nome,
+                                                      dados_os.equipamento, dados_os.marca,
+                                                      dados_os.modelo, "Orçamento", dados_os.status, dados_os.dias,
+                                                      dados_os.total,
+                                                      dados_os.tecnico, dados_os.operador, dados_os.defeito,
+                                                      dados_os.n_serie, dados_os.chassi,
+                                                      dados_os.dias, 0, dados_os.hora_entrada, dados_os.cliente_id),
+                                              tags=('evenrow'))
+            else:
+                if dados_os.aparelho_na_oficina == 1:
+                    self.tree_ap_manut.insert("", "end",
+                                              values=(dados_os.id, dados_os.data_entrada, dados_os.cliente.nome,
+                                                      dados_os.equipamento, dados_os.marca,
+                                                      dados_os.modelo, "Orçamento", dados_os.status, dados_os.dias,
+                                                      dados_os.total,
+                                                      dados_os.tecnico, dados_os.operador, dados_os.defeito,
+                                                      dados_os.n_serie, dados_os.chassi,
+                                                      dados_os.dias, 0, dados_os.hora_entrada, dados_os.cliente_id),
+                                              tags=('oddrow'))
+            self.count += 1
+        self.count = 0
         children = self.tree_ap_manut.get_children()
         if children:
             self.tree_ap_manut.selection_set(children[0])
@@ -1710,7 +1801,8 @@ class Castelo:
                             '', '',
                             '', '', '', '', '', '', '', '', '', '', '', 0, '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, tecnico, 0,
-                            '', 0, 0, 0, 0, 0, 0, '', '', '', None, nfe, cli_id, loja, garantia_complementar, None, 1, 0)
+                            '', 0, 0, 0, 0, 0, 0, '', '', '', None, nfe, cli_id, loja, garantia_complementar, None, 1,
+                            0)
             repositorio = os_repositorio.Os_repositorio()
             repositorio.nova_os(cli_id, tecnico, nova_os, sessao)
             sessao.commit()
@@ -2496,15 +2588,28 @@ class Castelo:
         Label(subframe_material1, text="Descrição").grid(row=0, column=4, pady=2, sticky=W, ipadx=10)
         Label(subframe_material1, text="Valor Un.").grid(row=0, column=5)
         Label(subframe_material1, text="Valor (R$)").grid(row=0, column=6, pady=2)
-        Button(subframe_material1, width=3, text="E", command=lambda: [self.janelaBuscaProduto(5)]).grid(row=1, column=0)
-        Button(subframe_material1, width=3, text="E", command=lambda: [self.janelaBuscaProduto(6)]).grid(row=2, column=0, pady=2)
-        Button(subframe_material1, width=3, text="E", command=lambda: [self.janelaBuscaProduto(7)]).grid(row=3, column=0)
-        Button(subframe_material1, width=3, text="E", command=lambda: [self.janelaBuscaProduto(8)]).grid(row=4, column=0, pady=2)
-        Button(subframe_material1, width=3, text="E", command=lambda: [self.janelaBuscaProduto(9)]).grid(row=5, column=0)
-        Button(subframe_material1, width=3, text="E", command=lambda: [self.janelaBuscaProduto(10)]).grid(row=6, column=0, pady=2)
-        Button(subframe_material1, width=3, text="E", command=lambda: [self.janelaBuscaProduto(11)]).grid(row=7, column=0)
-        Button(subframe_material1, width=3, text="E", command=lambda: [self.janelaBuscaProduto(12)]).grid(row=8, column=0, pady=2)
-        Button(subframe_material1, width=3, text="E", command=lambda: [self.janelaBuscaProduto(13)]).grid(row=9, column=0)
+        Button(subframe_material1, width=3, text="E", command=lambda: [self.janelaBuscaProduto(5)]).grid(row=1,
+                                                                                                         column=0)
+        Button(subframe_material1, width=3, text="E", command=lambda: [self.janelaBuscaProduto(6)]).grid(row=2,
+                                                                                                         column=0,
+                                                                                                         pady=2)
+        Button(subframe_material1, width=3, text="E", command=lambda: [self.janelaBuscaProduto(7)]).grid(row=3,
+                                                                                                         column=0)
+        Button(subframe_material1, width=3, text="E", command=lambda: [self.janelaBuscaProduto(8)]).grid(row=4,
+                                                                                                         column=0,
+                                                                                                         pady=2)
+        Button(subframe_material1, width=3, text="E", command=lambda: [self.janelaBuscaProduto(9)]).grid(row=5,
+                                                                                                         column=0)
+        Button(subframe_material1, width=3, text="E", command=lambda: [self.janelaBuscaProduto(10)]).grid(row=6,
+                                                                                                          column=0,
+                                                                                                          pady=2)
+        Button(subframe_material1, width=3, text="E", command=lambda: [self.janelaBuscaProduto(11)]).grid(row=7,
+                                                                                                          column=0)
+        Button(subframe_material1, width=3, text="E", command=lambda: [self.janelaBuscaProduto(12)]).grid(row=8,
+                                                                                                          column=0,
+                                                                                                          pady=2)
+        Button(subframe_material1, width=3, text="E", command=lambda: [self.janelaBuscaProduto(13)]).grid(row=9,
+                                                                                                          column=0)
         self.orc_cod_entry1 = Entry(subframe_material1, width=10, relief=SUNKEN)
         self.orc_cod_entry1.insert(0, dados_orc.codigo1)
         self.orc_cod_entry1.grid(row=1, column=1)
@@ -2945,7 +3050,6 @@ class Castelo:
 
         self.os_valor_final.config(text=self.insereTotalConvertido(total))
 
-
         if num == 1:
             nova_os = os.Os('', '', '', '', '', '', '', None, '', '', '', None, None, '', None, None, '', '', codigo1,
                             codigo2,
@@ -3057,12 +3161,24 @@ class Castelo:
         repositorio_cliente = cliente_repositorio.ClienteRepositorio()
         oss = repositorio.listar_os(sessao)
         for i in oss:
-            cliente_os = repositorio_cliente.listar_cliente_id(i.cliente_id, sessao)
-            self.tree_ap_entr.insert("", "end",
-                                     values=(i.os_saida, i.data_saida, cliente_os.nome, i.equipamento, i.marca,
-                                             i.modelo, "Orçamento", i.status, i.dias, i.total,
-                                             i.tecnico_id, i.operador, i.defeito, i.n_serie, i.chassi,
-                                             i.data_orc, i.data_entrada, i.hora_entrada, i.cliente_id))
+            if self.count % 2 == 0:
+                cliente_os = repositorio_cliente.listar_cliente_id(i.cliente_id, sessao)
+                self.tree_ap_entr.insert("", "end",
+                                         values=(i.os_saida, i.data_saida, cliente_os.nome, i.equipamento, i.marca,
+                                                 i.modelo, "Orçamento", i.status, i.dias, i.total,
+                                                 i.tecnico_id, i.operador, i.defeito, i.n_serie, i.chassi,
+                                                 i.data_orc, i.data_entrada, i.hora_entrada, i.cliente_id),
+                                         tags=('oddrow',))
+            else:
+                cliente_os = repositorio_cliente.listar_cliente_id(i.cliente_id, sessao)
+                self.tree_ap_entr.insert("", "end",
+                                         values=(i.os_saida, i.data_saida, cliente_os.nome, i.equipamento, i.marca,
+                                                 i.modelo, "Orçamento", i.status, i.dias, i.total,
+                                                 i.tecnico_id, i.operador, i.defeito, i.n_serie, i.chassi,
+                                                 i.data_orc, i.data_entrada, i.hora_entrada, i.cliente_id),
+                                         tags=('evenrow',))
+            self.count += 1
+        self.count = 0
         children = self.tree_ap_entr.get_children()
         if children:
             self.tree_ap_entr.selection_set(children[0])
@@ -3771,27 +3887,68 @@ class Castelo:
         repositorio_revendedor = revendedor_repositorio.RevendedorRepositorio()
         oss = repositorio.listar_produtos(sessao)
         for i in oss:
-            revendedor_prod = repositorio_revendedor.listar_revendedor_id(i.revendedor_id, sessao)
-            self.tree_est_prod.insert("", "end",
+            if self.count % 2 == 0:
+                if i.revendedor_id is not None:
+                    revendedor_prod = repositorio_revendedor.listar_revendedor_id(i.revendedor_id, sessao)
+                    revendedor_prod = revendedor_prod.Empresa
+                else:
+                    revendedor_prod = i.revendedor_id
+                self.tree_est_prod.insert("", "end",
                                       values=(i.id_fabr, i.descricao, i.qtd, self.insereTotalConvertido(i.valor_venda),
-                                              i.localizacao, i.marca,
-                                              i.utilizado, "revendedor_prod.Empresa", i.id_prod))
+                                              i.categoria, i.localizacao, i.marca,
+                                              i.utilizado, revendedor_prod, i.id_prod), tags=('oddrow'))
+            else:
+                if i.revendedor_id is not None:
+                    revendedor_prod = repositorio_revendedor.listar_revendedor_id(i.revendedor_id, sessao)
+                    revendedor_prod = revendedor_prod.Empresa
+                else:
+                    revendedor_prod = i.revendedor_id
+                self.tree_est_prod.insert("", "end",
+                                      values=(i.id_fabr, i.descricao, i.qtd, self.insereTotalConvertido(i.valor_venda),
+                                              i.categoria, i.localizacao, i.marca,
+                                              i.utilizado, revendedor_prod, i.id_prod), tags=('evenrow'))
+            self.count += 1
+        self.count = 0
         children = self.tree_est_prod.get_children()
         if children:
             self.tree_est_prod.selection_set(children[0])
 
-    def popularProdutoEstoquePesqNome(self, num):
+    def popularProdutoEstoquePesqNome(self, num, setor):
         self.tree_est_prod.delete(*self.tree_est_prod.get_children())
         produto = self.entry_descr_esto.get()
         repositorio = produto_repositorio.ProdutoRepositorio()
         repositorio_revendedor = revendedor_repositorio.RevendedorRepositorio()
-        oss = repositorio.listar_produto_nome(produto, num, sessao)
+        oss = repositorio.listar_produto_nome(produto, num, setor, sessao)
         for i in oss:
-            revendedor_prod = repositorio_revendedor.listar_revendedor_id(i.revendedor_id, sessao)
+            if i.revendedor_id is not None:
+                revendedor_prod = repositorio_revendedor.listar_revendedor_id(i.revendedor_id, sessao)
+                revendedor_prod = revendedor_prod.Empresa
+            else:
+                revendedor_prod = i.revendedor_id
             self.tree_est_prod.insert("", "end",
                                       values=(i.id_fabr, i.descricao, i.qtd, self.insereTotalConvertido(i.valor_venda),
-                                              i.localizacao, i.marca,
-                                              i.utilizado, 'revendedor_prod.Empresa', i.id_prod))
+                                              i.categoria, i.localizacao, i.marca,
+                                              i.utilizado, revendedor_prod, i.id_prod))
+        children = self.tree_est_prod.get_children()
+        if children:
+            self.tree_est_prod.selection_set(children[0])
+
+    def popularProdutoEstoquePesqId(self, setor):
+        self.tree_est_prod.delete(*self.tree_est_prod.get_children())
+        produto = self.entry_cod_esto.get()
+        repositorio = produto_repositorio.ProdutoRepositorio()
+        repositorio_revendedor = revendedor_repositorio.RevendedorRepositorio()
+        oss = repositorio.pesquisa_produto_id(produto, setor, sessao)
+        for i in oss:
+            if i.revendedor_id is not None:
+                revendedor_prod = repositorio_revendedor.listar_revendedor_id(i.revendedor_id, sessao)
+                revendedor_prod = revendedor_prod.Empresa
+            else:
+                revendedor_prod = i.revendedor_id
+            self.tree_est_prod.insert("", "end",
+                                      values=(i.id_fabr, i.descricao, i.qtd, self.insereTotalConvertido(i.valor_venda),
+                                              i.categoria, i.localizacao, i.marca,
+                                              i.utilizado, revendedor_prod, i.id_prod))
         children = self.tree_est_prod.get_children()
         if children:
             self.tree_est_prod.selection_set(children[0])
@@ -3802,13 +3959,17 @@ class Castelo:
         repositorio_revendedor = revendedor_repositorio.RevendedorRepositorio()
         oss = repositorio.listar_produtos(sessao)
         for i in oss:
-            revendedor_prod = repositorio_revendedor.listar_revendedor_id(i.revendedor_id, sessao)
+            if i.revendedor_id is not None:
+                revendedor_prod = repositorio_revendedor.listar_revendedor_id(i.revendedor_id, sessao)
+                revendedor_prod = revendedor_prod.Empresa
+            else:
+                revendedor_prod = i.revendedor_id
             self.treeview_busca_produto.insert("", "end",
                                                values=(
                                                    i.id_fabr, i.descricao, i.qtd,
                                                    self.insereTotalConvertido(i.valor_venda),
                                                    i.localizacao, i.marca,
-                                                   i.utilizado, "revendedor_prod.Empresa", i.id_prod))
+                                                   i.utilizado, revendedor_prod, i.id_prod))
         children = self.treeview_busca_produto.get_children()
         if children:
             self.treeview_busca_produto.selection_set(children[0])
@@ -3824,7 +3985,6 @@ class Castelo:
         lista_categ = ["Roçadeiras", "Cortador de Grama", "Motoserras"]
         lista_marca = ["Kawashima", "Stihl", "Raisman"]
         un_medida = ["UN", "METRO", "Kg"]
-        lista_revendedor = ["1", "2", "3", "4"]
 
         jan = Toplevel()
 
@@ -3877,7 +4037,7 @@ class Castelo:
         option_marca = ttk.Combobox(subframe_est_dados1, values=lista_marca, state="readonly", width=17)
         option_marca.grid(row=4, column=1, sticky=W, padx=20)
         Label(subframe_est_dados1, text="Revendedor").grid(row=5, column=3, sticky=E)
-        option_revendedor = ttk.Combobox(subframe_est_dados1, values=lista_revendedor, state="readonly", width=17)
+        option_revendedor = ttk.Combobox(subframe_est_dados1, values=self.lista_revendedor, state="readonly", width=17)
         option_revendedor.grid(row=5, column=4, sticky=W, padx=20)
         Label(subframe_est_dados1, text="Localização").grid(row=5, column=0, sticky=W)
         localizacao_entry = Entry(subframe_est_dados1, width=20)
@@ -3935,7 +4095,7 @@ class Castelo:
                 un_medida = option_medida.get()
                 estoque_min = estoque_min_entry.get()
                 caixa_peca = self.formataParaFloat(caixa_peca_entry.get())
-                revendedor = int(option_revendedor.get())
+                revendedor = option_revendedor.get()
 
                 novo_produto = produto.Produto(id_produto, descricao, qtd, marca, valor_compra, valor_venda, obs,
                                                localizacao, categoria, un_medida, estoque_min, caixa_peca, revendedor,
@@ -3974,7 +4134,7 @@ class Castelo:
 
         produto_selecionado = self.tree_est_prod.focus()
         dado_prod = self.tree_est_prod.item(produto_selecionado, 'values')
-        produto_dados = produto_repositorio.ProdutoRepositorio().listar_produto_id(dado_prod[8], sessao)
+        produto_dados = produto_repositorio.ProdutoRepositorio().listar_produto_id(dado_prod[9], sessao)
 
         frame_princ1 = Frame(jan)
         frame_princ1.pack(fill=X, padx=10, pady=10)
@@ -4025,8 +4185,8 @@ class Castelo:
         option_marca.current(encontraIndexLista(lista_marca, produto_dados.marca))
         option_marca.grid(row=4, column=1, sticky=W, padx=20)
         Label(subframe_est_dados1, text="Revendedor").grid(row=5, column=3, sticky=E)
-        option_revendedor = ttk.Combobox(subframe_est_dados1, values=lista_revendedor, state="readonly", width=17)
-        option_revendedor.current()
+        option_revendedor = ttk.Combobox(subframe_est_dados1, values=self.lista_revendedor, state="readonly", width=17)
+        option_revendedor.set(dado_prod[8])
         option_revendedor.grid(row=5, column=4, sticky=W, padx=20)
         Label(subframe_est_dados1, text="Localização").grid(row=5, column=0, sticky=W)
         localizacao_entry = Entry(subframe_est_dados1, width=20)
@@ -4094,7 +4254,7 @@ class Castelo:
                     un_medida = option_medida.get()
                     estoque_min = estoque_min_entry.get()
                     caixa_peca = self.formataParaFloat(caixa_peca_entry.get())
-                    revendedor = int(option_revendedor.get())
+                    revendedor = option_revendedor.get()
 
                     novo_produto = produto.Produto(id_produto, descricao, qtd, marca, valor_compra, valor_venda,
                                                    obs,
@@ -4102,7 +4262,7 @@ class Castelo:
                                                    revendedor,
                                                    utilizado)
                     repositorio = produto_repositorio.ProdutoRepositorio()
-                    repositorio.editar_produto(dado_prod[8], novo_produto, 1, sessao)
+                    repositorio.editar_produto(dado_prod[9], novo_produto, 1, sessao)
                     sessao.commit()
                     self.mostrarMensagem('1', 'Produto Editado com Sucesso!')
                     jan.destroy()
@@ -4137,7 +4297,7 @@ class Castelo:
 
         produto_selecionado = self.tree_est_prod.focus()
         dado_prod = self.tree_est_prod.item(produto_selecionado, 'values')
-        produto_dados = produto_repositorio.ProdutoRepositorio().listar_produto_id(dado_prod[8], sessao)
+        produto_dados = produto_repositorio.ProdutoRepositorio().listar_produto_id(dado_prod[9], sessao)
 
         frame_princ1 = Frame(jan)
         frame_princ1.pack(fill=X, padx=10, pady=10)
@@ -4316,7 +4476,6 @@ class Castelo:
 
         repositorio = produto_repositorio.ProdutoRepositorio()
 
-
         def popularEntradaProdutoVenda(id_prod):
             repositorio = produto_repositorio.ProdutoRepositorio()
             produto = repositorio.listar_produto_id_fabr(id_prod, sessao)
@@ -4332,10 +4491,9 @@ class Castelo:
             for i in produtos:
                 tree_est_venda.insert('', 'end',
                                       values=(i.id_fabr, i.descricao,
-                                               self.insereTotalConvertido(i.valor_un), i.qtd,
-                                               self.insereTotalConvertido(
-                                                   i.valor_un * i.qtd)))
-
+                                              self.insereTotalConvertido(i.valor_un), i.qtd,
+                                              self.insereTotalConvertido(
+                                                  i.valor_un * i.qtd)))
 
         def addProdutoestoque(id_prod, qtd):
             produto = repositorio.listar_produto_id_fabr(id_prod, sessao)
@@ -4498,15 +4656,14 @@ class Castelo:
                 finally:
                     sessao.close()
 
-
         subframe_fornecedor = Frame(frame_princ1)
         subframe_fornecedor.pack(fill=X)
         Label(subframe_fornecedor, text='Fornecedor').grid(row=0, column=0, sticky=W)
         self.est_fornec = Entry(subframe_fornecedor, width=150)
         self.est_fornec.grid(row=1, column=0, sticky=W)
-        self.est_busca_forn = Button(subframe_fornecedor, text='Buscar', command=lambda:[self.janelaBuscaFornecedor(3)])
+        self.est_busca_forn = Button(subframe_fornecedor, text='Buscar',
+                                     command=lambda: [self.janelaBuscaFornecedor(3)])
         self.est_busca_forn.grid(row=1, column=1, padx=10, ipadx=10)
-
 
         testa_float = jan.register(self.testaEntradaFloat)
         testa_inteiro = jan.register(self.testaEntradaInteiro)
@@ -4534,8 +4691,9 @@ class Castelo:
         busca_prod_button = Button(frame_prod, text='Buscar', command=lambda: [self.janelaBuscaProduto(opt)])
         busca_prod_button.grid(row=1, column=4, padx=10, ipadx=10)
         adiciona_prod_button = Button(subframe_prod, text='+', width=3, height=2,
-               command=lambda: [addProdutoestoque(self.est_cod_item.get(),
-                                                  self.formataParaIteiro(self.est_qtd_prod.get()))])
+                                      command=lambda: [addProdutoestoque(self.est_cod_item.get(),
+                                                                         self.formataParaIteiro(
+                                                                             self.est_qtd_prod.get()))])
         adiciona_prod_button.grid(row=0, column=1, padx=10, ipadx=10)
         remove_produto_button = Button(subframe_prod, text='-', width=3, height=2, command=removeProdutoEstoque)
         remove_produto_button.grid(row=0, column=2, padx=0, ipadx=10)
@@ -4662,7 +4820,7 @@ class Castelo:
         self.est_qtd_prod.bind('<Return>', cadastraProduto)
         jan.bind('<Shift-Return>', cadastraProduto)
 
-        if opt == 2: #Saida de estoque
+        if opt == 2:  # Saida de estoque
             self.preco_prod_est.config(state=DISABLED)
             self.custo_prod_est.config(state=DISABLED)
             self.est_edit_button.config(state=DISABLED)
@@ -4671,7 +4829,7 @@ class Castelo:
             self.est_button_entr.config(text='Confirmar Saída')
             self.est_nota.config(state=DISABLED)
 
-        elif opt == 3: #Edição de estoque
+        elif opt == 3:  # Edição de estoque
 
             estoque_selecionado = self.tree_est_reg.focus()
             dado_est = self.tree_est_reg.item(estoque_selecionado, 'values')
@@ -4704,8 +4862,6 @@ class Castelo:
             self.est_nota.insert(0, estoque_atual.nota)
             self.est_frete.insert(0, self.insereNumConvertido(estoque_atual.frete))
 
-
-
         jan.transient(root2)
         jan.focus_force()
         jan.grab_set()
@@ -4729,7 +4885,8 @@ class Castelo:
             total = self.formataParaFloat(self.est_total.cget('text').split()[1])
             produtos = self.lista_produto_est
 
-            novo_estoque = estoque.Estoque(revendedor, obs1, obs2, obs3, nota, frete, op, operador, total, produtos, None, None)
+            novo_estoque = estoque.Estoque(revendedor, obs1, obs2, obs3, nota, frete, op, operador, total, produtos,
+                                           None, None)
 
             repositorio = estoque_repositorio.EstoqueRepositorio()
 
@@ -4770,7 +4927,8 @@ class Castelo:
                 descricao = produto_atual.descricao
                 valor_un = produto_atual.valor_venda
 
-                nova_lista_produtos = produto_venda.ProdutoVenda(id_fabr, descricao, qtd_atual, valor_un, ultimo_estoque, 0)
+                nova_lista_produtos = produto_venda.ProdutoVenda(id_fabr, descricao, qtd_atual, valor_un,
+                                                                 ultimo_estoque, 0)
 
                 repositoriio_produtos_venda.inserir_produtos_venda(nova_lista_produtos, sessao)
 
@@ -4802,7 +4960,6 @@ class Castelo:
             sessao.commit()
         finally:
             sessao.close()
-
 
     def popularEntradaEstoque(self):
         self.tree_est_reg.delete(*self.tree_est_reg.get_children())
@@ -4849,11 +5006,10 @@ class Castelo:
                 self.popularEntradaEstoque()
 
             except:
-                 sessao.rollback()
+                sessao.rollback()
 
             finally:
-                 sessao.close()
-
+                sessao.close()
 
     # --------------------------------------------------------------------------------------
     def abrirJanelaVendas(self):
@@ -4941,7 +5097,6 @@ class Castelo:
         def habilitaEntry(event):
             habilitaEntryOption(opt)
 
-
         def procuraCod(event):
             codigo = self.venda_cod_item.get()
 
@@ -4978,7 +5133,7 @@ class Castelo:
             pix = self.formataParaFloat(self.venda_entry_pix.get())
             outros = self.formataParaFloat(self.venda_entry_outros.get())
 
-            soma_total = dinheiro+cheque+cdebito+ccredito+pix+outros
+            soma_total = dinheiro + cheque + cdebito + ccredito + pix + outros
 
             self.venda_valor_areceber.config(text=self.insereTotalConvertido(soma_total))
 
@@ -5021,10 +5176,11 @@ class Castelo:
         self.venda_qtd_item = Entry(frame_prod, width=5, validate='all', validatecommand=(testa_inteiro, '%P'))
         self.venda_qtd_item.grid(row=1, column=3, sticky=W)
         self.venda_button_busca_prod = Button(frame_prod, text='Buscar', command=lambda: [self.janelaBuscaProduto(4)])
-        self.venda_button_busca_prod .grid(row=1, column=4, padx=10, ipadx=10)
+        self.venda_button_busca_prod.grid(row=1, column=4, padx=10, ipadx=10)
         self.venda_button_add_prod = Button(subframe_prod, text='1', width=3, height=2,
                                             command=lambda: [addProdutoestoque(self.venda_cod_item.get(),
-                                                                               self.formataParaIteiro(self.venda_qtd_item.get()))])
+                                                                               self.formataParaIteiro(
+                                                                                   self.venda_qtd_item.get()))])
         self.venda_button_add_prod.grid(row=0, column=1, padx=10, ipadx=10)
         self.venda_button_remove_prod = Button(subframe_prod, text='2', width=3, height=2, command=removeProdutoEstoque)
         self.venda_button_remove_prod.grid(row=0, column=2, padx=0, ipadx=10)
@@ -5064,30 +5220,30 @@ class Castelo:
         Label(subframe_form_pag1, text="Cheque", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=1, column=0,
                                                                                                       padx=5, pady=5)
         self.venda_entry_cheque = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all',
-                                      validatecommand=(testa_float, '%P'))
+                                        validatecommand=(testa_float, '%P'))
         self.venda_entry_cheque.grid(row=1, column=1, padx=5)
         Label(subframe_form_pag1, text="Cartão de Crédito", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=2,
                                                                                                                  column=0,
                                                                                                                  padx=5)
         self.venda_entry_ccredito = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all',
-                                      validatecommand=(testa_float, '%P'))
+                                          validatecommand=(testa_float, '%P'))
         self.venda_entry_ccredito.grid(row=2, column=1, padx=5)
         Label(subframe_form_pag1, text="Cartão de Débito", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=3,
                                                                                                                 column=0,
                                                                                                                 padx=5,
                                                                                                                 pady=5)
         self.venda_entry_cdebito = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all',
-                                      validatecommand=(testa_float, '%P'))
+                                         validatecommand=(testa_float, '%P'))
         self.venda_entry_cdebito.grid(row=3, column=1, padx=5)
         Label(subframe_form_pag1, text="PIX", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=4, column=0,
                                                                                                    padx=5)
         self.venda_entry_pix = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all',
-                                      validatecommand=(testa_float, '%P'))
+                                     validatecommand=(testa_float, '%P'))
         self.venda_entry_pix.grid(row=4, column=1, padx=5)
         Label(subframe_form_pag1, text="Outros", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=5, column=0,
                                                                                                       padx=5, pady=5)
         self.venda_entry_outros = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all',
-                                      validatecommand=(testa_float, '%P'))
+                                        validatecommand=(testa_float, '%P'))
         self.venda_entry_outros.grid(row=5, column=1, padx=5)
         subframe_form_pag2 = Frame(labelframe_form_pag)
         subframe_form_pag2.pack(padx=10, fill=X, side=LEFT)
@@ -5221,12 +5377,13 @@ class Castelo:
                     operador = self.formataParaIteiro(self.venda_vendedor.get())
                     total = self.formataParaFloat(self.venda_label_total.cget('text').split()[1])
 
-                    nova_venda = os_venda.OsVenda(cliente, operador, obs1, obs2, obs3, dinheiro, cheque, cdebito, ccredito,
+                    nova_venda = os_venda.OsVenda(cliente, operador, obs1, obs2, obs3, dinheiro, cheque, cdebito,
+                                                  ccredito,
                                                   pix, outros, desconto, sub_total, None, None, total)
 
                     repositorio = os_venda_repositorio.OsVendaRepositorio()
 
-                    if op == 2: # op == 2 editar estoque
+                    if op == 2:  # op == 2 editar estoque
 
                         venda_selecionada = self.tree_est_vendas.focus()
                         dado_est = self.tree_est_vendas.item(venda_selecionada, 'values')
@@ -5240,7 +5397,8 @@ class Castelo:
 
                         sessao.commit()
                         self.cadastroProdutosVenda(op)
-                        self.mostrarMensagem('1', f'Venda Concluida! Troco: {self.insereTotalConvertido(receber - total)}')
+                        self.mostrarMensagem('1',
+                                             f'Venda Concluida! Troco: {self.insereTotalConvertido(receber - total)}')
                         self.popularEntradaVenda()
                         jan.destroy()
                 except:
@@ -5263,7 +5421,8 @@ class Castelo:
                 descricao = produto_atual.descricao
                 valor_un = produto_atual.valor_venda
 
-                nova_lista_produtos = produto_venda.ProdutoVenda(id_fabr, descricao, qtd_atual, valor_un, 0, ultima_venda)
+                nova_lista_produtos = produto_venda.ProdutoVenda(id_fabr, descricao, qtd_atual, valor_un, 0,
+                                                                 ultima_venda)
 
                 repositoriio_produtos_venda.inserir_produtos_venda(nova_lista_produtos, sessao)
 
@@ -5292,16 +5451,32 @@ class Castelo:
         repositorio = os_venda_repositorio.OsVendaRepositorio()
         vend = repositorio.listar_vendas(sessao)
         for i in vend:
-            self.tree_est_vendas.insert('', 'end',
-                                     values=(i.id_venda,
-                                             i.data,
-                                             i.cliente,
-                                             self.insereTotalConvertido(i.sub_total),
-                                             self.insereTotalConvertido(i.desconto),
-                                             self.insereTotalConvertido(i.total),
-                                             i.hora,
-                                             i.operador,
-                                             i.obs1))
+            if self.count % 2 == 0:
+                self.tree_est_vendas.insert('', 'end',
+                                            values=(i.id_venda,
+                                                    i.data,
+                                                    i.cliente,
+                                                    self.insereTotalConvertido(i.sub_total),
+                                                    self.insereTotalConvertido(i.desconto),
+                                                    self.insereTotalConvertido(i.total),
+                                                    i.hora,
+                                                    i.operador,
+                                                    i.obs1),
+                                            tags=('evenrow',))
+            else:
+                self.tree_est_vendas.insert('', 'end',
+                                            values=(i.id_venda,
+                                                    i.data,
+                                                    i.cliente,
+                                                    self.insereTotalConvertido(i.sub_total),
+                                                    self.insereTotalConvertido(i.desconto),
+                                                    self.insereTotalConvertido(i.total),
+                                                    i.hora,
+                                                    i.operador,
+                                                    i.obs1),
+                                            tags=('oddrow',))
+            self.count += 1
+        self.count = 0
         children = self.tree_est_vendas.get_children()
         if children:
             self.tree_est_vendas.selection_set(children[0])
@@ -5347,7 +5522,7 @@ class Castelo:
         # Centraliza a janela
         x_cordinate = int((self.w / 2) - (1200 / 2))
         y_cordinate = int((self.h / 2) - (900 / 2))
-        jan.geometry("{}x{}+{}+{}".format(960, 545, x_cordinate, y_cordinate))
+        jan.geometry("{}x{}+{}+{}".format(1080, 545, x_cordinate, y_cordinate))
 
         frame_principal = Frame(jan)
         frame_principal.pack(pady=10, fill=BOTH)
@@ -5395,21 +5570,84 @@ class Castelo:
 
         subframe2 = Frame(frame_principal)
         subframe2.pack(padx=10, pady=10, side=LEFT)
+        variable_int_produto = IntVar()
 
         frame_prod = LabelFrame(subframe2)
-        frame_prod.grid(row=0, column=0, sticky=W, ipady=3)
+        frame_prod.grid(row=0, column=0, sticky=W, ipady=1)
         subframe_prod = Frame(frame_prod)
         subframe_prod.pack(pady=5)
         Label(subframe_prod, text='Cód. do item').grid(sticky=W, padx=10)
-        Entry(subframe_prod, width=15).grid(row=1, column=0, sticky=W, padx=10)
+        busca_prod_cod = Entry(subframe_prod, width=15)
+        busca_prod_cod.grid(row=1, column=0, sticky=W, padx=10)
         Label(subframe_prod, text='Descrição do item').grid(row=0, column=1, sticky=W)
-        Entry(subframe_prod, width=90).grid(row=1, column=1, sticky=W)
+        busca_prod_nome = Entry(subframe_prod, width=90)
+        busca_prod_nome.grid(row=1, column=1, sticky=W)
         subframe_button = Frame(subframe_prod)
         subframe_button.grid(row=0, column=4, rowspan=2)
-        Button(subframe_button, text='1', height=2).pack(padx=10, ipadx=15, side=BOTTOM)
-        Button(subframe2, text='Selecionar', command=lambda: [self.elegeProduto(opt), jan.destroy()]).grid(row=0, column=2,
-                                                                                                   ipadx=10, ipady=5)
+        Button(subframe_button, text='C', height=2, command=self.popularProdutoEstoqueBusca).pack(padx=10, ipadx=15,
+                                                                                                  side=BOTTOM)
+        check_pesq_avan_estoq = Checkbutton(subframe_prod, text="Busca Avançada",
+                                            variable=variable_int_produto,
+                                            onvalue=1, offvalue=0)
+        check_pesq_avan_estoq.grid(row=1, column=2, sticky=W, padx=5)
+        Button(subframe2, text='Selecionar', command=lambda: [self.elegeProduto(opt), jan.destroy()]).grid(row=0,
+                                                                                                           column=2,
+                                                                                                           ipadx=10,
+                                                                                                           ipady=5)
         Button(subframe2, text='Fechar', command=jan.destroy).grid(row=0, column=1, ipadx=20, ipady=5, padx=15)
+
+        def popularProdutoEstoquePesqId():
+            self.treeview_busca_produto.delete(*self.treeview_busca_produto.get_children())
+            produto = busca_prod_cod.get()
+            repositorio = produto_repositorio.ProdutoRepositorio()
+            repositorio_revendedor = revendedor_repositorio.RevendedorRepositorio()
+            oss = repositorio.pesquisa_produto_id(produto, 'Todos', sessao)
+            for i in oss:
+                if i.revendedor_id is not None:
+                    revendedor_prod = repositorio_revendedor.listar_revendedor_id(i.revendedor_id, sessao)
+                    revendedor_prod = revendedor_prod.Empresa
+                else:
+                    revendedor_prod = i.revendedor_id
+                self.treeview_busca_produto.insert("", "end",
+                                                   values=(
+                                                       i.id_fabr, i.descricao, i.qtd,
+                                                       self.insereTotalConvertido(i.valor_venda),
+                                                       i.localizacao, i.marca,
+                                                       i.utilizado, revendedor_prod, i.id_prod))
+            children = self.treeview_busca_produto.get_children()
+            if children:
+                self.treeview_busca_produto.selection_set(children[0])
+
+        def popularProdutoEstoquePesqNome(num):
+            self.treeview_busca_produto.delete(*self.treeview_busca_produto.get_children())
+            produto = busca_prod_nome.get()
+            repositorio = produto_repositorio.ProdutoRepositorio()
+            repositorio_revendedor = revendedor_repositorio.RevendedorRepositorio()
+            oss = repositorio.listar_produto_nome(produto, num, 'Todos', sessao)
+            for i in oss:
+                if i.revendedor_id is not None:
+                    revendedor_prod = repositorio_revendedor.listar_revendedor_id(i.revendedor_id, sessao)
+                    revendedor_prod = revendedor_prod.Empresa
+                else:
+                    revendedor_prod = i.revendedor_id
+                self.treeview_busca_produto.insert("", "end",
+                                                   values=(
+                                                       i.id_fabr, i.descricao, i.qtd,
+                                                       self.insereTotalConvertido(i.valor_venda),
+                                                       i.localizacao, i.marca,
+                                                       i.utilizado, revendedor_prod, i.id_prod))
+            children = self.treeview_busca_produto.get_children()
+            if children:
+                self.treeview_busca_produto.selection_set(children[0])
+
+        def pesquisaNomeProduto(event):
+            popularProdutoEstoquePesqNome(variable_int_produto.get())
+
+        def pesquisaIdProduto(event):
+            popularProdutoEstoquePesqId()
+
+        busca_prod_nome.bind('<Return>', pesquisaNomeProduto)
+        busca_prod_cod.bind('<Return>', pesquisaIdProduto)
 
         jan.transient(root2)
         jan.focus_force()
@@ -5675,26 +5913,26 @@ class Castelo:
                                               yscrollcommand=scrollbar_busca_y,
                                               selectmode='browse',
                                               height=20)
-        treeview_busca_cliente .column('id', width=100, minwidth=50, stretch=False)
-        treeview_busca_cliente .column('cliente', width=500, minwidth=50, stretch=False)
-        treeview_busca_cliente .column('endereco', width=200, minwidth=50, stretch=False)
-        treeview_busca_cliente .column('cidade', width=150, minwidth=50, stretch=False)
-        treeview_busca_cliente .column('whats', width=200, minwidth=50, stretch=False)
-        treeview_busca_cliente .column('telefone', width=200, minwidth=50, stretch=False)
-        treeview_busca_cliente .column('email', width=200, minwidth=50, stretch=False)
+        treeview_busca_cliente.column('id', width=100, minwidth=50, stretch=False)
+        treeview_busca_cliente.column('cliente', width=500, minwidth=50, stretch=False)
+        treeview_busca_cliente.column('endereco', width=200, minwidth=50, stretch=False)
+        treeview_busca_cliente.column('cidade', width=150, minwidth=50, stretch=False)
+        treeview_busca_cliente.column('whats', width=200, minwidth=50, stretch=False)
+        treeview_busca_cliente.column('telefone', width=200, minwidth=50, stretch=False)
+        treeview_busca_cliente.column('email', width=200, minwidth=50, stretch=False)
 
-        treeview_busca_cliente .heading('id', text='ID')
-        treeview_busca_cliente .heading('cliente', text='CLIENTE')
-        treeview_busca_cliente .heading('endereco', text='ENDEREÇO.')
-        treeview_busca_cliente .heading('cidade', text='CIDADE')
-        treeview_busca_cliente .heading('whats', text='WHATSAPP')
-        treeview_busca_cliente .heading('telefone', text='TELEFONE')
-        treeview_busca_cliente .heading('email', text='EMAIL')
+        treeview_busca_cliente.heading('id', text='ID')
+        treeview_busca_cliente.heading('cliente', text='CLIENTE')
+        treeview_busca_cliente.heading('endereco', text='ENDEREÇO.')
+        treeview_busca_cliente.heading('cidade', text='CIDADE')
+        treeview_busca_cliente.heading('whats', text='WHATSAPP')
+        treeview_busca_cliente.heading('telefone', text='TELEFONE')
+        treeview_busca_cliente.heading('email', text='EMAIL')
 
-        scrollbar_busca_y.config(command=treeview_busca_cliente .yview)
+        scrollbar_busca_y.config(command=treeview_busca_cliente.yview)
         scrollbar_busca_y.pack(fill=Y, side=RIGHT)
-        treeview_busca_cliente .pack()
-        scrollbar_busca_x.config(command=treeview_busca_cliente .xview)
+        treeview_busca_cliente.pack()
+        scrollbar_busca_x.config(command=treeview_busca_cliente.xview)
         scrollbar_busca_x.pack(fill=X)
 
         popularEntradaBuscaCliente()
@@ -5705,15 +5943,15 @@ class Castelo:
         frame_prod = LabelFrame(subframe2, text='Digite um Nome para Pesquisar')
         frame_prod.grid(row=0, column=0, sticky=W, ipady=3)
         Entry(frame_prod, width=90).grid(row=0, column=0, sticky=W, padx=10)
-        Button(frame_prod, text='1', height=2, command=popularEntradaBuscaCliente).grid(row=0, column=1, padx=10, ipadx=15)
+        Button(frame_prod, text='1', height=2, command=popularEntradaBuscaCliente).grid(row=0, column=1, padx=10,
+                                                                                        ipadx=15)
         Button(subframe2, text='Fechar', command=jan.destroy).grid(row=0, column=1, padx=15, ipadx=20,
-                                                                                ipady=5)
+                                                                   ipady=5)
         Button(subframe2, text='Selecionar', command=selecionaCliente).grid(row=0, column=2, ipadx=20, ipady=5)
 
         jan.transient(root2)
         jan.focus_force()
         jan.grab_set()
-
 
     def janelaBuscaFornecedor(self, opt):
 
@@ -5722,11 +5960,10 @@ class Castelo:
         # Centraliza a janela
         x_cordinate = int((self.w / 2) - (1200 / 2))
         y_cordinate = int((self.h / 2) - (900 / 2))
-        self.fornec.geometry("{}x{}+{}+{}".format(960, 550, x_cordinate, y_cordinate))
+        self.fornec.geometry("{}x{}+{}+{}".format(970, 550, x_cordinate, y_cordinate))
 
         def editaFornec(event):
             self.janelaCadastroFornecedor(2)
-
 
         frame_principal = Frame(self.fornec)
         frame_principal.pack(pady=10, fill=BOTH)
@@ -5736,13 +5973,13 @@ class Castelo:
         scrollbar_busca_y = Scrollbar(subframe1, orient=VERTICAL)
         scrollbar_busca_x = Scrollbar(subframe1, orient=HORIZONTAL)
         self.treeview_busca_fornecedor = ttk.Treeview(subframe1,
-                                              columns=("id", 'fornecedor', 'endereco', 'cidade', 'whats',
-                                                       'telefone', 'email'),
-                                              show='headings',
-                                              xscrollcommand=scrollbar_busca_x,
-                                              yscrollcommand=scrollbar_busca_y,
-                                              selectmode='browse',
-                                              height=20)
+                                                      columns=("id", 'fornecedor', 'endereco', 'cidade', 'whats',
+                                                               'telefone', 'email'),
+                                                      show='headings',
+                                                      xscrollcommand=scrollbar_busca_x,
+                                                      yscrollcommand=scrollbar_busca_y,
+                                                      selectmode='browse',
+                                                      height=20)
         self.treeview_busca_fornecedor.column('id', width=100, minwidth=50, stretch=False)
         self.treeview_busca_fornecedor.column('fornecedor', width=500, minwidth=50, stretch=False)
         self.treeview_busca_fornecedor.column('endereco', width=200, minwidth=50, stretch=False)
@@ -5771,10 +6008,12 @@ class Castelo:
 
         frame_prod = LabelFrame(subframe2, text='Digite um Nome para Pesquisar')
         frame_prod.grid(row=0, column=0, sticky=W, ipady=3)
-        Entry(frame_prod, width=90).grid(row=0, column=0, sticky=W, padx=10)
+        pesq_nome = Entry(frame_prod, width=90)
+        pesq_nome.grid(row=0, column=0, sticky=W, padx=10)
         Button(frame_prod, text='1', height=2).grid(row=0, column=1, padx=10, ipadx=15)
-        Button(subframe2, text='Novo', command=lambda: [self.janelaCadastroFornecedor(opt)]).grid(row=0, column=1, padx=15, ipadx=20,
-                                                                                   ipady=5)
+        Button(subframe2, text='Novo', command=lambda: [self.janelaCadastroFornecedor(1)]).grid(row=0, column=1,
+                                                                                                padx=15, ipadx=20,
+                                                                                                ipady=5)
         second_button = Button(subframe2, text='Deletar', command=lambda: [self.excluirFornecedor(opt, self.fornec)])
         second_button.grid(row=0, column=2, ipadx=20, ipady=5)
         Button(subframe2, text='Fechar', command=self.fornec.destroy).grid(row=0, column=3, padx=15, ipadx=20, ipady=5)
@@ -5782,6 +6021,26 @@ class Castelo:
         self.treeview_busca_fornecedor.bind('<Double-1>', editaFornec)
         if opt == 3:
             second_button.config(text='Selecionar')
+
+        def popularProdutoEstoquePesqNome():
+            self.treeview_busca_fornecedor.delete(*self.treeview_busca_fornecedor.get_children())
+            revendedor = pesq_nome.get()
+            repositorio_revendedor = revendedor_repositorio.RevendedorRepositorio()
+            revend = repositorio_revendedor.listar_revendedor_nome(revendedor, sessao)
+            for i in revend:
+                self.treeview_busca_fornecedor.insert("", "end",
+                                                      values=(
+                                                          i.id, i.Empresa, i.logradouro,
+                                                          i.cidade, i.whats,
+                                                          i.tel_comercial, i.email))
+            children = self.treeview_busca_fornecedor.get_children()
+            if children:
+                self.treeview_busca_fornecedor.selection_set(children[0])
+
+        def pesquisaNomeProduto(event):
+            popularProdutoEstoquePesqNome()
+
+        pesq_nome.bind('<Return>', pesquisaNomeProduto)
 
         self.fornec.transient(root2)
         self.fornec.focus_force()
@@ -5844,17 +6103,20 @@ class Castelo:
         self.cad_forn_oper.grid(row=12, column=1, sticky=W, padx=10)
         self.forn_botao_entr_frame = Frame(jan)
         self.forn_botao_entr_frame.grid(row=12, column=2, sticky=W)
-        self.cad_forn_botao_conf = Button(self.forn_botao_entr_frame, text="Confirmar Cadastro", width=10, wraplength=70,
-               underline=0, font=('Verdana', '9', 'bold'), command=lambda: [self.cadastroFornecedor(opt, jan)])
+        self.cad_forn_botao_conf = Button(self.forn_botao_entr_frame, text="Confirmar Cadastro", width=10,
+                                          wraplength=70,
+                                          underline=0, font=('Verdana', '9', 'bold'),
+                                          command=lambda: [self.cadastroFornecedor(opt, jan)])
         self.cad_forn_botao_conf.grid()
         Button(self.forn_botao_entr_frame, text="Cancelar", width=10, wraplength=70,
                underline=0, font=('Verdana', '9', 'bold'), height=2, command=jan.destroy).grid(row=0, column=1,
-                                                                                                    padx=10)
+                                                                                               padx=10)
 
         if opt == 2:
             revendedor_selecionado = self.treeview_busca_fornecedor.focus()
             dado_revend = self.treeview_busca_fornecedor.item(revendedor_selecionado, 'values')
-            revendedor_dados = revendedor_repositorio.RevendedorRepositorio().listar_revendedor_id(dado_revend[0], sessao)
+            revendedor_dados = revendedor_repositorio.RevendedorRepositorio().listar_revendedor_id(dado_revend[0],
+                                                                                                   sessao)
             self.cad_forn_nome.insert(0, revendedor_dados.Empresa)
             self.cad_forn_cpf.insert(0, revendedor_dados.cnpj)
             self.cad_forn_end.insert(0, revendedor_dados.logradouro)
@@ -5911,11 +6173,13 @@ class Castelo:
             email = self.cad_forn_email.get()
             operador = self.insereZero(self.cad_forn_oper.get())
 
-            novo_revendedor = revendedor.Revendedor(nome, operador, celular, cpf, tel_fixo, '-', endereco, estado, bairro,
-                                           '', cep, cidade, email, whats, contato, tel_comercial)
+            novo_revendedor = revendedor.Revendedor(nome, operador, celular, cpf, tel_fixo, '-', endereco, estado,
+                                                    bairro,
+                                                    '', cep, cidade, email, whats, contato, tel_comercial)
             repositorio = revendedor_repositorio.RevendedorRepositorio()
             if opt == 1:
                 repositorio.inserir_revendedor(novo_revendedor, sessao)
+                self.lista_revendedor.append(nome)
                 sessao.commit()
                 self.mostrarMensagem("1", "Cliente Cadastrado com Sucesso!")
 
@@ -5924,6 +6188,10 @@ class Castelo:
                 revend_dados = self.treeview_busca_fornecedor.item(revendedor_selecionado, 'values')
                 repositorio.editar_revendedores(revend_dados[0], novo_revendedor, sessao)
                 sessao.commit()
+                self.lista_revendedor = []
+                revendedores = repositorio.listar_revendedores(sessao)
+                for i in revendedores:
+                    self.lista_revendedor.append(i.Empresa)
                 self.mostrarMensagem("1", "Registro Editado com Sucesso!")
 
 
@@ -5951,8 +6219,8 @@ class Castelo:
         revendedores = repositorio.listar_revendedores(sessao)
         for i in revendedores:
             self.treeview_busca_fornecedor.insert("", "end",
-                                      values=(i.id, i.Empresa, i.logradouro, i.cidade,
-                                              i.whats, i.tel_comercial, i.email))
+                                                  values=(i.id, i.Empresa, i.logradouro, i.cidade,
+                                                          i.whats, i.tel_comercial, i.email))
         children = self.treeview_busca_fornecedor.get_children()
         if children:
             self.treeview_busca_fornecedor.selection_set(children[0])
@@ -5968,6 +6236,10 @@ class Castelo:
                     repositorio.remover_revendedor(revend_dados[0], sessao)
                     self.mostrarMensagem('1', 'Registro deletado com sucesso!')
                     sessao.commit()
+                    self.lista_revendedor = []
+                    revendedores = repositorio.listar_revendedores(sessao)
+                    for i in revendedores:
+                        self.lista_revendedor.append(i.Empresa)
                     self.popularFornecedores()
                 except:
                     sessao.rollback()

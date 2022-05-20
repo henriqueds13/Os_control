@@ -1,7 +1,7 @@
 class Produto():
     def __init__(self, id_fabr, descricao, qtd=0, marca='', valor_compra=0, valor_venda=0,
-               obs='', localizacao='', categoria='', un_medida='', estoque_min=0, caixa_peca=0, revendedor_id=0,
-               utilizado=''):
+                 obs='', localizacao='', categoria='', un_medida='', estoque_min=0, caixa_peca=0, revendedor='',
+                 utilizado=''):
         self.__id_fabr = id_fabr
         self.__descricao = descricao
         self.__qtd = qtd
@@ -14,7 +14,7 @@ class Produto():
         self.__un_medida = un_medida
         self.__estoque_min = estoque_min
         self.__caixa_peca = caixa_peca
-        self.__revendedor_id = revendedor_id
+        self.__revendedor = revendedor
         self.__utilizado = utilizado
 
     @property
@@ -34,8 +34,8 @@ class Produto():
         return self.__caixa_peca
 
     @property
-    def revendedorId(self):
-        return self.__revendedor_id
+    def revendedor(self):
+        return self.__revendedor
 
     @property
     def utilizado(self):
@@ -89,9 +89,9 @@ class Produto():
     def estoqueMin(self, estoque):
         self.__estoque_min = estoque
 
-    @revendedorId.setter
-    def revendedorId(self, revendedor):
-        self.__revendedor_id = revendedor
+    @revendedor.setter
+    def revendedor(self, revendedor):
+        self.__revendedor = revendedor
 
     @utilizado.setter
     def utlizado(self, utililizado):

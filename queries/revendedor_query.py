@@ -15,8 +15,12 @@ class RevendedorQuery():
         return revendedor
 
     def listar_revendedor_nome(self, nome_revendedor, sessao):
-        revendedores = sessao.query(Revendedor).filter(Revendedor.nome.like( f'%{nome_revendedor}%' )).all()
+        revendedores = sessao.query(Revendedor).filter(Revendedor.Empresa.like( f'{nome_revendedor}%')).all()
         return revendedores
+
+    def pequisa_revendedor_nome(self, nome_revendedor, sessao):
+        revendedor = sessao.query(Revendedor).filter(Revendedor.Empresa == nome_revendedor).first()
+        return revendedor
 
     def editar_revendedores(self, id_revendedor, revendedor, sessao):
         revend = self.listar_revendedor_id(id_revendedor, sessao)
