@@ -243,19 +243,15 @@ class Castelo:
                        foreground=[('selected', '#FBFC8B')])
 
         self.tree_cliente = ttk.Treeview(self.cadastro_label_frame,
-                                         columns=('id', 'nome', 'endereço', 'bairro', 'telefone'),
+                                         columns=('id', 'nome', 'telefone'),
                                          show='headings',
                                          xscrollcommand=self.scrollbar.set,
                                          selectmode='browse')  # TreeView listagem de clientes
         self.tree_cliente.column('id', width=50, minwidth=100, stretch=False)
-        self.tree_cliente.column('nome', width=250, minwidth=100, stretch=False)
-        self.tree_cliente.column('endereço', width=200, minwidth=100, stretch=False)
-        self.tree_cliente.column('bairro', width=100, minwidth=100, stretch=False)
-        self.tree_cliente.column('telefone', width=100, minwidth=100, stretch=False)
+        self.tree_cliente.column('nome', width=330, minwidth=100, stretch=False)
+        self.tree_cliente.column('telefone', width=120, minwidth=100, stretch=False)
         self.tree_cliente.heading('id', text='ID')
         self.tree_cliente.heading('nome', text='Nome')
-        self.tree_cliente.heading('endereço', text='Endereço')
-        self.tree_cliente.heading('bairro', text='Bairro')
         self.tree_cliente.heading('telefone', text='Telefone')
         self.popular()
 
@@ -291,11 +287,12 @@ class Castelo:
         self.botao_localizar_cliente.pack(side='right')
         self.botao_alterar_cliente.pack(side='right', padx=10)
 
-        self.subframe_listagem_clientes = Frame(self.subframe_cadastro_cliente, height=500)
+        self.subframe_listagem_clientes = Frame(self.subframe_cadastro_cliente)
         self.listagem_label_frame = LabelFrame(self.subframe_listagem_clientes, text='Dados do Cliente',
                                                font=font_label,
                                                fg='blue')  # Frame onde mostra os dados do cliente pesquisado
-
+        self.listagem_label_frame.configure(height=300, width=400)
+        self.listagem_label_frame.grid_propagate(0)
         # capturando dados da row
         self.tree_cliente.focus_set()
         children = self.tree_cliente.get_children()
@@ -963,6 +960,9 @@ class Castelo:
 
         self.popularEntradaEstoque()
 
+        self.tree_est_reg.tag_configure('evenrow', background='#828E8C')
+        self.tree_est_reg.tag_configure('oddrow', background='#C5D0C1')
+
         button_est1.bind('<Enter>', on_enter)
         button_est1.bind('<Leave>', on_leave)
         button_est2.bind('<Enter>', on_enter)
@@ -1191,13 +1191,13 @@ class Castelo:
         clientes = repositorio.listar_clientes(sessao)
         for i in clientes:
             if self.count % 2 == 0:
-                self.tree_cliente.insert("", "end", values=(i.id, i.nome, i.logradouro, i.bairro, i.tel_fixo),
+                self.tree_cliente.insert("", "end", values=(i.id, i.nome, i.whats),
                                          tags=('oddrow',))
             else:
-                self.tree_cliente.insert("", "end", values=(i.id, i.nome, i.logradouro, i.bairro, i.tel_fixo),
+                self.tree_cliente.insert("", "end", values=(i.id, i.nome, i.whats),
                                          tags=('evenrow',))
             self.count += 1
-        self.count == 0
+        self.count = 0
 
     def popularPesquisaNome(self, tipo):
         self.tree_cliente.delete(*self.tree_cliente.get_children())
@@ -1206,13 +1206,13 @@ class Castelo:
         clientes = repositorio.listar_cliente_nome(nome, tipo, sessao)
         for i in clientes:
             if self.count % 2 == 0:
-                self.tree_cliente.insert("", "end", values=(i.id, i.nome, i.logradouro, i.bairro, i.tel_fixo),
-                                         tags=('evenrow',))
-            else:
-                self.tree_cliente.insert("", "end", values=(i.id, i.nome, i.logradouro, i.bairro, i.tel_fixo),
+                self.tree_cliente.insert("", "end", values=(i.id, i.nome, i.tel_fixo),
                                          tags=('oddrow',))
+            else:
+                self.tree_cliente.insert("", "end", values=(i.id, i.nome, i.tel_fixo),
+                                         tags=('evenrow',))
             self.count += 1
-        self.count == 0
+        self.count = 0
 
     def cadastrarCliente(self):
 
@@ -1727,14 +1727,14 @@ class Castelo:
                                               values=(i.id, i.data_entrada, i.cliente.nome, i.equipamento, i.marca,
                                                       i.modelo, "Orçamento", i.status, i.dias, i.total,
                                                       i.tecnico, i.operador, i.defeito, i.n_serie, i.chassi,
-                                                      i.dias, 0, i.hora_entrada, i.cliente_id), tags=('evenrow',))
+                                                      i.dias, 0, i.hora_entrada, i.cliente_id), tags=('oddrow',))
             else:
                 if i.aparelho_na_oficina == 1:
                     self.tree_ap_manut.insert("", "end",
                                               values=(i.id, i.data_entrada, i.cliente.nome, i.equipamento, i.marca,
                                                       i.modelo, "Orçamento", i.status, i.dias, i.total,
                                                       i.tecnico, i.operador, i.defeito, i.n_serie, i.chassi,
-                                                      i.dias, 0, i.hora_entrada, i.cliente_id), tags=('oddrow',))
+                                                      i.dias, 0, i.hora_entrada, i.cliente_id), tags=('evenrow',))
             self.count += 1
         self.count = 0
         children = self.tree_ap_manut.get_children()
@@ -1757,7 +1757,7 @@ class Castelo:
                                                       dados_os.tecnico, dados_os.operador, dados_os.defeito,
                                                       dados_os.n_serie, dados_os.chassi,
                                                       dados_os.dias, 0, dados_os.hora_entrada, dados_os.cliente_id),
-                                              tags=('evenrow'))
+                                              tags=('oddrow'))
             else:
                 if dados_os.aparelho_na_oficina == 1:
                     self.tree_ap_manut.insert("", "end",
@@ -1768,7 +1768,7 @@ class Castelo:
                                                       dados_os.tecnico, dados_os.operador, dados_os.defeito,
                                                       dados_os.n_serie, dados_os.chassi,
                                                       dados_os.dias, 0, dados_os.hora_entrada, dados_os.cliente_id),
-                                              tags=('oddrow'))
+                                              tags=('evenrow'))
             self.count += 1
         self.count = 0
         children = self.tree_ap_manut.get_children()
@@ -3189,12 +3189,22 @@ class Castelo:
         repositorio = os_saida_repositorio.OsSaidaRepositorio()
         oss = repositorio.listar_os_nome(nome, num, sessao)
         for i in oss:
-            self.tree_ap_entr.insert("", "end",
-                                     values=(i.os_saida, i.data_saida, i.nome, i.equipamento, i.marca,
-                                             i.modelo, "Orçamento", i.status, i.dias, i.total,
-                                             i.tecnico_id, i.operador, i.defeito, i.n_serie, i.chassi,
-                                             i.data_orc, i.data_entrada, i.hora_entrada, i.cliente_id))
-
+            if self.count % 2 == 0:
+                self.tree_ap_entr.insert("", "end",
+                                         values=(i.os_saida, i.data_saida, i.nome, i.equipamento, i.marca,
+                                                 i.modelo, "Orçamento", i.status, i.dias, i.total,
+                                                 i.tecnico_id, i.operador, i.defeito, i.n_serie, i.chassi,
+                                                 i.data_orc, i.data_entrada, i.hora_entrada, i.cliente_id),
+                                         tags=('oddrow'))
+            else:
+                self.tree_ap_entr.insert("", "end",
+                                         values=(i.os_saida, i.data_saida, i.nome, i.equipamento, i.marca,
+                                                 i.modelo, "Orçamento", i.status, i.dias, i.total,
+                                                 i.tecnico_id, i.operador, i.defeito, i.n_serie, i.chassi,
+                                                 i.data_orc, i.data_entrada, i.hora_entrada, i.cliente_id),
+                                         tags=('evenrow'))
+            self.count += 1
+        self.count = 0
         children = self.tree_ap_entr.get_children()
         if children:
             self.tree_ap_entr.selection_set(children[0])
@@ -3894,7 +3904,8 @@ class Castelo:
                 else:
                     revendedor_prod = i.revendedor_id
                 self.tree_est_prod.insert("", "end",
-                                      values=(i.id_fabr, i.descricao, i.qtd, self.insereTotalConvertido(i.valor_venda),
+                                          values=(
+                                              i.id_fabr, i.descricao, i.qtd, self.insereTotalConvertido(i.valor_venda),
                                               i.categoria, i.localizacao, i.marca,
                                               i.utilizado, revendedor_prod, i.id_prod), tags=('oddrow'))
             else:
@@ -3904,7 +3915,8 @@ class Castelo:
                 else:
                     revendedor_prod = i.revendedor_id
                 self.tree_est_prod.insert("", "end",
-                                      values=(i.id_fabr, i.descricao, i.qtd, self.insereTotalConvertido(i.valor_venda),
+                                          values=(
+                                              i.id_fabr, i.descricao, i.qtd, self.insereTotalConvertido(i.valor_venda),
                                               i.categoria, i.localizacao, i.marca,
                                               i.utilizado, revendedor_prod, i.id_prod), tags=('evenrow'))
             self.count += 1
@@ -3920,15 +3932,32 @@ class Castelo:
         repositorio_revendedor = revendedor_repositorio.RevendedorRepositorio()
         oss = repositorio.listar_produto_nome(produto, num, setor, sessao)
         for i in oss:
-            if i.revendedor_id is not None:
-                revendedor_prod = repositorio_revendedor.listar_revendedor_id(i.revendedor_id, sessao)
-                revendedor_prod = revendedor_prod.Empresa
-            else:
-                revendedor_prod = i.revendedor_id
-            self.tree_est_prod.insert("", "end",
-                                      values=(i.id_fabr, i.descricao, i.qtd, self.insereTotalConvertido(i.valor_venda),
+            if self.count % 2 == 0:
+                if i.revendedor_id is not None:
+                    revendedor_prod = repositorio_revendedor.listar_revendedor_id(i.revendedor_id, sessao)
+                    revendedor_prod = revendedor_prod.Empresa
+                else:
+                    revendedor_prod = i.revendedor_id
+                self.tree_est_prod.insert("", "end",
+                                          values=(
+                                              i.id_fabr, i.descricao, i.qtd,
+                                              self.insereTotalConvertido(i.valor_venda),
                                               i.categoria, i.localizacao, i.marca,
-                                              i.utilizado, revendedor_prod, i.id_prod))
+                                              i.utilizado, revendedor_prod, i.id_prod), tags=('oddrow',))
+            else:
+                if i.revendedor_id is not None:
+                    revendedor_prod = repositorio_revendedor.listar_revendedor_id(i.revendedor_id, sessao)
+                    revendedor_prod = revendedor_prod.Empresa
+                else:
+                    revendedor_prod = i.revendedor_id
+                self.tree_est_prod.insert("", "end",
+                                          values=(
+                                              i.id_fabr, i.descricao, i.qtd,
+                                              self.insereTotalConvertido(i.valor_venda),
+                                              i.categoria, i.localizacao, i.marca,
+                                              i.utilizado, revendedor_prod, i.id_prod), tags=('evenrow',))
+            self.count += 1
+        self.count = 0
         children = self.tree_est_prod.get_children()
         if children:
             self.tree_est_prod.selection_set(children[0])
@@ -3940,15 +3969,30 @@ class Castelo:
         repositorio_revendedor = revendedor_repositorio.RevendedorRepositorio()
         oss = repositorio.pesquisa_produto_id(produto, setor, sessao)
         for i in oss:
-            if i.revendedor_id is not None:
-                revendedor_prod = repositorio_revendedor.listar_revendedor_id(i.revendedor_id, sessao)
-                revendedor_prod = revendedor_prod.Empresa
+            if self.count % 2 == 0:
+                if i.revendedor_id is not None:
+                    revendedor_prod = repositorio_revendedor.listar_revendedor_id(i.revendedor_id, sessao)
+                    revendedor_prod = revendedor_prod.Empresa
+                else:
+                    revendedor_prod = i.revendedor_id
+                self.tree_est_prod.insert("", "end",
+                                          values=(
+                                          i.id_fabr, i.descricao, i.qtd, self.insereTotalConvertido(i.valor_venda),
+                                          i.categoria, i.localizacao, i.marca,
+                                          i.utilizado, revendedor_prod, i.id_prod), tags=('oddrow',))
             else:
-                revendedor_prod = i.revendedor_id
-            self.tree_est_prod.insert("", "end",
-                                      values=(i.id_fabr, i.descricao, i.qtd, self.insereTotalConvertido(i.valor_venda),
-                                              i.categoria, i.localizacao, i.marca,
-                                              i.utilizado, revendedor_prod, i.id_prod))
+                if i.revendedor_id is not None:
+                    revendedor_prod = repositorio_revendedor.listar_revendedor_id(i.revendedor_id, sessao)
+                    revendedor_prod = revendedor_prod.Empresa
+                else:
+                    revendedor_prod = i.revendedor_id
+                self.tree_est_prod.insert("", "end",
+                                          values=(
+                                          i.id_fabr, i.descricao, i.qtd, self.insereTotalConvertido(i.valor_venda),
+                                          i.categoria, i.localizacao, i.marca,
+                                          i.utilizado, revendedor_prod, i.id_prod), tags=('evenrow',))
+            self.count += 1
+        self.count = 0
         children = self.tree_est_prod.get_children()
         if children:
             self.tree_est_prod.selection_set(children[0])
@@ -4911,6 +4955,7 @@ class Castelo:
             sessao.rollback()
             raise
         finally:
+            self.revendedor_obj = None
             sessao.close()
 
     def cadastroProdutosEstoque(self, op):
@@ -4967,32 +5012,60 @@ class Castelo:
         repositorio_revend = revendedor_repositorio.RevendedorRepositorio()
         estoq = repositorio.listar_estoques(sessao)
         for i in estoq:
-            if i.revendedor_id == None:
-                self.tree_est_reg.insert('', 'end',
-                                         values=(i.data,
-                                                 i.hora,
-                                                 'SAÍDA DE ESTOQUE',
-                                                 i.nota,
-                                                 self.insereTotalConvertido(i.total),
-                                                 self.insereTotalConvertido(i.frete),
-                                                 i.operador,
-                                                 i.obs1,
-                                                 i.id))
+            if self.count % 2 == 0:
+
+                if i.revendedor_id is None:
+                    self.tree_est_reg.insert('', 'end',
+                                             values=(i.data,
+                                                     i.hora,
+                                                     'SAÍDA DE ESTOQUE',
+                                                     i.nota,
+                                                     self.insereTotalConvertido(i.total),
+                                                     self.insereTotalConvertido(i.frete),
+                                                     i.operador,
+                                                     i.obs1,
+                                                     i.id), tags=('evenrow',))
+                else:
+                    revendedor_atual = repositorio_revend.listar_revendedor_id(i.revendedor_id, sessao)
+                    self.tree_est_reg.insert('', 'end',
+                                             values=(i.data,
+                                                     i.hora,
+                                                     revendedor_atual.Empresa,
+                                                     i.nota,
+                                                     self.insereTotalConvertido(i.total),
+                                                     self.insereTotalConvertido(i.frete),
+                                                     i.operador,
+                                                     i.obs1,
+                                                     i.id), tags=('evenrow',))
             else:
-                revendedor_atual = repositorio_revend.listar_revendedor_id(i.revendedor_id, sessao)
-                self.tree_est_reg.insert('', 'end',
-                                         values=(i.data,
-                                                 i.hora,
-                                                 revendedor_atual.Empresa,
-                                                 i.nota,
-                                                 self.insereTotalConvertido(i.total),
-                                                 self.insereTotalConvertido(i.frete),
-                                                 i.operador,
-                                                 i.obs1,
-                                                 i.id))
-            children = self.tree_est_reg.get_children()
-            if children:
-                self.tree_est_reg.selection_set(children[0])
+                if i.revendedor_id is None:
+                    self.tree_est_reg.insert('', 'end',
+                                             values=(i.data,
+                                                     i.hora,
+                                                     'SAÍDA DE ESTOQUE',
+                                                     i.nota,
+                                                     self.insereTotalConvertido(i.total),
+                                                     self.insereTotalConvertido(i.frete),
+                                                     i.operador,
+                                                     i.obs1,
+                                                     i.id), tags=('oddrow',))
+                else:
+                    revendedor_atual = repositorio_revend.listar_revendedor_id(i.revendedor_id, sessao)
+                    self.tree_est_reg.insert('', 'end',
+                                             values=(i.data,
+                                                     i.hora,
+                                                     revendedor_atual.Empresa,
+                                                     i.nota,
+                                                     self.insereTotalConvertido(i.total),
+                                                     self.insereTotalConvertido(i.frete),
+                                                     i.operador,
+                                                     i.obs1,
+                                                     i.id), tags=('oddrow',))
+                children = self.tree_est_reg.get_children()
+                if children:
+                    self.tree_est_reg.selection_set(children[0])
+            self.count += 1
+        self.count = 0
 
     def excluirRegistroEstoque(self):
         res = messagebox.askyesno(None, 'Deseja Realmente Excluir o Registro?')
@@ -6257,7 +6330,6 @@ class Castelo:
             self.revendedor_obj = repositorio.listar_revendedor_id(revend_dados[0], sessao)
             self.est_fornec.delete(0, END)
             self.est_fornec.insert(0, self.revendedor_obj.Empresa)
-            self.revendedor_obj = None
             jan.destroy()
 
 

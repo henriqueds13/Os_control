@@ -11,7 +11,7 @@ class EstoqueRepositorio():
         if estoque.revendedor is not None:
             revendedor = repositorio_revendedor.listar_revendedor_id(estoque.revendedor.id, sessao)
         else:
-            revendedor = estoque.revendedor_id
+            revendedor = estoque.revendedor
         novo_estoque = Estoque(est_revend=revendedor, obs1=estoque.obs1, obs2=estoque.obs2, obs3=estoque.obs3,
                                nota=estoque.nota, frete=estoque.frete, tipo_operacao=estoque.tipoOp,
                                operador=estoque.operador, total=estoque.total, data=None, hora=None)
