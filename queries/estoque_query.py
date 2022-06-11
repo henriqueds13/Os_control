@@ -21,7 +21,7 @@ class EstoqueQuery():
 
     def editar_estoque(self, id_estoque, estoque, sessao):
         estoq = self.listar_estoque_id(id_estoque, sessao)
-        #estoq.revendedor_id = estoque.revendedor
+        estoq.revendedor_id = estoque.revendedor.id
         estoq.obs1 = estoque.obs1
         estoq.obs2 = estoque.obs2
         estoq.obs3 = estoque.obs3

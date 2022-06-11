@@ -223,7 +223,8 @@ class Castelo:
                                                variable=self.variable_int_cli, onvalue=1, offvalue=0)
 
         self.frame_num_clientes = LabelFrame(self.subframe2_entry_cliente, text='Núm de Clientes')
-        Label(self.frame_num_clientes, text=2, fg='blue', font='bold').pack()
+        self.label_num_cliente = Label(self.frame_num_clientes, text=2, fg='blue', font='bold')
+        self.label_num_cliente.pack()
 
         self.scrollbar = Scrollbar(self.cadastro_label_frame, orient=HORIZONTAL)  # Scrollbar da treeview
 
@@ -1096,6 +1097,12 @@ class Castelo:
 
         self.nome_frame = self.frame_cadastro_clientes
 
+    def testaTamanhoTexto(self, text):
+        if len(text) < 39:
+            return True
+        else:
+            return False
+
     def mostrarMensagem(self, tipoMsg, msg):
         if (tipoMsg == "1"):
             messagebox.showinfo(None, message=msg)
@@ -1120,17 +1127,18 @@ class Castelo:
         y_cordinate = int((self.h / 2) - (370 / 2))
         self.jan.geometry("{}x{}+{}+{}".format(550, 370, x_cordinate, y_cordinate))
 
+        testa_tamanho_nome = self.jan.register(self.testaTamanhoTexto)
         testa_inteiro_cep = self.jan.register(self.testaEntradaNumCep)
         testa_inteiro_op = self.jan.register(self.testaEntradaNumOperador)
         self.Nome = ''
         Label(self.jan, text="Nome:").grid(sticky=W, padx=10)
-        self.cad_cli_nome = Entry(self.jan, width=40)
+        self.cad_cli_nome = Entry(self.jan, width=50, validate='all', validatecommand=(testa_tamanho_nome, '%P'))
         self.cad_cli_nome.grid(row=1, column=0, stick=W, padx=10, columnspan=2)
         Label(self.jan, text="CPF:").grid(row=0, column=2, sticky=W)
         self.cad_cli_cpf = Entry(self.jan, width=25)
         self.cad_cli_cpf.grid(row=1, column=2, stick=W)
         Label(self.jan, text="Endereço:").grid(sticky=W, padx=10)
-        self.cad_cli_end = Entry(self.jan, width=50)
+        self.cad_cli_end = Entry(self.jan, width=50, validate='all', validatecommand=(testa_tamanho_nome, '%P'))
         self.cad_cli_end.grid(row=3, column=0, padx=10, columnspan=2, sticky=W)
         Label(self.jan, text="Complemento:").grid(row=2, column=2, sticky=W)
         self.cad_cli_compl = Entry(self.jan, width=27)
@@ -1176,7 +1184,7 @@ class Castelo:
         self.botao_entr_frame.grid(row=12, column=2, sticky=W)
         Button(self.botao_entr_frame, text="Confirmar Cadastro", width=10, wraplength=70,
                underline=0, font=('Verdana', '9', 'bold'),
-               command=lambda: [self.cadastrarCliente(), self.jan.destroy()]).grid()
+               command=lambda: [self.cadastrarCliente()]).grid()
         Button(self.botao_entr_frame, text="Cancelar", width=10, wraplength=70,
                underline=0, font=('Verdana', '9', 'bold'), height=2, command=self.jan.destroy).grid(row=0, column=1,
                                                                                                     padx=10)
@@ -1197,6 +1205,7 @@ class Castelo:
                 self.tree_cliente.insert("", "end", values=(i.id, i.nome, i.whats),
                                          tags=('evenrow',))
             self.count += 1
+        self.label_num_cliente.config(text=self.count)
         self.count = 0
 
     def popularPesquisaNome(self, tipo):
@@ -1212,38 +1221,43 @@ class Castelo:
                 self.tree_cliente.insert("", "end", values=(i.id, i.nome, i.tel_fixo),
                                          tags=('evenrow',))
             self.count += 1
+        self.label_num_cliente.config(text=self.count)
         self.count = 0
 
     def cadastrarCliente(self):
 
-        try:
-            nome = self.cad_cli_nome.get()
-            cpf = self.cad_cli_cpf.get()
-            endereco = self.cad_cli_end.get()
-            complemento = self.cad_cli_compl.get()
-            bairro = self.cad_cli_bairro.get()
-            cidade = self.cad_cli_cid.get()
-            estado = self.cad_cli_estado.get()
-            cep = self.insereZero(self.cad_cli_cep.get())
-            tel_fixo = self.cad_cli_telfix.get()
-            tel_comercial = self.cad_cli_telcomer.get()
-            celular = self.cad_cli_cel.get()
-            whats = self.cad_cli_whats.get()
-            email = self.cad_cli_email.get()
-            operador = self.insereZero(self.cad_cli_oper.get())
+        if self.cad_cli_nome.get() == '':
+            messagebox.showinfo(title="ERRO", message="Campo nome não pode estar vazio!")
+        else:
+            try:
+                nome = self.cad_cli_nome.get()
+                cpf = self.cad_cli_cpf.get()
+                endereco = self.cad_cli_end.get()
+                complemento = self.cad_cli_compl.get()
+                bairro = self.cad_cli_bairro.get()
+                cidade = self.cad_cli_cid.get()
+                estado = self.cad_cli_estado.get()
+                cep = self.insereZero(self.cad_cli_cep.get())
+                tel_fixo = self.cad_cli_telfix.get()
+                tel_comercial = self.cad_cli_telcomer.get()
+                celular = self.cad_cli_cel.get()
+                whats = self.cad_cli_whats.get()
+                email = self.cad_cli_email.get()
+                operador = self.insereZero(self.cad_cli_oper.get())
 
-            novo_cliente = cliente.Cliente(nome, operador, celular, cpf, tel_fixo, '-', endereco, estado, bairro,
-                                           complemento, cep, cidade, email, whats, '-', tel_comercial)
-            repositorio = cliente_repositorio.ClienteRepositorio()
-            repositorio.inserir_cliente(novo_cliente, sessao)
-            sessao.commit()
-            self.mostrarMensagem("1", "Cliente Cadastrado com Sucesso!")
-            self.popular()
-        except:
-            sessao.rollback()
-            raise
-        finally:
-            sessao.close()
+                novo_cliente = cliente.Cliente(nome, operador, celular, cpf, tel_fixo, '-', endereco, estado, bairro,
+                                               complemento, cep, cidade, email, whats, '-', tel_comercial)
+                repositorio = cliente_repositorio.ClienteRepositorio()
+                repositorio.inserir_cliente(novo_cliente, sessao)
+                sessao.commit()
+                self.mostrarMensagem("1", "Cliente Cadastrado com Sucesso!")
+                self.jan.destroy()
+                self.popular()
+            except:
+                sessao.rollback()
+                raise
+            finally:
+                sessao.close()
 
     def deletarCliente(self):
         res = messagebox.askyesno(None,
@@ -1287,17 +1301,17 @@ class Castelo:
         Label(self.first_intro_frame, text="ID:", bg="#ffffe1").pack()
         self.cad_cli_id = Label(self.first_intro_frame, text=dado_cli[0], width=10, relief=SUNKEN)
         self.cad_cli_id.pack()
-        Label(self.first_frame, text="Operador:", bg="#ffffe1").pack(side=RIGHT, ipadx=10)
         self.cad_cli_oper = Entry(self.first_frame, width=20)
-        self.cad_cli_oper.pack(side=RIGHT)
+        self.cad_cli_oper.pack(side=RIGHT, padx=10)
+        Label(self.first_frame, text="Operador:", bg="#ffffe1").pack(side=RIGHT, ipadx=0)
         self.second_frame = Frame(jan, bg="#ffffe1")
         self.second_frame.pack()
         Label(self.second_frame, text="Nome:", bg="#ffffe1").grid(sticky=W, padx=10)
-        self.cad_cli_nome = Entry(self.second_frame, width=40)
+        self.cad_cli_nome = Entry(self.second_frame, width=50)
         self.cad_cli_nome.insert(0, cliente_dados.nome)
         self.cad_cli_nome.grid(row=1, column=0, stick=W, padx=10, columnspan=2)
         Label(self.second_frame, text="CPF:", bg="#ffffe1").grid(row=0, column=2, sticky=W)
-        self.cad_cli_cpf = Entry(self.second_frame, width=25)
+        self.cad_cli_cpf = Entry(self.second_frame, width=31)
         self.cad_cli_cpf.insert(0, cliente_dados.cpf_cnpj)
         self.cad_cli_cpf.grid(row=1, column=2, stick=W)
         Label(self.second_frame, text="Endereço:", bg="#ffffe1").grid(sticky=W, padx=10)
@@ -1305,7 +1319,7 @@ class Castelo:
         self.cad_cli_end.insert(0, cliente_dados.logradouro)
         self.cad_cli_end.grid(row=3, column=0, padx=10, columnspan=2, sticky=W)
         Label(self.second_frame, text="Complemento:", bg="#ffffe1").grid(row=2, column=2, sticky=W)
-        self.cad_cli_compl = Entry(self.second_frame, width=27)
+        self.cad_cli_compl = Entry(self.second_frame, width=31)
         self.cad_cli_compl.insert(0, cliente_dados.complemento)
         self.cad_cli_compl.grid(row=3, column=2, sticky=W)
         Label(self.second_frame, text="Bairro:", bg="#ffffe1").grid(sticky=W, padx=10)
@@ -1532,9 +1546,12 @@ class Castelo:
         lista_aparelhos = ["Roçadeira", "Lav.Alta Pressão", "Cort.Grama Elétrico"]
         lista_marca = ["Karcher", "Stihl", "Trapp"]
         lista_tecnicos = [1, 2]
-        radio_loc_text_os = StringVar()
+        global radio_loc_text_os
+        radio_loc_text_os = IntVar()
+        radio_loc_text_os.set("1")
         font_dados1 = ('Verdana', '8', '')
         font_dados2 = ('Verdana', '8', 'bold')
+
 
         jan = Toplevel()
 
@@ -1624,7 +1641,7 @@ class Castelo:
         self.label_os = Label(labelframe_os, text="", fg="red", font=('Verdana', '20', 'bold'))
         self.label_os.pack(padx=10, pady=8)
         Button(labelframe_os, text="Confirmar Entrada", wraplength=70,
-               command=lambda: [self.cadastrarOs(), jan.destroy()]).pack(pady=10, padx=10, ipadx=10)
+               command=lambda: [self.cadastrarOs(jan)]).pack(pady=10, padx=10, ipadx=10)
 
         labelframe_dadosapare_os = LabelFrame(frame_princ_jan_os, text="Dados do Aparelho", fg=self.color_fg_label)
         labelframe_dadosapare_os.grid(row=1, column=0, sticky=W, ipady=5)
@@ -1674,37 +1691,54 @@ class Castelo:
         labelframe_prazo_os = LabelFrame(frame_prazo, text="Prazo", fg=self.color_fg_label)
         labelframe_prazo_os.pack(ipadx=15)
         Label(labelframe_prazo_os, text='Dias').grid(row=0, column=1, padx=1)
-        self.os_dias = Entry(labelframe_prazo_os, width=5, justify=CENTER)
+        self.os_dias = Entry(labelframe_prazo_os, width=5, justify=CENTER, validate='all',
+                                      validatecommand=(testa_garantia, '%P'))
         self.os_dias.grid(row=0, column=0, padx=5, pady=5)
         Label(frame_prazo, text="3", bg="grey", height=15).pack(fill=X, pady=5)
 
         labelframe_tipo = LabelFrame(frame_princ_jan_os, text="Tipo", fg=self.color_fg_label)
         labelframe_tipo.grid(row=2, column=0, sticky=W)
-        radio_orc = Radiobutton(labelframe_tipo, text="Orçamento", value="orçamento", variable=radio_loc_text_os)
+        radio_orc = Radiobutton(labelframe_tipo, text="Orçamento", variable=radio_loc_text_os, value=1,
+                                command=lambda: habilitaGarantia('disabled'))
         radio_orc.grid(row=0, column=0, padx=5, sticky=W)
-        radio_gar_serv = Radiobutton(labelframe_tipo, text="Gar. de Serviço", value="garantia serviço",
+        radio_orc.select()
+        radio_gar_serv = Radiobutton(labelframe_tipo, state='disabled', text="Gar. de Serviço", value=2,
                                      variable=radio_loc_text_os)
         radio_gar_serv.grid(row=0, column=1, padx=5, sticky=W)
-        radio_gar_fabrica = Radiobutton(labelframe_tipo, text="Gar. de Fábrica", value="garantia fabrica",
-                                        variable=radio_loc_text_os)
+        radio_gar_fabrica = Radiobutton(labelframe_tipo, text="Gar. de Fábrica", value=3,
+                                        variable=radio_loc_text_os, command=lambda: habilitaGarantia('normal'))
         radio_gar_fabrica.grid(row=0, column=2, padx=5, sticky=W)
+
 
         labelframe_garantia = LabelFrame(frame_princ_jan_os, text="Garantia de Fábrica", fg=self.color_fg_label)
         labelframe_garantia.grid(row=3, column=0, sticky=W, ipadx=6, ipady=5)
         Label(labelframe_garantia, text='Loja').grid(row=0, column=0, sticky=W, padx=10)
-        self.os_loja = Entry(labelframe_garantia, width=25)
+        self.os_loja = Entry(labelframe_garantia, width=25, state='disabled')
         self.os_loja.grid(row=1, column=0, sticky=W, padx=10)
         Label(labelframe_garantia, text='Data Compra').grid(row=0, column=1, sticky=W)
-        self.os_datacompra = Entry(labelframe_garantia, width=15)
+        self.os_datacompra = Entry(labelframe_garantia, width=15, state='disabled')
         self.os_datacompra.grid(row=1, column=1, sticky=W)
         Label(labelframe_garantia, text='Nota Fiscal').grid(row=0, column=2, sticky=W, padx=10)
         self.os_notafiscal = Entry(labelframe_garantia, width=15, validate='all',
-                                   validatecommand=(testa_nf, '%P'))
+                                   validatecommand=(testa_nf, '%P'), state='disabled')
         self.os_notafiscal.grid(row=1, column=2, sticky=W, padx=10)
         Label(labelframe_garantia, text='Gar. Complementar').grid(row=0, column=3, sticky=W)
         self.os_garantiacompl = Entry(labelframe_garantia, width=18, validate='all',
-                                      validatecommand=(testa_garantia, '%P'))
+                                      validatecommand=(testa_garantia, '%P'), state='disabled')
         self.os_garantiacompl.grid(row=1, column=3, sticky=W)
+
+        def habilitaGarantia(value):
+
+            if value == 'disabled':
+                self.os_loja.delete(0, 'end')
+                self.os_datacompra.delete(0, 'end')
+                self.os_notafiscal.delete(0, 'end')
+                self.os_garantiacompl.delete(0, 'end')
+
+            self.os_loja.config(state=value)
+            self.os_datacompra.config(state=value)
+            self.os_notafiscal.config(state=value)
+            self.os_garantiacompl.config(state=value)
 
         frame_button_os = Frame(frame_princ_jan_os)
         frame_button_os.grid(row=3, column=1, sticky=S)
@@ -1775,46 +1809,55 @@ class Castelo:
         if children:
             self.tree_ap_manut.selection_set(children[0])
 
-    def cadastrarOs(self):
+    def cadastrarOs(self, jan):
 
-        try:
-            equipamento = self.os_aparelho.get()
-            marca = self.os_marca.get()
-            modelo = self.os_modelo.get()
-            acessorios = self.os_acessorios.get()
-            defeito = self.os_defeito.get()
-            estado_aparelho = self.os_estadoaparelho.get()
-            n_serie = self.os_numserie.get()
-            tensao = self.insereZero(self.os_tensao.get())
-            chassi = self.os_chassis.get()
-            dias = self.os_dias.get()
-            operador = self.os_operador.get()
-            tecnico = self.insereZero(self.os_tecnico.get())
-            loja = self.os_loja.get()
-            garantia_complementar = self.insereZero(self.os_garantiacompl.get())
-            data_compra = self.os_datacompra.get()
-            nfe = self.insereZero(self.os_notafiscal.get())
-            cli_id = self.os_idcliente
+        if self.os_aparelho.get() == '':
+            messagebox.showinfo(title="ERRO", message="Campo equipamento não pode estar vazio!")
+        elif self.os_marca.get() == '':
+            messagebox.showinfo(title="ERRO", message="Campo Marca não pode estar vazio!")
+        elif self.os_dias.get() == '':
+            messagebox.showinfo(title="ERRO", message="Defina o prazo para o orçamento!")
+        else:
 
-            nova_os = os.Os(equipamento, marca, modelo, acessorios, defeito, estado_aparelho, n_serie, tensao,
-                            'EM SERVIÇO', chassi, '', None, None, dias, None, None, operador, '', '', '', '', '', '',
-                            '', '',
-                            '', '', '', '', '', '', '', '', '', '', '', 0, '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, tecnico, 0,
-                            '', 0, 0, 0, 0, 0, 0, '', '', '', None, nfe, cli_id, loja, garantia_complementar, None, 1,
-                            0)
-            repositorio = os_repositorio.Os_repositorio()
-            repositorio.nova_os(cli_id, tecnico, nova_os, sessao)
-            sessao.commit()
-            ordem_de_servicos = repositorio.listar_os(sessao)
-            self.label_os.config(text=ordem_de_servicos[-1].id)
-            self.mostrarMensagem("1", "OS Cadastrado com Sucesso!")
-            self.popularOsConserto()
-        except:
-            sessao.rollback()
-            raise
-        finally:
-            sessao.close()
+            try:
+                equipamento = self.os_aparelho.get()
+                marca = self.os_marca.get()
+                modelo = self.os_modelo.get()
+                acessorios = self.os_acessorios.get()
+                defeito = self.os_defeito.get()
+                estado_aparelho = self.os_estadoaparelho.get()
+                n_serie = self.os_numserie.get()
+                tensao = self.insereZero(self.os_tensao.get())
+                chassi = self.os_chassis.get()
+                dias = self.os_dias.get()
+                operador = self.os_operador.get()
+                tecnico = self.insereZero(self.os_tecnico.get())
+                loja = self.os_loja.get()
+                garantia_complementar = self.insereZero(self.os_garantiacompl.get())
+                data_compra = self.os_datacompra.get()
+                nfe = self.insereZero(self.os_notafiscal.get())
+                cli_id = self.os_idcliente
+
+                nova_os = os.Os(equipamento, marca, modelo, acessorios, defeito, estado_aparelho, n_serie, tensao,
+                                'EM SERVIÇO', chassi, '', None, None, dias, None, None, operador, '', '', '', '', '', '',
+                                '', '',
+                                '', '', '', '', '', '', '', '', '', '', '', 0, '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, tecnico, 0,
+                                '', 0, 0, 0, 0, 0, 0, '', '', '', None, nfe, cli_id, loja, garantia_complementar, None, 1,
+                                0)
+                repositorio = os_repositorio.Os_repositorio()
+                repositorio.nova_os(cli_id, tecnico, nova_os, sessao)
+                sessao.commit()
+                ordem_de_servicos = repositorio.listar_os(sessao)
+                self.label_os.config(text=ordem_de_servicos[-1].id)
+                self.mostrarMensagem("1", "OS Cadastrado com Sucesso!")
+                self.popularOsConserto()
+                jan.destroy()
+            except:
+                sessao.rollback()
+                raise
+            finally:
+                sessao.close()
 
     def atualizandoDados(self):
         cliente_selecionado = self.tree_cliente.focus()
@@ -4929,28 +4972,32 @@ class Castelo:
             total = self.formataParaFloat(self.est_total.cget('text').split()[1])
             produtos = self.lista_produto_est
 
-            novo_estoque = estoque.Estoque(revendedor, obs1, obs2, obs3, nota, frete, op, operador, total, produtos,
-                                           None, None)
-
-            repositorio = estoque_repositorio.EstoqueRepositorio()
-
-            if op == 3:
-
-                estoque_selecionado = self.tree_est_reg.focus()
-                dado_est = self.tree_est_reg.item(estoque_selecionado, 'values')
-                repositorio.editar_estoque(dado_est[8], novo_estoque, sessao)
-                self.popularEntradaEstoque()
-                sessao.commit()
-                jan.destroy()
+            if op == 1 and revendedor is None:
+                messagebox.showinfo(title="ERRO", message="Defina um Fornecedor!")
 
             else:
-                repositorio.inserir_estoque(novo_estoque, sessao)
+                novo_estoque = estoque.Estoque(revendedor, obs1, obs2, obs3, nota, frete, op, operador, total, produtos,
+                                               None, None)
 
-                sessao.commit()
-                self.cadastroProdutosEstoque(op)
-                self.revendedor_obj = None
-                self.popularEntradaEstoque()
-                jan.destroy()
+                repositorio = estoque_repositorio.EstoqueRepositorio()
+
+                if op == 3:
+
+                    estoque_selecionado = self.tree_est_reg.focus()
+                    dado_est = self.tree_est_reg.item(estoque_selecionado, 'values')
+                    repositorio.editar_estoque(dado_est[8], novo_estoque, sessao)
+                    self.popularEntradaEstoque()
+                    sessao.commit()
+                    jan.destroy()
+
+                else:
+                    repositorio.inserir_estoque(novo_estoque, sessao)
+
+                    sessao.commit()
+                    self.cadastroProdutosEstoque(op)
+                    self.revendedor_obj = None
+                    self.popularEntradaEstoque()
+                    jan.destroy()
         except:
             sessao.rollback()
             raise
