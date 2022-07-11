@@ -367,3 +367,11 @@ values=(i.id_venda,
      i.operador))
 
 def popularPesquisaCliente(self):
+    self.tree_cliente.focus_set()
+    children = self.tree_cliente.get_children()
+    if children:
+        self.tree_cliente.focus(children[0])
+        self.tree_cliente.selection_set(children[0])
+    self.cliente_selecionado = self.tree_cliente.focus()
+    self.dado_cli = self.tree_cliente.item(self.cliente_selecionado, "values")
+    self.cliente_dados = cliente_repositorio.ClienteRepositorio().listar_cliente_id(self.dado_cli[0], sessao)

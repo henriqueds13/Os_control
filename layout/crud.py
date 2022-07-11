@@ -652,8 +652,10 @@ class Castelo:
         self.tree_ap_manut.tag_configure('oddrow', background='#ffffe1')
         self.tree_ap_manut.tag_configure('evenrow', background='#D9D0C1')
 
+        self.tree_ap_manut.focus_set()
         children = self.tree_ap_manut.get_children()
         if children:
+            self.tree_ap_manut.focus(children[0])
             self.tree_ap_manut.selection_set(children[0])
 
         self.label_pesquisa_manut = LabelFrame(self.subframe_ap_manut2, text="Digite um Nome para Pesquisar",
@@ -767,6 +769,12 @@ class Castelo:
 
         self.tree_ap_entr.tag_configure('oddrow', background='#ffffe1')
         self.tree_ap_entr.tag_configure('evenrow', background='#F2E8B3')
+
+        self.tree_ap_entr.focus_set()
+        children = self.tree_ap_entr.get_children()
+        if children:
+            self.tree_ap_entr.focus(children[0])
+            self.tree_ap_entr.selection_set(children[0])
 
         self.label_pesquisa_entr = LabelFrame(self.subframe_ap_entr2, text="Digite um Nome para Pesquisar",
                                               bg="#F2E8B3")
@@ -904,6 +912,12 @@ class Castelo:
         self.tree_est_prod.tag_configure('evenrow', background='#828E8C')
         self.tree_est_prod.tag_configure('oddrow', background='#C5D0C1')
 
+        self.tree_est_prod.focus_set()
+        children = self.tree_est_prod.get_children()
+        if children:
+            self.tree_est_prod.focus(children[0])
+            self.tree_est_prod.selection_set(children[0])
+
         self.frame_reg_est = Frame(self.frame_estoque, bg=color_est1)
         self.frame_reg_est.pack(fill=X)
         self.frame_buttons_reg_est = Frame(self.frame_reg_est, bg=color_est2, relief='raised', borderwidth=1)
@@ -963,6 +977,12 @@ class Castelo:
 
         self.tree_est_reg.tag_configure('evenrow', background='#828E8C')
         self.tree_est_reg.tag_configure('oddrow', background='#C5D0C1')
+
+        self.tree_est_reg.focus_set()
+        children = self.tree_est_reg.get_children()
+        if children:
+            self.tree_est_reg.focus(children[0])
+            self.tree_est_reg.selection_set(children[0])
 
         button_est1.bind('<Enter>', on_enter)
         button_est1.bind('<Leave>', on_leave)
@@ -1074,6 +1094,12 @@ class Castelo:
 
         self.tree_est_vendas.tag_configure('evenrow', background='#C5D7D9')
         self.tree_est_vendas.tag_configure('oddrow', background='#A5CAD3')
+
+        self.tree_est_vendas.focus_set()
+        children = self.tree_est_vendas.get_children()
+        if children:
+            self.tree_est_vendas.focus(children[0])
+            self.tree_est_vendas.selection_set(children[0])
 
         button_vend1.bind('<Enter>', on_enter)
         button_vend1.bind('<Leave>', on_leave)
@@ -1209,6 +1235,22 @@ class Castelo:
         self.count = 0
 
     def popularPesquisaNome(self, tipo):
+        self.tree_cliente.delete(*self.tree_cliente.get_children())
+        nome = self.entrada_pesquisa_cliente.get()
+        repositorio = cliente_repositorio.ClienteRepositorio()
+        clientes = repositorio.listar_cliente_nome(nome, tipo, sessao)
+        for i in clientes:
+            if self.count % 2 == 0:
+                self.tree_cliente.insert("", "end", values=(i.id, i.nome, i.tel_fixo),
+                                         tags=('oddrow',))
+            else:
+                self.tree_cliente.insert("", "end", values=(i.id, i.nome, i.tel_fixo),
+                                         tags=('evenrow',))
+            self.count += 1
+        self.label_num_cliente.config(text=self.count)
+        self.count = 0
+
+    def popularPesquisaWhats(self, tipo):
         self.tree_cliente.delete(*self.tree_cliente.get_children())
         nome = self.entrada_pesquisa_cliente.get()
         repositorio = cliente_repositorio.ClienteRepositorio()
@@ -1377,134 +1419,138 @@ class Castelo:
         jan.grab_set()
 
     def editarCliente(self, jan):
-        res = messagebox.askyesno(None, "Deseja Realmente Editar o Cadastro?")
-        if res:
-            #   try:
-            cliente_selecionado = self.tree_cliente.focus()
-            dado_cli = self.tree_cliente.item(cliente_selecionado, "values")
-            nome = self.cad_cli_nome.get()
-            cpf = self.cad_cli_cpf.get()
-            endereco = self.cad_cli_end.get()
-            complemento = self.cad_cli_compl.get()
-            bairro = self.cad_cli_bairro.get()
-            cidade = self.cad_cli_cid.get()
-            estado = self.cad_cli_estado.get()
-            cep = self.cad_cli_cep.get()
-            tel_fixo = self.cad_cli_telfix.get()
-            tel_comercial = self.cad_cli_telcomer.get()
-            celular = self.cad_cli_cel.get()
-            whats = self.cad_cli_whats.get()
-            email = self.cad_cli_email.get()
-            operador = self.cad_cli_oper.get()
 
-            novo_cliente = cliente.Cliente(nome, operador, celular, cpf, tel_fixo, '-', endereco, estado, bairro,
-                                           complemento, cep, cidade, email, whats, '-', tel_comercial)
-            repositorio = cliente_repositorio.ClienteRepositorio()
-            repositorio.editar_cliente(dado_cli[0], novo_cliente, sessao)
-
-            nova_os = os.Os('', '', '', '', '', '', '', None, '', '', '', None, None, '', None, None, '', '',
-                            '',
-                            '',
-                            '', '', '', '', '', '', '', '', '', '',
-                            '', '', '', '', '', '', 0, '', '',
-                            '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                            0, 0, 0, 0, 0, 0, 0, 0,
-                            0,
-                            0, 0, 0, 0, 0, 0, 0, 0, 0,
-                            0,
-                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 0, 0, 0, 0,
-                            0, '',
-                            '', '', None, 0, 0, '', 0, None, 0, nome)
-            repositorio_os = os_repositorio.Os_repositorio()
-            oss = repositorio_os.listar_os_cli_id(dado_cli[0], sessao)
-            try:
-                for i in oss:
-                    repositorio_os.editar_os(i.id, nova_os, 2, sessao)
-            except ValueError:
-                pass
-
-            nova_os_entregue = os_saida.OsSaida(equipamento='', marca='',
-                                                modelo='', acessorios='',
-                                                defeito='', estado_aparelho='',
-                                                n_serie=0, tensao=0,
-                                                status='', chassi='',
-                                                andamento='', data_entrada=None,
-                                                hora_entrada=None, dias=0,
-                                                data_orc=None, conclusao=None,
-                                                operador=0, log='',
-                                                codigo1='os_atual_db.codigo1', codigo2='os_atual_db.codigo2',
-                                                codigo3='os_atual_db.codigo3', codigo4='os_atual_db.codigo4',
-                                                codigo5='os_atual_db.codigo5', codigo6='os_atual_db.codigo6',
-                                                codigo7='os_atual_db.codigo7', codigo8='os_atual_db.codigo8',
-                                                codigo9='os_atual_db.codigo9', desc_serv1='os_atual_db.desc_serv1',
-                                                desc_serv2='os_atual_db.desc_serv2',
-                                                desc_serv3='os_atual_db.desc_serv3',
-                                                desc_serv4='os_atual_db.desc_serv4',
-                                                desc_serv5='os_atual_db.desc_serv5',
-                                                desc_serv6='os_atual_db.desc_serv6',
-                                                desc_serv7='os_atual_db.desc_serv7',
-                                                desc_serv8='os_atual_db.desc_serv8',
-                                                desc_serv9='os_atual_db.desc_serv9',
-                                                desconto=0,
-                                                obs1='os_atual_db.obs1', obs2='os_atual_db.obs2',
-                                                obs3='os_atual_db.obs3',
-                                                valor_mao_obra=0, qtd1=0,
-                                                qtd2=0, qtd3=0, qtd4=0,
-                                                qtd5=0, qtd6=0, qtd7=0,
-                                                qtd8=0,
-                                                qtd9=0, valor_uni1=0,
-                                                valor_uni2=0, valor_uni3=0,
-                                                valor_uni4=0, valor_uni5=0,
-                                                valor_uni6=0,
-                                                valor_uni7=0, valor_uni8=0,
-                                                valor_uni9=0,
-                                                valor_total1=0, valor_total2=0,
-                                                valor_total3=0,
-                                                valor_total4=0, valor_total5=0,
-                                                valor_total6=0,
-                                                valor_total7=0, valor_total8=0,
-                                                valor_total9=0,
-                                                caixa_peca1=0, caixa_peca2=0,
-                                                caixa_peca3=0,
-                                                caixa_peca4=0, caixa_peca5=0,
-                                                caixa_peca6=0,
-                                                caixa_peca7=0, caixa_peca8=0,
-                                                caixa_peca9=0,
-                                                caixa_peca_total=0,
-                                                tecnico=0,
-                                                total=0, defeitos='os_atual_db.defeitos',
-                                                cheque=0, ccredito=0,
-                                                cdebito=0, pix=0,
-                                                dinheiro=0,
-                                                outros=0, obs_pagamento1='',
-                                                obs_pagamento2='os_atual_db.obs_pagamento2',
-                                                obs_pagamento3='os_atual_db.obs_pagamento3',
-                                                data_garantia=None, nota_fiscal=0,
-                                                cli_id=0,
-                                                loja='os_atual_db.loja', garantia_compl=0,
-                                                data_compra=None,
-                                                aparelho_na_oficina=1, data_saida=None,
-                                                hora_saida='', os=0, nome=nome)
-            repositorio_os_saida = os_saida_repositorio.OsSaidaRepositorio()
-            ossaida = repositorio_os_saida.listar_os_cli_id(dado_cli[0], sessao)
-            try:
-                for i in ossaida:
-                    repositorio_os_saida.editar_os_saida(i.id, nova_os_entregue, sessao)
-            except ValueError:
-                pass
-
-            sessao.commit()
-            self.mostrarMensagem("1", "Cadastro Editado com Sucesso!")
-            self.atualizandoDados()
-            jan.destroy()
-            self.popular()
-
-            # except:
-        #     messagebox.showinfo(title="ERRO", message="ERRO")
-        # finally:
-        #     sessao.close()
+        if self.cad_cli_nome.get() == '':
+            messagebox.showinfo(title="ERRO", message="Campo nome não pode estar vazio!")
         else:
-            pass
+            res = messagebox.askyesno(None, "Deseja Realmente Editar o Cadastro?")
+            if res:
+                #   try:
+                cliente_selecionado = self.tree_cliente.focus()
+                dado_cli = self.tree_cliente.item(cliente_selecionado, "values")
+                nome = self.cad_cli_nome.get()
+                cpf = self.cad_cli_cpf.get()
+                endereco = self.cad_cli_end.get()
+                complemento = self.cad_cli_compl.get()
+                bairro = self.cad_cli_bairro.get()
+                cidade = self.cad_cli_cid.get()
+                estado = self.cad_cli_estado.get()
+                cep = self.cad_cli_cep.get()
+                tel_fixo = self.cad_cli_telfix.get()
+                tel_comercial = self.cad_cli_telcomer.get()
+                celular = self.cad_cli_cel.get()
+                whats = self.cad_cli_whats.get()
+                email = self.cad_cli_email.get()
+                operador = self.cad_cli_oper.get()
+
+                novo_cliente = cliente.Cliente(nome, operador, celular, cpf, tel_fixo, '-', endereco, estado, bairro,
+                                               complemento, cep, cidade, email, whats, '-', tel_comercial)
+                repositorio = cliente_repositorio.ClienteRepositorio()
+                repositorio.editar_cliente(dado_cli[0], novo_cliente, sessao)
+
+                nova_os = os.Os('', '', '', '', '', '', '', None, '', '', '', None, None, '', None, None, '', '',
+                                '',
+                                '',
+                                '', '', '', '', '', '', '', '', '', '',
+                                '', '', '', '', '', '', 0, '', '',
+                                '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                0, 0, 0, 0, 0, 0, 0, 0,
+                                0,
+                                0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                0,
+                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 0, 0, 0, 0,
+                                0, '',
+                                '', '', None, 0, 0, '', 0, None, 0, nome)
+                repositorio_os = os_repositorio.Os_repositorio()
+                oss = repositorio_os.listar_os_cli_id(dado_cli[0], sessao)
+                try:
+                    for i in oss:
+                        repositorio_os.editar_os(i.id, nova_os, 2, sessao)
+                except ValueError:
+                    pass
+
+                nova_os_entregue = os_saida.OsSaida(equipamento='', marca='',
+                                                    modelo='', acessorios='',
+                                                    defeito='', estado_aparelho='',
+                                                    n_serie=0, tensao=0,
+                                                    status='', chassi='',
+                                                    andamento='', data_entrada=None,
+                                                    hora_entrada=None, dias=0,
+                                                    data_orc=None, conclusao=None,
+                                                    operador=0, log='',
+                                                    codigo1='os_atual_db.codigo1', codigo2='os_atual_db.codigo2',
+                                                    codigo3='os_atual_db.codigo3', codigo4='os_atual_db.codigo4',
+                                                    codigo5='os_atual_db.codigo5', codigo6='os_atual_db.codigo6',
+                                                    codigo7='os_atual_db.codigo7', codigo8='os_atual_db.codigo8',
+                                                    codigo9='os_atual_db.codigo9', desc_serv1='os_atual_db.desc_serv1',
+                                                    desc_serv2='os_atual_db.desc_serv2',
+                                                    desc_serv3='os_atual_db.desc_serv3',
+                                                    desc_serv4='os_atual_db.desc_serv4',
+                                                    desc_serv5='os_atual_db.desc_serv5',
+                                                    desc_serv6='os_atual_db.desc_serv6',
+                                                    desc_serv7='os_atual_db.desc_serv7',
+                                                    desc_serv8='os_atual_db.desc_serv8',
+                                                    desc_serv9='os_atual_db.desc_serv9',
+                                                    desconto=0,
+                                                    obs1='os_atual_db.obs1', obs2='os_atual_db.obs2',
+                                                    obs3='os_atual_db.obs3',
+                                                    valor_mao_obra=0, qtd1=0,
+                                                    qtd2=0, qtd3=0, qtd4=0,
+                                                    qtd5=0, qtd6=0, qtd7=0,
+                                                    qtd8=0,
+                                                    qtd9=0, valor_uni1=0,
+                                                    valor_uni2=0, valor_uni3=0,
+                                                    valor_uni4=0, valor_uni5=0,
+                                                    valor_uni6=0,
+                                                    valor_uni7=0, valor_uni8=0,
+                                                    valor_uni9=0,
+                                                    valor_total1=0, valor_total2=0,
+                                                    valor_total3=0,
+                                                    valor_total4=0, valor_total5=0,
+                                                    valor_total6=0,
+                                                    valor_total7=0, valor_total8=0,
+                                                    valor_total9=0,
+                                                    caixa_peca1=0, caixa_peca2=0,
+                                                    caixa_peca3=0,
+                                                    caixa_peca4=0, caixa_peca5=0,
+                                                    caixa_peca6=0,
+                                                    caixa_peca7=0, caixa_peca8=0,
+                                                    caixa_peca9=0,
+                                                    caixa_peca_total=0,
+                                                    tecnico=0,
+                                                    total=0, defeitos='os_atual_db.defeitos',
+                                                    cheque=0, ccredito=0,
+                                                    cdebito=0, pix=0,
+                                                    dinheiro=0,
+                                                    outros=0, obs_pagamento1='',
+                                                    obs_pagamento2='os_atual_db.obs_pagamento2',
+                                                    obs_pagamento3='os_atual_db.obs_pagamento3',
+                                                    data_garantia=None, nota_fiscal=0,
+                                                    cli_id=0,
+                                                    loja='os_atual_db.loja', garantia_compl=0,
+                                                    data_compra=None,
+                                                    aparelho_na_oficina=1, data_saida=None,
+                                                    hora_saida='', os=0, nome=nome)
+                repositorio_os_saida = os_saida_repositorio.OsSaidaRepositorio()
+                ossaida = repositorio_os_saida.listar_os_cli_id(dado_cli[0], sessao)
+                try:
+                    for i in ossaida:
+                        repositorio_os_saida.editar_os_saida(i.id, nova_os_entregue, sessao)
+                except ValueError:
+                    pass
+
+                sessao.commit()
+                self.mostrarMensagem("1", "Cadastro Editado com Sucesso!")
+                self.atualizandoDados()
+                jan.destroy()
+                self.popular()
+
+                # except:
+            #     messagebox.showinfo(title="ERRO", message="ERRO")
+            # finally:
+            #     sessao.close()
+            else:
+                pass
 
     def janelaLocalizarCliente(self):
         jan = Toplevel()
@@ -1945,10 +1991,10 @@ class Castelo:
 
         os_selecionada = self.tree_ap_manut.focus()
         dado_os = self.tree_ap_manut.item(os_selecionada, "values")
-        self.num_os = dado_os[0]
         os_dados = os_repositorio.Os_repositorio.listar_os_id(dado_os[0], dado_os[0], sessao)
         cliente_os_atual = cliente_repositorio.ClienteRepositorio.listar_cliente_id(os_dados.cliente_id,
                                                                                     os_dados.cliente_id, sessao)
+        self.num_os = dado_os[0]
 
         def seleciona_status(num):
             if num == 1:
