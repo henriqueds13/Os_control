@@ -36,6 +36,11 @@ class ClienteRepositorio():
         clientes = query_cliente.listar_cliente_nome(nome_cliente, tipo, sessao)
         return clientes
 
+    def listar_cliente_locali(self, entry, tipo,  sessao):
+        query_cliente = cliente_query.ClienteQuery()
+        cliente = query_cliente.listar_cliente_locali(entry,tipo, sessao)
+        return cliente
+
     def editar_cliente(self, id_cliente, cliente, sessao):
         query_cliente = cliente_query.ClienteQuery()
         query_cliente.editar_cliente(id_cliente, cliente, sessao)

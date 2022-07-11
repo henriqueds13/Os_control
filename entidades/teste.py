@@ -375,3 +375,7 @@ def popularPesquisaCliente(self):
     self.cliente_selecionado = self.tree_cliente.focus()
     self.dado_cli = self.tree_cliente.item(self.cliente_selecionado, "values")
     self.cliente_dados = cliente_repositorio.ClienteRepositorio().listar_cliente_id(self.dado_cli[0], sessao)
+
+    global radio_loc_text_os
+    radio_loc_text_os = IntVar()
+    radio_loc_text_os.set("1")

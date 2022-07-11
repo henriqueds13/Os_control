@@ -25,6 +25,17 @@ class ClienteQuery():
             clientes = sessao.query(Cliente).filter(Cliente.nome.like(f'{nome_cliente}%')).all()
         return clientes
 
+    def listar_cliente_locali(self, entry, tipo, sessao):
+        if tipo == 1:
+            cliente = sessao.query(Cliente).filter(Cliente.id.like(f'{entry}')).all()
+        elif tipo == 2:
+            cliente = sessao.query(Cliente).filter(Cliente.tel_fixo.like(f'%{entry}%')).all()
+        elif tipo == 3:
+            cliente = sessao.query(Cliente).filter(Cliente.whats.like(f'%{entry}%')).all()
+        else:
+            cliente = sessao.query(Cliente).filter(Cliente.celular.like(f'%{entry}%')).all()
+        return cliente
+
     def editar_cliente(self, id_cliente, cliente, sessao):
         client = self.listar_cliente_id(id_cliente, sessao)
         client.nome = cliente.nome

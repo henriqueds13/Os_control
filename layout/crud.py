@@ -1250,11 +1250,11 @@ class Castelo:
         self.label_num_cliente.config(text=self.count)
         self.count = 0
 
-    def popularPesquisaWhats(self, tipo):
+    def popularPesquisaLocaliza(self, tipo):
         self.tree_cliente.delete(*self.tree_cliente.get_children())
-        nome = self.entrada_pesquisa_cliente.get()
+        entry = entry_locali.get()
         repositorio = cliente_repositorio.ClienteRepositorio()
-        clientes = repositorio.listar_cliente_nome(nome, tipo, sessao)
+        clientes = repositorio.listar_cliente_locali(entry, tipo, sessao)
         for i in clientes:
             if self.count % 2 == 0:
                 self.tree_cliente.insert("", "end", values=(i.id, i.nome, i.tel_fixo),
@@ -1560,27 +1560,32 @@ class Castelo:
         y_cordinate = int((self.h / 2) - (200 / 2))
         jan.geometry("{}x{}+{}+{}".format(400, 200, x_cordinate, y_cordinate))
 
-        radio_loc_text = StringVar()
+        global radio_loc_text
+        global entry_locali
+        radio_loc_text = IntVar()
+        radio_loc_text.set("1")
         frame_localizar_jan1 = Frame(jan)
         frame_localizar_jan1.pack(padx=10, fill=X)
         labelframe_local = LabelFrame(frame_localizar_jan1, text="Opção de Busca", fg="blue")
         labelframe_local.pack(side=LEFT, pady=10)
-        radio_id_locali = Radiobutton(labelframe_local, text="Id do Cliente", value="id", variable=radio_loc_text)
+        radio_id_locali = Radiobutton(labelframe_local, text="Id do Cliente", value="1", variable=radio_loc_text)
         radio_id_locali.grid(row=0, column=0, padx=5, sticky=W)
-        radio_telres_locali = Radiobutton(labelframe_local, text="Telefone Residêncial", value="telres",
+        radio_telres_locali = Radiobutton(labelframe_local, text="Telefone Residêncial", value="2",
                                           variable=radio_loc_text)
         radio_telres_locali.grid(row=1, column=0, padx=5, sticky=W)
-        radio_whats_locali = Radiobutton(labelframe_local, text="Whatsapp", value="whats", variable=radio_loc_text)
+        radio_whats_locali = Radiobutton(labelframe_local, text="Whatsapp", value="3", variable=radio_loc_text)
         radio_whats_locali.grid(row=2, column=0, padx=5, sticky=W)
-        radio_cel_locali = Radiobutton(labelframe_local, text="Celular", value="cel", variable=radio_loc_text)
+        radio_cel_locali = Radiobutton(labelframe_local, text="Celular", value="4", variable=radio_loc_text)
         radio_cel_locali.grid(row=3, column=0, padx=5, sticky=W)
 
         frame_localizar_jan2 = Frame(jan)
         frame_localizar_jan2.pack(pady=10, fill=X)
         entry_locali = Entry(frame_localizar_jan2, width=30, relief="sunken", borderwidth=2)
         entry_locali.pack(side=LEFT, padx=10)
-        Button(frame_localizar_jan2, text="Iniciar Pesquisa", width=10, wraplength=70,
-               underline=0, font=('Verdana', '9', 'bold'), height=2).pack(side=LEFT, padx=5)
+        search_button = Button(frame_localizar_jan2, text="Iniciar Pesquisa", width=10, wraplength=70,
+                               underline=0, font=('Verdana', '9', 'bold'), height=2,
+                               command=lambda: [self.popularPesquisaLocaliza(radio_loc_text.get())])
+        search_button.pack(side=LEFT, padx=5)
         Button(frame_localizar_jan2, text="Fechar", width=10, wraplength=70,
                underline=0, font=('Verdana', '9', 'bold'), height=2, command=jan.destroy).pack(side=LEFT, padx=5)
 
