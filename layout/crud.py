@@ -2062,11 +2062,11 @@ class Castelo:
         font_dados1 = ('Verdana', '8', '')
         font_dados2 = ('Verdana', '8', 'bold')
         color_fg_labels = "blue"
-        color_fg_labels2 = "#768591"
-        color_fg_labels0 = '#4B72A6'
+        color_fg_labels2 = "#000080"
+        color_fg_labels0 = '#0078d7'
         color_bgdc_labels = "gray"
-        color_frame = '#F9CB9C'
-        entry_bg = '#E6BE92'
+        color_frame = '#FEBF7F'
+        entry_bg = '#ffe0c0'
 
         jan = Toplevel()
 
@@ -2080,11 +2080,11 @@ class Castelo:
         frame_princ_jan_os_0.pack(side=LEFT, fill=BOTH)
         frame_princ_jan_os.pack(side=LEFT, fill=BOTH, padx=10, pady=10)
 
-        self.tree_ap_manut.focus_set()
-        children = self.tree_ap_manut.get_children()
-        if children:
-            self.tree_ap_manut.focus_set()
-            self.tree_ap_manut.selection_set(children[0])
+        # self.tree_ap_manut.focus_set()
+        # children = self.tree_ap_manut.get_children()
+        # if children:
+        #     self.tree_ap_manut.focus_set()
+        #     self.tree_ap_manut.selection_set(children[0])
         os_selecionada = self.tree_ap_manut.focus()
         dado_os = self.tree_ap_manut.item(os_selecionada, "values")
         os_dados = os_repositorio.Os_repositorio.listar_os_id(dado_os[0], dado_os[0], sessao)
@@ -2166,36 +2166,36 @@ class Castelo:
         sub_frame_dc_os1.pack(side=LEFT, fill=BOTH, pady=5)
         sub_frame_dc_os2 = Frame(labelframe_dadoscli_os, bg=color_frame)
         sub_frame_dc_os2.pack(side=LEFT, fill=BOTH, padx=10, pady=5)
-        Label(sub_frame_dc_os1, text="Nome", fg=color_fg_labels, font=font_dados1,
+        Label(sub_frame_dc_os1, text="Nome", font=font_dados1,
               bg=color_frame).grid(row=0, column=0, sticky=W)
-        ap_nome_os = Entry(sub_frame_dc_os1, width=30, font=font_dados2, bg=entry_bg, fg=color_fg_labels0)
+        ap_nome_os = Entry(sub_frame_dc_os1, width=38, font=font_dados1, bg=entry_bg, fg=color_fg_labels0)
         ap_nome_os.grid(row=0, column=1, sticky=W)
         ap_nome_os.insert(0, cliente_os_atual.nome)
         ap_nome_os.config(validate='all', validatecommand=(impede_escrita, '%P'))
-        Label(sub_frame_dc_os1, text="Endereço", fg=color_fg_labels,
-              font=font_dados1, bg=color_frame).grid(row=1, column=0, sticky=W, columnspan=2, pady=2)
-        ap_end_os = Entry(sub_frame_dc_os1, width=27, font=font_dados2, bg=entry_bg, fg=color_fg_labels0)
+        Label(sub_frame_dc_os1, text="Endereço", font=font_dados1,
+              bg=color_frame).grid(row=1, column=0, sticky=W, columnspan=2, pady=2)
+        ap_end_os = Entry(sub_frame_dc_os1, width=32, font=font_dados1, bg=entry_bg, fg=color_fg_labels0)
         ap_end_os.grid(row=1, column=1, sticky=E)
         ap_end_os.insert(0, cliente_os_atual.logradouro)
         ap_end_os.config(validate='all', validatecommand=(impede_escrita, '%P'))
         frame_sub_dc = Frame(sub_frame_dc_os1, bg=color_frame)
         frame_sub_dc.grid(row=2, column=0, columnspan=2, sticky=W)
-        Label(frame_sub_dc, text="Complemento", fg=color_fg_labels,
+        Label(frame_sub_dc, text="Complemento",
               font=font_dados1, bg=color_frame).grid(row=0, column=0, sticky=W)
-        ap_compl_os = Entry(frame_sub_dc, width=15, font=font_dados2, bg=entry_bg, fg=color_fg_labels0)
+        ap_compl_os = Entry(frame_sub_dc, width=19, font=font_dados1, bg=entry_bg, fg=color_fg_labels0)
         ap_compl_os.grid(row=0, column=1, sticky=E)
         ap_compl_os.insert(0, cliente_os_atual.complemento)
         ap_compl_os.config(validate='all', validatecommand=(impede_escrita, '%P'))
-        Label(frame_sub_dc, text="Bairro", fg=color_fg_labels,
+        Label(frame_sub_dc, text="Bairro",
               font=font_dados1, bg=color_frame).grid(row=1, column=0, sticky=W,
                                                      pady=2)
-        ap_bairro_os = Entry(frame_sub_dc, width=15, font=font_dados2, bg=entry_bg, fg=color_fg_labels0)
+        ap_bairro_os = Entry(frame_sub_dc, width=19, font=font_dados1, bg=entry_bg, fg=color_fg_labels0)
         ap_bairro_os.grid(row=1, column=1, sticky=W)
         ap_bairro_os.insert(0, cliente_os_atual.bairro)
         ap_bairro_os.config(validate='all', validatecommand=(impede_escrita, '%P'))
-        Label(frame_sub_dc, text="Cidade", fg=color_fg_labels,
+        Label(frame_sub_dc, text="Cidade",
               font=font_dados1, bg=color_frame).grid(row=2, column=0, sticky=W)
-        ap_cidade_os = Entry(frame_sub_dc, width=15, font=font_dados2, bg=entry_bg, fg=color_fg_labels0)
+        ap_cidade_os = Entry(frame_sub_dc, width=19, font=font_dados1, bg=entry_bg, fg=color_fg_labels0)
         ap_cidade_os.grid(row=2, column=1, sticky=W)
         ap_cidade_os.insert(0, cliente_os_atual.cidade)
         ap_cidade_os.config(validate='all', validatecommand=(impede_escrita, '%P'))
@@ -2203,33 +2203,33 @@ class Castelo:
         frame_sub_dc1.grid(row=0, column=2, rowspan=3, sticky=S, ipadx=13)
         Button(frame_sub_dc1, text="1", width=7).pack(ipady=8, side=RIGHT)
 
-        Label(sub_frame_dc_os2, text="Tel.Res.", fg=color_fg_labels,
+        Label(sub_frame_dc_os2, text="Tel.Res.",
               font=font_dados1, bg=color_frame).grid(row=0, column=0, sticky=W)
-        ap_telfix_os = Entry(sub_frame_dc_os2, width=16, font=font_dados2, bg=entry_bg, fg=color_fg_labels0)
+        ap_telfix_os = Entry(sub_frame_dc_os2, width=16, font=font_dados1, bg=entry_bg, fg=color_fg_labels0)
         ap_telfix_os.grid(row=0, column=1)
         ap_telfix_os.insert(0, cliente_os_atual.tel_fixo)
         ap_telfix_os.config(validate='all', validatecommand=(impede_escrita, '%P'))
-        Label(sub_frame_dc_os2, text="Tel.Com.", fg=color_fg_labels,
+        Label(sub_frame_dc_os2, text="Tel.Com.",
               font=font_dados1, bg=color_frame).grid(row=1, column=0, sticky=W)
-        ap_telcom_os = Entry(sub_frame_dc_os2, width=16, font=font_dados2, bg=entry_bg, fg=color_fg_labels0)
+        ap_telcom_os = Entry(sub_frame_dc_os2, width=16, font=font_dados1, bg=entry_bg, fg=color_fg_labels0)
         ap_telcom_os.grid(row=1, column=1, pady=2)
         ap_telcom_os.insert(0, cliente_os_atual.tel_comercial)
         ap_telcom_os.config(validate='all', validatecommand=(impede_escrita, '%P'))
-        Label(sub_frame_dc_os2, text="Celular", fg=color_fg_labels,
+        Label(sub_frame_dc_os2, text="Celular",
               font=font_dados1, bg=color_frame).grid(row=2, column=0, sticky=W)
-        ap_celular_os = Entry(sub_frame_dc_os2, width=16, font=font_dados2, bg=entry_bg, fg=color_fg_labels0)
+        ap_celular_os = Entry(sub_frame_dc_os2, width=16, font=font_dados1, bg=entry_bg, fg=color_fg_labels0)
         ap_celular_os.grid(row=2, column=1)
         ap_celular_os.insert(0, cliente_os_atual.celular)
         ap_celular_os.config(validate='all', validatecommand=(impede_escrita, '%P'))
-        Label(sub_frame_dc_os2, text="Whatsapp.", fg=color_fg_labels,
+        Label(sub_frame_dc_os2, text="Whatsapp.",
               font=font_dados1, bg=color_frame).grid(row=3, column=0, sticky=W)
-        ap_whats_os = Entry(sub_frame_dc_os2, width=16, font=font_dados2, bg=entry_bg, fg=color_fg_labels0)
+        ap_whats_os = Entry(sub_frame_dc_os2, width=16, font=font_dados1, bg=entry_bg, fg=color_fg_labels0)
         ap_whats_os.grid(row=3, column=1, pady=2)
         ap_whats_os.insert(0, cliente_os_atual.whats)
         ap_whats_os.config(validate='all', validatecommand=(impede_escrita, '%P'))
-        Label(sub_frame_dc_os2, text="Id.", fg=color_fg_labels,
+        Label(sub_frame_dc_os2, text="Id.",
               font=font_dados1, bg=color_frame).grid(row=4, column=0, sticky=W)
-        ap_id_os = Entry(sub_frame_dc_os2, width=16, font=font_dados2, bg=entry_bg, fg=color_fg_labels0)
+        ap_id_os = Entry(sub_frame_dc_os2, width=16, font=font_dados1, bg=entry_bg, fg=color_fg_labels0)
         ap_id_os.grid(row=4, column=1)
         ap_id_os.insert(0, cliente_os_atual.id)
         ap_id_os.config(validate='all', validatecommand=(impede_escrita, '%P'))
@@ -2391,7 +2391,7 @@ class Castelo:
         frame_prob_os.pack(padx=8, pady=8)
         scroll_prob_os = Scrollbar(frame_prob_os)
         scroll_prob_os.pack(side=RIGHT, fill=Y)
-        text_prob_os = Text(frame_prob_os, relief=SUNKEN, yscrollcommand=scroll_prob_os, bg='#FFE599')
+        text_prob_os = Text(frame_prob_os, relief=SUNKEN, yscrollcommand=scroll_prob_os, bg='#ffe0c0')
         text_prob_os.insert(END, os_dados.log)
         text_prob_os.pack(side=LEFT)
         scroll_prob_os.config(command=text_prob_os.yview)
@@ -2400,12 +2400,12 @@ class Castelo:
         frame_andamento_os.pack(padx=8, pady=8)
         scroll_andamento_os = Scrollbar(frame_andamento_os)
         scroll_andamento_os.pack(side=RIGHT, fill=Y)
-        text_andamento_os = Text(frame_andamento_os, relief=SUNKEN, yscrollcommand=scroll_andamento_os, bg="#FFE599")
+        text_andamento_os = Text(frame_andamento_os, relief=SUNKEN, yscrollcommand=scroll_andamento_os, bg="#ffe0c0")
         text_andamento_os.insert(END, os_dados.andamento)
         text_andamento_os.pack(side=LEFT)
         scroll_andamento_os.config(command=text_andamento_os.yview)
 
-        self.list_status_os = Listbox(labelframe_os_status, bg="#FFE599")
+        self.list_status_os = Listbox(labelframe_os_status, bg="#ffe0c0")
         self.list_status_os.insert(1, "EM ANDAMENTO")
         self.list_status_os.insert(2, "EM SERVIÇO")
         self.list_status_os.insert(3, "N/ AUTORIZADO")
@@ -2416,12 +2416,12 @@ class Castelo:
         frame_status_os = Frame(labelframe_os_status, bg=color_frame)
         frame_status_os.pack(side=LEFT, padx=5, fill=Y)
         self.os_status = Label(frame_status_os, text=os_dados.status, fg="blue",
-                               bg="#FFE599", bd=2, relief=SUNKEN, width=15)
+                               bg="#ffe0c0", bd=2, relief=SUNKEN, width=15)
         self.os_status.grid(row=0, column=0, ipadx=10, padx=5)
         Button(frame_status_os, text="Salvar", command=lambda: [seleciona_status(1)]).grid(row=1, column=0, pady=20,
                                                                                            ipadx=10)
 
-        list_tecnicos_os = Listbox(labelframe_os_tecnicos, bg="#FFE599")
+        list_tecnicos_os = Listbox(labelframe_os_tecnicos, bg="#ffe0c0")
         list_tecnicos_os.insert(1, "HENRIQUE")
         list_tecnicos_os.insert(2, "HUGO")
         list_tecnicos_os.insert(3, "AUGUSTO")
@@ -2705,6 +2705,9 @@ class Castelo:
         y_cordinate = int((self.h / 2) - (650 / 2))
         jan.geometry("{}x{}+{}+{}".format(1000, 650, x_cordinate, y_cordinate))
 
+        color_entry1 = '#ffffe1'
+        color_entry2= '#ffff80'
+
         def apagaAba1():
             if self.orc_cod_entry1.get() == '':
                 self.orc_descr_entry1.delete(0, END)
@@ -2816,10 +2819,10 @@ class Castelo:
         frame_os_su2 = Frame(labelframe_garantia_os)
         frame_os_su2.pack(padx=10)
         Label(frame_os_su2, text="Dias").grid(row=0, column=0, sticky=W, padx=10, pady=3)
-        self.orc_dias = Entry(frame_os_su2, width=5)
+        self.orc_dias = Entry(frame_os_su2, width=5, bg=color_entry1)
         self.orc_dias.grid(row=1, column=0, padx=10)
         Label(frame_os_su2, text="Garantia até:").grid(row=0, column=1, padx=10)
-        Label(frame_os_su2, text="23/01/2022", relief=SUNKEN, bd=2, width=10).grid(row=1, column=1, padx=10)
+        Label(frame_os_su2, text="23/01/2022", relief=SUNKEN, bd=2, width=10, bg=color_entry2).grid(row=1, column=1, padx=10)
 
         labelframe_operador_os = LabelFrame(frame_princ_os1, text="Operador")
         labelframe_operador_os.grid(row=0, column=3, ipady=3, padx=10, sticky=W)
@@ -2863,194 +2866,194 @@ class Castelo:
                                                                                                           pady=2)
         Button(subframe_material1, width=3, text="E", command=lambda: [self.janelaBuscaProduto(13)]).grid(row=9,
                                                                                                           column=0)
-        self.orc_cod_entry1 = Entry(subframe_material1, width=10, relief=SUNKEN)
+        self.orc_cod_entry1 = Entry(subframe_material1, width=10, relief=SUNKEN, bg=color_entry1)
         self.orc_cod_entry1.insert(0, dados_orc.codigo1)
         self.orc_cod_entry1.grid(row=1, column=1)
-        self.orc_cod_entry2 = Entry(subframe_material1, width=10, relief=SUNKEN)
+        self.orc_cod_entry2 = Entry(subframe_material1, width=10, relief=SUNKEN, bg=color_entry1)
         self.orc_cod_entry2.insert(0, dados_orc.codigo2)
         self.orc_cod_entry2.grid(row=2, column=1)
-        self.orc_cod_entry3 = Entry(subframe_material1, width=10, relief=SUNKEN)
+        self.orc_cod_entry3 = Entry(subframe_material1, width=10, relief=SUNKEN, bg=color_entry1)
         self.orc_cod_entry3.insert(0, dados_orc.codigo3)
         self.orc_cod_entry3.grid(row=3, column=1)
-        self.orc_cod_entry4 = Entry(subframe_material1, width=10, relief=SUNKEN)
+        self.orc_cod_entry4 = Entry(subframe_material1, width=10, relief=SUNKEN, bg=color_entry1)
         self.orc_cod_entry4.insert(0, dados_orc.codigo4)
         self.orc_cod_entry4.grid(row=4, column=1)
-        self.orc_cod_entry5 = Entry(subframe_material1, width=10, relief=SUNKEN)
+        self.orc_cod_entry5 = Entry(subframe_material1, width=10, relief=SUNKEN, bg=color_entry1)
         self.orc_cod_entry5.insert(0, dados_orc.codigo5)
         self.orc_cod_entry5.grid(row=5, column=1)
-        self.orc_cod_entry6 = Entry(subframe_material1, width=10, relief=SUNKEN)
+        self.orc_cod_entry6 = Entry(subframe_material1, width=10, relief=SUNKEN, bg=color_entry1)
         self.orc_cod_entry6.insert(0, dados_orc.codigo6)
         self.orc_cod_entry6.grid(row=6, column=1)
-        self.orc_cod_entry7 = Entry(subframe_material1, width=10, relief=SUNKEN)
+        self.orc_cod_entry7 = Entry(subframe_material1, width=10, relief=SUNKEN, bg=color_entry1)
         self.orc_cod_entry7.insert(0, dados_orc.codigo7)
         self.orc_cod_entry7.grid(row=7, column=1)
-        self.orc_cod_entry8 = Entry(subframe_material1, width=10, relief=SUNKEN)
+        self.orc_cod_entry8 = Entry(subframe_material1, width=10, relief=SUNKEN, bg=color_entry1)
         self.orc_cod_entry8.insert(0, dados_orc.codigo8)
         self.orc_cod_entry8.grid(row=8, column=1)
-        self.orc_cod_entry9 = Entry(subframe_material1, width=10, relief=SUNKEN)
+        self.orc_cod_entry9 = Entry(subframe_material1, width=10, relief=SUNKEN, bg=color_entry1)
         self.orc_cod_entry9.insert(0, dados_orc.codigo9)
         self.orc_cod_entry9.grid(row=9, column=1)
-        self.orc_quant_entry1 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all',
+        self.orc_quant_entry1 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all', bg=color_entry1,
                                       validatecommand=(testa_inteiro, '%P'))
         self.orc_quant_entry1.insert(0, self.insereNumConvertido(dados_orc.qtd1))
         self.orc_quant_entry1.grid(row=1, column=2, padx=5)
-        self.orc_id_entry1 = Entry(subframe_material1, width=6, relief=SUNKEN, validate='all',
+        self.orc_id_entry1 = Entry(subframe_material1, width=6, relief=SUNKEN, validate='all', bg=color_entry1,
                                    validatecommand=(testa_float, '%P'))
         self.orc_id_entry1.insert(0, self.insereNumConvertido(dados_orc.caixa_peca1))
         self.orc_id_entry1.grid(row=1, column=3)
-        self.orc_descr_entry1 = Entry(subframe_material1, width=50, relief=SUNKEN)
+        self.orc_descr_entry1 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1)
         self.orc_descr_entry1.insert(0, dados_orc.desc_serv1)
         self.orc_descr_entry1.grid(row=1, column=4, padx=5)
-        self.orc_val_uni_entry1 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all',
+        self.orc_val_uni_entry1 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
                                         validatecommand=(testa_float, '%P'))
         self.orc_val_uni_entry1.insert(0, self.insereNumConvertido(dados_orc.valor_uni1))
         self.orc_val_uni_entry1.grid(row=1, column=5)
         self.orc_val_total_entry1 = Label(subframe_material1, text=self.insereNumConvertido(dados_orc.valor_tot1),
-                                          width=10, relief=SUNKEN, bd=2)
+                                          width=10, relief=SUNKEN, bd=2, bg=color_entry2)
         self.orc_val_total_entry1.grid(row=1, column=6, padx=5)
-        self.orc_quant_entry2 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all',
+        self.orc_quant_entry2 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all', bg=color_entry1,
                                       validatecommand=(testa_inteiro, '%P'))
         self.orc_quant_entry2.insert(0, self.insereNumConvertido(dados_orc.qtd2))
         self.orc_quant_entry2.grid(row=2, column=2, padx=5)
-        self.orc_id_entry2 = Entry(subframe_material1, width=6, relief=SUNKEN, validate='all',
+        self.orc_id_entry2 = Entry(subframe_material1, width=6, relief=SUNKEN, validate='all', bg=color_entry1,
                                    validatecommand=(testa_float, '%P'))
         self.orc_id_entry2.insert(0, self.insereNumConvertido(dados_orc.caixa_peca2))
         self.orc_id_entry2.grid(row=2, column=3)
-        self.orc_descr_entry2 = Entry(subframe_material1, width=50, relief=SUNKEN)
+        self.orc_descr_entry2 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1)
         self.orc_descr_entry2.insert(0, dados_orc.desc_serv2)
         self.orc_descr_entry2.grid(row=2, column=4, padx=5)
-        self.orc_val_uni_entry2 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all',
+        self.orc_val_uni_entry2 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
                                         validatecommand=(testa_float, '%P'))
         self.orc_val_uni_entry2.insert(0, self.insereNumConvertido(dados_orc.valor_uni2))
         self.orc_val_uni_entry2.grid(row=2, column=5)
         self.orc_val_total_entry2 = Label(subframe_material1, text=self.insereNumConvertido(dados_orc.valor_tot2),
-                                          width=10, relief=SUNKEN, bd=2)
+                                          width=10, relief=SUNKEN, bd=2, bg=color_entry2)
         self.orc_val_total_entry2.grid(row=2, column=6, padx=5)
-        self.orc_quant_entry3 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all',
+        self.orc_quant_entry3 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all', bg=color_entry1,
                                       validatecommand=(testa_inteiro, '%P'))
         self.orc_quant_entry3.insert(0, self.insereNumConvertido(dados_orc.qtd3))
         self.orc_quant_entry3.grid(row=3, column=2, padx=5)
-        self.orc_id_entry3 = Entry(subframe_material1, width=6, relief=SUNKEN, validate='all',
+        self.orc_id_entry3 = Entry(subframe_material1, width=6, relief=SUNKEN, validate='all', bg=color_entry1,
                                    validatecommand=(testa_float, '%P'))
         self.orc_id_entry3.insert(0, self.insereNumConvertido(dados_orc.caixa_peca3))
         self.orc_id_entry3.grid(row=3, column=3)
-        self.orc_descr_entry3 = Entry(subframe_material1, width=50, relief=SUNKEN)
+        self.orc_descr_entry3 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1)
         self.orc_descr_entry3.insert(0, dados_orc.desc_serv3)
         self.orc_descr_entry3.grid(row=3, column=4, padx=5)
-        self.orc_val_uni_entry3 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all',
+        self.orc_val_uni_entry3 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
                                         validatecommand=(testa_float, '%P'))
         self.orc_val_uni_entry3.insert(0, self.insereNumConvertido(dados_orc.valor_uni3))
         self.orc_val_uni_entry3.grid(row=3, column=5)
         self.orc_val_total_entry3 = Label(subframe_material1, text=self.insereNumConvertido(dados_orc.valor_tot3),
-                                          width=10, relief=SUNKEN, bd=2)
+                                          width=10, relief=SUNKEN, bd=2, bg=color_entry2)
         self.orc_val_total_entry3.grid(row=3, column=6, padx=5)
-        self.orc_quant_entry4 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all',
+        self.orc_quant_entry4 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all', bg=color_entry1,
                                       validatecommand=(testa_inteiro, '%P'))
         self.orc_quant_entry4.insert(0, self.insereNumConvertido(dados_orc.qtd4))
         self.orc_quant_entry4.grid(row=4, column=2, padx=5)
-        self.orc_id_entry4 = Entry(subframe_material1, width=6, relief=SUNKEN, validate='all',
+        self.orc_id_entry4 = Entry(subframe_material1, width=6, relief=SUNKEN, validate='all', bg=color_entry1,
                                    validatecommand=(testa_float, '%P'))
         self.orc_id_entry4.insert(0, self.insereNumConvertido(dados_orc.caixa_peca4))
         self.orc_id_entry4.grid(row=4, column=3)
-        self.orc_descr_entry4 = Entry(subframe_material1, width=50, relief=SUNKEN)
+        self.orc_descr_entry4 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1)
         self.orc_descr_entry4.insert(0, dados_orc.desc_serv4)
         self.orc_descr_entry4.grid(row=4, column=4, padx=5)
-        self.orc_val_uni_entry4 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all',
+        self.orc_val_uni_entry4 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
                                         validatecommand=(testa_float, '%P'))
         self.orc_val_uni_entry4.insert(0, self.insereNumConvertido(dados_orc.valor_uni4))
         self.orc_val_uni_entry4.grid(row=4, column=5)
         self.orc_val_total_entry4 = Label(subframe_material1, text=self.insereNumConvertido(dados_orc.valor_tot4),
-                                          width=10, relief=SUNKEN, bd=2)
+                                          width=10, relief=SUNKEN, bd=2, bg=color_entry2)
         self.orc_val_total_entry4.grid(row=4, column=6, padx=5)
-        self.orc_quant_entry5 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all',
+        self.orc_quant_entry5 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all', bg=color_entry1,
                                       validatecommand=(testa_inteiro, '%P'))
         self.orc_quant_entry5.insert(0, self.insereNumConvertido(dados_orc.qtd5))
         self.orc_quant_entry5.grid(row=5, column=2, padx=5)
-        self.orc_id_entry5 = Entry(subframe_material1, width=6, relief=SUNKEN, validate='all',
+        self.orc_id_entry5 = Entry(subframe_material1, width=6, relief=SUNKEN, validate='all', bg=color_entry1,
                                    validatecommand=(testa_float, '%P'))
         self.orc_id_entry5.insert(0, self.insereNumConvertido(dados_orc.caixa_peca5))
         self.orc_id_entry5.grid(row=5, column=3)
-        self.orc_descr_entry5 = Entry(subframe_material1, width=50, relief=SUNKEN)
+        self.orc_descr_entry5 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1)
         self.orc_descr_entry5.insert(0, dados_orc.desc_serv5)
         self.orc_descr_entry5.grid(row=5, column=4, padx=5)
-        self.orc_val_uni_entry5 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all',
+        self.orc_val_uni_entry5 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
                                         validatecommand=(testa_float, '%P'))
         self.orc_val_uni_entry5.insert(0, self.insereNumConvertido(dados_orc.valor_uni5))
         self.orc_val_uni_entry5.grid(row=5, column=5)
         self.orc_val_total_entry5 = Label(subframe_material1, text=self.insereNumConvertido(dados_orc.valor_tot5),
-                                          width=10, relief=SUNKEN, bd=2)
+                                          width=10, relief=SUNKEN, bd=2, bg=color_entry2)
         self.orc_val_total_entry5.grid(row=5, column=6, padx=5)
-        self.orc_quant_entry6 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all',
+        self.orc_quant_entry6 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all', bg=color_entry1,
                                       validatecommand=(testa_inteiro, '%P'))
         self.orc_quant_entry6.insert(0, self.insereNumConvertido(dados_orc.qtd6))
         self.orc_quant_entry6.grid(row=6, column=2, padx=5)
-        self.orc_id_entry6 = Entry(subframe_material1, width=6, relief=SUNKEN, validate='all',
+        self.orc_id_entry6 = Entry(subframe_material1, width=6, relief=SUNKEN, validate='all', bg=color_entry1,
                                    validatecommand=(testa_float, '%P'))
         self.orc_id_entry6.insert(0, self.insereNumConvertido(dados_orc.caixa_peca6))
         self.orc_id_entry6.grid(row=6, column=3)
-        self.orc_descr_entry6 = Entry(subframe_material1, width=50, relief=SUNKEN)
+        self.orc_descr_entry6 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1)
         self.orc_descr_entry6.insert(0, dados_orc.desc_serv6)
         self.orc_descr_entry6.grid(row=6, column=4, padx=5)
-        self.orc_val_uni_entry6 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all',
+        self.orc_val_uni_entry6 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
                                         validatecommand=(testa_float, '%P'))
         self.orc_val_uni_entry6.insert(0, self.insereNumConvertido(dados_orc.valor_uni6))
         self.orc_val_uni_entry6.grid(row=6, column=5)
         self.orc_val_total_entry6 = Label(subframe_material1, text=self.insereNumConvertido(dados_orc.valor_tot6),
-                                          width=10, relief=SUNKEN, bd=2)
+                                          width=10, relief=SUNKEN, bd=2, bg=color_entry2)
         self.orc_val_total_entry6.grid(row=6, column=6, padx=5)
-        self.orc_quant_entry7 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all',
+        self.orc_quant_entry7 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all', bg=color_entry1,
                                       validatecommand=(testa_inteiro, '%P'))
         self.orc_quant_entry7.insert(0, self.insereNumConvertido(dados_orc.qtd7))
         self.orc_quant_entry7.grid(row=7, column=2, padx=5)
-        self.orc_id_entry7 = Entry(subframe_material1, width=6, relief=SUNKEN, validate='all',
+        self.orc_id_entry7 = Entry(subframe_material1, width=6, relief=SUNKEN, validate='all', bg=color_entry1,
                                    validatecommand=(testa_float, '%P'))
         self.orc_id_entry7.insert(0, self.insereNumConvertido(dados_orc.caixa_peca7))
         self.orc_id_entry7.grid(row=7, column=3)
-        self.orc_descr_entry7 = Entry(subframe_material1, width=50, relief=SUNKEN)
+        self.orc_descr_entry7 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1)
         self.orc_descr_entry7.insert(0, dados_orc.desc_serv7)
         self.orc_descr_entry7.grid(row=7, column=4, padx=5)
-        self.orc_val_uni_entry7 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all',
+        self.orc_val_uni_entry7 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
                                         validatecommand=(testa_float, '%P'))
         self.orc_val_uni_entry7.insert(0, self.insereNumConvertido(dados_orc.valor_uni7))
         self.orc_val_uni_entry7.grid(row=7, column=5)
         self.orc_val_total_entry7 = Label(subframe_material1, text=self.insereNumConvertido(dados_orc.valor_tot7),
-                                          width=10, relief=SUNKEN, bd=2)
+                                          width=10, relief=SUNKEN, bd=2, bg=color_entry2)
         self.orc_val_total_entry7.grid(row=7, column=6, padx=5)
-        self.orc_quant_entry8 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all',
+        self.orc_quant_entry8 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all', bg=color_entry1,
                                       validatecommand=(testa_inteiro, '%P'))
         self.orc_quant_entry8.insert(0, self.insereNumConvertido(dados_orc.qtd8))
         self.orc_quant_entry8.grid(row=8, column=2, padx=5)
-        self.orc_id_entry8 = Entry(subframe_material1, width=6, relief=SUNKEN, validate='all',
+        self.orc_id_entry8 = Entry(subframe_material1, width=6, relief=SUNKEN, validate='all', bg=color_entry1,
                                    validatecommand=(testa_float, '%P'))
         self.orc_id_entry8.insert(0, self.insereNumConvertido(dados_orc.caixa_peca8))
         self.orc_id_entry8.grid(row=8, column=3)
-        self.orc_descr_entry8 = Entry(subframe_material1, width=50, relief=SUNKEN)
+        self.orc_descr_entry8 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1,)
         self.orc_descr_entry8.insert(0, dados_orc.desc_serv8)
         self.orc_descr_entry8.grid(row=8, column=4, padx=5)
-        self.orc_val_uni_entry8 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all',
+        self.orc_val_uni_entry8 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
                                         validatecommand=(testa_float, '%P'))
         self.orc_val_uni_entry8.insert(0, self.insereNumConvertido(dados_orc.valor_uni8))
         self.orc_val_uni_entry8.grid(row=8, column=5)
         self.orc_val_total_entry8 = Label(subframe_material1, text=self.insereNumConvertido(dados_orc.valor_tot8),
-                                          width=10, relief=SUNKEN, bd=2)
+                                          width=10, relief=SUNKEN, bd=2, bg=color_entry2)
         self.orc_val_total_entry8.grid(row=8, column=6, padx=5)
-        self.orc_quant_entry9 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all',
+        self.orc_quant_entry9 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all', bg=color_entry1,
                                       validatecommand=(testa_inteiro, '%P'))
         self.orc_quant_entry9.insert(0, self.insereNumConvertido(dados_orc.qtd9))
         self.orc_quant_entry9.grid(row=9, column=2, padx=5)
-        self.orc_id_entry9 = Entry(subframe_material1, width=6, relief=SUNKEN, validate='all',
+        self.orc_id_entry9 = Entry(subframe_material1, width=6, relief=SUNKEN, validate='all', bg=color_entry1,
                                    validatecommand=(testa_float, '%P'))
         self.orc_id_entry9.insert(0, self.insereNumConvertido(dados_orc.caixa_peca9))
         self.orc_id_entry9.grid(row=9, column=3)
-        self.orc_descr_entry9 = Entry(subframe_material1, width=50, relief=SUNKEN)
+        self.orc_descr_entry9 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1,)
         self.orc_descr_entry9.insert(0, dados_orc.desc_serv9)
         self.orc_descr_entry9.grid(row=9, column=4, padx=5)
-        self.orc_val_uni_entry9 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all',
+        self.orc_val_uni_entry9 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
                                         validatecommand=(testa_float, '%P'))
         self.orc_val_uni_entry9.insert(0, self.insereNumConvertido(dados_orc.valor_uni9))
         self.orc_val_uni_entry9.grid(row=9, column=5)
         self.orc_val_total_entry9 = Label(subframe_material1, text=self.insereNumConvertido(dados_orc.valor_tot9),
-                                          width=10, relief=SUNKEN, bd=2)
+                                          width=10, relief=SUNKEN, bd=2, bg=color_entry2)
         self.orc_val_total_entry9.grid(row=9, column=6, padx=5)
         subframe_material2 = Frame(labelframe_material)
         subframe_material2.pack(fill=BOTH)
@@ -3067,7 +3070,7 @@ class Castelo:
         introframe_material2.pack(side=RIGHT, fill=Y, padx=5)
         introframe_material3 = Frame(introframe_material2)
         introframe_material3.pack()
-        self.orc_entry_mao_obra_material = Entry(introframe_material3, width=15)
+        self.orc_entry_mao_obra_material = Entry(introframe_material3, width=15, bg=color_entry1)
         self.orc_entry_mao_obra_material.insert(0, self.insereNumConvertido(dados_orc.valor_mao_obra))
         self.orc_entry_mao_obra_material.pack(side=RIGHT)
         Label(introframe_material3, text="Mão de Obra(+)").pack(side=RIGHT, padx=10)
@@ -3076,12 +3079,12 @@ class Castelo:
         self.orc_valor_subtotal_material = dados_orc.total - dados_orc.valor_mao_obra + dados_orc.desconto
         self.orc_entry_subtotal_material = Label(introframe_material4,
                                                  text=self.insereTotalConvertido(self.orc_valor_subtotal_material),
-                                                 width=13, relief=SUNKEN, bd=2)
+                                                 width=13, relief=SUNKEN, bd=2, bg=color_entry2)
         self.orc_entry_subtotal_material.pack(side=RIGHT)
         Label(introframe_material4, text="Sub Total(=)").pack(side=RIGHT, padx=10)
         introframe_material5 = Frame(introframe_material2)
         introframe_material5.pack(fill=X)
-        self.orc_entry_desconto_material = Entry(introframe_material5, width=15)
+        self.orc_entry_desconto_material = Entry(introframe_material5, width=15, bg=color_entry1)
         self.orc_entry_desconto_material.insert(0, self.insereNumConvertido(dados_orc.desconto))
         self.orc_entry_desconto_material.pack(side=RIGHT)
         Label(introframe_material5, text="Desconto(-)").pack(side=RIGHT, padx=10)
@@ -3091,35 +3094,35 @@ class Castelo:
         self.orc_valor_total_material = dados_orc.total
         self.orc_entry_total_material = Label(subframe_material3, width=10, fg="blue", font=("", 14, ""),
                                               justify=RIGHT, relief=SUNKEN, bd=2,
-                                              text=self.insereTotalConvertido(dados_orc.total))
+                                              text=self.insereTotalConvertido(dados_orc.total), bg=color_entry2)
         self.orc_entry_total_material.pack(side=RIGHT)
         Label(subframe_material3, text="Total do Serviço").pack(side=RIGHT, padx=15)
 
         desc_frame = Frame(subframe_material3)
         desc_frame.pack(side=LEFT, pady=10, padx=5, fill=X)
-        self.orc_porcentagem = Entry(desc_frame, width=5, validate='all',
+        self.orc_porcentagem = Entry(desc_frame, width=5, validate='all', bg=color_entry1,
                                      validatecommand=(testa_float, '%P'))
         self.orc_porcentagem.insert(0, 5)
         self.orc_porcentagem.pack(side=LEFT)
         Label(desc_frame, text="%").pack(padx=5, side=LEFT)
-        self.orc_porcentagem_result = Label(desc_frame, text="R$0,00", bg="yellow", width=15, relief=SUNKEN, bd=2)
+        self.orc_porcentagem_result = Label(desc_frame, text="R$0,00", bg=color_entry2, width=15, relief=SUNKEN, bd=2)
         self.orc_porcentagem_result.pack(side=LEFT)
         desc_frame1 = Frame(subframe_material3)
         desc_frame1.pack(side=RIGHT, pady=10, padx=20, fill=X)
-        self.orc_entry_cp_total = Label(desc_frame1, bg="#FF8C64", width=15, relief=SUNKEN, bd=2,
+        self.orc_entry_cp_total = Label(desc_frame1, bg=color_entry2, width=15, relief=SUNKEN, bd=2,
                                         text=self.insereTotalConvertido(dados_orc.caixa_peca_total))
         self.orc_entry_cp_total.pack(side=RIGHT)
         Label(desc_frame1, text="CP:").pack(side=RIGHT, padx=5)
 
         labelframe_orc_coment = LabelFrame(frame_princ_os1, text="Comentários")
         labelframe_orc_coment.grid(row=2, column=0, columnspan=4, pady=5)
-        self.orc_comentario1 = Entry(labelframe_orc_coment, width=104)
+        self.orc_comentario1 = Entry(labelframe_orc_coment, width=104, bg=color_entry1)
         self.orc_comentario1.insert(0, dados_orc.obs1)
         self.orc_comentario1.pack(padx=5, pady=5)
-        self.orc_comentario2 = Entry(labelframe_orc_coment, width=104)
+        self.orc_comentario2 = Entry(labelframe_orc_coment, width=104, bg=color_entry1)
         self.orc_comentario2.insert(0, dados_orc.obs2)
         self.orc_comentario2.pack()
-        self.orc_comentario3 = Entry(labelframe_orc_coment, width=104)
+        self.orc_comentario3 = Entry(labelframe_orc_coment, width=104, bg=color_entry1)
         self.orc_comentario3.insert(0, dados_orc.obs3)
         self.orc_comentario3.pack(pady=5)
 
@@ -3131,7 +3134,7 @@ class Castelo:
         sub_frame_coment.pack(fill=BOTH, padx=5, pady=5)
         scroll_os = Scrollbar(sub_frame_coment)
         scroll_os.pack(side=RIGHT, fill=Y)
-        self.orc_text_os = Text(sub_frame_coment, relief=SUNKEN, yscrollcommand=scroll_os, height=5)
+        self.orc_text_os = Text(sub_frame_coment, relief=SUNKEN, yscrollcommand=scroll_os, height=5, bg=color_entry1)
         self.orc_text_os.insert('end', dados_orc.defeitos)
         self.orc_text_os.pack(side=RIGHT)
         scroll_os.config(command=self.orc_text_os.yview)
@@ -3142,20 +3145,20 @@ class Castelo:
         subframe_form_pag1.pack(padx=15, pady=5)
         Label(subframe_form_pag1, text="Dinheiro", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=0, column=0,
                                                                                                         padx=5)
-        self.orc_dinheiro = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all',
+        self.orc_dinheiro = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all', bg=color_entry1,
                                   validatecommand=(testa_float, '%P'))
         self.orc_dinheiro.insert(0, self.insereNumConvertido(dados_orc.dinheiro))
         self.orc_dinheiro.grid(row=0, column=1, padx=5)
         Label(subframe_form_pag1, text="Cheque", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=1, column=0,
                                                                                                       padx=5, pady=5)
-        self.orc_cheque = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all',
+        self.orc_cheque = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all', bg=color_entry1,
                                 validatecommand=(testa_float, '%P'))
         self.orc_cheque.insert(0, self.insereNumConvertido(dados_orc.cheque))
         self.orc_cheque.grid(row=1, column=1, padx=5)
         Label(subframe_form_pag1, text="Cartão de Crédito", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=2,
                                                                                                                  column=0,
                                                                                                                  padx=5)
-        self.orc_ccredito = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all',
+        self.orc_ccredito = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all', bg=color_entry1,
                                   validatecommand=(testa_float, '%P'))
         self.orc_ccredito.insert(0, self.insereNumConvertido(dados_orc.ccredito))
         self.orc_ccredito.grid(row=2, column=1, padx=5)
@@ -3163,31 +3166,31 @@ class Castelo:
                                                                                                                 column=0,
                                                                                                                 padx=5,
                                                                                                                 pady=5)
-        self.orc_cdebito = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all',
+        self.orc_cdebito = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all', bg=color_entry1,
                                  validatecommand=(testa_float, '%P'))
         self.orc_cdebito.insert(0, self.insereNumConvertido(dados_orc.cdebito))
         self.orc_cdebito.grid(row=3, column=1, padx=5)
         Label(subframe_form_pag1, text="PIX", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=4, column=0,
                                                                                                    padx=5)
-        self.orc_pix = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all',
+        self.orc_pix = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all', bg=color_entry1,
                              validatecommand=(testa_float, '%P'))
         self.orc_pix.insert(0, self.insereNumConvertido(dados_orc.pix))
         self.orc_pix.grid(row=4, column=1, padx=5)
         Label(subframe_form_pag1, text="Outros", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=5, column=0,
                                                                                                       padx=5, pady=5)
-        self.orc_outros = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all',
+        self.orc_outros = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all', bg=color_entry1,
                                 validatecommand=(testa_float, '%P'))
         self.orc_outros.insert(0, self.insereNumConvertido(dados_orc.outros))
         self.orc_outros.grid(row=5, column=1, padx=5)
         labelframe_pag_coment = LabelFrame(labelframe_form_pag, text="Observações de Pagamento")
         labelframe_pag_coment.pack(padx=10, pady=4)
-        self.orc_obs_pagamento1 = Entry(labelframe_pag_coment, width=47)
+        self.orc_obs_pagamento1 = Entry(labelframe_pag_coment, width=47, bg=color_entry1)
         self.orc_obs_pagamento1.insert(0, dados_orc.obs_pagamento1)
         self.orc_obs_pagamento1.pack(padx=5, pady=5)
-        self.orc_obs_pagamento2 = Entry(labelframe_pag_coment, width=47)
+        self.orc_obs_pagamento2 = Entry(labelframe_pag_coment, width=47, bg=color_entry1)
         self.orc_obs_pagamento2.insert(0, dados_orc.obs_pagamento2)
         self.orc_obs_pagamento2.pack(padx=5)
-        self.orc_obs_pagamento3 = Entry(labelframe_pag_coment, width=47)
+        self.orc_obs_pagamento3 = Entry(labelframe_pag_coment, width=47, bg=color_entry1)
         self.orc_obs_pagamento3.insert(0, dados_orc.obs_pagamento3)
         self.orc_obs_pagamento3.pack(pady=5, padx=5)
         subframe_form_pag2 = Frame(labelframe_form_pag)
@@ -3552,8 +3555,10 @@ class Castelo:
         font_dados1 = ('Verdana', '8', '')
         font_dados2 = ('Verdana', '8', 'bold')
         color_fg_labels = "blue"
-        color_fg_labels2 = "#768591"
-        color_bgdc_labels = "gray"
+        color_fg_labels2 = "#000080"
+        color_fg = "#0b7ed6"
+        color_frame= '#ffe0c0'
+        color_entry = '#ffffc0'
 
         jan = Toplevel()
 
@@ -3562,7 +3567,11 @@ class Castelo:
         y_cordinate = int((self.h / 2) - (520 / 2))
         jan.geometry("{}x{}+{}+{}".format(780, 520, x_cordinate, y_cordinate))
 
-        frame_princ_jan_os = Frame(jan)
+        impede_escrita = jan.register(self.ImpedeEscrita)
+
+        frame_princ_jan_os0 = Frame(jan, bg=color_frame)
+        frame_princ_jan_os0.pack(side=LEFT, fill=BOTH)
+        frame_princ_jan_os = Frame(frame_princ_jan_os0, bg=color_frame)
         frame_princ_jan_os.pack(side=LEFT, fill=BOTH, padx=10, pady=10)
 
         os_selecionada = self.tree_ap_entr.focus()
@@ -3572,218 +3581,240 @@ class Castelo:
         os_dados = os_saida_repo.listar_os_id(dado_os[0], sessao)
         cliente_os_atual = cliente_repo.listar_cliente_id(os_dados.cliente_id, sessao)
 
-        labelframe_dadoscli_os = LabelFrame(frame_princ_jan_os, text="Dados do Cliente", fg=self.color_fg_label)
+        labelframe_dadoscli_os = LabelFrame(frame_princ_jan_os, text="Dados do Cliente", fg=self.color_fg_label,
+                                            bg=color_frame)
         labelframe_dadoscli_os.grid(row=0, column=0, sticky=W)
-        sub_frame_dc_os1 = Frame(labelframe_dadoscli_os)
+        sub_frame_dc_os1 = Frame(labelframe_dadoscli_os, bg=color_frame)
         sub_frame_dc_os1.pack(side=LEFT, fill=BOTH, pady=5)
-        sub_frame_dc_os2 = Frame(labelframe_dadoscli_os)
+        sub_frame_dc_os2 = Frame(labelframe_dadoscli_os, bg=color_frame)
         sub_frame_dc_os2.pack(side=LEFT, fill=BOTH, padx=10, pady=5)
-        Label(sub_frame_dc_os1, text="Nome", fg=color_fg_labels, font=font_dados1).grid(row=0, column=0, sticky=W)
-        ap_nome_os = Entry(sub_frame_dc_os1, width=30, font=font_dados2)
+        Label(sub_frame_dc_os1, text="Nome", font=font_dados1,
+              bg=color_frame).grid(row=0, column=0, sticky=W)
+        ap_nome_os = Entry(sub_frame_dc_os1, width=30, font=font_dados2, bg=color_entry, fg=color_fg)
         ap_nome_os.grid(row=0, column=1, sticky=W)
         ap_nome_os.insert(0, cliente_os_atual.nome)
-        ap_nome_os.config(state=DISABLED)
-        Label(sub_frame_dc_os1, text="Endereço", fg=color_fg_labels, font=font_dados1).grid(row=1, column=0, sticky=W,
-                                                                                            columnspan=2, pady=2)
-        ap_end_os = Entry(sub_frame_dc_os1, width=27, font=font_dados2)
+        ap_nome_os.config(validate='all', validatecommand=(impede_escrita, '%P'))
+        Label(sub_frame_dc_os1, text="Endereço", font=font_dados1,
+              bg=color_frame).grid(row=1, column=0, sticky=W, columnspan=2, pady=2)
+        ap_end_os = Entry(sub_frame_dc_os1, width=27, font=font_dados2, bg=color_entry, fg=color_fg)
         ap_end_os.grid(row=1, column=1, sticky=E)
         ap_end_os.insert(0, cliente_os_atual.logradouro)
-        ap_end_os.config(state=DISABLED)
-        frame_sub_dc = Frame(sub_frame_dc_os1)
+        ap_end_os.config(validate='all', validatecommand=(impede_escrita, '%P'))
+        frame_sub_dc = Frame(sub_frame_dc_os1, bg=color_frame)
         frame_sub_dc.grid(row=2, column=0, columnspan=2, sticky=W)
-        Label(frame_sub_dc, text="Complemento", fg=color_fg_labels, font=font_dados1).grid(row=0, column=0, sticky=W)
-        ap_compl_os = Entry(frame_sub_dc, width=15, font=font_dados2)
+        Label(frame_sub_dc, text="Complemento", font=font_dados1,
+              bg=color_frame).grid(row=0, column=0, sticky=W)
+        ap_compl_os = Entry(frame_sub_dc, width=15, font=font_dados2, bg=color_entry, fg=color_fg)
         ap_compl_os.grid(row=0, column=1, sticky=E)
         ap_compl_os.insert(0, cliente_os_atual.complemento)
-        ap_compl_os.config(state=DISABLED)
-        Label(frame_sub_dc, text="Bairro", fg=color_fg_labels, font=font_dados1).grid(row=1, column=0, sticky=W,
-                                                                                      pady=2)
-        ap_bairro_os = Entry(frame_sub_dc, width=15, font=font_dados2)
+        ap_compl_os.config(validate='all', validatecommand=(impede_escrita, '%P'))
+        Label(frame_sub_dc, text="Bairro", font=font_dados1,
+              bg=color_frame).grid(row=1, column=0, sticky=W, pady=2)
+        ap_bairro_os = Entry(frame_sub_dc, width=15, font=font_dados2, bg=color_entry, fg=color_fg)
         ap_bairro_os.grid(row=1, column=1, sticky=W)
         ap_bairro_os.insert(0, cliente_os_atual.bairro)
-        ap_bairro_os.config(state=DISABLED)
-        Label(frame_sub_dc, text="Cidade", fg=color_fg_labels, font=font_dados1).grid(row=2, column=0, sticky=W)
-        ap_cidade_os = Entry(frame_sub_dc, width=15, font=font_dados2)
+        ap_bairro_os.config(validate='all', validatecommand=(impede_escrita, '%P'))
+        Label(frame_sub_dc, text="Cidade", font=font_dados1,
+              bg=color_frame).grid(row=2, column=0, sticky=W)
+        ap_cidade_os = Entry(frame_sub_dc, width=15, font=font_dados2, bg=color_entry, fg=color_fg)
         ap_cidade_os.grid(row=2, column=1, sticky=W)
         ap_cidade_os.insert(0, cliente_os_atual.cidade)
-        ap_cidade_os.config(state=DISABLED)
-        frame_sub_dc1 = Frame(frame_sub_dc)
+        ap_cidade_os.config(validate='all', validatecommand=(impede_escrita, '%P'))
+        frame_sub_dc1 = Frame(frame_sub_dc, bg=color_frame)
         frame_sub_dc1.grid(row=0, column=2, rowspan=3, sticky=S, ipadx=13)
         Button(frame_sub_dc1, text="1", width=7).pack(ipady=8, side=RIGHT)
 
-        Label(sub_frame_dc_os2, text="Tel.Res.", fg=color_fg_labels, font=font_dados1).grid(row=0, column=0, sticky=W)
-        ap_telfix_os = Entry(sub_frame_dc_os2, width=16, font=font_dados2)
+        Label(sub_frame_dc_os2, text="Tel.Res.", font=font_dados1,
+              bg=color_frame).grid(row=0, column=0, sticky=W)
+        ap_telfix_os = Entry(sub_frame_dc_os2, width=16, font=font_dados2, bg=color_entry, fg=color_fg)
         ap_telfix_os.grid(row=0, column=1)
         ap_telfix_os.insert(0, cliente_os_atual.tel_fixo)
-        ap_telfix_os.config(state=DISABLED)
-        Label(sub_frame_dc_os2, text="Tel.Com.", fg=color_fg_labels, font=font_dados1).grid(row=1, column=0, sticky=W)
-        ap_telcom_os = Entry(sub_frame_dc_os2, width=16, font=font_dados2)
+        ap_telfix_os.config(validate='all', validatecommand=(impede_escrita, '%P'))
+        Label(sub_frame_dc_os2, text="Tel.Com.", font=font_dados1,
+              bg=color_frame).grid(row=1, column=0, sticky=W)
+        ap_telcom_os = Entry(sub_frame_dc_os2, width=16, font=font_dados2, bg=color_entry, fg=color_fg)
         ap_telcom_os.grid(row=1, column=1, pady=2)
         ap_telcom_os.insert(0, cliente_os_atual.tel_comercial)
-        ap_telcom_os.config(state=DISABLED)
-        Label(sub_frame_dc_os2, text="Celular", fg=color_fg_labels, font=font_dados1).grid(row=2, column=0, sticky=W)
-        ap_celular_os = Entry(sub_frame_dc_os2, width=16, font=font_dados2)
+        ap_telcom_os.config(validate='all', validatecommand=(impede_escrita, '%P'))
+        Label(sub_frame_dc_os2, text="Celular", font=font_dados1,
+              bg=color_frame).grid(row=2, column=0, sticky=W)
+        ap_celular_os = Entry(sub_frame_dc_os2, width=16, font=font_dados2, bg=color_entry, fg=color_fg)
         ap_celular_os.grid(row=2, column=1)
         ap_celular_os.insert(0, cliente_os_atual.celular)
-        ap_celular_os.config(state=DISABLED)
-        Label(sub_frame_dc_os2, text="Whatsapp.", fg=color_fg_labels, font=font_dados1).grid(row=3, column=0, sticky=W)
-        ap_whats_os = Entry(sub_frame_dc_os2, width=16, font=font_dados2)
+        ap_celular_os.config(validate='all', validatecommand=(impede_escrita, '%P'))
+        Label(sub_frame_dc_os2, text="Whatsapp.", font=font_dados1,
+              bg=color_frame).grid(row=3, column=0, sticky=W)
+        ap_whats_os = Entry(sub_frame_dc_os2, width=16, font=font_dados2, bg=color_entry, fg=color_fg)
         ap_whats_os.grid(row=3, column=1, pady=2)
         ap_whats_os.insert(0, cliente_os_atual.whats)
-        ap_whats_os.config(state=DISABLED)
-        Label(sub_frame_dc_os2, text="Id.", fg=color_fg_labels, font=font_dados1).grid(row=4, column=0, sticky=W)
-        ap_id_os = Entry(sub_frame_dc_os2, width=16, font=font_dados2)
+        ap_whats_os.config(validate='all', validatecommand=(impede_escrita, '%P'))
+        Label(sub_frame_dc_os2, text="Id.", font=font_dados1,
+              bg=color_frame).grid(row=4, column=0, sticky=W)
+        ap_id_os = Entry(sub_frame_dc_os2, width=16, font=font_dados2, bg=color_entry, fg=color_fg)
         ap_id_os.grid(row=4, column=1)
         ap_id_os.insert(0, cliente_os_atual.id)
-        ap_id_os.config(state=DISABLED)
+        ap_id_os.config(validate='all', validatecommand=(impede_escrita, '%P'))
 
-        labelframe_os = LabelFrame(frame_princ_jan_os, text="Ordem de Serviço", fg=self.color_fg_label)
+        labelframe_os = LabelFrame(frame_princ_jan_os, text="Ordem de Serviço", fg=self.color_fg_label, bg=color_frame)
         labelframe_os.grid(row=0, column=1, padx=15, rowspan=2, ipadx=3, sticky=N, ipady=10)
-        Label(labelframe_os, text=os_dados.os_saida, fg="red", font=('Verdana', '24', 'bold')).grid(row=0, column=0,
+        Label(labelframe_os, text=os_dados.os_saida, fg="red", font=('Verdana', '24', 'bold'), bg=color_frame).grid(row=0, column=0,
                                                                                                     columnspan=2,
                                                                                                     padx=10, pady=11)
-        Label(labelframe_os, text="Entrada:", fg=color_fg_labels2, font=font_dados2).grid(row=1, column=0, sticky=E,
+        Label(labelframe_os, text="Entrada:", fg=color_fg_labels2, font=font_dados2, bg=color_frame).grid(row=1, column=0, sticky=E,
                                                                                           padx=5)
-        Label(labelframe_os, text="19/10/2021", fg=color_fg_labels, font=font_dados2).grid(row=1, column=1, sticky=W)
-        Label(labelframe_os, text="Hora:", fg=color_fg_labels2, font=font_dados2).grid(row=2, column=0, sticky=E,
+        Label(labelframe_os, text="19/10/2021", fg=color_fg_labels, font=font_dados2, bg=color_frame).grid(row=1, column=1, sticky=W)
+        Label(labelframe_os, text="Hora:", fg=color_fg_labels2, font=font_dados2, bg=color_frame).grid(row=2, column=0, sticky=E,
                                                                                        padx=5)
-        Label(labelframe_os, text="21:28", fg=color_fg_labels, font=font_dados2).grid(row=2, column=1, sticky=W)
-        Label(labelframe_os, text="Dias:", fg=color_fg_labels2, font=font_dados2).grid(row=3, column=0, sticky=E,
+        Label(labelframe_os, text="21:28", fg=color_fg_labels, font=font_dados2, bg=color_frame).grid(row=2, column=1, sticky=W)
+        Label(labelframe_os, text="Dias:", fg=color_fg_labels2, font=font_dados2, bg=color_frame).grid(row=3, column=0, sticky=E,
                                                                                        padx=5)
-        Label(labelframe_os, text="1", fg=color_fg_labels, font=font_dados2).grid(row=3, column=1, sticky=W)
-        Label(labelframe_os, text="Tipo:", fg=color_fg_labels2, font=font_dados2).grid(row=4, column=0, sticky=E,
+        Label(labelframe_os, text="1", fg=color_fg_labels, font=font_dados2, bg=color_frame).grid(row=3, column=1, sticky=W)
+        Label(labelframe_os, text="Tipo:", fg=color_fg_labels2, font=font_dados2, bg=color_frame).grid(row=4, column=0, sticky=E,
                                                                                        padx=5)
-        Label(labelframe_os, text="ORÇAMENTO", fg=color_fg_labels, font=font_dados2).grid(row=4, column=1, sticky=W)
+        Label(labelframe_os, text="ORÇAMENTO", fg=color_fg_labels, font=font_dados2, bg=color_frame).grid(row=4, column=1, sticky=W)
         Label(labelframe_os, text="Operador:", fg=color_fg_labels2,
-              font=font_dados2).grid(row=5, column=0, sticky=E, padx=1)
-        Label(labelframe_os, text="ADMINISTRADOR", fg=color_fg_labels, font=font_dados2).grid(row=5, column=1, sticky=W)
+              font=font_dados2, bg=color_frame).grid(row=5, column=0, sticky=E, padx=1)
+        Label(labelframe_os, text="ADMINISTRADOR", fg=color_fg_labels,
+              font=font_dados2, bg=color_frame).grid(row=5, column=1, sticky=W)
         Label(labelframe_os, text="Atendimento:", fg=color_fg_labels2,
-              font=font_dados2).grid(row=6, column=0, sticky=E, padx=1)
-        Label(labelframe_os, text="INTERNO", fg=color_fg_labels, font=font_dados2).grid(row=6, column=1, sticky=W)
+              font=font_dados2, bg=color_frame).grid(row=6, column=0, sticky=E, padx=1)
+        Label(labelframe_os, text="INTERNO", fg=color_fg_labels, font=font_dados2,
+              bg=color_frame).grid(row=6, column=1, sticky=W)
         Label(labelframe_os, text="Status", fg=color_fg_labels2,
-              font=font_dados2).grid(row=7, column=0, sticky=E, padx=1)
-        Label(labelframe_os, text="PRONTO", fg=color_fg_labels, font=font_dados2).grid(row=7, column=1, sticky=W)
+              font=font_dados2, bg=color_frame).grid(row=7, column=0, sticky=E, padx=1)
+        Label(labelframe_os, text="PRONTO", fg=color_fg_labels, font=font_dados2,
+              bg=color_frame).grid(row=7, column=1, sticky=W)
         Label(labelframe_os, text="Técnico:", fg=color_fg_labels2,
-              font=font_dados2).grid(row=8, column=0, sticky=E, padx=1)
-        Label(labelframe_os, text="HENRIQUE", fg=color_fg_labels, font=font_dados2).grid(row=8, column=1, sticky=W)
+              font=font_dados2, bg=color_frame).grid(row=8, column=0, sticky=E, padx=1)
+        Label(labelframe_os, text="HENRIQUE", fg=color_fg_labels, font=font_dados2,
+              bg=color_frame).grid(row=8, column=1, sticky=W)
         Label(labelframe_os, text="Conclusão:", fg=color_fg_labels2,
-              font=font_dados2).grid(row=9, column=0, sticky=E, padx=1)
-        Label(labelframe_os, text="21/10/2021", fg=color_fg_labels, font=font_dados2).grid(row=9, column=1, sticky=W)
+              font=font_dados2, bg=color_frame).grid(row=9, column=0, sticky=E, padx=1)
+        Label(labelframe_os, text="21/10/2021", fg=color_fg_labels, font=font_dados2,
+              bg=color_frame).grid(row=9, column=1, sticky=W)
 
-        labelframe_dadosapare_os = LabelFrame(frame_princ_jan_os, text="Dados do Aparelho", fg=self.color_fg_label)
+        labelframe_dadosapare_os = LabelFrame(frame_princ_jan_os, text="Dados do Aparelho", fg=self.color_fg_label,
+                                              bg=color_frame)
         labelframe_dadosapare_os.grid(row=1, column=0, sticky=W, ipady=5)
-        frame_dadosapare_os1 = Frame(labelframe_dadosapare_os)
+        frame_dadosapare_os1 = Frame(labelframe_dadosapare_os, bg=color_frame)
         frame_dadosapare_os1.pack(fill=X, padx=5)
-        Label(frame_dadosapare_os1, text='Aparelho').grid(row=0, column=0, sticky=W)
-        ap_entregue_equipamento = Entry(frame_dadosapare_os1)
+        Label(frame_dadosapare_os1, text='Aparelho', bg=color_frame).grid(row=0, column=0, sticky=W)
+        ap_entregue_equipamento = Entry(frame_dadosapare_os1, bg=color_entry, fg=color_fg)
         ap_entregue_equipamento.grid(row=0, column=1)
         ap_entregue_equipamento.insert(0, os_dados.equipamento)
-        ap_entregue_equipamento.config(state=DISABLED)
-        Label(frame_dadosapare_os1, text='Marca').grid(row=0, column=2, sticky=W, padx=5)
-        ap_entregue_marca = Entry(frame_dadosapare_os1)
+        ap_entregue_equipamento.config(validate='all', validatecommand=(impede_escrita, '%P'))
+        Label(frame_dadosapare_os1, text='Marca', bg=color_frame).grid(row=0, column=2, sticky=W, padx=5)
+        ap_entregue_marca = Entry(frame_dadosapare_os1, bg=color_entry, fg=color_fg)
         ap_entregue_marca.grid(row=0, column=3, padx=5)
         ap_entregue_marca.insert(0, os_dados.marca)
-        ap_entregue_marca.config(state=DISABLED)
-        Label(frame_dadosapare_os1, text='Modelo').grid(row=0, column=4, sticky=W)
-        ap_entregue_modelo = Entry(frame_dadosapare_os1, width=15)
+        ap_entregue_marca.config(validate='all', validatecommand=(impede_escrita, '%P'))
+        Label(frame_dadosapare_os1, text='Modelo', bg=color_frame).grid(row=0, column=4, sticky=W)
+        ap_entregue_modelo = Entry(frame_dadosapare_os1, width=15, bg=color_entry, fg=color_fg)
         ap_entregue_modelo.grid(row=0, column=5)
         ap_entregue_modelo.insert(0, os_dados.modelo)
-        ap_entregue_modelo.config(state=DISABLED)
-        frame_dadosapare_os2 = Frame(labelframe_dadosapare_os)
+        ap_entregue_modelo.config(validate='all', validatecommand=(impede_escrita, '%P'))
+        frame_dadosapare_os2 = Frame(labelframe_dadosapare_os, bg=color_frame)
         frame_dadosapare_os2.pack(fill=X, padx=5, pady=5)
-        Label(frame_dadosapare_os2, text='Chassis').grid(row=0, column=0, sticky=W)
-        ap_entregue_chassis = Entry(frame_dadosapare_os2, width=15)
+        Label(frame_dadosapare_os2, text='Chassis', bg=color_frame).grid(row=0, column=0, sticky=W)
+        ap_entregue_chassis = Entry(frame_dadosapare_os2, width=15, bg=color_entry, fg=color_fg)
         ap_entregue_chassis.grid(row=0, column=1)
         ap_entregue_chassis.insert(0, os_dados.chassi)
-        ap_entregue_chassis.config(state=DISABLED)
-        Label(frame_dadosapare_os2, text='Núm Série').grid(row=0, column=2, sticky=W, padx=5)
-        ap_entregue_num_serie = Entry(frame_dadosapare_os2, width=25)
+        ap_entregue_chassis.config(validate='all', validatecommand=(impede_escrita, '%P'))
+        Label(frame_dadosapare_os2, text='Núm Série', bg=color_frame).grid(row=0, column=2, sticky=W, padx=5)
+        ap_entregue_num_serie = Entry(frame_dadosapare_os2, width=25, bg=color_entry, fg=color_fg)
         ap_entregue_num_serie.grid(row=0, column=3, padx=5)
         ap_entregue_num_serie.insert(0, os_dados.n_serie)
-        ap_entregue_num_serie.config(state=DISABLED)
-        Label(frame_dadosapare_os2, text='Tensão').grid(row=0, column=4, sticky=W, padx=1)
-        ap_entregue_tensao = Entry(frame_dadosapare_os2, width=13)
+        ap_entregue_num_serie.config(validate='all', validatecommand=(impede_escrita, '%P'))
+        Label(frame_dadosapare_os2, text='Tensão', bg=color_frame).grid(row=0, column=4, sticky=W, padx=1)
+        ap_entregue_tensao = Entry(frame_dadosapare_os2, width=13, bg=color_entry, fg=color_fg)
         ap_entregue_tensao.grid(row=0, column=5, sticky=E)
         ap_entregue_tensao.insert(0, os_dados.tensao)
-        ap_entregue_tensao.config(state=DISABLED)
-        frame_dadosapare_os3 = Frame(labelframe_dadosapare_os)
+        ap_entregue_tensao.config(validate='all', validatecommand=(impede_escrita, '%P'))
+        frame_dadosapare_os3 = Frame(labelframe_dadosapare_os, bg=color_frame)
         frame_dadosapare_os3.pack(fill=X, padx=10)
-        Label(frame_dadosapare_os3, text="Defeito Reclamado").grid(row=0, column=0, sticky=W)
-        ap_entregue_defeito = Entry(frame_dadosapare_os3, width=64)
+        Label(frame_dadosapare_os3, text="Defeito Reclamado", bg=color_frame).grid(row=0, column=0, sticky=W)
+        ap_entregue_defeito = Entry(frame_dadosapare_os3, width=64, bg=color_entry, fg=color_fg)
         ap_entregue_defeito.grid(row=0, column=1)
         ap_entregue_defeito.insert(0, os_dados.defeito)
-        ap_entregue_defeito.config(state=DISABLED)
-        Label(frame_dadosapare_os3, text="Estado do Aparelho").grid(row=1, column=0, sticky=W)
-        ap_entregue_estado_ap = Entry(frame_dadosapare_os3, width=64)
+        ap_entregue_defeito.config(validate='all', validatecommand=(impede_escrita, '%P'))
+        Label(frame_dadosapare_os3, text="Estado do Aparelho", bg=color_frame).grid(row=1, column=0, sticky=W)
+        ap_entregue_estado_ap = Entry(frame_dadosapare_os3, width=64, bg=color_entry, fg=color_fg)
         ap_entregue_estado_ap.grid(row=1, column=1)
         ap_entregue_estado_ap.insert(0, os_dados.estado_aparelho)
-        ap_entregue_estado_ap.config(state=DISABLED)
-        Label(frame_dadosapare_os3, text="Acessórios").grid(row=2, column=0, sticky=W)
-        ap_entregue_acessorios = Entry(frame_dadosapare_os3, width=64)
+        ap_entregue_estado_ap.config(validate='all', validatecommand=(impede_escrita, '%P'))
+        Label(frame_dadosapare_os3, text="Acessórios", bg=color_frame).grid(row=2, column=0, sticky=W)
+        ap_entregue_acessorios = Entry(frame_dadosapare_os3, width=64, bg=color_entry, fg=color_fg)
         ap_entregue_acessorios.grid(row=2, column=1, sticky=W)
         ap_entregue_acessorios.insert(0, os_dados.acessorios)
-        ap_entregue_acessorios.config(state=DISABLED)
+        ap_entregue_acessorios.config(validate='all', validatecommand=(impede_escrita, '%P'))
 
-        labelframe_garantia = LabelFrame(frame_princ_jan_os, text="Garantia de Fábrica", fg=self.color_fg_label)
+        labelframe_garantia = LabelFrame(frame_princ_jan_os, text="Garantia de Fábrica", fg=self.color_fg_label,
+                                         bg=color_frame)
         labelframe_garantia.grid(row=2, column=0, sticky=W, ipadx=6, ipady=5)
-        Label(labelframe_garantia, text='Loja').grid(row=0, column=0, sticky=W, padx=13)
-        ap_entregue_loja = Entry(labelframe_garantia, width=25)
+        Label(labelframe_garantia, text='Loja', bg=color_frame).grid(row=0, column=0, sticky=W, padx=13)
+        ap_entregue_loja = Entry(labelframe_garantia, width=25, bg=color_entry, fg=color_fg)
         ap_entregue_loja.grid(row=1, column=0, sticky=W, padx=13)
         ap_entregue_loja.insert(0, os_dados.loja)
-        ap_entregue_loja.config(state=DISABLED)
-        Label(labelframe_garantia, text='Data Compra').grid(row=0, column=1, sticky=W)
-        ap_entregue_data_compra = Entry(labelframe_garantia, width=15)
+        ap_entregue_loja.config(validate='all', validatecommand=(impede_escrita, '%P'))
+        Label(labelframe_garantia, text='Data Compra', bg=color_frame).grid(row=0, column=1, sticky=W)
+        ap_entregue_data_compra = Entry(labelframe_garantia, width=15, bg=color_entry, fg=color_fg)
         ap_entregue_data_compra.grid(row=1, column=1, sticky=W)
         # ap_entregue_data_compra.insert(0, os_dados.data_compra)
-        ap_entregue_data_compra.config(state=DISABLED)
-        Label(labelframe_garantia, text='Nota Fiscal').grid(row=0, column=2, sticky=W, padx=13)
-        ap_entregue_nf = Entry(labelframe_garantia, width=15)
+        ap_entregue_data_compra.config(validate='all', validatecommand=(impede_escrita, '%P'))
+        Label(labelframe_garantia, text='Nota Fiscal', bg=color_frame).grid(row=0, column=2, sticky=W, padx=13)
+        ap_entregue_nf = Entry(labelframe_garantia, width=15, bg=color_entry, fg=color_fg)
         ap_entregue_nf.grid(row=1, column=2, sticky=W, padx=13)
         ap_entregue_nf.insert(0, os_dados.notaFiscal)
-        ap_entregue_nf.config(state=DISABLED)
-        Label(labelframe_garantia, text='Gar. Complementar').grid(row=0, column=3, sticky=W)
-        ap_entregue_garantia_compl = Entry(labelframe_garantia, width=18)
+        ap_entregue_nf.config(validate='all', validatecommand=(impede_escrita, '%P'))
+        Label(labelframe_garantia, text='Gar. Complementar', bg=color_frame).grid(row=0, column=3, sticky=W)
+        ap_entregue_garantia_compl = Entry(labelframe_garantia, width=18, bg=color_entry, fg=color_fg)
         ap_entregue_garantia_compl.grid(row=1, column=3, sticky=W)
         ap_entregue_garantia_compl.insert(0, os_dados.garantia_compl)
-        ap_entregue_garantia_compl.config(state=DISABLED)
+        ap_entregue_garantia_compl.config(validate='all', validatecommand=(impede_escrita, '%P'))
 
-        frame_botao_ad = Frame(frame_princ_jan_os)
+        frame_botao_ad = Frame(frame_princ_jan_os, bg=color_frame)
         frame_botao_ad.grid(row=2, column=1, sticky=E, padx=35)
         Button(frame_botao_ad, text="Ordem de Serviço", wraplength=80, height=2, width=7,
                bg="#BEC7C7", command=self.janelaOrçamentoEntregue).pack(side=RIGHT, ipadx=20, padx=5)
 
-        frame_os_final = Frame(frame_princ_jan_os)
+        frame_os_final = Frame(frame_princ_jan_os, bg=color_frame)
         frame_os_final.grid(row=3, column=0, sticky=W, columnspan=2)
-        labelframe_os_andamento = LabelFrame(frame_os_final, text="Andamento do Serviço", fg="Blue")
+        labelframe_os_andamento = LabelFrame(frame_os_final, text="Andamento do Serviço", fg="Blue", bg=color_frame)
         labelframe_os_andamento.pack(side=LEFT)
-        frame_andamento_os = Frame(labelframe_os_andamento)
+        frame_andamento_os = Frame(labelframe_os_andamento, bg=color_frame)
         frame_andamento_os.pack(padx=8, pady=8)
         scroll_andamento_os = Scrollbar(frame_andamento_os)
         scroll_andamento_os.pack(side=RIGHT, fill=Y)
-        text_andamento_os = Text(frame_andamento_os, relief=SUNKEN, yscrollcommand=scroll_andamento_os, bg="#F2E18D",
+        text_andamento_os = Text(frame_andamento_os, relief=SUNKEN, yscrollcommand=scroll_andamento_os, bg='#FFF',
                                  width=40, height=7)
         text_andamento_os.insert('end', os_dados.andamento)
         text_andamento_os.pack(side=LEFT)
         text_andamento_os.config(state=DISABLED)
         scroll_andamento_os.config(command=text_andamento_os.yview)
 
-        labelframe_saida = LabelFrame(frame_os_final, text="Saída")
+        labelframe_saida = LabelFrame(frame_os_final, text="Saída", bg=color_frame)
         labelframe_saida.pack(padx=10, side=LEFT)
-        Label(labelframe_saida, text="Data:", font=font_dados2).grid(row=0, column=0, sticky=E, padx=5)
-        Label(labelframe_saida, text="29/10/2021", fg=color_fg_labels, font=font_dados2).grid(row=0, column=1, sticky=W)
-        Label(labelframe_saida, text="Hora:", font=font_dados2).grid(row=1, column=0, sticky=E, padx=5)
-        Label(labelframe_saida, text="15:12", fg=color_fg_labels, font=font_dados2).grid(row=1, column=1, sticky=W)
-        Label(labelframe_saida, text="Garantia até:", font=font_dados2).grid(row=2, column=0, sticky=E, padx=5)
-        Label(labelframe_saida, text="29/01/2022", fg=color_fg_labels, font=font_dados2).grid(row=2, column=1, sticky=W)
-        Label(labelframe_saida, text="Operador:", font=font_dados2).grid(row=3, column=0, sticky=E, padx=5)
-        Label(labelframe_saida, text="ADMINISTRADOR", fg=color_fg_labels, font=font_dados2).grid(row=3, column=1,
-                                                                                                 sticky=W)
+        Label(labelframe_saida, text="Data:", font=font_dados2, bg=color_frame).grid(row=0, column=0, sticky=E, padx=5)
+        Label(labelframe_saida, text="29/10/2021", fg=color_fg_labels,
+              font=font_dados2, bg=color_frame).grid(row=0, column=1, sticky=W)
+        Label(labelframe_saida, text="Hora:", font=font_dados2,
+              bg=color_frame).grid(row=1, column=0, sticky=E, padx=5)
+        Label(labelframe_saida, text="15:12", fg=color_fg_labels, font=font_dados2,
+              bg=color_frame).grid(row=1, column=1, sticky=W)
+        Label(labelframe_saida, text="Garantia até:", font=font_dados2,
+              bg=color_frame).grid(row=2, column=0, sticky=E, padx=5)
+        Label(labelframe_saida, text="29/01/2022", fg=color_fg_labels, font=font_dados2,
+              bg=color_frame).grid(row=2, column=1, sticky=W)
+        Label(labelframe_saida, text="Operador:", font=font_dados2,
+              bg=color_frame).grid(row=3, column=0, sticky=E, padx=5)
+        Label(labelframe_saida, text="ADMINISTRADOR", fg=color_fg_labels, font=font_dados2,
+              bg=color_frame).grid(row=3, column=1, sticky=W)
         Label(labelframe_saida, text="Valor Cobrado:",
-              font=("Verdana", "11", "bold")).grid(row=4, column=0, sticky=E, padx=1, pady=10)
+              font=("Verdana", "11", "bold"), bg=color_frame).grid(row=4, column=0, sticky=E, padx=1, pady=10)
         Label(labelframe_saida, text=self.insereTotalConvertido(os_dados.total), fg=color_fg_labels,
-              font=("Verdana", "11", "bold")).grid(row=4, column=1, sticky=W, pady=10)
+              font=("Verdana", "11", "bold"), bg=color_frame).grid(row=4, column=1, sticky=W, pady=10)
 
-        frame_os_buttons = Frame(frame_os_final)
+        frame_os_buttons = Frame(frame_os_final, bg=color_frame)
         frame_os_buttons.pack(side=LEFT)
         Button(frame_os_buttons, text="Nova Ordem de Serviço", wraplength=80, height=2, width=7,
                bg="#BEC7C7", command=lambda: [jan.destroy(), self.frame_ap_entregue.forget(),
@@ -3807,6 +3838,9 @@ class Castelo:
         cliente_repo = cliente_repositorio.ClienteRepositorio()
         os_dados = os_saida_repo.listar_os_id(dado_os[0], sessao)
         cliente_os_atual = cliente_repo.listar_cliente_id(os_dados.cliente_id, sessao)
+
+        color_entry= '#ffffe1'
+        color_entry2 ='#ffff80'
 
         # Centraliza a janela
         x_cordinate = int((self.w / 2) - (1000 / 2))
@@ -3835,7 +3869,8 @@ class Castelo:
         Label(frame_os_su2, text="Dias").grid(row=0, column=0, sticky=W, padx=10, pady=3)
         Entry(frame_os_su2, width=5, state=DISABLED).grid(row=1, column=0, padx=10)
         Label(frame_os_su2, text="Garantia até:").grid(row=0, column=1, padx=10)
-        Label(frame_os_su2, text="23/01/2022", relief=SUNKEN, bd=2, width=10).grid(row=1, column=1, padx=10)
+        Label(frame_os_su2, text="23/01/2022", relief=SUNKEN, bd=2, width=10,
+              bg=color_entry).grid(row=1, column=1, padx=10)
 
         labelframe_operador_os = LabelFrame(frame_princ_os1, text="Operador")
         labelframe_operador_os.grid(row=0, column=3, ipady=3, padx=10, sticky=W)
@@ -3863,150 +3898,158 @@ class Castelo:
         Button(subframe_material1, width=3, text="E", state=DISABLED).grid(row=7, column=0)
         Button(subframe_material1, width=3, text="E", state=DISABLED).grid(row=8, column=0, pady=2)
         Button(subframe_material1, width=3, text="E", state=DISABLED).grid(row=9, column=0)
-        cod_entry1 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2, text=os_dados.codigo1)
+        cod_entry1 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2, text=os_dados.codigo1, bg=color_entry)
         cod_entry1.grid(row=1, column=1)
-        cod_entry2 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2, text=os_dados.codigo2)
+        cod_entry2 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2, text=os_dados.codigo2, bg=color_entry)
         cod_entry2.grid(row=2, column=1)
-        cod_entry3 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2, text=os_dados.codigo3)
+        cod_entry3 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2, text=os_dados.codigo3, bg=color_entry)
         cod_entry3.grid(row=3, column=1)
-        cod_entry4 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2, text=os_dados.codigo4)
+        cod_entry4 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2, text=os_dados.codigo4, bg=color_entry)
         cod_entry4.grid(row=4, column=1)
-        cod_entry5 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2, text=os_dados.codigo5)
+        cod_entry5 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2, text=os_dados.codigo5, bg=color_entry)
         cod_entry5.grid(row=5, column=1)
-        cod_entry6 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2, text=os_dados.codigo6)
+        cod_entry6 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2, text=os_dados.codigo6, bg=color_entry)
         cod_entry6.grid(row=6, column=1)
-        cod_entry7 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2, text=os_dados.codigo7)
+        cod_entry7 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2, text=os_dados.codigo7, bg=color_entry)
         cod_entry7.grid(row=7, column=1)
-        cod_entry8 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2, text=os_dados.codigo8)
+        cod_entry8 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2, text=os_dados.codigo8, bg=color_entry)
         cod_entry8.grid(row=8, column=1)
-        cod_entry9 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2, text=os_dados.codigo9)
+        cod_entry9 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2, text=os_dados.codigo9, bg=color_entry)
         cod_entry9.grid(row=9, column=1)
         quant_entry1 = Label(subframe_material1, width=4, relief=SUNKEN, bd=2,
-                             text=self.insereNumConvertido(os_dados.qtd1))
+                             text=self.insereNumConvertido(os_dados.qtd1), bg=color_entry)
         quant_entry1.grid(row=1, column=2, padx=5)
         id_entry1 = Label(subframe_material1, width=5, relief=SUNKEN, bd=2,
-                          text=self.insereNumConvertido(os_dados.caixa_peca1))
+                          text=self.insereNumConvertido(os_dados.caixa_peca1), bg=color_entry)
         id_entry1.grid(row=1, column=3)
-        id_entry1.config(state=DISABLED)
-        descr_entry1 = Label(subframe_material1, width=43, relief=SUNKEN, bd=2, text=os_dados.desc_serv1, anchor=W)
+        descr_entry1 = Label(subframe_material1, width=43, relief=SUNKEN, bd=2, text=os_dados.desc_serv1, anchor=W,
+                             bg=color_entry)
         descr_entry1.grid(row=1, column=4, padx=5)
         val_uni_entry1 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2,
-                               text=self.insereNumConvertido(os_dados.valor_uni1))
+                               text=self.insereNumConvertido(os_dados.valor_uni1), bg=color_entry)
         val_uni_entry1.grid(row=1, column=5)
         val_total_entry1 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2,
-                                 text=self.insereNumConvertido(os_dados.valor_tot1))
+                                 text=self.insereNumConvertido(os_dados.valor_tot1), bg=color_entry2)
         val_total_entry1.grid(row=1, column=6, padx=5)
         quant_entry2 = Label(subframe_material1, width=4, relief=SUNKEN, bd=2,
-                             text=self.insereNumConvertido(os_dados.qtd2))
+                             text=self.insereNumConvertido(os_dados.qtd2), bg=color_entry)
         quant_entry2.grid(row=2, column=2, padx=5)
         id_entry2 = Label(subframe_material1, width=5, relief=SUNKEN, bd=2,
-                          text=self.insereNumConvertido(os_dados.caixa_peca2))
+                          text=self.insereNumConvertido(os_dados.caixa_peca2), bg=color_entry)
         id_entry2.grid(row=2, column=3)
-        descr_entry2 = Label(subframe_material1, width=43, relief=SUNKEN, bd=2, text=os_dados.desc_serv2, anchor=W)
+        descr_entry2 = Label(subframe_material1, width=43, relief=SUNKEN, bd=2, text=os_dados.desc_serv2, anchor=W,
+                             bg=color_entry)
         descr_entry2.grid(row=2, column=4, padx=5)
         val_uni_entry2 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2,
-                               text=self.insereNumConvertido(os_dados.valor_uni2))
+                               text=self.insereNumConvertido(os_dados.valor_uni2), bg=color_entry)
         val_uni_entry2.grid(row=2, column=5)
         val_total_entry2 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2,
-                                 text=self.insereNumConvertido(os_dados.valor_tot2))
+                                 text=self.insereNumConvertido(os_dados.valor_tot2), bg=color_entry2)
         val_total_entry2.grid(row=2, column=6, padx=5)
         quant_entry3 = Label(subframe_material1, width=4, relief=SUNKEN, bd=2,
-                             text=self.insereNumConvertido(os_dados.qtd3))
+                             text=self.insereNumConvertido(os_dados.qtd3), bg=color_entry)
         quant_entry3.grid(row=3, column=2, padx=5)
         id_entry3 = Label(subframe_material1, width=5, relief=SUNKEN, bd=2,
-                          text=self.insereNumConvertido(os_dados.caixa_peca3))
+                          text=self.insereNumConvertido(os_dados.caixa_peca3), bg=color_entry)
         id_entry3.grid(row=3, column=3)
-        descr_entry3 = Label(subframe_material1, width=43, relief=SUNKEN, bd=2, text=os_dados.desc_serv3, anchor=W)
+        descr_entry3 = Label(subframe_material1, width=43, relief=SUNKEN, bd=2, text=os_dados.desc_serv3,
+                             anchor=W, bg=color_entry)
         descr_entry3.grid(row=3, column=4, padx=5)
         val_uni_entry3 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2,
-                               text=self.insereNumConvertido(os_dados.valor_uni3))
+                               text=self.insereNumConvertido(os_dados.valor_uni3), bg=color_entry)
         val_uni_entry3.grid(row=3, column=5)
         val_total_entry3 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2,
-                                 text=self.insereNumConvertido(os_dados.valor_tot3))
+                                 text=self.insereNumConvertido(os_dados.valor_tot3), bg=color_entry2)
         val_total_entry3.grid(row=3, column=6, padx=5)
         quant_entry4 = Label(subframe_material1, width=4, relief=SUNKEN, bd=2,
-                             text=self.insereNumConvertido(os_dados.qtd4))
+                             text=self.insereNumConvertido(os_dados.qtd4), bg=color_entry)
         quant_entry4.grid(row=4, column=2, padx=5)
         id_entry4 = Label(subframe_material1, width=5, relief=SUNKEN, bd=2,
-                          text=self.insereNumConvertido(os_dados.caixa_peca4))
+                          text=self.insereNumConvertido(os_dados.caixa_peca4), bg=color_entry)
         id_entry4.grid(row=4, column=3)
-        descr_entry4 = Label(subframe_material1, width=43, relief=SUNKEN, bd=2, text=os_dados.desc_serv4, anchor=W)
+        descr_entry4 = Label(subframe_material1, width=43, relief=SUNKEN, bd=2, text=os_dados.desc_serv4, anchor=W,
+                             bg=color_entry)
         descr_entry4.grid(row=4, column=4, padx=5)
         val_uni_entry4 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2,
-                               text=self.insereNumConvertido(os_dados.valor_uni4))
+                               text=self.insereNumConvertido(os_dados.valor_uni4), bg=color_entry)
         val_uni_entry4.grid(row=4, column=5)
         val_total_entry4 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2,
-                                 text=self.insereNumConvertido(os_dados.valor_tot4))
+                                 text=self.insereNumConvertido(os_dados.valor_tot4), bg=color_entry2)
         val_total_entry4.grid(row=4, column=6, padx=5)
         quant_entry5 = Label(subframe_material1, width=4, relief=SUNKEN, bd=2,
-                             text=self.insereNumConvertido(os_dados.qtd5))
+                             text=self.insereNumConvertido(os_dados.qtd5), bg=color_entry)
         quant_entry5.grid(row=5, column=2, padx=5)
         id_entry5 = Label(subframe_material1, width=5, relief=SUNKEN, bd=2,
-                          text=self.insereNumConvertido(os_dados.caixa_peca5))
+                          text=self.insereNumConvertido(os_dados.caixa_peca5), bg=color_entry)
         id_entry5.grid(row=5, column=3)
-        descr_entry5 = Label(subframe_material1, width=43, relief=SUNKEN, bd=2, text=os_dados.desc_serv5, anchor=W)
+        descr_entry5 = Label(subframe_material1, width=43, relief=SUNKEN, bd=2, text=os_dados.desc_serv5, anchor=W,
+                             bg=color_entry)
         descr_entry5.grid(row=5, column=4, padx=5)
         val_uni_entry5 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2,
-                               text=self.insereNumConvertido(os_dados.valor_uni5))
+                               text=self.insereNumConvertido(os_dados.valor_uni5), bg=color_entry)
         val_uni_entry5.grid(row=5, column=5)
         val_total_entry5 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2,
-                                 text=self.insereNumConvertido(os_dados.valor_tot5))
+                                 text=self.insereNumConvertido(os_dados.valor_tot5), bg=color_entry2)
         val_total_entry5.grid(row=5, column=6, padx=5)
         quant_entry6 = Label(subframe_material1, width=4, relief=SUNKEN, bd=2,
-                             text=self.insereNumConvertido(os_dados.qtd6))
+                             text=self.insereNumConvertido(os_dados.qtd6), bg=color_entry)
         quant_entry6.grid(row=6, column=2, padx=5)
         id_entry6 = Label(subframe_material1, width=5, relief=SUNKEN, bd=2,
-                          text=self.insereNumConvertido(os_dados.caixa_peca6))
+                          text=self.insereNumConvertido(os_dados.caixa_peca6), bg=color_entry)
         id_entry6.grid(row=6, column=3)
-        descr_entry6 = Label(subframe_material1, width=43, relief=SUNKEN, bd=2, text=os_dados.desc_serv6, anchor=W)
+        descr_entry6 = Label(subframe_material1, width=43, relief=SUNKEN, bd=2, text=os_dados.desc_serv6, anchor=W,
+                             bg=color_entry)
         descr_entry6.grid(row=6, column=4, padx=5)
         val_uni_entry6 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2,
-                               text=self.insereNumConvertido(os_dados.valor_uni6))
+                               text=self.insereNumConvertido(os_dados.valor_uni6), bg=color_entry)
         val_uni_entry6.grid(row=6, column=5)
         val_total_entry6 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2,
-                                 text=self.insereNumConvertido(os_dados.valor_tot6))
+                                 text=self.insereNumConvertido(os_dados.valor_tot6), bg=color_entry2)
         val_total_entry6.grid(row=6, column=6, padx=5)
         quant_entry7 = Label(subframe_material1, width=4, relief=SUNKEN, bd=2,
-                             text=self.insereNumConvertido(os_dados.qtd7))
+                             text=self.insereNumConvertido(os_dados.qtd7), bg=color_entry)
         quant_entry7.grid(row=7, column=2, padx=5)
         id_entry7 = Label(subframe_material1, width=5, relief=SUNKEN, bd=2,
-                          text=self.insereNumConvertido(os_dados.caixa_peca7))
+                          text=self.insereNumConvertido(os_dados.caixa_peca7), bg=color_entry)
         id_entry7.grid(row=7, column=3)
-        descr_entry7 = Label(subframe_material1, width=43, relief=SUNKEN, bd=2, text=os_dados.desc_serv7, anchor=W)
+        descr_entry7 = Label(subframe_material1, width=43, relief=SUNKEN, bd=2, text=os_dados.desc_serv7, anchor=W,
+                             bg=color_entry)
         descr_entry7.grid(row=7, column=4, padx=5)
         val_uni_entry7 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2,
-                               text=self.insereNumConvertido(os_dados.valor_uni7))
+                               text=self.insereNumConvertido(os_dados.valor_uni7), bg=color_entry)
         val_uni_entry7.grid(row=7, column=5)
         val_total_entry7 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2,
-                                 text=self.insereNumConvertido(os_dados.valor_tot7))
+                                 text=self.insereNumConvertido(os_dados.valor_tot7), bg=color_entry2)
         val_total_entry7.grid(row=7, column=6, padx=5)
         quant_entry8 = Label(subframe_material1, width=4, relief=SUNKEN, bd=2,
-                             text=self.insereNumConvertido(os_dados.qtd8))
+                             text=self.insereNumConvertido(os_dados.qtd8), bg=color_entry)
         quant_entry8.grid(row=8, column=2, padx=5)
         id_entry8 = Label(subframe_material1, width=5, relief=SUNKEN, bd=2,
-                          text=self.insereNumConvertido(os_dados.caixa_peca8))
+                          text=self.insereNumConvertido(os_dados.caixa_peca8), bg=color_entry)
         id_entry8.grid(row=8, column=3)
-        descr_entry8 = Label(subframe_material1, width=43, relief=SUNKEN, bd=2, text=os_dados.desc_serv8, anchor=W)
+        descr_entry8 = Label(subframe_material1, width=43, relief=SUNKEN, bd=2, text=os_dados.desc_serv8, anchor=W,
+                             bg=color_entry)
         descr_entry8.grid(row=8, column=4, padx=5)
         val_uni_entry8 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2,
-                               text=self.insereNumConvertido(os_dados.valor_uni8))
+                               text=self.insereNumConvertido(os_dados.valor_uni8), bg=color_entry)
         val_uni_entry8.grid(row=8, column=5)
         val_total_entry8 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2,
-                                 text=self.insereNumConvertido(os_dados.valor_tot8))
+                                 text=self.insereNumConvertido(os_dados.valor_tot8), bg=color_entry2)
         val_total_entry8.grid(row=8, column=6, padx=5)
         quant_entry9 = Label(subframe_material1, width=4, relief=SUNKEN, bd=2,
-                             text=self.insereNumConvertido(os_dados.qtd9))
+                             text=self.insereNumConvertido(os_dados.qtd9), bg=color_entry)
         quant_entry9.grid(row=9, column=2, padx=5)
         id_entry9 = Label(subframe_material1, width=5, relief=SUNKEN, bd=2,
-                          text=self.insereNumConvertido(os_dados.caixa_peca9))
+                          text=self.insereNumConvertido(os_dados.caixa_peca9), bg=color_entry)
         id_entry9.grid(row=9, column=3)
-        descr_entry9 = Label(subframe_material1, width=43, relief=SUNKEN, bd=2, text=os_dados.desc_serv9, anchor=W)
+        descr_entry9 = Label(subframe_material1, width=43, relief=SUNKEN, bd=2, text=os_dados.desc_serv9, anchor=W,
+                             bg=color_entry)
         descr_entry9.grid(row=9, column=4, padx=5)
         val_uni_entry9 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2,
-                               text=self.insereNumConvertido(os_dados.valor_uni9))
+                               text=self.insereNumConvertido(os_dados.valor_uni9), bg=color_entry)
         val_uni_entry9.grid(row=9, column=5)
         val_total_entry9 = Label(subframe_material1, width=9, relief=SUNKEN, bd=2,
-                                 text=self.insereNumConvertido(os_dados.valor_tot9))
+                                 text=self.insereNumConvertido(os_dados.valor_tot9), bg=color_entry2)
         val_total_entry9.grid(row=9, column=6, padx=5)
         subframe_material2 = Frame(labelframe_material)
         subframe_material2.pack(fill=BOTH)
@@ -4027,27 +4070,28 @@ class Castelo:
         introframe_material3 = Frame(introframe_material2)
         introframe_material3.pack()
         entry_mao_obra_material = Label(introframe_material3, width=13, relief=SUNKEN, bd=2,
-                                        text=self.insereNumConvertido(os_dados.valor_mao_obra))
+                                        text=self.insereNumConvertido(os_dados.valor_mao_obra), bg=color_entry)
         entry_mao_obra_material.pack(side=RIGHT)
         Label(introframe_material3, text="Mão de Obra(+)").pack(side=RIGHT, padx=10)
         introframe_material4 = Frame(introframe_material2)
         introframe_material4.pack(fill=X, pady=5)
         orc_valor_subtotal_material = os_dados.total - os_dados.valor_mao_obra + os_dados.desconto
         entry_subtotal_material = Label(introframe_material4, width=13, relief=SUNKEN, bd=2,
-                                        text=self.insereTotalConvertido(orc_valor_subtotal_material))
+                                        text=self.insereTotalConvertido(orc_valor_subtotal_material), bg=color_entry2)
         entry_subtotal_material.pack(side=RIGHT)
         Label(introframe_material4, text="Sub Total(=)").pack(side=RIGHT, padx=10)
         introframe_material5 = Frame(introframe_material2)
         introframe_material5.pack(fill=X)
         entry_desconto_material = Label(introframe_material5, width=13, relief=SUNKEN, bd=2,
-                                        text=self.insereNumConvertido(os_dados.desconto))
+                                        text=self.insereNumConvertido(os_dados.desconto), bg=color_entry)
         entry_desconto_material.pack(side=RIGHT)
         Label(introframe_material5, text="Desconto(-)").pack(side=RIGHT, padx=10)
 
         subframe_material3 = Frame(labelframe_material)
         subframe_material3.pack(fill=X, padx=5, pady=5)
         entry_total_material = Label(subframe_material3, width=13, fg="blue", font=("", 14, ""), justify=RIGHT,
-                                     relief=SUNKEN, bd=2, text=self.insereTotalConvertido(os_dados.total))
+                                     relief=SUNKEN, bd=2, text=self.insereTotalConvertido(os_dados.total),
+                                     bg=color_entry2)
         entry_total_material.pack(side=RIGHT)
         Label(subframe_material3, text="Total do Serviço").pack(side=RIGHT, padx=15)
 
@@ -4055,20 +4099,23 @@ class Castelo:
         desc_frame.pack(side=LEFT, pady=10, padx=5, fill=X)
         Entry(desc_frame, width=5, state=DISABLED).pack(side=LEFT)
         Label(desc_frame, text="%").pack(padx=5, side=LEFT)
-        Label(desc_frame, width=15, relief=SUNKEN, bd=2).pack(side=LEFT)
+        Label(desc_frame, width=15, relief=SUNKEN, bd=2, bg=color_entry2).pack(side=LEFT)
         desc_frame1 = Frame(subframe_material3)
         desc_frame1.pack(side=RIGHT, pady=10, padx=20, fill=X)
-        Label(desc_frame1, text=self.insereTotalConvertido(os_dados.caixa_peca_total), bg="#FF8C64", width=15,
+        Label(desc_frame1, text=self.insereTotalConvertido(os_dados.caixa_peca_total), bg=color_entry2, width=15,
               relief=SUNKEN, bd=2).pack(side=RIGHT)
         Label(desc_frame1, text="CP:").pack(side=RIGHT, padx=5)
 
         labelframe_orc_coment = LabelFrame(frame_princ_os1, text="Comentários")
         labelframe_orc_coment.grid(row=2, column=0, columnspan=4, pady=5)
-        comentario1 = Label(labelframe_orc_coment, width=93, relief=SUNKEN, bd=2, text=os_dados.obs1, anchor=W)
+        comentario1 = Label(labelframe_orc_coment, width=93, relief=SUNKEN, bd=2, text=os_dados.obs1, anchor=W,
+                            bg=color_entry)
         comentario1.pack(padx=5, pady=5)
-        comentario2 = Label(labelframe_orc_coment, width=93, relief=SUNKEN, bd=2, text=os_dados.obs2, anchor=W)
+        comentario2 = Label(labelframe_orc_coment, width=93, relief=SUNKEN, bd=2, text=os_dados.obs2, anchor=W,
+                            bg=color_entry)
         comentario2.pack()
-        comentario3 = Label(labelframe_orc_coment, width=93, relief=SUNKEN, bd=2, text=os_dados.obs3, anchor=W)
+        comentario3 = Label(labelframe_orc_coment, width=93, relief=SUNKEN, bd=2, text=os_dados.obs3, anchor=W,
+                            bg=color_entry)
         comentario3.pack(pady=5)
 
         frame_princ_os2 = Frame(jan)
@@ -4079,7 +4126,7 @@ class Castelo:
         sub_frame_coment.pack(fill=BOTH, padx=5, pady=5)
         scroll_os = Scrollbar(sub_frame_coment)
         scroll_os.pack(side=RIGHT, fill=Y)
-        text_os = Text(sub_frame_coment, relief=SUNKEN, yscrollcommand=scroll_os, height=5)
+        text_os = Text(sub_frame_coment, relief=SUNKEN, yscrollcommand=scroll_os, height=5, bg=color_entry)
         text_os.insert('end', os_dados.defeitos)
         text_os.pack(side=RIGHT)
         text_os.config(state=DISABLED)
@@ -4092,52 +4139,48 @@ class Castelo:
         Label(subframe_form_pag1, text="Dinheiro", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=0, column=0,
                                                                                                         padx=5)
         oss_dinheiro = Label(subframe_form_pag1, width=15, justify=RIGHT, relief=SUNKEN, bd=2,
-                             text=self.insereNumConvertido(os_dados.dinheiro))
+                             text=self.insereNumConvertido(os_dados.dinheiro), bg=color_entry)
         oss_dinheiro.grid(row=0, column=1, padx=5)
         Label(subframe_form_pag1, text="Cheque", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=1, column=0,
                                                                                                       padx=5, pady=5)
         oss_cheque = Label(subframe_form_pag1, width=15, justify=RIGHT, relief=SUNKEN, bd=2,
-                           text=self.insereNumConvertido(os_dados.cheque))
+                           text=self.insereNumConvertido(os_dados.cheque), bg=color_entry)
         oss_cheque.grid(row=1, column=1, padx=5)
-        Label(subframe_form_pag1, text="Cartão de Crédito", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=2,
-                                                                                                                 column=0,
-                                                                                                                 padx=5)
+        Label(subframe_form_pag1, text="Cartão de Crédito", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=2, column=0, padx=5)
         oss_ccredito = Label(subframe_form_pag1, width=15, justify=RIGHT, relief=SUNKEN, bd=2,
-                             text=self.insereNumConvertido(os_dados.ccredito))
+                             text=self.insereNumConvertido(os_dados.ccredito), bg=color_entry)
         oss_ccredito.grid(row=2, column=1, padx=5)
-        Label(subframe_form_pag1, text="Cartão de Débito", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=3,
-                                                                                                                column=0,
-                                                                                                                padx=5,
-                                                                                                                pady=5)
+        Label(subframe_form_pag1, text="Cartão de Débito", fg="red", anchor=E,
+              font=('Verdana', "10", "")).grid(row=3, column=0, padx=5, pady=5)
         oss_cdebito = Label(subframe_form_pag1, width=15, justify=RIGHT, relief=SUNKEN, bd=2,
-                            text=self.insereNumConvertido(os_dados.cdebito))
+                            text=self.insereNumConvertido(os_dados.cdebito), bg=color_entry)
         oss_cdebito.grid(row=3, column=1, padx=5)
         Label(subframe_form_pag1, text="PIX", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=4, column=0,
                                                                                                    padx=5)
         oss_pix = Label(subframe_form_pag1, width=15, justify=RIGHT, relief=SUNKEN, bd=2,
-                        text=self.insereNumConvertido(os_dados.pix))
+                        text=self.insereNumConvertido(os_dados.pix), bg=color_entry)
         oss_pix.grid(row=4, column=1, padx=5)
         Label(subframe_form_pag1, text="Outros", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=5, column=0,
                                                                                                       padx=5, pady=5)
         oss_outros = Label(subframe_form_pag1, width=15, justify=RIGHT, relief=SUNKEN, bd=2,
-                           text=self.insereNumConvertido(os_dados.outros))
+                           text=self.insereNumConvertido(os_dados.outros), bg=color_entry)
         oss_outros.grid(row=5, column=1, padx=5)
         labelframe_pag_coment = LabelFrame(labelframe_form_pag, text="Observações de Pagamento")
         labelframe_pag_coment.pack(padx=10, pady=4)
         oss_obs1 = Label(labelframe_pag_coment, width=40, justify=RIGHT, relief=SUNKEN, bd=2,
-                         text=os_dados.obs_pagamento1, anchor=W)
+                         text=os_dados.obs_pagamento1, anchor=W, bg=color_entry)
         oss_obs1.pack(padx=5, pady=5)
         oss_obs2 = Label(labelframe_pag_coment, width=40, justify=RIGHT, relief=SUNKEN, bd=2,
-                         text=os_dados.obs_pagamento2, anchor=W)
+                         text=os_dados.obs_pagamento2, anchor=W, bg=color_entry)
         oss_obs2.pack(padx=5)
         oss_obs3 = Label(labelframe_pag_coment, width=40, justify=RIGHT, relief=SUNKEN, bd=2,
-                         text=os_dados.obs_pagamento3, anchor=W)
+                         text=os_dados.obs_pagamento3, anchor=W, bg=color_entry)
         oss_obs3.pack(pady=5, padx=5)
         subframe_form_pag2 = Frame(labelframe_form_pag)
         subframe_form_pag2.pack(padx=10, fill=X, side=LEFT)
         labelframe_valor_rec = LabelFrame(subframe_form_pag2)
         labelframe_valor_rec.grid(row=0, column=0, sticky=W, pady=5)
-        Label(labelframe_valor_rec, text="Valor à Receber:").pack()
+        Label(labelframe_valor_rec, text="Valor Recebido:").pack()
         Label(labelframe_valor_rec, text=self.insereTotalConvertido(os_dados.total), anchor=E, font=("", "12", ""),
               fg="red").pack(fill=X, pady=5,
                              padx=30)
