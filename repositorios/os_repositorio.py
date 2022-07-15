@@ -64,6 +64,12 @@ class Os_repositorio():
         os = query_os.listar_os_nome(nome, tipo, sessao)
         return os
 
+    def listar_os_locali(self, entry, tipo,  sessao):
+        query_os = os_query.OsQuery()
+        os = query_os.listar_os_locali(entry,tipo, sessao)
+        return os
+
+
 
     def remover_os(self, id_os, sessao):
         query_os = os_query.OsQuery()

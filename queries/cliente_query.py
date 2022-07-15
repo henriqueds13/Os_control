@@ -29,11 +29,11 @@ class ClienteQuery():
         if tipo == 1:
             cliente = sessao.query(Cliente).filter(Cliente.id.like(f'{entry}')).all()
         elif tipo == 2:
-            cliente = sessao.query(Cliente).filter(Cliente.tel_fixo.like(f'%{entry}%')).all()
+            cliente = sessao.query(Cliente).filter(Cliente.tel_fixo.like(f'{entry}')).all()
         elif tipo == 3:
-            cliente = sessao.query(Cliente).filter(Cliente.whats.like(f'%{entry}%')).all()
+            cliente = sessao.query(Cliente).filter(Cliente.whats.like(f'{entry}')).all()
         else:
-            cliente = sessao.query(Cliente).filter(Cliente.celular.like(f'%{entry}%')).all()
+            cliente = sessao.query(Cliente).filter(Cliente.celular.like(f'{entry}')).all()
         return cliente
 
     def editar_cliente(self, id_cliente, cliente, sessao):

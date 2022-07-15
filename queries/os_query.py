@@ -210,3 +210,10 @@ class OsQuery():
             oss.obs_pagamento2 = os.obsPagamento2
             oss.obs_pagamento3 = os.obsPagamento3
             oss.total = os.total
+
+    def listar_os_locali(self, entry, tipo, sessao):
+        if tipo == 1:
+            os = sessao.query(OS).filter(OS.id.like(f'{entry}')).all()
+        elif tipo == 2:
+            os = sessao.query(OS).filter(OS.n_serie.like(f'{entry}')).all()
+        return os
