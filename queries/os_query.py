@@ -49,8 +49,8 @@ class OsQuery():
             oss.acessorios = os.acessorios
             oss.loja = os.loja
             oss.notaFiscal = os.notaFiscal
-            oss.garantia_compl = os.garantia_compl
-            oss.data_compra = os.data_compra
+            oss.garantia_compl = os.garantiaCompl
+            oss.data_compra = os.dataCompra
         elif opt == 2:
             oss.nome = os.nome
 

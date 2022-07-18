@@ -2,7 +2,6 @@ from tkinter import *
 from tkinter import ttk, messagebox
 from tkinter.ttk import Style
 
-
 from fabricas import fabrica_conexao
 from repositorios import cliente_repositorio, os_repositorio, os_saida_repositorio, produto_repositorio, \
     revendedor_repositorio, estoque_repositorio, produto_venda_repositorio, os_venda_repositorio
@@ -120,6 +119,13 @@ class Castelo:
             else:
                 pass
 
+        self.var = StringVar(master)
+
+        def to_uppercase(*args):
+            self.var.set(self.var.get().upper())
+
+        self.var.trace_add('write', to_uppercase)
+
         # Barra de menus
 
         barraDeMenus = Menu(master)
@@ -220,7 +226,7 @@ class Castelo:
         self.subframe2_entry_cliente = Frame(self.cadastro_label_frame)
         self.variable_int_cli = IntVar()
         self.entrada_pesquisa_cliente = Entry(self.subframe2_entry_cliente, width=40,
-                                              bg="#FFF")  # Entrada para pesquisa
+                                              bg="#FFF", textvariable=self.var)  # Entrada para pesquisa
         self.check_pesq_avan_cli = Checkbutton(self.subframe2_entry_cliente, text='Busca Avançada',
                                                variable=self.variable_int_cli, onvalue=1, offvalue=0)
 
@@ -579,6 +585,12 @@ class Castelo:
         Button(self.frame5_orc, text="Localizar", width=8).pack(side=RIGHT, ipadx=5, ipady=5)
 
         # ------------------------------- Janela Aparelhos em Manutenção------------------------------------------------
+        osVar = StringVar(master)
+
+        def to_uppercase(*args):
+            osVar.set(osVar.get().upper())
+
+        osVar.trace_add('write', to_uppercase)
 
         self.frame_ap_manutencao = Frame(self.frame_princ)
         self.subframe_ap_manut1 = Frame(self.frame_ap_manutencao)
@@ -657,14 +669,15 @@ class Castelo:
         self.tree_ap_manut.focus_set()
         children = self.tree_ap_manut.get_children()
         if children:
-            self.tree_ap_manut.focus(children[0])
-            self.tree_ap_manut.selection_set(children[0])
+            self.tree_ap_manut.focus(children[-1])
+            self.tree_ap_manut.selection_set(children[-1])
 
         self.label_pesquisa_manut = LabelFrame(self.subframe_ap_manut2, text="Digite um Nome para Pesquisar",
                                                bg="#D9D0C1")
         self.label_pesquisa_manut.pack(side=LEFT, padx=10, pady=5)
         self.variable_int_os = IntVar()
-        self.entr_pesq_manut = Entry(self.label_pesquisa_manut, relief=SUNKEN, width=35)
+
+        self.entr_pesq_manut = Entry(self.label_pesquisa_manut, relief=SUNKEN, width=35, textvariable=osVar)
         self.entr_pesq_manut.pack(side=LEFT, padx=5)
         self.botao_pesqu_manut = Button(self.label_pesquisa_manut, text="C", width=5, command=self.popularOsConserto)
         self.botao_pesqu_manut.pack(side=RIGHT, padx=5, ipady=5, pady=2)
@@ -699,6 +712,14 @@ class Castelo:
         self.entr_pesq_manut.bind('<Return>', pesquisaOs)
 
         # ------------------------------- Janela Aparelhos Entregues----------------------------------------------
+
+        osVarEntr = StringVar(master)
+
+        def to_uppercase(*args):
+            osVarEntr.set(osVarEntr.get().upper())
+
+        osVarEntr.trace_add('write', to_uppercase)
+
         self.frame_ap_entregue = Frame(self.frame_princ)
 
         self.subframe_ap_entr1 = Frame(self.frame_ap_entregue)
@@ -775,14 +796,14 @@ class Castelo:
         self.tree_ap_entr.focus_set()
         children = self.tree_ap_entr.get_children()
         if children:
-            self.tree_ap_entr.focus(children[0])
-            self.tree_ap_entr.selection_set(children[0])
+            self.tree_ap_entr.focus(children[-1])
+            self.tree_ap_entr.selection_set(children[-1])
 
         self.label_pesquisa_entr = LabelFrame(self.subframe_ap_entr2, text="Digite um Nome para Pesquisar",
                                               bg="#F2E8B3")
         self.label_pesquisa_entr.pack(side=LEFT, padx=10, pady=5)
         self.variable_int_os_entr = IntVar()
-        self.entr_pesq_entr = Entry(self.label_pesquisa_entr, relief=SUNKEN, width=35)
+        self.entr_pesq_entr = Entry(self.label_pesquisa_entr, relief=SUNKEN, width=35, textvariable=osVarEntr)
         self.entr_pesq_entr.pack(side=LEFT, padx=5)
         self.botao_pesqu_entr = Button(self.label_pesquisa_entr, text="C", width=5, command=self.popularOsEntregue)
         self.botao_pesqu_entr.pack(side=RIGHT, padx=5, ipady=5, pady=2)
@@ -821,6 +842,20 @@ class Castelo:
         self.tree_ap_entr.bind('<Double-1>', abreApEntrBind)
 
         # ------------------------------- Janela Estoque Peças e Máquinas ----------------------------------------------
+        osVarEst1 = StringVar(master)
+
+        def to_uppercase(*args):
+            osVarEst1.set(osVarEst1.get().upper())
+
+        osVarEst1.trace_add('write', to_uppercase)
+
+        osVarEst2 = StringVar(master)
+
+        def to_uppercase(*args):
+            osVarEst2.set(osVarEst2.get().upper())
+
+        osVarEst2.trace_add('write', to_uppercase)
+
         color_est1 = "#3F5957"
         color_est2 = "#C5D0C1"
         self.frame_estoque = Frame(self.frame_princ, bg=color_est1)
@@ -855,9 +890,9 @@ class Castelo:
         Label(self.frame_pesq_estoq, text="Código:", bg=color_est1).grid(sticky=W, padx=10, pady=1)
         Label(self.frame_pesq_estoq, text="Produto:", bg=color_est1).grid(row=0, column=1, sticky=W, padx=10)
         Label(self.frame_pesq_estoq, text="Setor:", bg=color_est1).grid(row=0, column=2, sticky=W, padx=10)
-        self.entry_cod_esto = Entry(self.frame_pesq_estoq, width=10, relief=SUNKEN)
+        self.entry_cod_esto = Entry(self.frame_pesq_estoq, width=10, relief=SUNKEN, textvariable=osVarEst1)
         self.entry_cod_esto.grid(row=1, column=0, padx=10)
-        self.entry_descr_esto = Entry(self.frame_pesq_estoq, width=30, relief=SUNKEN)
+        self.entry_descr_esto = Entry(self.frame_pesq_estoq, width=30, relief=SUNKEN, textvariable=osVarEst2)
         self.entry_descr_esto.grid(row=1, column=1, padx=10)
         self.option_setor_esto = ttk.Combobox(self.frame_pesq_estoq, values=listaSetores, state="readonly")
         self.option_setor_esto.set("Todos")
@@ -983,8 +1018,8 @@ class Castelo:
         self.tree_est_reg.focus_set()
         children = self.tree_est_reg.get_children()
         if children:
-            self.tree_est_reg.focus(children[0])
-            self.tree_est_reg.selection_set(children[0])
+            self.tree_est_reg.focus(children[-1])
+            self.tree_est_reg.selection_set(children[-1])
 
         button_est1.bind('<Enter>', on_enter)
         button_est1.bind('<Leave>', on_leave)
@@ -1100,8 +1135,8 @@ class Castelo:
         self.tree_est_vendas.focus_set()
         children = self.tree_est_vendas.get_children()
         if children:
-            self.tree_est_vendas.focus(children[0])
-            self.tree_est_vendas.selection_set(children[0])
+            self.tree_est_vendas.focus(children[-1])
+            self.tree_est_vendas.selection_set(children[-1])
 
         button_vend1.bind('<Enter>', on_enter)
         button_vend1.bind('<Leave>', on_leave)
@@ -1857,8 +1892,8 @@ class Castelo:
         self.tree_ap_manut.focus_set()
         children = self.tree_ap_manut.get_children()
         if children:
-            self.tree_ap_manut.focus(children[0])
-            self.tree_ap_manut.selection_set(children[0])
+            self.tree_ap_manut.focus(children[-1])
+            self.tree_ap_manut.selection_set(children[-1])
 
     def popularOsConsertoOrdenado(self, num):
         self.tree_ap_manut.delete(*self.tree_ap_manut.get_children())
@@ -1893,8 +1928,8 @@ class Castelo:
         self.tree_ap_manut.focus_set()
         children = self.tree_ap_manut.get_children()
         if children:
-            self.tree_ap_manut.focus(children[0])
-            self.tree_ap_manut.selection_set(children[0])
+            self.tree_ap_manut.focus(children[-1])
+            self.tree_ap_manut.selection_set(children[-1])
 
     def cadastrarOs(self, jan):
 
@@ -2093,6 +2128,9 @@ class Castelo:
         valor_esc = '1'
         self.num_os = dado_os[0]
         impede_escrita = jan.register(self.ImpedeEscrita)
+        testa_tensao = jan.register(self.testaEntradaNumTensao)
+        testa_nf = jan.register(self.testaEntradaNumCep)
+        testa_garantia = jan.register(self.testaEntradaNumGarantiaCPL)
 
         def seleciona_status(num):
             if num == 1:
@@ -2142,22 +2180,66 @@ class Castelo:
             sessao.commit()
 
         def editDados():
-            self.jan_os_aparelho.configure(validate='none')
-            self.jan_os_tensao.configure(validate='none')
-            self.jan_os_marca.configure(validate='none')
-            self.jan_os_modelo.configure(validate='none')
-            self.jan_os_chassi.configure(validate='none')
-            self.jan_os_numSerie.configure(validate='none')
+            self.jan_os_aparelho.configure(validate='none', fg='red')
+            self.jan_os_tensao.configure(validatecommand=(testa_tensao, '%P'), fg='red')
+            self.jan_os_marca.configure(validate='none', fg='red')
+            self.jan_os_modelo.configure(validate='none', fg='red')
+            self.jan_os_chassi.configure(validate='none', fg='red')
+            self.jan_os_numSerie.configure(validate='none', fg='red')
+            self.jan_os_loja.configure(validate='none', fg='red')
+            self.jan_os_data_compra.configure(validate='none', fg='red')
+            self.jan_os_garantia_compl.configure(validatecommand=(testa_garantia, '%P'), fg='red')
+            self.jan_os_nota_fiscal.configure(validatecommand=(testa_nf, '%P'), fg='red')
             edit_button.configure(text="Salvar", command=salvaEdit)
 
         def salvaEdit():
-            self.jan_os_aparelho.configure(validate='all')
-            self.jan_os_tensao.configure(validate='all')
-            self.jan_os_marca.configure(validate='all')
-            self.jan_os_modelo.configure(validate='all')
-            self.jan_os_chassi.configure(validate='all')
-            self.jan_os_numSerie.configure(validate='all')
+            editar_os()
+            self.jan_os_aparelho.configure(validate='all', fg='#000')
+            self.jan_os_tensao.configure(validatecommand=(impede_escrita, '%P'), fg='#000')
+            self.jan_os_marca.configure(validate='all', fg='#000')
+            self.jan_os_modelo.configure(validate='all', fg='#000')
+            self.jan_os_chassi.configure(validate='all', fg='#000')
+            self.jan_os_numSerie.configure(validate='all', fg='#000')
+            self.jan_os_loja.configure(validate='all', fg='#000')
+            self.jan_os_data_compra.configure(validate='all', fg='#000')
+            self.jan_os_garantia_compl.configure(validatecommand=(impede_escrita, '%P'), fg='#000')
+            self.jan_os_nota_fiscal.configure(validatecommand=(impede_escrita, '%P'), fg='#000')
             edit_button.configure(text='Alterar Dados', command=editDados)
+
+        def editar_os():
+            if self.jan_os_aparelho.get() == '':
+                messagebox.showinfo(title="ERRO", message="Campo Aparelho não pode estar vazio!")
+            else:
+                aparelho = self.jan_os_aparelho.get()
+                marca = self.jan_os_marca.get()
+                modelo = self.jan_os_modelo.get()
+                n_serie = self.jan_os_numSerie.get()
+                chassi = self.jan_os_chassi.get()
+                tensao = self.insereZero(self.jan_os_tensao.get())
+                defeito = self.jan_os_defeito.get()
+                est_aparelho = self.jan_os_estado_aparelho.get()
+                acessorios = self.jan_os_acessorios.get()
+                loja = self.jan_os_loja.get()
+                n_fiscal = self.insereZero(self.jan_os_nota_fiscal.get())
+                garantia_cpl = self.insereZero(self.jan_os_garantia_compl.get())
+                data_compra = self.jan_os_data_compra.get()
+                nova_os = os.Os(aparelho, marca, modelo, acessorios, defeito, est_aparelho, n_serie, tensao, '', chassi,
+                                '',
+                                None, None, '', None, None, '', '',
+                                '',
+                                '',
+                                '', '', '', '', '', '', '', '', '', '',
+                                '', '', '', '', '', '', 0, '', '',
+                                '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                0, 0, 0, 0, 0, 0, 0, 0,
+                                0,
+                                0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                0,
+                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 0, 0, 0, 0,
+                                0, '',
+                                '', '', None, n_fiscal, 0, loja, garantia_cpl, None, 0, None)
+                repositorio_os = os_repositorio.Os_repositorio()
+                repositorio_os.editar_os(os_dados.id, nova_os, 1, sessao)
 
         labelframe_dadoscli_os = LabelFrame(frame_princ_jan_os, text="Dados do Cliente", fg=self.color_fg_label,
                                             bg=color_frame)
@@ -2429,7 +2511,7 @@ class Castelo:
         frame_tecnico_os = Frame(labelframe_os_tecnicos, bg=color_frame)
         frame_tecnico_os.pack(side=LEFT, padx=5, fill=Y)
         Label(frame_tecnico_os, text="HENRIQUE", fg="blue",
-              bg="#FFE599", bd=2, relief=SUNKEN, width=15).grid(row=0, column=0, ipadx=10, padx=5)
+              bg="#ffe0c0", bd=2, relief=SUNKEN, width=15).grid(row=0, column=0, ipadx=10, padx=5)
         Button(frame_tecnico_os, text="Salvar").grid(row=1, column=0, pady=20, ipadx=10)
 
         Button(frame_os_final, width=10, text="Manutenções Anteriores",
@@ -2706,7 +2788,7 @@ class Castelo:
         jan.geometry("{}x{}+{}+{}".format(1000, 650, x_cordinate, y_cordinate))
 
         color_entry1 = '#ffffe1'
-        color_entry2= '#ffff80'
+        color_entry2 = '#ffff80'
 
         def apagaAba1():
             if self.orc_cod_entry1.get() == '':
@@ -2822,7 +2904,8 @@ class Castelo:
         self.orc_dias = Entry(frame_os_su2, width=5, bg=color_entry1)
         self.orc_dias.grid(row=1, column=0, padx=10)
         Label(frame_os_su2, text="Garantia até:").grid(row=0, column=1, padx=10)
-        Label(frame_os_su2, text="23/01/2022", relief=SUNKEN, bd=2, width=10, bg=color_entry2).grid(row=1, column=1, padx=10)
+        Label(frame_os_su2, text="23/01/2022", relief=SUNKEN, bd=2, width=10, bg=color_entry2).grid(row=1, column=1,
+                                                                                                    padx=10)
 
         labelframe_operador_os = LabelFrame(frame_princ_os1, text="Operador")
         labelframe_operador_os.grid(row=0, column=3, ipady=3, padx=10, sticky=W)
@@ -3027,7 +3110,7 @@ class Castelo:
                                    validatecommand=(testa_float, '%P'))
         self.orc_id_entry8.insert(0, self.insereNumConvertido(dados_orc.caixa_peca8))
         self.orc_id_entry8.grid(row=8, column=3)
-        self.orc_descr_entry8 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1,)
+        self.orc_descr_entry8 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1, )
         self.orc_descr_entry8.insert(0, dados_orc.desc_serv8)
         self.orc_descr_entry8.grid(row=8, column=4, padx=5)
         self.orc_val_uni_entry8 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
@@ -3045,7 +3128,7 @@ class Castelo:
                                    validatecommand=(testa_float, '%P'))
         self.orc_id_entry9.insert(0, self.insereNumConvertido(dados_orc.caixa_peca9))
         self.orc_id_entry9.grid(row=9, column=3)
-        self.orc_descr_entry9 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1,)
+        self.orc_descr_entry9 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1, )
         self.orc_descr_entry9.insert(0, dados_orc.desc_serv9)
         self.orc_descr_entry9.grid(row=9, column=4, padx=5)
         self.orc_val_uni_entry9 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
@@ -3439,7 +3522,8 @@ class Castelo:
         self.count = 0
         children = self.tree_ap_entr.get_children()
         if children:
-            self.tree_ap_entr.selection_set(children[0])
+            self.tree_ap_entr.focus(children[-1])
+            self.tree_ap_entr.selection_set(children[-1])
 
     def popularOsEntregueOrdenado(self, num):
         self.tree_ap_entr.delete(*self.tree_ap_entr.get_children())
@@ -3467,7 +3551,8 @@ class Castelo:
         self.count = 0
         children = self.tree_ap_entr.get_children()
         if children:
-            self.tree_ap_entr.selection_set(children[0])
+            self.tree_ap_entr.focus(children[-1])
+            self.tree_ap_entr.selection_set(children[-1])
 
     def saidaDeOs(self, jan):
 
@@ -3557,7 +3642,7 @@ class Castelo:
         color_fg_labels = "blue"
         color_fg_labels2 = "#000080"
         color_fg = "#0b7ed6"
-        color_frame= '#ffe0c0'
+        color_frame = '#ffe0c0'
         color_entry = '#ffffc0'
 
         jan = Toplevel()
@@ -3657,21 +3742,33 @@ class Castelo:
 
         labelframe_os = LabelFrame(frame_princ_jan_os, text="Ordem de Serviço", fg=self.color_fg_label, bg=color_frame)
         labelframe_os.grid(row=0, column=1, padx=15, rowspan=2, ipadx=3, sticky=N, ipady=10)
-        Label(labelframe_os, text=os_dados.os_saida, fg="red", font=('Verdana', '24', 'bold'), bg=color_frame).grid(row=0, column=0,
-                                                                                                    columnspan=2,
-                                                                                                    padx=10, pady=11)
-        Label(labelframe_os, text="Entrada:", fg=color_fg_labels2, font=font_dados2, bg=color_frame).grid(row=1, column=0, sticky=E,
-                                                                                          padx=5)
-        Label(labelframe_os, text="19/10/2021", fg=color_fg_labels, font=font_dados2, bg=color_frame).grid(row=1, column=1, sticky=W)
-        Label(labelframe_os, text="Hora:", fg=color_fg_labels2, font=font_dados2, bg=color_frame).grid(row=2, column=0, sticky=E,
-                                                                                       padx=5)
-        Label(labelframe_os, text="21:28", fg=color_fg_labels, font=font_dados2, bg=color_frame).grid(row=2, column=1, sticky=W)
-        Label(labelframe_os, text="Dias:", fg=color_fg_labels2, font=font_dados2, bg=color_frame).grid(row=3, column=0, sticky=E,
-                                                                                       padx=5)
-        Label(labelframe_os, text="1", fg=color_fg_labels, font=font_dados2, bg=color_frame).grid(row=3, column=1, sticky=W)
-        Label(labelframe_os, text="Tipo:", fg=color_fg_labels2, font=font_dados2, bg=color_frame).grid(row=4, column=0, sticky=E,
-                                                                                       padx=5)
-        Label(labelframe_os, text="ORÇAMENTO", fg=color_fg_labels, font=font_dados2, bg=color_frame).grid(row=4, column=1, sticky=W)
+        Label(labelframe_os, text=os_dados.os_saida, fg="red", font=('Verdana', '24', 'bold'), bg=color_frame).grid(
+            row=0, column=0,
+            columnspan=2,
+            padx=10, pady=11)
+        Label(labelframe_os, text="Entrada:", fg=color_fg_labels2, font=font_dados2, bg=color_frame).grid(row=1,
+                                                                                                          column=0,
+                                                                                                          sticky=E,
+                                                                                                          padx=5)
+        Label(labelframe_os, text="19/10/2021", fg=color_fg_labels, font=font_dados2, bg=color_frame).grid(row=1,
+                                                                                                           column=1,
+                                                                                                           sticky=W)
+        Label(labelframe_os, text="Hora:", fg=color_fg_labels2, font=font_dados2, bg=color_frame).grid(row=2, column=0,
+                                                                                                       sticky=E,
+                                                                                                       padx=5)
+        Label(labelframe_os, text="21:28", fg=color_fg_labels, font=font_dados2, bg=color_frame).grid(row=2, column=1,
+                                                                                                      sticky=W)
+        Label(labelframe_os, text="Dias:", fg=color_fg_labels2, font=font_dados2, bg=color_frame).grid(row=3, column=0,
+                                                                                                       sticky=E,
+                                                                                                       padx=5)
+        Label(labelframe_os, text="1", fg=color_fg_labels, font=font_dados2, bg=color_frame).grid(row=3, column=1,
+                                                                                                  sticky=W)
+        Label(labelframe_os, text="Tipo:", fg=color_fg_labels2, font=font_dados2, bg=color_frame).grid(row=4, column=0,
+                                                                                                       sticky=E,
+                                                                                                       padx=5)
+        Label(labelframe_os, text="ORÇAMENTO", fg=color_fg_labels, font=font_dados2, bg=color_frame).grid(row=4,
+                                                                                                          column=1,
+                                                                                                          sticky=W)
         Label(labelframe_os, text="Operador:", fg=color_fg_labels2,
               font=font_dados2, bg=color_frame).grid(row=5, column=0, sticky=E, padx=1)
         Label(labelframe_os, text="ADMINISTRADOR", fg=color_fg_labels,
@@ -3839,8 +3936,8 @@ class Castelo:
         os_dados = os_saida_repo.listar_os_id(dado_os[0], sessao)
         cliente_os_atual = cliente_repo.listar_cliente_id(os_dados.cliente_id, sessao)
 
-        color_entry= '#ffffe1'
-        color_entry2 ='#ffff80'
+        color_entry = '#ffffe1'
+        color_entry2 = '#ffff80'
 
         # Centraliza a janela
         x_cordinate = int((self.w / 2) - (1000 / 2))
@@ -4146,7 +4243,9 @@ class Castelo:
         oss_cheque = Label(subframe_form_pag1, width=15, justify=RIGHT, relief=SUNKEN, bd=2,
                            text=self.insereNumConvertido(os_dados.cheque), bg=color_entry)
         oss_cheque.grid(row=1, column=1, padx=5)
-        Label(subframe_form_pag1, text="Cartão de Crédito", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=2, column=0, padx=5)
+        Label(subframe_form_pag1, text="Cartão de Crédito", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=2,
+                                                                                                                 column=0,
+                                                                                                                 padx=5)
         oss_ccredito = Label(subframe_form_pag1, width=15, justify=RIGHT, relief=SUNKEN, bd=2,
                              text=self.insereNumConvertido(os_dados.ccredito), bg=color_entry)
         oss_ccredito.grid(row=2, column=1, padx=5)
@@ -5375,10 +5474,11 @@ class Castelo:
                                                      i.operador,
                                                      i.obs1,
                                                      i.id), tags=('oddrow',))
-                children = self.tree_est_reg.get_children()
-                if children:
-                    self.tree_est_reg.selection_set(children[0])
             self.count += 1
+        children = self.tree_est_reg.get_children()
+        if children:
+            self.tree_est_reg.focus(children[-1])
+            self.tree_est_reg.selection_set(children[-1])
         self.count = 0
 
     def excluirRegistroEstoque(self):
@@ -5866,7 +5966,8 @@ class Castelo:
         self.count = 0
         children = self.tree_est_vendas.get_children()
         if children:
-            self.tree_est_vendas.selection_set(children[0])
+            self.tree_est_vendas.focus(children[-1])
+            self.tree_est_vendas.selection_set(children[-1])
 
     def excluirRegistroVenda(self):
         res = messagebox.askyesno(None, 'Deseja Realmente Excluir o Registro?')
