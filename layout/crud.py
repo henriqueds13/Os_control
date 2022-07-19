@@ -1190,30 +1190,85 @@ class Castelo:
         y_cordinate = int((self.h / 2) - (370 / 2))
         self.jan.geometry("{}x{}+{}+{}".format(550, 370, x_cordinate, y_cordinate))
 
+        # --------------------------------------------------------------------------------------
+
+        osVar1 = StringVar(self.jan)
+
+        def to_uppercase(*args):
+            osVar1.set(osVar1.get().upper())
+
+        osVar1.trace_add('write', to_uppercase)
+
+        osVar2 = StringVar(self.jan)
+
+        def to_uppercase(*args):
+            osVar2.set(osVar2.get().upper())
+
+        osVar2.trace_add('write', to_uppercase)
+
+        osVar3 = StringVar(self.jan)
+
+        def to_uppercase(*args):
+            osVar3.set(osVar3.get().upper())
+
+        osVar3.trace_add('write', to_uppercase)
+
+        osVar4 = StringVar(self.jan)
+
+        def to_uppercase(*args):
+            osVar4.set(osVar4.get().upper())
+
+        osVar4.trace_add('write', to_uppercase)
+
+        osVar5 = StringVar(self.jan)
+
+        def to_uppercase(*args):
+            osVar5.set(osVar5.get().upper())
+
+        osVar5.trace_add('write', to_uppercase)
+
+        osVar6 = StringVar(self.jan)
+
+        def to_uppercase(*args):
+            osVar6.set(osVar6.get().upper())
+
+        osVar6.trace_add('write', to_uppercase)
+
+        osVar7 = StringVar(self.jan)
+
+        def to_uppercase(*args):
+            osVar7.set(osVar7.get().upper())
+
+        osVar7.trace_add('write', to_uppercase)
+
+        # --------------------------------------------------------------------------------------
+
         testa_tamanho_nome = self.jan.register(self.testaTamanhoTexto)
         testa_inteiro_cep = self.jan.register(self.testaEntradaNumCep)
         testa_inteiro_op = self.jan.register(self.testaEntradaNumOperador)
         self.Nome = ''
         Label(self.jan, text="Nome:").grid(sticky=W, padx=10)
-        self.cad_cli_nome = Entry(self.jan, width=50, validate='all', validatecommand=(testa_tamanho_nome, '%P'))
+        self.cad_cli_nome = Entry(self.jan, width=50, validate='all', validatecommand=(testa_tamanho_nome, '%P'),
+                                  textvariable=osVar1)
         self.cad_cli_nome.grid(row=1, column=0, stick=W, padx=10, columnspan=2)
         Label(self.jan, text="CPF:").grid(row=0, column=2, sticky=W)
         self.cad_cli_cpf = Entry(self.jan, width=25)
         self.cad_cli_cpf.grid(row=1, column=2, stick=W)
         Label(self.jan, text="Endereço:").grid(sticky=W, padx=10)
-        self.cad_cli_end = Entry(self.jan, width=50, validate='all', validatecommand=(testa_tamanho_nome, '%P'))
+        self.cad_cli_end = Entry(self.jan, width=50, validate='all', validatecommand=(testa_tamanho_nome, '%P'),
+                                 textvariable=osVar2)
         self.cad_cli_end.grid(row=3, column=0, padx=10, columnspan=2, sticky=W)
         Label(self.jan, text="Complemento:").grid(row=2, column=2, sticky=W)
-        self.cad_cli_compl = Entry(self.jan, width=27)
+        self.cad_cli_compl = Entry(self.jan, width=27, textvariable=osVar3)
         self.cad_cli_compl.grid(row=3, column=2, sticky=W)
         Label(self.jan, text="Bairro:").grid(sticky=W, padx=10)
-        self.cad_cli_bairro = Entry(self.jan, width=25)
+        self.cad_cli_bairro = Entry(self.jan, width=25, textvariable=osVar4)
         self.cad_cli_bairro.grid(row=5, column=0, padx=10, sticky=W)
         Label(self.jan, text="Cidade:").grid(row=4, column=1, sticky=W, padx=10)
-        self.cad_cli_cid = Entry(self.jan, width=25)
+        self.cad_cli_cid = Entry(self.jan, width=25, textvariable=osVar5)
         self.cad_cli_cid.grid(row=5, column=1)
         Label(self.jan, text="Estado:").grid(row=4, column=2, sticky=W, padx=10)
-        self.cad_cli_estado = Entry(self.jan, width=15)
+        self.cad_cli_estado = Entry(self.jan, width=15, textvariable=osVar6)
         self.cad_cli_estado.grid(row=5, column=2, sticky=W, padx=10)
         Label(self.jan, text="Cep:").grid(row=6, column=0, sticky=W, padx=10)
         self.cep_frame = Frame(self.jan)
@@ -1237,7 +1292,7 @@ class Castelo:
         self.cad_cli_whats = Entry(self.contato_frame, width=25, )
         self.cad_cli_whats.grid(row=3, column=1, padx=10)
         Label(self.jan, text="Email:").grid(row=9, column=0, sticky=W, padx=10)
-        self.cad_cli_email = Entry(self.jan, width=40)
+        self.cad_cli_email = Entry(self.jan, width=40, textvariable=osVar7 )
         self.cad_cli_email.grid(row=10, column=0, sticky=W, padx=10, columnspan=2)
         Label(self.jan, text="Operador:").grid(row=11, column=1, sticky=W, padx=10)
         self.cad_cli_oper = Entry(self.jan, width=20, validate='all',
@@ -1396,6 +1451,59 @@ class Castelo:
         dado_cli = self.tree_cliente.item(cliente_selecionado, "values")
         cliente_dados = cliente_repositorio.ClienteRepositorio().listar_cliente_id(dado_cli[0], sessao)
 
+        # --------------------------------------------------------------------------------------
+
+        osVar1 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar1.set(osVar1.get().upper())
+
+        osVar1.trace_add('write', to_uppercase)
+
+        osVar2 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar2.set(osVar2.get().upper())
+
+        osVar2.trace_add('write', to_uppercase)
+
+        osVar3 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar3.set(osVar3.get().upper())
+
+        osVar3.trace_add('write', to_uppercase)
+
+        osVar4 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar4.set(osVar4.get().upper())
+
+        osVar4.trace_add('write', to_uppercase)
+
+        osVar5 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar5.set(osVar5.get().upper())
+
+        osVar5.trace_add('write', to_uppercase)
+
+        osVar6 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar6.set(osVar6.get().upper())
+
+        osVar6.trace_add('write', to_uppercase)
+
+        osVar7 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar7.set(osVar7.get().upper())
+
+        osVar7.trace_add('write', to_uppercase)
+
+        # --------------------------------------------------------------------------------------
+
         self.first_frame = Frame(jan, bg="#ffffe1")
         self.first_frame.pack(fill=X)
         self.first_intro_frame = Frame(self.first_frame, bg="#ffffe1")
@@ -1409,7 +1517,7 @@ class Castelo:
         self.second_frame = Frame(jan, bg="#ffffe1")
         self.second_frame.pack()
         Label(self.second_frame, text="Nome:", bg="#ffffe1").grid(sticky=W, padx=10)
-        self.cad_cli_nome = Entry(self.second_frame, width=50)
+        self.cad_cli_nome = Entry(self.second_frame, width=50, textvariable=osVar1)
         self.cad_cli_nome.insert(0, cliente_dados.nome)
         self.cad_cli_nome.grid(row=1, column=0, stick=W, padx=10, columnspan=2)
         Label(self.second_frame, text="CPF:", bg="#ffffe1").grid(row=0, column=2, sticky=W)
@@ -1417,23 +1525,23 @@ class Castelo:
         self.cad_cli_cpf.insert(0, cliente_dados.cpf_cnpj)
         self.cad_cli_cpf.grid(row=1, column=2, stick=W)
         Label(self.second_frame, text="Endereço:", bg="#ffffe1").grid(sticky=W, padx=10)
-        self.cad_cli_end = Entry(self.second_frame, width=50)
+        self.cad_cli_end = Entry(self.second_frame, width=50, textvariable=osVar2)
         self.cad_cli_end.insert(0, cliente_dados.logradouro)
         self.cad_cli_end.grid(row=3, column=0, padx=10, columnspan=2, sticky=W)
         Label(self.second_frame, text="Complemento:", bg="#ffffe1").grid(row=2, column=2, sticky=W)
-        self.cad_cli_compl = Entry(self.second_frame, width=31)
+        self.cad_cli_compl = Entry(self.second_frame, width=31, textvariable=osVar3)
         self.cad_cli_compl.insert(0, cliente_dados.complemento)
         self.cad_cli_compl.grid(row=3, column=2, sticky=W)
         Label(self.second_frame, text="Bairro:", bg="#ffffe1").grid(sticky=W, padx=10)
-        self.cad_cli_bairro = Entry(self.second_frame, width=25)
+        self.cad_cli_bairro = Entry(self.second_frame, width=25, textvariable=osVar4)
         self.cad_cli_bairro.insert(0, cliente_dados.bairro)
         self.cad_cli_bairro.grid(row=5, column=0, padx=10, sticky=W)
         Label(self.second_frame, text="Cidade:", bg="#ffffe1").grid(row=4, column=1, sticky=W, padx=10)
-        self.cad_cli_cid = Entry(self.second_frame, width=25)
+        self.cad_cli_cid = Entry(self.second_frame, width=25, textvariable=osVar5)
         self.cad_cli_cid.insert(0, cliente_dados.cidade)
         self.cad_cli_cid.grid(row=5, column=1)
         Label(self.second_frame, text="Estado:", bg="#ffffe1").grid(row=4, column=2, sticky=W, padx=10)
-        self.cad_cli_estado = Entry(self.second_frame, width=15)
+        self.cad_cli_estado = Entry(self.second_frame, width=15, textvariable=osVar6)
         self.cad_cli_estado.insert(0, cliente_dados.uf)
         self.cad_cli_estado.grid(row=5, column=2, sticky=W, padx=10)
         Label(self.second_frame, text="Cep:", bg="#ffffe1").grid(row=6, column=0, sticky=W, padx=10)
@@ -1462,7 +1570,7 @@ class Castelo:
         self.cad_cli_whats.insert(0, cliente_dados.whats)
         self.cad_cli_whats.grid(row=3, column=1, padx=10)
         Label(self.second_frame, text="Email:", bg="#ffffe1").grid(row=9, column=0, sticky=W, padx=10)
-        self.cad_cli_email = Entry(self.second_frame, width=40)
+        self.cad_cli_email = Entry(self.second_frame, width=40, textvariable=osVar7)
         self.cad_cli_email.insert(0, cliente_dados.email)
         self.cad_cli_email.grid(row=10, column=0, sticky=W, padx=10, columnspan=2)
         self.botao_entr_frame = Frame(self.second_frame, bg="#ffffe1")
@@ -1666,12 +1774,72 @@ class Castelo:
         jan = Toplevel()
 
         color_fd_labels = "blue"
-        color_bgdc_labels = "gray"
 
         # Centraliza a janela
         x_cordinate = int((self.w / 2) - (700 / 2))
         y_cordinate = int((self.h / 2) - (520 / 2))
         jan.geometry("{}x{}+{}+{}".format(700, 520, x_cordinate, y_cordinate))
+
+        #--------------------------------------------------------------------------------------
+
+
+
+        osVar1 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar1.set(osVar1.get().upper())
+
+        osVar1.trace_add('write', to_uppercase)
+
+
+        osVar2 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar2.set(osVar2.get().upper())
+
+        osVar2.trace_add('write', to_uppercase)
+
+
+        osVar3 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar3.set(osVar3.get().upper())
+
+        osVar3.trace_add('write', to_uppercase)
+
+
+        osVar4 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar4.set(osVar4.get().upper())
+
+        osVar4.trace_add('write', to_uppercase)
+
+
+        osVar5 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar5.set(osVar5.get().upper())
+
+        osVar5.trace_add('write', to_uppercase)
+
+
+        osVar6 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar6.set(osVar6.get().upper())
+
+        osVar6.trace_add('write', to_uppercase)
+
+        osVar7 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar7.set(osVar7.get().upper())
+
+        osVar7.trace_add('write', to_uppercase)
+
+
+        #--------------------------------------------------------------------------------------
 
         cliente_selecionado = self.tree_cliente.focus()
         dado_cli = self.tree_cliente.item(cliente_selecionado, "values")
@@ -1773,15 +1941,15 @@ class Castelo:
         self.os_marca = ttk.Combobox(frame_dadosapare_os1, values=lista_marca, state="readonly")
         self.os_marca.grid(row=1, column=1, padx=10)
         Label(frame_dadosapare_os1, text='Modelo').grid(row=0, column=2, sticky=W)
-        self.os_modelo = Entry(frame_dadosapare_os1, width=28)
+        self.os_modelo = Entry(frame_dadosapare_os1, width=28, textvariable=osVar1)
         self.os_modelo.grid(row=1, column=2)
         frame_dadosapare_os2 = Frame(labelframe_dadosapare_os)
         frame_dadosapare_os2.pack(fill=X, padx=10)
         Label(frame_dadosapare_os2, text='Chassis').grid(row=0, column=0, sticky=W)
-        self.os_chassis = Entry(frame_dadosapare_os2, width=15)
+        self.os_chassis = Entry(frame_dadosapare_os2, width=15, textvariable=osVar2)
         self.os_chassis.grid(row=1, column=0)
         Label(frame_dadosapare_os2, text='Núm Série').grid(row=0, column=1, sticky=W, padx=10)
-        self.os_numserie = Entry(frame_dadosapare_os2, width=25)
+        self.os_numserie = Entry(frame_dadosapare_os2, width=25, textvariable=osVar3)
         self.os_numserie.grid(row=1, column=1, padx=10)
         Label(frame_dadosapare_os2, text='Tensão').grid(row=0, column=2, sticky=W)
         self.os_tensao = Entry(frame_dadosapare_os2, width=8, validate='all',
@@ -1793,13 +1961,13 @@ class Castelo:
         frame_dadosapare_os3 = Frame(labelframe_dadosapare_os)
         frame_dadosapare_os3.pack(fill=X, padx=10)
         Label(frame_dadosapare_os3, text="Defeito Reclamado").grid(row=0, column=0, sticky=W)
-        self.os_defeito = Entry(frame_dadosapare_os3, width=79)
+        self.os_defeito = Entry(frame_dadosapare_os3, width=79, textvariable=osVar4)
         self.os_defeito.grid(row=1, column=0, columnspan=2)
         Label(frame_dadosapare_os3, text="Estado do Aparelho").grid(row=2, column=0, sticky=W)
-        self.os_estadoaparelho = Entry(frame_dadosapare_os3, width=79)
+        self.os_estadoaparelho = Entry(frame_dadosapare_os3, width=79, textvariable=osVar5)
         self.os_estadoaparelho.grid(row=3, column=0, columnspan=2)
         Label(frame_dadosapare_os3, text="Acessórios").grid(row=4, column=0, sticky=W)
-        self.os_acessorios = Entry(frame_dadosapare_os3, width=60)
+        self.os_acessorios = Entry(frame_dadosapare_os3, width=60, textvariable=osVar6)
         self.os_acessorios.grid(row=5, column=0, sticky=W)
         Label(frame_dadosapare_os3, text="Operador").grid(row=4, column=1, sticky=W)
         self.os_operador = Entry(frame_dadosapare_os3, width=8, font=('Verdana', '13', 'bold'))
@@ -1831,7 +1999,7 @@ class Castelo:
         labelframe_garantia = LabelFrame(frame_princ_jan_os, text="Garantia de Fábrica", fg=self.color_fg_label)
         labelframe_garantia.grid(row=3, column=0, sticky=W, ipadx=6, ipady=5)
         Label(labelframe_garantia, text='Loja').grid(row=0, column=0, sticky=W, padx=10)
-        self.os_loja = Entry(labelframe_garantia, width=25, state='disabled')
+        self.os_loja = Entry(labelframe_garantia, width=25, state='disabled', textvariable=osVar7)
         self.os_loja.grid(row=1, column=0, sticky=W, padx=10)
         Label(labelframe_garantia, text='Data Compra').grid(row=0, column=1, sticky=W)
         self.os_datacompra = Entry(labelframe_garantia, width=15, state='disabled')
@@ -2110,22 +2278,88 @@ class Castelo:
         y_cordinate = int((self.h / 2) - (520 / 2))
         jan.geometry("{}x{}+{}+{}".format(780, 520, x_cordinate, y_cordinate))
 
+        # --------------------------------------------------------------------------------------
+
+        osVar1 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar1.set(osVar1.get().upper())
+
+        osVar1.trace_add('write', to_uppercase)
+
+        osVar2 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar2.set(osVar2.get().upper())
+
+        osVar2.trace_add('write', to_uppercase)
+
+        osVar3 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar3.set(osVar3.get().upper())
+
+        osVar3.trace_add('write', to_uppercase)
+
+        osVar4 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar4.set(osVar4.get().upper())
+
+        osVar4.trace_add('write', to_uppercase)
+
+
+        osVar5 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar5.set(osVar5.get().upper())
+
+        osVar5.trace_add('write', to_uppercase)
+
+
+        osVar6 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar6.set(osVar6.get().upper())
+
+        osVar6.trace_add('write', to_uppercase)
+
+
+        osVar7 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar7.set(osVar7.get().upper())
+
+        osVar7.trace_add('write', to_uppercase)
+
+
+        osVar8 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar8.set(osVar8.get().upper())
+
+        osVar8.trace_add('write', to_uppercase)
+
+
+        osVar9 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar9.set(osVar9.get().upper())
+
+        osVar9.trace_add('write', to_uppercase)
+
+        # --------------------------------------------------------------------------------------
+
         frame_princ_jan_os_0 = Frame(jan, bg=color_frame)
         frame_princ_jan_os = Frame(frame_princ_jan_os_0, bg=color_frame)
         frame_princ_jan_os_0.pack(side=LEFT, fill=BOTH)
         frame_princ_jan_os.pack(side=LEFT, fill=BOTH, padx=10, pady=10)
 
-        # self.tree_ap_manut.focus_set()
-        # children = self.tree_ap_manut.get_children()
-        # if children:
-        #     self.tree_ap_manut.focus_set()
-        #     self.tree_ap_manut.selection_set(children[0])
         os_selecionada = self.tree_ap_manut.focus()
         dado_os = self.tree_ap_manut.item(os_selecionada, "values")
         os_dados = os_repositorio.Os_repositorio.listar_os_id(dado_os[0], dado_os[0], sessao)
         cliente_os_atual = cliente_repositorio.ClienteRepositorio.listar_cliente_id(os_dados.cliente_id,
                                                                                     os_dados.cliente_id, sessao)
-        valor_esc = '1'
         self.num_os = dado_os[0]
         impede_escrita = jan.register(self.ImpedeEscrita)
         testa_tensao = jan.register(self.testaEntradaNumTensao)
@@ -2382,29 +2616,29 @@ class Castelo:
         frame_dadosapare_os1 = Frame(labelframe_dadosapare_os, bg=color_frame)
         frame_dadosapare_os1.pack(fill=X, padx=5)
         Label(frame_dadosapare_os1, text='Aparelho', bg=color_frame).grid(row=0, column=0, sticky=W)
-        self.jan_os_aparelho = Entry(frame_dadosapare_os1, font=('', '9', 'bold'), width=17)
+        self.jan_os_aparelho = Entry(frame_dadosapare_os1, font=('', '9', 'bold'), width=17, textvariable=osVar1)
         self.jan_os_aparelho.insert(0, os_dados.equipamento)
         self.jan_os_aparelho.grid(row=0, column=1)
         self.jan_os_aparelho.config(validate='all', validatecommand=(impede_escrita, '%P'))
         Label(frame_dadosapare_os1, text='Marca', bg=color_frame).grid(row=0, column=2, sticky=W, padx=5)
-        self.jan_os_marca = Entry(frame_dadosapare_os1, font=('', '9', 'bold'), width=15)
+        self.jan_os_marca = Entry(frame_dadosapare_os1, font=('', '9', 'bold'), width=15, textvariable=osVar2)
         self.jan_os_marca.insert(0, os_dados.marca)
         self.jan_os_marca.grid(row=0, column=3, padx=5)
         self.jan_os_marca.config(validate='all', validatecommand=(impede_escrita, '%P'))
         Label(frame_dadosapare_os1, text='Modelo', bg=color_frame).grid(row=0, column=4, sticky=W)
-        self.jan_os_modelo = Entry(frame_dadosapare_os1, width=15, font=('', '9', 'bold'))
+        self.jan_os_modelo = Entry(frame_dadosapare_os1, width=15, font=('', '9', 'bold'), textvariable=osVar3)
         self.jan_os_modelo.insert(0, os_dados.modelo)
         self.jan_os_modelo.grid(row=0, column=5)
         self.jan_os_modelo.config(validate='all', validatecommand=(impede_escrita, '%P'))
         frame_dadosapare_os2 = Frame(labelframe_dadosapare_os, bg=color_frame)
         frame_dadosapare_os2.pack(fill=X, padx=5, pady=5)
         Label(frame_dadosapare_os2, text='Chassis', bg=color_frame).grid(row=0, column=0, sticky=W)
-        self.jan_os_chassi = Entry(frame_dadosapare_os2, width=15, font=('', '9', 'bold'))
+        self.jan_os_chassi = Entry(frame_dadosapare_os2, width=15, font=('', '9', 'bold'), textvariable=osVar4)
         self.jan_os_chassi.insert(0, os_dados.chassi)
         self.jan_os_chassi.grid(row=0, column=1)
         self.jan_os_chassi.config(validate='all', validatecommand=(impede_escrita, '%P'))
         Label(frame_dadosapare_os2, text='Núm Série', bg=color_frame).grid(row=0, column=2, sticky=W, padx=5)
-        self.jan_os_numSerie = Entry(frame_dadosapare_os2, width=20, font=('', '9', 'bold'))
+        self.jan_os_numSerie = Entry(frame_dadosapare_os2, width=20, font=('', '9', 'bold'), textvariable=osVar5)
         self.jan_os_numSerie.insert(0, os_dados.n_serie)
         self.jan_os_numSerie.grid(row=0, column=3, padx=5)
         self.jan_os_numSerie.config(validate='all', validatecommand=(impede_escrita, '%P'))
@@ -2416,15 +2650,16 @@ class Castelo:
         frame_dadosapare_os3 = Frame(labelframe_dadosapare_os, bg=color_frame)
         frame_dadosapare_os3.pack(fill=X, padx=10)
         Label(frame_dadosapare_os3, text="Defeito Reclamado", bg=color_frame).grid(row=0, column=0, sticky=W)
-        self.jan_os_defeito = Entry(frame_dadosapare_os3, width=54, fg='green', font=('', '9', 'bold'))
+        self.jan_os_defeito = Entry(frame_dadosapare_os3, width=54, fg='green', font=('', '9', 'bold'),
+                                    textvariable=osVar6)
         self.jan_os_defeito.insert(0, os_dados.defeito)
         self.jan_os_defeito.grid(row=0, column=1)
         Label(frame_dadosapare_os3, text="Estado do Aparelho", bg=color_frame).grid(row=1, column=0, sticky=W)
-        self.jan_os_estado_aparelho = Entry(frame_dadosapare_os3, width=54, font=('', '9', 'bold'))
+        self.jan_os_estado_aparelho = Entry(frame_dadosapare_os3, width=54, font=('', '9', 'bold'), textvariable=osVar7)
         self.jan_os_estado_aparelho.insert(0, os_dados.estado_aparelho)
         self.jan_os_estado_aparelho.grid(row=1, column=1)
         Label(frame_dadosapare_os3, text="Acessórios", bg=color_frame).grid(row=2, column=0, sticky=W)
-        self.jan_os_acessorios = Entry(frame_dadosapare_os3, width=54, font=('', '9', 'bold'))
+        self.jan_os_acessorios = Entry(frame_dadosapare_os3, width=54, font=('', '9', 'bold'), textvariable=osVar8)
         self.jan_os_acessorios.insert(0, os_dados.acessorios)
         self.jan_os_acessorios.grid(row=2, column=1, sticky=W)
 
@@ -2432,7 +2667,7 @@ class Castelo:
                                          bg=color_frame)
         labelframe_garantia.grid(row=3, column=0, sticky=W, ipadx=6, ipady=5)
         Label(labelframe_garantia, text='Loja', bg=color_frame).grid(row=0, column=0, sticky=W, padx=13)
-        self.jan_os_loja = Entry(labelframe_garantia, width=21, font=('', '9', 'bold'))
+        self.jan_os_loja = Entry(labelframe_garantia, width=21, font=('', '9', 'bold'), textvariable=osVar9)
         self.jan_os_loja.insert(0, os_dados.loja)
         self.jan_os_loja.grid(row=1, column=0, sticky=W, padx=13)
         self.jan_os_loja.config(validate='all', validatecommand=(impede_escrita, '%P'))
@@ -2482,10 +2717,22 @@ class Castelo:
         frame_andamento_os.pack(padx=8, pady=8)
         scroll_andamento_os = Scrollbar(frame_andamento_os)
         scroll_andamento_os.pack(side=RIGHT, fill=Y)
-        text_andamento_os = Text(frame_andamento_os, relief=SUNKEN, yscrollcommand=scroll_andamento_os, bg="#ffe0c0")
+        text_andamento_os = Text(frame_andamento_os, relief=SUNKEN, yscrollcommand=scroll_andamento_os)
         text_andamento_os.insert(END, os_dados.andamento)
         text_andamento_os.pack(side=LEFT)
         scroll_andamento_os.config(command=text_andamento_os.yview)
+
+        #----------------------------------------------------------
+        def get_stringvar1(event):
+            text_prob_os.replace("1.0", END, text_prob_os.get("1.0", END).upper())
+
+        text_prob_os.bind("<KeyRelease>", get_stringvar1)
+
+        def get_stringvar(event):
+            text_andamento_os.replace("1.0", END, text_andamento_os.get("1.0", END).upper())
+
+        text_andamento_os.bind("<KeyRelease>", get_stringvar)
+        #------------------------------------------------------------
 
         self.list_status_os = Listbox(labelframe_os_status, bg="#ffe0c0")
         self.list_status_os.insert(1, "EM ANDAMENTO")
@@ -2790,6 +3037,178 @@ class Castelo:
         color_entry1 = '#ffffe1'
         color_entry2 = '#ffff80'
 
+        # --------------------------------------------------------------------------------------
+
+        osVar1 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar1.set(osVar1.get().upper())
+
+        osVar1.trace_add('write', to_uppercase)
+
+        osVar2 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar2.set(osVar2.get().upper())
+
+        osVar2.trace_add('write', to_uppercase)
+
+        osVar3 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar3.set(osVar3.get().upper())
+
+        osVar3.trace_add('write', to_uppercase)
+
+        osVar4 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar4.set(osVar4.get().upper())
+
+        osVar4.trace_add('write', to_uppercase)
+
+        osVar5 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar5.set(osVar5.get().upper())
+
+        osVar5.trace_add('write', to_uppercase)
+
+        osVar6 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar6.set(osVar6.get().upper())
+
+        osVar6.trace_add('write', to_uppercase)
+
+        osVar7 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar7.set(osVar7.get().upper())
+
+        osVar7.trace_add('write', to_uppercase)
+
+        osVar8 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar8.set(osVar8.get().upper())
+
+        osVar8.trace_add('write', to_uppercase)
+
+        osVar9 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar9.set(osVar9.get().upper())
+
+        osVar9.trace_add('write', to_uppercase)
+
+        osVar10 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar10.set(osVar10.get().upper())
+
+        osVar10.trace_add('write', to_uppercase)
+
+        osVar11 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar11.set(osVar11.get().upper())
+
+        osVar11.trace_add('write', to_uppercase)
+
+        osVar12 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar12.set(osVar12.get().upper())
+
+        osVar12.trace_add('write', to_uppercase)
+
+        osVar13 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar13.set(osVar13.get().upper())
+
+        osVar13.trace_add('write', to_uppercase)
+
+        osVar14 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar14.set(osVar14.get().upper())
+
+        osVar14.trace_add('write', to_uppercase)
+
+        osVar15 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar15.set(osVar15.get().upper())
+
+        osVar15.trace_add('write', to_uppercase)
+
+        osVar16 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar16.set(osVar16.get().upper())
+
+        osVar16.trace_add('write', to_uppercase)
+
+        osVar17 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar17.set(osVar17.get().upper())
+
+        osVar17.trace_add('write', to_uppercase)
+
+        osVar18 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar18.set(osVar18.get().upper())
+
+        osVar18.trace_add('write', to_uppercase)
+
+        osVar19 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar19.set(osVar19.get().upper())
+
+        osVar19.trace_add('write', to_uppercase)
+
+        osVar20 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar20.set(osVar20.get().upper())
+
+        osVar20.trace_add('write', to_uppercase)
+
+        osVar21 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar21.set(osVar21.get().upper())
+
+        osVar21.trace_add('write', to_uppercase)
+
+        osVar22 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar22.set(osVar22.get().upper())
+
+        osVar22.trace_add('write', to_uppercase)
+
+        osVar23 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar23.set(osVar23.get().upper())
+
+        osVar23.trace_add('write', to_uppercase)
+
+        osVar24 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar24.set(osVar24.get().upper())
+
+        osVar24.trace_add('write', to_uppercase)
+
+        # --------------------------------------------------------------------------------------
+
         def apagaAba1():
             if self.orc_cod_entry1.get() == '':
                 self.orc_descr_entry1.delete(0, END)
@@ -2949,31 +3368,31 @@ class Castelo:
                                                                                                           pady=2)
         Button(subframe_material1, width=3, text="E", command=lambda: [self.janelaBuscaProduto(13)]).grid(row=9,
                                                                                                           column=0)
-        self.orc_cod_entry1 = Entry(subframe_material1, width=10, relief=SUNKEN, bg=color_entry1)
+        self.orc_cod_entry1 = Entry(subframe_material1, width=10, relief=SUNKEN, bg=color_entry1, textvariable=osVar1)
         self.orc_cod_entry1.insert(0, dados_orc.codigo1)
         self.orc_cod_entry1.grid(row=1, column=1)
-        self.orc_cod_entry2 = Entry(subframe_material1, width=10, relief=SUNKEN, bg=color_entry1)
+        self.orc_cod_entry2 = Entry(subframe_material1, width=10, relief=SUNKEN, bg=color_entry1, textvariable=osVar2)
         self.orc_cod_entry2.insert(0, dados_orc.codigo2)
         self.orc_cod_entry2.grid(row=2, column=1)
-        self.orc_cod_entry3 = Entry(subframe_material1, width=10, relief=SUNKEN, bg=color_entry1)
+        self.orc_cod_entry3 = Entry(subframe_material1, width=10, relief=SUNKEN, bg=color_entry1, textvariable=osVar3)
         self.orc_cod_entry3.insert(0, dados_orc.codigo3)
         self.orc_cod_entry3.grid(row=3, column=1)
-        self.orc_cod_entry4 = Entry(subframe_material1, width=10, relief=SUNKEN, bg=color_entry1)
+        self.orc_cod_entry4 = Entry(subframe_material1, width=10, relief=SUNKEN, bg=color_entry1, textvariable=osVar4)
         self.orc_cod_entry4.insert(0, dados_orc.codigo4)
         self.orc_cod_entry4.grid(row=4, column=1)
-        self.orc_cod_entry5 = Entry(subframe_material1, width=10, relief=SUNKEN, bg=color_entry1)
+        self.orc_cod_entry5 = Entry(subframe_material1, width=10, relief=SUNKEN, bg=color_entry1, textvariable=osVar5)
         self.orc_cod_entry5.insert(0, dados_orc.codigo5)
         self.orc_cod_entry5.grid(row=5, column=1)
-        self.orc_cod_entry6 = Entry(subframe_material1, width=10, relief=SUNKEN, bg=color_entry1)
+        self.orc_cod_entry6 = Entry(subframe_material1, width=10, relief=SUNKEN, bg=color_entry1, textvariable=osVar6)
         self.orc_cod_entry6.insert(0, dados_orc.codigo6)
         self.orc_cod_entry6.grid(row=6, column=1)
-        self.orc_cod_entry7 = Entry(subframe_material1, width=10, relief=SUNKEN, bg=color_entry1)
+        self.orc_cod_entry7 = Entry(subframe_material1, width=10, relief=SUNKEN, bg=color_entry1, textvariable=osVar7)
         self.orc_cod_entry7.insert(0, dados_orc.codigo7)
         self.orc_cod_entry7.grid(row=7, column=1)
-        self.orc_cod_entry8 = Entry(subframe_material1, width=10, relief=SUNKEN, bg=color_entry1)
+        self.orc_cod_entry8 = Entry(subframe_material1, width=10, relief=SUNKEN, bg=color_entry1, textvariable=osVar8)
         self.orc_cod_entry8.insert(0, dados_orc.codigo8)
         self.orc_cod_entry8.grid(row=8, column=1)
-        self.orc_cod_entry9 = Entry(subframe_material1, width=10, relief=SUNKEN, bg=color_entry1)
+        self.orc_cod_entry9 = Entry(subframe_material1, width=10, relief=SUNKEN, bg=color_entry1, textvariable=osVar9)
         self.orc_cod_entry9.insert(0, dados_orc.codigo9)
         self.orc_cod_entry9.grid(row=9, column=1)
         self.orc_quant_entry1 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all', bg=color_entry1,
@@ -2984,7 +3403,7 @@ class Castelo:
                                    validatecommand=(testa_float, '%P'))
         self.orc_id_entry1.insert(0, self.insereNumConvertido(dados_orc.caixa_peca1))
         self.orc_id_entry1.grid(row=1, column=3)
-        self.orc_descr_entry1 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1)
+        self.orc_descr_entry1 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1, textvariable=osVar10)
         self.orc_descr_entry1.insert(0, dados_orc.desc_serv1)
         self.orc_descr_entry1.grid(row=1, column=4, padx=5)
         self.orc_val_uni_entry1 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
@@ -3002,7 +3421,7 @@ class Castelo:
                                    validatecommand=(testa_float, '%P'))
         self.orc_id_entry2.insert(0, self.insereNumConvertido(dados_orc.caixa_peca2))
         self.orc_id_entry2.grid(row=2, column=3)
-        self.orc_descr_entry2 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1)
+        self.orc_descr_entry2 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1, textvariable=osVar11)
         self.orc_descr_entry2.insert(0, dados_orc.desc_serv2)
         self.orc_descr_entry2.grid(row=2, column=4, padx=5)
         self.orc_val_uni_entry2 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
@@ -3020,7 +3439,7 @@ class Castelo:
                                    validatecommand=(testa_float, '%P'))
         self.orc_id_entry3.insert(0, self.insereNumConvertido(dados_orc.caixa_peca3))
         self.orc_id_entry3.grid(row=3, column=3)
-        self.orc_descr_entry3 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1)
+        self.orc_descr_entry3 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1, textvariable=osVar12)
         self.orc_descr_entry3.insert(0, dados_orc.desc_serv3)
         self.orc_descr_entry3.grid(row=3, column=4, padx=5)
         self.orc_val_uni_entry3 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
@@ -3038,7 +3457,7 @@ class Castelo:
                                    validatecommand=(testa_float, '%P'))
         self.orc_id_entry4.insert(0, self.insereNumConvertido(dados_orc.caixa_peca4))
         self.orc_id_entry4.grid(row=4, column=3)
-        self.orc_descr_entry4 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1)
+        self.orc_descr_entry4 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1, textvariable=osVar13)
         self.orc_descr_entry4.insert(0, dados_orc.desc_serv4)
         self.orc_descr_entry4.grid(row=4, column=4, padx=5)
         self.orc_val_uni_entry4 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
@@ -3056,7 +3475,7 @@ class Castelo:
                                    validatecommand=(testa_float, '%P'))
         self.orc_id_entry5.insert(0, self.insereNumConvertido(dados_orc.caixa_peca5))
         self.orc_id_entry5.grid(row=5, column=3)
-        self.orc_descr_entry5 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1)
+        self.orc_descr_entry5 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1, textvariable=osVar14)
         self.orc_descr_entry5.insert(0, dados_orc.desc_serv5)
         self.orc_descr_entry5.grid(row=5, column=4, padx=5)
         self.orc_val_uni_entry5 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
@@ -3074,7 +3493,7 @@ class Castelo:
                                    validatecommand=(testa_float, '%P'))
         self.orc_id_entry6.insert(0, self.insereNumConvertido(dados_orc.caixa_peca6))
         self.orc_id_entry6.grid(row=6, column=3)
-        self.orc_descr_entry6 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1)
+        self.orc_descr_entry6 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1, textvariable=osVar15)
         self.orc_descr_entry6.insert(0, dados_orc.desc_serv6)
         self.orc_descr_entry6.grid(row=6, column=4, padx=5)
         self.orc_val_uni_entry6 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
@@ -3092,7 +3511,7 @@ class Castelo:
                                    validatecommand=(testa_float, '%P'))
         self.orc_id_entry7.insert(0, self.insereNumConvertido(dados_orc.caixa_peca7))
         self.orc_id_entry7.grid(row=7, column=3)
-        self.orc_descr_entry7 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1)
+        self.orc_descr_entry7 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1, textvariable=osVar16)
         self.orc_descr_entry7.insert(0, dados_orc.desc_serv7)
         self.orc_descr_entry7.grid(row=7, column=4, padx=5)
         self.orc_val_uni_entry7 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
@@ -3110,7 +3529,7 @@ class Castelo:
                                    validatecommand=(testa_float, '%P'))
         self.orc_id_entry8.insert(0, self.insereNumConvertido(dados_orc.caixa_peca8))
         self.orc_id_entry8.grid(row=8, column=3)
-        self.orc_descr_entry8 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1, )
+        self.orc_descr_entry8 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1, textvariable=osVar17)
         self.orc_descr_entry8.insert(0, dados_orc.desc_serv8)
         self.orc_descr_entry8.grid(row=8, column=4, padx=5)
         self.orc_val_uni_entry8 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
@@ -3128,7 +3547,7 @@ class Castelo:
                                    validatecommand=(testa_float, '%P'))
         self.orc_id_entry9.insert(0, self.insereNumConvertido(dados_orc.caixa_peca9))
         self.orc_id_entry9.grid(row=9, column=3)
-        self.orc_descr_entry9 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1, )
+        self.orc_descr_entry9 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1, textvariable=osVar18)
         self.orc_descr_entry9.insert(0, dados_orc.desc_serv9)
         self.orc_descr_entry9.grid(row=9, column=4, padx=5)
         self.orc_val_uni_entry9 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
@@ -3199,13 +3618,13 @@ class Castelo:
 
         labelframe_orc_coment = LabelFrame(frame_princ_os1, text="Comentários")
         labelframe_orc_coment.grid(row=2, column=0, columnspan=4, pady=5)
-        self.orc_comentario1 = Entry(labelframe_orc_coment, width=104, bg=color_entry1)
+        self.orc_comentario1 = Entry(labelframe_orc_coment, width=104, bg=color_entry1, textvariable=osVar19)
         self.orc_comentario1.insert(0, dados_orc.obs1)
         self.orc_comentario1.pack(padx=5, pady=5)
-        self.orc_comentario2 = Entry(labelframe_orc_coment, width=104, bg=color_entry1)
+        self.orc_comentario2 = Entry(labelframe_orc_coment, width=104, bg=color_entry1, textvariable=osVar20)
         self.orc_comentario2.insert(0, dados_orc.obs2)
         self.orc_comentario2.pack()
-        self.orc_comentario3 = Entry(labelframe_orc_coment, width=104, bg=color_entry1)
+        self.orc_comentario3 = Entry(labelframe_orc_coment, width=104, bg=color_entry1, textvariable=osVar21)
         self.orc_comentario3.insert(0, dados_orc.obs3)
         self.orc_comentario3.pack(pady=5)
 
@@ -3221,6 +3640,11 @@ class Castelo:
         self.orc_text_os.insert('end', dados_orc.defeitos)
         self.orc_text_os.pack(side=RIGHT)
         scroll_os.config(command=self.orc_text_os.yview)
+
+        def get_stringvar(event):
+            self.orc_text_os.replace("1.0", END, self.orc_text_os.get("1.0", END).upper())
+
+        self.orc_text_os.bind("<KeyRelease>", get_stringvar)
 
         labelframe_form_pag = LabelFrame(frame_princ_os2, text="Forma de Pagamento")
         labelframe_form_pag.pack(pady=10, fill=X)
@@ -3267,13 +3691,13 @@ class Castelo:
         self.orc_outros.grid(row=5, column=1, padx=5)
         labelframe_pag_coment = LabelFrame(labelframe_form_pag, text="Observações de Pagamento")
         labelframe_pag_coment.pack(padx=10, pady=4)
-        self.orc_obs_pagamento1 = Entry(labelframe_pag_coment, width=47, bg=color_entry1)
+        self.orc_obs_pagamento1 = Entry(labelframe_pag_coment, width=47, bg=color_entry1, textvariable=osVar22)
         self.orc_obs_pagamento1.insert(0, dados_orc.obs_pagamento1)
         self.orc_obs_pagamento1.pack(padx=5, pady=5)
-        self.orc_obs_pagamento2 = Entry(labelframe_pag_coment, width=47, bg=color_entry1)
+        self.orc_obs_pagamento2 = Entry(labelframe_pag_coment, width=47, bg=color_entry1, textvariable=osVar23)
         self.orc_obs_pagamento2.insert(0, dados_orc.obs_pagamento2)
         self.orc_obs_pagamento2.pack(padx=5)
-        self.orc_obs_pagamento3 = Entry(labelframe_pag_coment, width=47, bg=color_entry1)
+        self.orc_obs_pagamento3 = Entry(labelframe_pag_coment, width=47, bg=color_entry1, textvariable=osVar24)
         self.orc_obs_pagamento3.insert(0, dados_orc.obs_pagamento3)
         self.orc_obs_pagamento3.pack(pady=5, padx=5)
         subframe_form_pag2 = Frame(labelframe_form_pag)
@@ -4446,6 +4870,38 @@ class Castelo:
         y_cordinate = int((self.h / 2) - (650 / 2))
         jan.geometry("{}x{}+{}+{}".format(1000, 650, x_cordinate, y_cordinate))
 
+        # --------------------------------------------------------------------------------------
+
+        osVar1 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar1.set(osVar1.get().upper())
+
+        osVar1.trace_add('write', to_uppercase)
+
+        osVar2 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar2.set(osVar2.get().upper())
+
+        osVar2.trace_add('write', to_uppercase)
+
+        osVar3 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar3.set(osVar3.get().upper())
+
+        osVar3.trace_add('write', to_uppercase)
+
+        osVar4 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar4.set(osVar4.get().upper())
+
+        osVar4.trace_add('write', to_uppercase)
+
+        # --------------------------------------------------------------------------------------
+
         frame_princ1 = Frame(jan)
         frame_princ1.pack(fill=X, padx=10, pady=10)
         Button(frame_princ1, text="Salvar(F2)", width=10, command=lambda: [cadastrarProduto(), jan.destroy()]).pack(
@@ -4471,17 +4927,18 @@ class Castelo:
         subframe_est_dados1 = Frame(frame_est_dados)
         subframe_est_dados1.pack(fill=X, padx=20, ipady=5)
         Label(subframe_est_dados1, text="Código").grid(row=0, column=0, sticky=W, pady=10)
-        id_entry = Entry(subframe_est_dados1, width=20, validate='all', validatecommand=(testa_id, '%P'))
+        id_entry = Entry(subframe_est_dados1, width=20, validate='all', validatecommand=(testa_id, '%P'),
+                         textvariable=osVar1)
         id_entry.grid(row=0, column=1, sticky=W, padx=20)
         Label(subframe_est_dados1, width=20).grid(row=0, column=2)
         # Label(subframe_est_dados1, text="Código Extra").grid(row=0, column=3, sticky=E)
         # id_fabrica_entry = Entry(subframe_est_dados1, width=20)
         # id_fabrica_entry.grid(row=0, column=4, sticky=W, padx=20)
         Label(subframe_est_dados1, text="Descrição").grid(row=1, column=0, sticky=W)
-        descricao_entry = Entry(subframe_est_dados1, width=87)
+        descricao_entry = Entry(subframe_est_dados1, width=87, textvariable=osVar2)
         descricao_entry.grid(row=1, column=1, columnspan=4, sticky=W, padx=20)
         Label(subframe_est_dados1, text="Utilizado em:").grid(row=2, column=0, sticky=W, pady=10)
-        utilizado_entry = Entry(subframe_est_dados1, width=87)
+        utilizado_entry = Entry(subframe_est_dados1, width=87, textvariable=osVar3)
         utilizado_entry.grid(row=2, column=1, columnspan=4, sticky=W, padx=20)
         Label(subframe_est_dados1, text="Categoria").grid(row=3, column=0, sticky=W)
         option_categ = ttk.Combobox(subframe_est_dados1, values=lista_categ, state="readonly", width=17)
@@ -4493,7 +4950,7 @@ class Castelo:
         option_revendedor = ttk.Combobox(subframe_est_dados1, values=self.lista_revendedor, state="readonly", width=17)
         option_revendedor.grid(row=5, column=4, sticky=W, padx=20)
         Label(subframe_est_dados1, text="Localização").grid(row=5, column=0, sticky=W)
-        localizacao_entry = Entry(subframe_est_dados1, width=20)
+        localizacao_entry = Entry(subframe_est_dados1, width=20, textvariable=osVar4)
         localizacao_entry.grid(row=5, column=1, sticky=W, padx=20)
         Label(subframe_est_dados1, width=20, relief=SUNKEN, height=7).grid(row=0, column=5, rowspan=5, sticky=N,
                                                                            pady=10)
@@ -4528,6 +4985,11 @@ class Castelo:
         Label(subframe_est_dados1, text="Observações").grid(row=14, column=0, sticky=NW, pady=10)
         obs_criar_prod = Text(subframe_est_dados1, relief=SUNKEN, height=5, width=67)
         obs_criar_prod.grid(row=14, column=1, sticky=W, columnspan=5, padx=20, pady=10)
+
+        def get_stringvar(event):
+            obs_criar_prod.replace("1.0", END, obs_criar_prod.get("1.0", END).upper())
+
+        obs_criar_prod.bind("<KeyRelease>", get_stringvar)
 
         jan.transient(root2)
         jan.focus_force()
@@ -4585,6 +5047,38 @@ class Castelo:
         y_cordinate = int((self.h / 2) - (650 / 2))
         jan.geometry("{}x{}+{}+{}".format(1000, 650, x_cordinate, y_cordinate))
 
+        # --------------------------------------------------------------------------------------
+
+        osVar1 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar1.set(osVar1.get().upper())
+
+        osVar1.trace_add('write', to_uppercase)
+
+        osVar2 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar2.set(osVar2.get().upper())
+
+        osVar2.trace_add('write', to_uppercase)
+
+        osVar3 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar3.set(osVar3.get().upper())
+
+        osVar3.trace_add('write', to_uppercase)
+
+        osVar4 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar4.set(osVar4.get().upper())
+
+        osVar4.trace_add('write', to_uppercase)
+
+        # --------------------------------------------------------------------------------------
+
         produto_selecionado = self.tree_est_prod.focus()
         dado_prod = self.tree_est_prod.item(produto_selecionado, 'values')
         produto_dados = produto_repositorio.ProdutoRepositorio().listar_produto_id(dado_prod[9], sessao)
@@ -4614,7 +5108,8 @@ class Castelo:
         subframe_est_dados1 = Frame(frame_est_dados)
         subframe_est_dados1.pack(fill=X, padx=20, ipady=5)
         Label(subframe_est_dados1, text="Código").grid(row=0, column=0, sticky=W, pady=10)
-        id_entry = Entry(subframe_est_dados1, width=20, validate='all', validatecommand=(testa_id, '%P'))
+        id_entry = Entry(subframe_est_dados1, width=20, validate='all', validatecommand=(testa_id, '%P'),
+                         textvariable=osVar1)
         id_entry.insert(0, produto_dados.id_fabr)
         id_entry.grid(row=0, column=1, sticky=W, padx=20)
         Label(subframe_est_dados1, width=20).grid(row=0, column=2)
@@ -4622,11 +5117,11 @@ class Castelo:
         # id_fabrica_entry = Entry(subframe_est_dados1, width=20)
         # id_fabrica_entry.grid(row=0, column=4, sticky=W, padx=20)
         Label(subframe_est_dados1, text="Descrição").grid(row=1, column=0, sticky=W)
-        descricao_entry = Entry(subframe_est_dados1, width=87)
+        descricao_entry = Entry(subframe_est_dados1, width=87, textvariable=osVar2)
         descricao_entry.insert(0, produto_dados.descricao)
         descricao_entry.grid(row=1, column=1, columnspan=4, sticky=W, padx=20)
         Label(subframe_est_dados1, text="Utilizado em:").grid(row=2, column=0, sticky=W, pady=10)
-        utilizado_entry = Entry(subframe_est_dados1, width=87)
+        utilizado_entry = Entry(subframe_est_dados1, width=87, textvariable=osVar3)
         utilizado_entry.insert(0, produto_dados.utilizado)
         utilizado_entry.grid(row=2, column=1, columnspan=4, sticky=W, padx=20)
         Label(subframe_est_dados1, text="Categoria").grid(row=3, column=0, sticky=W)
@@ -4642,7 +5137,7 @@ class Castelo:
         option_revendedor.set(dado_prod[8])
         option_revendedor.grid(row=5, column=4, sticky=W, padx=20)
         Label(subframe_est_dados1, text="Localização").grid(row=5, column=0, sticky=W)
-        localizacao_entry = Entry(subframe_est_dados1, width=20)
+        localizacao_entry = Entry(subframe_est_dados1, width=20, textvariable=osVar4)
         localizacao_entry.insert(0, produto_dados.localizacao)
         localizacao_entry.grid(row=5, column=1, sticky=W, padx=20)
         Label(subframe_est_dados1, width=20, relief=SUNKEN, height=7).grid(row=0, column=5, rowspan=5, sticky=N,
@@ -4685,6 +5180,11 @@ class Castelo:
         obs_criar_prod = Text(subframe_est_dados1, relief=SUNKEN, height=5, width=67)
         obs_criar_prod.insert('end', produto_dados.obs)
         obs_criar_prod.grid(row=14, column=1, sticky=W, columnspan=5, padx=20, pady=10)
+
+        def get_stringvar(event):
+            obs_criar_prod.replace("1.0", END, obs_criar_prod.get("1.0", END).upper())
+
+        obs_criar_prod.bind("<KeyRelease>", get_stringvar)
 
         jan.transient(root2)
         jan.focus_force()
@@ -4748,6 +5248,38 @@ class Castelo:
         y_cordinate = int((self.h / 2) - (650 / 2))
         jan.geometry("{}x{}+{}+{}".format(1000, 650, x_cordinate, y_cordinate))
 
+        # --------------------------------------------------------------------------------------
+
+        osVar1 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar1.set(osVar1.get().upper())
+
+        osVar1.trace_add('write', to_uppercase)
+
+        osVar2 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar2.set(osVar2.get().upper())
+
+        osVar2.trace_add('write', to_uppercase)
+
+        osVar3 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar3.set(osVar3.get().upper())
+
+        osVar3.trace_add('write', to_uppercase)
+
+        osVar4 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar4.set(osVar4.get().upper())
+
+        osVar4.trace_add('write', to_uppercase)
+
+        # --------------------------------------------------------------------------------------
+
         produto_selecionado = self.tree_est_prod.focus()
         dado_prod = self.tree_est_prod.item(produto_selecionado, 'values')
         produto_dados = produto_repositorio.ProdutoRepositorio().listar_produto_id(dado_prod[9], sessao)
@@ -4776,7 +5308,8 @@ class Castelo:
         subframe_est_dados1 = Frame(frame_est_dados)
         subframe_est_dados1.pack(fill=X, padx=20, ipady=5)
         Label(subframe_est_dados1, text="Código").grid(row=0, column=0, sticky=W, pady=10)
-        id_entry = Entry(subframe_est_dados1, width=20, validate='all', validatecommand=(testa_id, '%P'))
+        id_entry = Entry(subframe_est_dados1, width=20, validate='all', validatecommand=(testa_id, '%P'),
+                         textvariable=osVar1)
         id_entry.insert(0, produto_dados.id_fabr)
         id_entry.grid(row=0, column=1, sticky=W, padx=20)
         Label(subframe_est_dados1, width=20).grid(row=0, column=2)
@@ -4784,11 +5317,11 @@ class Castelo:
         # id_fabrica_entry = Entry(subframe_est_dados1, width=20)
         # id_fabrica_entry.grid(row=0, column=4, sticky=W, padx=20)
         Label(subframe_est_dados1, text="Descrição").grid(row=1, column=0, sticky=W)
-        descricao_entry = Entry(subframe_est_dados1, width=87)
+        descricao_entry = Entry(subframe_est_dados1, width=87, textvariable=osVar2)
         descricao_entry.insert(0, produto_dados.descricao)
         descricao_entry.grid(row=1, column=1, columnspan=4, sticky=W, padx=20)
         Label(subframe_est_dados1, text="Utilizado em:").grid(row=2, column=0, sticky=W, pady=10)
-        utilizado_entry = Entry(subframe_est_dados1, width=87)
+        utilizado_entry = Entry(subframe_est_dados1, width=87, textvariable=osVar3)
         utilizado_entry.insert(0, produto_dados.utilizado)
         utilizado_entry.grid(row=2, column=1, columnspan=4, sticky=W, padx=20)
         Label(subframe_est_dados1, text="Categoria").grid(row=3, column=0, sticky=W)
@@ -4804,7 +5337,7 @@ class Castelo:
         option_revendedor.current()
         option_revendedor.grid(row=5, column=4, sticky=W, padx=20)
         Label(subframe_est_dados1, text="Localização").grid(row=5, column=0, sticky=W)
-        localizacao_entry = Entry(subframe_est_dados1, width=20)
+        localizacao_entry = Entry(subframe_est_dados1, width=20, textvariable=osVar4)
         localizacao_entry.insert(0, produto_dados.localizacao)
         localizacao_entry.grid(row=5, column=1, sticky=W, padx=20)
         Label(subframe_est_dados1, width=20, relief=SUNKEN, height=7).grid(row=0, column=5, rowspan=5, sticky=N,
@@ -4847,6 +5380,12 @@ class Castelo:
         obs_criar_prod = Text(subframe_est_dados1, relief=SUNKEN, height=5, width=67)
         obs_criar_prod.insert('end', produto_dados.obs)
         obs_criar_prod.grid(row=14, column=1, sticky=W, columnspan=5, padx=20, pady=10)
+
+        def get_stringvar(event):
+            obs_criar_prod.replace("1.0", END, obs_criar_prod.get("1.0", END).upper())
+
+        obs_criar_prod.bind("<KeyRelease>", get_stringvar)
+
         jan.transient(root2)
         jan.focus_force()
         jan.grab_set()
@@ -4928,6 +5467,73 @@ class Castelo:
         self.est_valor_total_add = 0
 
         repositorio = produto_repositorio.ProdutoRepositorio()
+
+        # --------------------------------------------------------------------------------------
+
+        osVar1 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar1.set(osVar1.get().upper())
+
+        osVar1.trace_add('write', to_uppercase)
+
+        osVar2 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar2.set(osVar2.get().upper())
+
+        osVar2.trace_add('write', to_uppercase)
+
+        osVar3 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar3.set(osVar3.get().upper())
+
+        osVar3.trace_add('write', to_uppercase)
+
+        osVar4 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar4.set(osVar4.get().upper())
+
+        osVar4.trace_add('write', to_uppercase)
+
+        osVar5 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar5.set(osVar5.get().upper())
+
+        osVar5.trace_add('write', to_uppercase)
+
+        osVar6 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar6.set(osVar6.get().upper())
+
+        osVar6.trace_add('write', to_uppercase)
+
+        osVar7 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar7.set(osVar7.get().upper())
+
+        osVar7.trace_add('write', to_uppercase)
+
+        osVar8 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar8.set(osVar8.get().upper())
+
+        osVar8.trace_add('write', to_uppercase)
+
+        osVar9 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar9.set(osVar9.get().upper())
+
+        osVar9.trace_add('write', to_uppercase)
+
+        # --------------------------------------------------------------------------------------
 
         def popularEntradaProdutoVenda(id_prod):
             repositorio = produto_repositorio.ProdutoRepositorio()
@@ -5112,7 +5718,7 @@ class Castelo:
         subframe_fornecedor = Frame(frame_princ1)
         subframe_fornecedor.pack(fill=X)
         Label(subframe_fornecedor, text='Fornecedor').grid(row=0, column=0, sticky=W)
-        self.est_fornec = Entry(subframe_fornecedor, width=150)
+        self.est_fornec = Entry(subframe_fornecedor, width=150, textvariable=osVar1)
         self.est_fornec.grid(row=1, column=0, sticky=W)
         self.est_busca_forn = Button(subframe_fornecedor, text='Buscar',
                                      command=lambda: [self.janelaBuscaFornecedor(3)])
@@ -5126,11 +5732,11 @@ class Castelo:
         frame_prod = LabelFrame(subframe_prod)
         frame_prod.grid(row=0, column=0, sticky=W, ipady=3)
         Label(frame_prod, text='Cód. do item').grid(sticky=W, padx=10)
-        self.est_cod_item = Entry(frame_prod, width=15)
+        self.est_cod_item = Entry(frame_prod, width=15, textvariable=osVar2)
         self.est_cod_item.config(state=DISABLED)
         self.est_cod_item.grid(row=1, column=0, sticky=W, padx=10)
         Label(frame_prod, text='Descrição do item').grid(row=0, column=1, sticky=W)
-        self.est_desc_item = Entry(frame_prod, width=90)
+        self.est_desc_item = Entry(frame_prod, width=90, textvariable=osVar3)
         self.est_desc_item.config(state=DISABLED)
         self.est_desc_item.grid(row=1, column=1, sticky=W)
         Label(frame_prod, text='Preço Unit.').grid(row=0, column=2, sticky=W, padx=10)
@@ -5181,13 +5787,13 @@ class Castelo:
         Label(subframe_form_pag1, text="Descrição", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=0,
                                                                                                          column=0,
                                                                                                          padx=5)
-        self.desc_prod_est = Entry(subframe_form_pag1, width=18, justify=RIGHT, state=DISABLED)
+        self.desc_prod_est = Entry(subframe_form_pag1, width=18, justify=RIGHT, state=DISABLED, textvariable=osVar4)
         self.desc_prod_est.grid(row=0, column=1, padx=5)
         Label(subframe_form_pag1, text="Categoria", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=1,
                                                                                                          column=0,
                                                                                                          padx=5,
                                                                                                          pady=5)
-        self.categoria_prod_est = Entry(subframe_form_pag1, width=18, justify=RIGHT, state=DISABLED)
+        self.categoria_prod_est = Entry(subframe_form_pag1, width=18, justify=RIGHT, state=DISABLED, textvariable=osVar5)
         self.categoria_prod_est.grid(row=1, column=1, padx=5)
         Label(subframe_form_pag1, text="Estoque Atual", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=2,
                                                                                                              column=0,
@@ -5210,7 +5816,7 @@ class Castelo:
                                                                                                           column=0,
                                                                                                           padx=5,
                                                                                                           pady=5)
-        self.revend_prod_est = Entry(subframe_form_pag1, width=18, justify=RIGHT, state=DISABLED)
+        self.revend_prod_est = Entry(subframe_form_pag1, width=18, justify=RIGHT, state=DISABLED, textvariable=osVar6)
         self.revend_prod_est.grid(row=5, column=1, padx=5)
         subframe_form_pag2 = Frame(labelframe_form_pag)
         subframe_form_pag2.pack(padx=10, fill=X, side=LEFT)
@@ -5229,11 +5835,11 @@ class Castelo:
 
         labelframe_pag_coment = LabelFrame(subframe_prod1, text="Observações")
         labelframe_pag_coment.grid(row=1, column=0, sticky=W)
-        self.est_obs1 = Entry(labelframe_pag_coment, width=108)
+        self.est_obs1 = Entry(labelframe_pag_coment, width=108, textvariable=osVar7)
         self.est_obs1.pack(padx=5, pady=5)
-        self.est_obs2 = Entry(labelframe_pag_coment, width=108)
+        self.est_obs2 = Entry(labelframe_pag_coment, width=108, textvariable=osVar8)
         self.est_obs2.pack(padx=5)
-        self.est_obs3 = Entry(labelframe_pag_coment, width=108)
+        self.est_obs3 = Entry(labelframe_pag_coment, width=108, textvariable=osVar9)
         self.est_obs3.pack(pady=5, padx=5)
 
         labelframe_desc_vend = LabelFrame(subframe_prod1)
@@ -5516,6 +6122,52 @@ class Castelo:
         self.lista_produto_venda = []
         self.venda_valor_total_add = 0
 
+        # --------------------------------------------------------------------------------------
+
+        osVar1 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar1.set(osVar1.get().upper())
+
+        osVar1.trace_add('write', to_uppercase)
+
+        osVar2 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar2.set(osVar2.get().upper())
+
+        osVar2.trace_add('write', to_uppercase)
+
+        osVar3 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar3.set(osVar3.get().upper())
+
+        osVar3.trace_add('write', to_uppercase)
+
+        osVar4 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar4.set(osVar4.get().upper())
+
+        osVar4.trace_add('write', to_uppercase)
+
+        osVar5 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar5.set(osVar5.get().upper())
+
+        osVar5.trace_add('write', to_uppercase)
+
+        osVar6 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar6.set(osVar6.get().upper())
+
+        osVar6.trace_add('write', to_uppercase)
+
+        # --------------------------------------------------------------------------------------
+
         repositorio = produto_repositorio.ProdutoRepositorio()
 
         def atualizarValorFinalDesc(event):
@@ -5635,7 +6287,7 @@ class Castelo:
         subframe_cliente = Frame(frame_princ1)
         subframe_cliente.pack(fill=X)
         Label(subframe_cliente, text='Cliente').grid(row=0, column=0, sticky=W)
-        self.venda_cliente = Entry(subframe_cliente, width=150)
+        self.venda_cliente = Entry(subframe_cliente, width=150, textvariable=osVar1)
         self.venda_cliente.grid(row=1, column=0, sticky=W)
         self.venda_button_busca_cliente = Button(subframe_cliente, text='Buscar', command=self.janelaBuscaCliente)
         self.venda_button_busca_cliente.grid(row=1, column=1, padx=10, ipadx=10)
@@ -5648,11 +6300,11 @@ class Castelo:
         frame_prod = LabelFrame(subframe_prod)
         frame_prod.grid(row=0, column=0, sticky=W, ipady=3)
         Label(frame_prod, text='Cód. do item').grid(sticky=W, padx=10)
-        self.venda_cod_item = Entry(frame_prod, width=15)
+        self.venda_cod_item = Entry(frame_prod, width=15, textvariable=osVar2)
         self.venda_cod_item.config(state=DISABLED)
         self.venda_cod_item.grid(row=1, column=0, sticky=W, padx=10)
         Label(frame_prod, text='Descrição do item').grid(row=0, column=1, sticky=W)
-        self.venda_descr_item = Entry(frame_prod, width=90)
+        self.venda_descr_item = Entry(frame_prod, width=90, textvariable=osVar3)
         self.venda_descr_item.config(state=DISABLED)
         self.venda_descr_item.grid(row=1, column=1, sticky=W)
         Label(frame_prod, text='Preço Unit.').grid(row=0, column=2, sticky=W, padx=10)
@@ -5747,11 +6399,11 @@ class Castelo:
 
         labelframe_pag_coment = LabelFrame(subframe_prod1, text="Observações de Pagamento")
         labelframe_pag_coment.grid(row=1, column=0, sticky=W)
-        self.venda_obs1 = Entry(labelframe_pag_coment, width=108)
+        self.venda_obs1 = Entry(labelframe_pag_coment, width=108, textvariable=osVar4)
         self.venda_obs1.pack(padx=5, pady=5)
-        self.venda_obs2 = Entry(labelframe_pag_coment, width=108)
+        self.venda_obs2 = Entry(labelframe_pag_coment, width=108, textvariable=osVar5)
         self.venda_obs2.pack(padx=5)
-        self.venda_obs3 = Entry(labelframe_pag_coment, width=108)
+        self.venda_obs3 = Entry(labelframe_pag_coment, width=108, textvariable=osVar6)
         self.venda_obs3.pack(pady=5, padx=5)
 
         labelframe_desc_vend = LabelFrame(subframe_prod1)
@@ -6374,6 +7026,17 @@ class Castelo:
         y_cordinate = int((self.h / 2) - (900 / 2))
         jan.geometry("{}x{}+{}+{}".format(890, 550, x_cordinate, y_cordinate))
 
+        # --------------------------------------------------------------------------------------
+
+        osVar1 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar1.set(osVar1.get().upper())
+
+        osVar1.trace_add('write', to_uppercase)
+
+        # --------------------------------------------------------------------------------------
+
         def popularEntradaBuscaCliente():
             treeview_busca_cliente.delete(*treeview_busca_cliente.get_children())
             repositorio = cliente_repositorio.ClienteRepositorio()
@@ -6445,7 +7108,7 @@ class Castelo:
 
         frame_prod = LabelFrame(subframe2, text='Digite um Nome para Pesquisar')
         frame_prod.grid(row=0, column=0, sticky=W, ipady=3)
-        Entry(frame_prod, width=90).grid(row=0, column=0, sticky=W, padx=10)
+        Entry(frame_prod, width=90, textvariable=osVar1).grid(row=0, column=0, sticky=W, padx=10)
         Button(frame_prod, text='1', height=2, command=popularEntradaBuscaCliente).grid(row=0, column=1, padx=10,
                                                                                         ipadx=15)
         Button(subframe2, text='Fechar', command=jan.destroy).grid(row=0, column=1, padx=15, ipadx=20,
@@ -6470,6 +7133,16 @@ class Castelo:
 
         frame_principal = Frame(self.fornec)
         frame_principal.pack(pady=10, fill=BOTH)
+        # --------------------------------------------------------------------------------------
+
+        osVar1 = StringVar(self.fornec)
+
+        def to_uppercase(*args):
+            osVar1.set(osVar1.get().upper())
+
+        osVar1.trace_add('write', to_uppercase)
+
+        # --------------------------------------------------------------------------------------
 
         subframe1 = Frame(frame_principal)
         subframe1.pack(fill=X)
@@ -6511,7 +7184,7 @@ class Castelo:
 
         frame_prod = LabelFrame(subframe2, text='Digite um Nome para Pesquisar')
         frame_prod.grid(row=0, column=0, sticky=W, ipady=3)
-        pesq_nome = Entry(frame_prod, width=90)
+        pesq_nome = Entry(frame_prod, width=90, textvariable=osVar1)
         pesq_nome.grid(row=0, column=0, sticky=W, padx=10)
         Button(frame_prod, text='1', height=2).grid(row=0, column=1, padx=10, ipadx=15)
         Button(subframe2, text='Novo', command=lambda: [self.janelaCadastroFornecedor(1)]).grid(row=0, column=1,

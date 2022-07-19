@@ -379,3 +379,10 @@ def popularPesquisaCliente(self):
     global radio_loc_text_os
     radio_loc_text_os = IntVar()
     radio_loc_text_os.set("1")
+
+osVar = StringVar(master)
+
+        def to_uppercase(*args):
+            osVar.set(osVar.get().upper())
+
+        osVar.trace_add('write', to_uppercase)
