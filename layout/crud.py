@@ -798,6 +798,8 @@ class Castelo:
         if children:
             self.tree_ap_entr.focus(children[-1])
             self.tree_ap_entr.selection_set(children[-1])
+        os_selecionada = self.tree_ap_entr.focus()
+        self.dado_os_entr = self.tree_ap_entr.item(os_selecionada, "values")
 
         self.label_pesquisa_entr = LabelFrame(self.subframe_ap_entr2, text="Digite um Nome para Pesquisar",
                                               bg="#F2E8B3")
@@ -825,14 +827,21 @@ class Castelo:
         Button(self.label_botoes_ap_entr, text="2", width=5, command=self.janelaLocalizarOsEntregue).pack(side=LEFT,
                                                                                                           ipady=7,
                                                                                                           padx=5)
-        Button(self.label_botoes_ap_entr, text="3", width=5, command=self.janelaAbrirOsEntregue).pack(side=LEFT,
-                                                                                                      ipady=7, padx=5)
+        Button(self.label_botoes_ap_entr, text="3", width=5,
+               command=lambda: [self.janelaAbrirOsEntregue(self.dado_os_entr[0])]).pack(side=LEFT,
+                                                                                        ipady=7, padx=5)
         Button(self.label_botoes_ap_entr, text="4", width=5, command=self.frame_ap_entregue.forget).pack(side=LEFT,
                                                                                                          ipady=7,
                                                                                                          padx=5)
 
         def abreApEntrBind(event):
-            self.janelaAbrirOsEntregue()
+            os_selecionada = self.tree_ap_entr.focus()
+            self.dado_os_entr = self.tree_ap_entr.item(os_selecionada, "values")
+            self.janelaAbrirOsEntregue(self.dado_os_entr[0])
+
+        def selecionaOS(event):
+            os_selecionada = self.tree_ap_entr.focus()
+            self.dado_os_entr = self.tree_ap_entr.item(os_selecionada, "values")
 
         def pesquisaOsEntregue(event):
             self.popularOsEntregueOrdenado(self.variable_int_os_entr.get())
@@ -840,6 +849,8 @@ class Castelo:
         self.entr_pesq_entr.bind('<Return>', pesquisaOsEntregue)
 
         self.tree_ap_entr.bind('<Double-1>', abreApEntrBind)
+
+        self.tree_ap_entr.bind('<ButtonRelease-1>', selecionaOS)
 
         # ------------------------------- Janela Estoque Peças e Máquinas ----------------------------------------------
         osVarEst1 = StringVar(master)
@@ -1292,7 +1303,7 @@ class Castelo:
         self.cad_cli_whats = Entry(self.contato_frame, width=25, )
         self.cad_cli_whats.grid(row=3, column=1, padx=10)
         Label(self.jan, text="Email:").grid(row=9, column=0, sticky=W, padx=10)
-        self.cad_cli_email = Entry(self.jan, width=40, textvariable=osVar7 )
+        self.cad_cli_email = Entry(self.jan, width=40, textvariable=osVar7)
         self.cad_cli_email.grid(row=10, column=0, sticky=W, padx=10, columnspan=2)
         Label(self.jan, text="Operador:").grid(row=11, column=1, sticky=W, padx=10)
         self.cad_cli_oper = Entry(self.jan, width=20, validate='all',
@@ -1353,6 +1364,16 @@ class Castelo:
         if children:
             self.tree_cliente.focus(children[0])
             self.tree_cliente.selection_set(children[0])
+
+    def popularPesquisaId(self, id):
+        self.tree_cliente.delete(*self.tree_cliente.get_children())
+        repositorio = cliente_repositorio.ClienteRepositorio()
+        cliente = repositorio.listar_cliente_id(id, sessao)
+        self.tree_cliente.insert("", "end", values=(cliente.id, cliente.nome, cliente.whats),
+                                 tags=('oddrow',))
+        children = self.tree_cliente.get_children()
+        self.tree_cliente.focus(children[0])
+        self.tree_cliente.selection_set(children[0])
 
     def popularPesquisaLocaliza(self, tipo, jan):
 
@@ -1780,9 +1801,7 @@ class Castelo:
         y_cordinate = int((self.h / 2) - (520 / 2))
         jan.geometry("{}x{}+{}+{}".format(700, 520, x_cordinate, y_cordinate))
 
-        #--------------------------------------------------------------------------------------
-
-
+        # --------------------------------------------------------------------------------------
 
         osVar1 = StringVar(jan)
 
@@ -1791,14 +1810,12 @@ class Castelo:
 
         osVar1.trace_add('write', to_uppercase)
 
-
         osVar2 = StringVar(jan)
 
         def to_uppercase(*args):
             osVar2.set(osVar2.get().upper())
 
         osVar2.trace_add('write', to_uppercase)
-
 
         osVar3 = StringVar(jan)
 
@@ -1807,7 +1824,6 @@ class Castelo:
 
         osVar3.trace_add('write', to_uppercase)
 
-
         osVar4 = StringVar(jan)
 
         def to_uppercase(*args):
@@ -1815,14 +1831,12 @@ class Castelo:
 
         osVar4.trace_add('write', to_uppercase)
 
-
         osVar5 = StringVar(jan)
 
         def to_uppercase(*args):
             osVar5.set(osVar5.get().upper())
 
         osVar5.trace_add('write', to_uppercase)
-
 
         osVar6 = StringVar(jan)
 
@@ -1838,8 +1852,7 @@ class Castelo:
 
         osVar7.trace_add('write', to_uppercase)
 
-
-        #--------------------------------------------------------------------------------------
+        # --------------------------------------------------------------------------------------
 
         cliente_selecionado = self.tree_cliente.focus()
         dado_cli = self.tree_cliente.item(cliente_selecionado, "values")
@@ -2308,14 +2321,12 @@ class Castelo:
 
         osVar4.trace_add('write', to_uppercase)
 
-
         osVar5 = StringVar(jan)
 
         def to_uppercase(*args):
             osVar5.set(osVar5.get().upper())
 
         osVar5.trace_add('write', to_uppercase)
-
 
         osVar6 = StringVar(jan)
 
@@ -2324,7 +2335,6 @@ class Castelo:
 
         osVar6.trace_add('write', to_uppercase)
 
-
         osVar7 = StringVar(jan)
 
         def to_uppercase(*args):
@@ -2332,14 +2342,12 @@ class Castelo:
 
         osVar7.trace_add('write', to_uppercase)
 
-
         osVar8 = StringVar(jan)
 
         def to_uppercase(*args):
             osVar8.set(osVar8.get().upper())
 
         osVar8.trace_add('write', to_uppercase)
-
 
         osVar9 = StringVar(jan)
 
@@ -2365,6 +2373,160 @@ class Castelo:
         testa_tensao = jan.register(self.testaEntradaNumTensao)
         testa_nf = jan.register(self.testaEntradaNumCep)
         testa_garantia = jan.register(self.testaEntradaNumGarantiaCPL)
+
+        def manAnteriores():
+
+            repositorio = os_saida_repositorio.OsSaidaRepositorio()
+            oss = repositorio.listar_os_cli_id(cliente_os_atual.id, sessao)
+            if len(oss)== 0:
+                messagebox.showinfo(title="ERRO", message="Cliente não possui manutenção anteriores ainda!")
+
+            else:
+                jan1 = Toplevel()
+
+                # Centraliza a janela
+                x_cordinate = int((self.w / 2) - (1200 / 2))
+                y_cordinate = int((self.h / 2) - (520 / 2))
+                jan1.geometry("{}x{}+{}+{}".format(1200, 520, x_cordinate, y_cordinate))
+
+                osVarEntr = StringVar(jan1)
+
+                def to_uppercase(*args):
+                    osVarEntr.set(osVarEntr.get().upper())
+
+                osVarEntr.trace_add('write', to_uppercase)
+
+                frame_ap_entregue = Frame(jan1)
+                frame_ap_entregue.pack(fill=BOTH)
+
+                subframe_ap_entr1 = Frame(frame_ap_entregue)
+                subframe_ap_entr1.pack(fill=BOTH)
+                subframe_ap_entr2 = Frame(frame_ap_entregue, bg="#F2E8B3")
+                subframe_ap_entr2.pack(fill=X, side=BOTTOM)
+
+                scrollbar_entr_v = Scrollbar(subframe_ap_entr1, orient=VERTICAL)  # Scrollbar da treeview vert
+                scrollbar_entr_h = Scrollbar(subframe_ap_entr1, orient=HORIZONTAL)  # Scrollbar da treeview horiz
+
+                tree_ap_entr = ttk.Treeview(subframe_ap_entr1,
+                                            columns=('os', 'saida', 'cliente', 'aparelho', 'marca', 'modelo', 'tipo',
+                                                     'status', 'dias', 'valor', 'tecnico', 'operador', 'defeito',
+                                                     'num_serie', 'chassis', 'data_orc', 'data_entrad', 'hora',
+                                                     'id_cliente'),
+                                            show='headings',
+                                            xscrollcommand=scrollbar_entr_h.set,
+                                            yscrollcommand=scrollbar_entr_v.set,
+                                            selectmode='browse',
+                                            height=20)  # TreeView listagem de aparelhos em manutençãp
+
+                tree_ap_entr.column('os', width=100, minwidth=100, stretch=False, anchor=CENTER)
+                tree_ap_entr.column('saida', width=100, minwidth=10, stretch=False, anchor=CENTER)
+                tree_ap_entr.column('cliente', width=200, minwidth=10, stretch=False)
+                tree_ap_entr.column('aparelho', width=150, minwidth=10, stretch=False)
+                tree_ap_entr.column('marca', width=100, minwidth=10, stretch=False, anchor=CENTER)
+                tree_ap_entr.column('modelo', width=100, minwidth=10, stretch=False, anchor=CENTER)
+                tree_ap_entr.column('tipo', width=100, minwidth=10, stretch=False)
+                tree_ap_entr.column('status', width=100, minwidth=10, stretch=False)
+                tree_ap_entr.column('dias', width=100, minwidth=10, stretch=False, anchor=CENTER)
+                tree_ap_entr.column('valor', width=100, minwidth=10, stretch=False, anchor=CENTER)
+                tree_ap_entr.column('tecnico', width=100, minwidth=10, stretch=False, anchor=CENTER)
+                tree_ap_entr.column('operador', width=100, minwidth=10, stretch=False)
+                tree_ap_entr.column('defeito', width=100, minwidth=10, stretch=False)
+                tree_ap_entr.column('num_serie', width=100, minwidth=10, stretch=False)
+                tree_ap_entr.column('chassis', width=100, minwidth=10, stretch=False)
+                tree_ap_entr.column('data_orc', width=100, minwidth=10, stretch=False, anchor=CENTER)
+                tree_ap_entr.column('data_entrad', width=100, minwidth=10, stretch=False, anchor=CENTER)
+                tree_ap_entr.column('hora', width=100, minwidth=10, stretch=False, anchor=CENTER)
+                tree_ap_entr.column('id_cliente', width=100, minwidth=10, stretch=False, anchor=CENTER)
+
+                tree_ap_entr.heading('#0', text='', anchor=CENTER)
+                tree_ap_entr.heading('os', text='OS')
+                tree_ap_entr.heading('saida', text='SAÍDA')
+                tree_ap_entr.heading('cliente', text='CLIENTE')
+                tree_ap_entr.heading('aparelho', text='APARELHO')
+                tree_ap_entr.heading('marca', text='MARCA')
+                tree_ap_entr.heading('modelo', text='MODELO')
+                tree_ap_entr.heading('tipo', text='TIPO')
+                tree_ap_entr.heading('status', text='STATUS')
+                tree_ap_entr.heading('dias', text='DIAS')
+                tree_ap_entr.heading('valor', text='VALOR')
+                tree_ap_entr.heading('tecnico', text='TECNICO')
+                tree_ap_entr.heading('operador', text='OPERADOR')
+                tree_ap_entr.heading('defeito', text='DEFEITO')
+                tree_ap_entr.heading('num_serie', text='NUM SERIE')
+                tree_ap_entr.heading('chassis', text='CHASSI')
+                tree_ap_entr.heading('data_orc', text='DATA ORÇAMENTO')
+                tree_ap_entr.heading('data_entrad', text='DATA ENTRADA')
+                tree_ap_entr.heading('hora', text='HORA')
+                tree_ap_entr.heading('id_cliente', text='ID CLIENTE')
+
+                scrollbar_entr_v.config(command=tree_ap_entr.yview)
+                scrollbar_entr_v.pack(fill=Y, side=RIGHT)
+                tree_ap_entr.pack()
+                scrollbar_entr_h.config(command=tree_ap_entr.xview)
+                scrollbar_entr_h.pack(fill=X)
+
+                self.popularOsEntregueButton(tree_ap_entr, cliente_os_atual.id)
+
+                tree_ap_entr.tag_configure('oddrow', background='#ffffe1')
+                tree_ap_entr.tag_configure('evenrow', background='#F2E8B3')
+
+                tree_ap_entr.focus_set()
+                children = tree_ap_entr.get_children()
+                if children:
+                    tree_ap_entr.focus(children[-1])
+                    tree_ap_entr.selection_set(children[-1])
+                os_selecionada = tree_ap_entr.focus()
+                self.dado_os_entr1 = tree_ap_entr.item(os_selecionada, "values")
+
+
+                label_pesquisa_entr = LabelFrame(subframe_ap_entr2, text="Digite um Nome para Pesquisar",
+                                                 bg="#F2E8B3")
+                label_pesquisa_entr.pack(side=LEFT, padx=10, pady=5)
+                variable_int_os_entr = IntVar()
+                entr_pesq_entr = Entry(label_pesquisa_entr, relief=SUNKEN, width=35, textvariable=osVarEntr, state=DISABLED)
+                entr_pesq_entr.pack(side=LEFT, padx=5)
+                botao_pesqu_entr = Button(label_pesquisa_entr, text="C", width=5, command=self.popularOsEntregue,
+                                          state=DISABLED)
+                botao_pesqu_entr.pack(side=RIGHT, padx=5, ipady=5, pady=2)
+                check_pesq_avan_os_ent = Checkbutton(label_pesquisa_entr, text='Busca Avançada',
+                                                     variable=self.variable_int_os_entr, onvalue=1, offvalue=0,
+                                                     bg="#F2E8B3", state=DISABLED)
+                check_pesq_avan_os_ent.pack(side=RIGHT, padx=5, pady=2)
+
+                label_n_aparelhos_entr = LabelFrame(subframe_ap_entr2, text="N Aparelhos", bg="#F2E8B3")
+                label_n_aparelhos_entr.pack(side=LEFT, padx=20, pady=5, ipadx=5)
+                widget1_n_aparelhos_entr = Label(label_n_aparelhos_entr, text="1", bg="#F2E8B3")
+                widget1_n_aparelhos_entr.pack(side=LEFT, padx=5, pady=10)
+                widget2_n_aparelhos_entr = Label(label_n_aparelhos_entr, text="Aparelhos", bg="#F2E8B3")
+                widget2_n_aparelhos_entr.pack(side=RIGHT, padx=5)
+
+                label_botoes_ap_entr = Label(subframe_ap_entr2, bg="#F2E8B3")
+                label_botoes_ap_entr.pack(side=LEFT, pady=5, padx=50)
+                Button(label_botoes_ap_entr, text="1", width=5, state=DISABLED).pack(side=LEFT, ipady=7, padx=5)
+                Button(label_botoes_ap_entr, text="2", width=5, command=self.janelaLocalizarOsEntregue,
+                       state=DISABLED).pack(side=LEFT, ipady=7, padx=5)
+                Button(label_botoes_ap_entr, text="3", width=5,
+                       command=lambda: [self.janelaAbrirOsEntregue(self.dado_os_entr1[0])]).pack(side=LEFT,
+                                                                                                 ipady=7,
+                                                                                                 padx=5)
+                Button(label_botoes_ap_entr, text="4", width=5, command=jan1.destroy).pack(side=LEFT, ipady=7, padx=5)
+
+                def abreApEntrBind(event):
+                    os_selecionada = tree_ap_entr.focus()
+                    self.dado_os_entr1 = tree_ap_entr.item(os_selecionada, "values")
+                    self.janelaAbrirOsEntregue(self.dado_os_entr1[0])
+
+                def selecionaOS(event):
+                    os_selecionada = tree_ap_entr.focus()
+                    self.dado_os_entr1 = tree_ap_entr.item(os_selecionada, "values")
+
+                tree_ap_entr.bind('<Double-1>', abreApEntrBind)
+
+                tree_ap_entr.bind('<ButtonRelease-1>', selecionaOS)
+
+                jan1.transient(root2)
+                jan1.focus_force()
+                jan1.grab_set()
 
         def seleciona_status(num):
             if num == 1:
@@ -2419,6 +2581,9 @@ class Castelo:
             self.jan_os_marca.configure(validate='none', fg='red')
             self.jan_os_modelo.configure(validate='none', fg='red')
             self.jan_os_chassi.configure(validate='none', fg='red')
+            self.jan_os_defeito.configure(validate='none', fg='red')
+            self.jan_os_estado_aparelho.configure(validate='none', fg='red')
+            self.jan_os_acessorios.configure(validate='none', fg='red')
             self.jan_os_numSerie.configure(validate='none', fg='red')
             self.jan_os_loja.configure(validate='none', fg='red')
             self.jan_os_data_compra.configure(validate='none', fg='red')
@@ -2434,6 +2599,9 @@ class Castelo:
             self.jan_os_modelo.configure(validate='all', fg='#000')
             self.jan_os_chassi.configure(validate='all', fg='#000')
             self.jan_os_numSerie.configure(validate='all', fg='#000')
+            self.jan_os_defeito.configure(validate='all', fg='#000')
+            self.jan_os_acessorios.configure(validate='all', fg='#000')
+            self.jan_os_estado_aparelho.configure(validate='all', fg='#000')
             self.jan_os_loja.configure(validate='all', fg='#000')
             self.jan_os_data_compra.configure(validate='all', fg='#000')
             self.jan_os_garantia_compl.configure(validatecommand=(impede_escrita, '%P'), fg='#000')
@@ -2517,7 +2685,8 @@ class Castelo:
         ap_cidade_os.config(validate='all', validatecommand=(impede_escrita, '%P'))
         frame_sub_dc1 = Frame(frame_sub_dc, bg=color_frame)
         frame_sub_dc1.grid(row=0, column=2, rowspan=3, sticky=S, ipadx=13)
-        Button(frame_sub_dc1, text="1", width=7).pack(ipady=8, side=RIGHT)
+        Button(frame_sub_dc1, text="1", width=7,
+               command=lambda: [abreCliente(cliente_os_atual.id), jan.destroy()]).pack(ipady=8, side=RIGHT)
 
         Label(sub_frame_dc_os2, text="Tel.Res.",
               font=font_dados1, bg=color_frame).grid(row=0, column=0, sticky=W)
@@ -2650,18 +2819,21 @@ class Castelo:
         frame_dadosapare_os3 = Frame(labelframe_dadosapare_os, bg=color_frame)
         frame_dadosapare_os3.pack(fill=X, padx=10)
         Label(frame_dadosapare_os3, text="Defeito Reclamado", bg=color_frame).grid(row=0, column=0, sticky=W)
-        self.jan_os_defeito = Entry(frame_dadosapare_os3, width=54, fg='green', font=('', '9', 'bold'),
+        self.jan_os_defeito = Entry(frame_dadosapare_os3, width=54, font=('', '9', 'bold'),
                                     textvariable=osVar6)
         self.jan_os_defeito.insert(0, os_dados.defeito)
         self.jan_os_defeito.grid(row=0, column=1)
+        self.jan_os_defeito.config(validate='all', validatecommand=(impede_escrita, '%P'))
         Label(frame_dadosapare_os3, text="Estado do Aparelho", bg=color_frame).grid(row=1, column=0, sticky=W)
         self.jan_os_estado_aparelho = Entry(frame_dadosapare_os3, width=54, font=('', '9', 'bold'), textvariable=osVar7)
         self.jan_os_estado_aparelho.insert(0, os_dados.estado_aparelho)
         self.jan_os_estado_aparelho.grid(row=1, column=1)
+        self.jan_os_estado_aparelho.config(validate='all', validatecommand=(impede_escrita, '%P'))
         Label(frame_dadosapare_os3, text="Acessórios", bg=color_frame).grid(row=2, column=0, sticky=W)
         self.jan_os_acessorios = Entry(frame_dadosapare_os3, width=54, font=('', '9', 'bold'), textvariable=osVar8)
         self.jan_os_acessorios.insert(0, os_dados.acessorios)
         self.jan_os_acessorios.grid(row=2, column=1, sticky=W)
+        self.jan_os_acessorios.config(validate='all', validatecommand=(impede_escrita, '%P'))
 
         labelframe_garantia = LabelFrame(frame_princ_jan_os, text="Garantia de Fábrica", fg=self.color_fg_label,
                                          bg=color_frame)
@@ -2717,12 +2889,12 @@ class Castelo:
         frame_andamento_os.pack(padx=8, pady=8)
         scroll_andamento_os = Scrollbar(frame_andamento_os)
         scroll_andamento_os.pack(side=RIGHT, fill=Y)
-        text_andamento_os = Text(frame_andamento_os, relief=SUNKEN, yscrollcommand=scroll_andamento_os)
+        text_andamento_os = Text(frame_andamento_os, relief=SUNKEN, yscrollcommand=scroll_andamento_os, bg='#ffe0c0')
         text_andamento_os.insert(END, os_dados.andamento)
         text_andamento_os.pack(side=LEFT)
         scroll_andamento_os.config(command=text_andamento_os.yview)
 
-        #----------------------------------------------------------
+        # ----------------------------------------------------------
         def get_stringvar1(event):
             text_prob_os.replace("1.0", END, text_prob_os.get("1.0", END).upper())
 
@@ -2732,7 +2904,7 @@ class Castelo:
             text_andamento_os.replace("1.0", END, text_andamento_os.get("1.0", END).upper())
 
         text_andamento_os.bind("<KeyRelease>", get_stringvar)
-        #------------------------------------------------------------
+        # ------------------------------------------------------------
 
         self.list_status_os = Listbox(labelframe_os_status, bg="#ffe0c0")
         self.list_status_os.insert(1, "EM ANDAMENTO")
@@ -2762,7 +2934,7 @@ class Castelo:
         Button(frame_tecnico_os, text="Salvar").grid(row=1, column=0, pady=20, ipadx=10)
 
         Button(frame_os_final, width=10, text="Manutenções Anteriores",
-               wraplength=80).grid(row=0, column=1, sticky=S, padx=30, ipadx=15, pady=5)
+               wraplength=80, command=manAnteriores).grid(row=0, column=1, sticky=S, padx=30, ipadx=15, pady=5)
 
         labelframe_os_buttons = LabelFrame(frame_princ_jan_os, bg=color_frame)
         labelframe_os_buttons.grid(row=4, column=1, ipady=10)
@@ -2770,12 +2942,17 @@ class Castelo:
                              bg="#BEC7C7", command=editDados)
         edit_button.grid(row=0, column=0, ipadx=10, padx=13, pady=13)
         Button(labelframe_os_buttons, text="Orçamento", height=2, width=7,
-               bg="#BEC7C7", command=lambda: [salvaAoFechar(), self.janelaOrçamento()]).grid(row=0, column=1, ipadx=10,
-                                                                                             padx=15, pady=13)
+               bg="#BEC7C7", command=lambda: [salvaAoFechar(), self.janelaOrçamento(jan)]).grid(row=0, column=1,
+                                                                                                ipadx=10,
+                                                                                                padx=15, pady=13)
         Button(labelframe_os_buttons, text="Imprimir OS", wraplength=50, height=2, width=7,
                bg="#BEC7C7").grid(row=1, column=0, ipadx=10)
         Button(labelframe_os_buttons, text="Fechar", height=2, width=7, bg="#BEC7C7",
                command=lambda: [salvaAoFechar(), jan.destroy()]).grid(row=1, column=1, ipadx=10)
+
+        def abreCliente(id):
+            self.abrirJanelaCliente()
+            self.popularPesquisaId(id)
 
         jan.transient(root2)
         jan.focus_force()
@@ -2967,6 +3144,21 @@ class Castelo:
         cp8 = self.orc_id_entry8.get()
         cp9 = self.orc_id_entry9.get()
 
+        lista = [[qtd1, valor_uni1, self.orc_val_uni_entry1, self.orc_quant_entry1],
+                 [qtd2, valor_uni2, self.orc_val_uni_entry2, self.orc_quant_entry2],
+                 [qtd3, valor_uni3, self.orc_val_uni_entry3, self.orc_quant_entry3],
+                 [qtd4, valor_uni4, self.orc_val_uni_entry4, self.orc_quant_entry4],
+                 [qtd5, valor_uni5, self.orc_val_uni_entry5, self.orc_quant_entry5],
+                 [qtd6, valor_uni6, self.orc_val_uni_entry6, self.orc_quant_entry6],
+                 [qtd7, valor_uni7, self.orc_val_uni_entry7, self.orc_quant_entry7],
+                 [qtd8, valor_uni8, self.orc_val_uni_entry8, self.orc_quant_entry8],
+                 [qtd9, valor_uni9, self.orc_val_uni_entry9, self.orc_quant_entry9]]
+
+        for i in lista:
+            if i[0] == '' or i[1] == '':
+                i[2].delete(0, END)
+                i[3].delete(0, END)
+
         caixa_peca = [self.insereNumMultiplicado(cp1, qtd1),
                       self.insereNumMultiplicado(cp2, qtd2),
                       self.insereNumMultiplicado(cp3, qtd3),
@@ -3025,182 +3217,183 @@ class Castelo:
 
         self.orc_porcentagem_result.config(text=self.insereTotalConvertido(porcent))
 
-    def janelaOrçamento(self):
+    def janelaOrçamento(self, jan):
 
-        jan = Toplevel()
+        jan1 = Toplevel()
 
         # Centraliza a janela
         x_cordinate = int((self.w / 2) - (1000 / 2))
         y_cordinate = int((self.h / 2) - (650 / 2))
-        jan.geometry("{}x{}+{}+{}".format(1000, 650, x_cordinate, y_cordinate))
+        jan1.geometry("{}x{}+{}+{}".format(1000, 650, x_cordinate, y_cordinate))
 
         color_entry1 = '#ffffe1'
+
         color_entry2 = '#ffff80'
 
         # --------------------------------------------------------------------------------------
 
-        osVar1 = StringVar(jan)
+        osVar1 = StringVar(jan1)
 
         def to_uppercase(*args):
             osVar1.set(osVar1.get().upper())
 
         osVar1.trace_add('write', to_uppercase)
 
-        osVar2 = StringVar(jan)
+        osVar2 = StringVar(jan1)
 
         def to_uppercase(*args):
             osVar2.set(osVar2.get().upper())
 
         osVar2.trace_add('write', to_uppercase)
 
-        osVar3 = StringVar(jan)
+        osVar3 = StringVar(jan1)
 
         def to_uppercase(*args):
             osVar3.set(osVar3.get().upper())
 
         osVar3.trace_add('write', to_uppercase)
 
-        osVar4 = StringVar(jan)
+        osVar4 = StringVar(jan1)
 
         def to_uppercase(*args):
             osVar4.set(osVar4.get().upper())
 
         osVar4.trace_add('write', to_uppercase)
 
-        osVar5 = StringVar(jan)
+        osVar5 = StringVar(jan1)
 
         def to_uppercase(*args):
             osVar5.set(osVar5.get().upper())
 
         osVar5.trace_add('write', to_uppercase)
 
-        osVar6 = StringVar(jan)
+        osVar6 = StringVar(jan1)
 
         def to_uppercase(*args):
             osVar6.set(osVar6.get().upper())
 
         osVar6.trace_add('write', to_uppercase)
 
-        osVar7 = StringVar(jan)
+        osVar7 = StringVar(jan1)
 
         def to_uppercase(*args):
             osVar7.set(osVar7.get().upper())
 
         osVar7.trace_add('write', to_uppercase)
 
-        osVar8 = StringVar(jan)
+        osVar8 = StringVar(jan1)
 
         def to_uppercase(*args):
             osVar8.set(osVar8.get().upper())
 
         osVar8.trace_add('write', to_uppercase)
 
-        osVar9 = StringVar(jan)
+        osVar9 = StringVar(jan1)
 
         def to_uppercase(*args):
             osVar9.set(osVar9.get().upper())
 
         osVar9.trace_add('write', to_uppercase)
 
-        osVar10 = StringVar(jan)
+        osVar10 = StringVar(jan1)
 
         def to_uppercase(*args):
             osVar10.set(osVar10.get().upper())
 
         osVar10.trace_add('write', to_uppercase)
 
-        osVar11 = StringVar(jan)
+        osVar11 = StringVar(jan1)
 
         def to_uppercase(*args):
             osVar11.set(osVar11.get().upper())
 
         osVar11.trace_add('write', to_uppercase)
 
-        osVar12 = StringVar(jan)
+        osVar12 = StringVar(jan1)
 
         def to_uppercase(*args):
             osVar12.set(osVar12.get().upper())
 
         osVar12.trace_add('write', to_uppercase)
 
-        osVar13 = StringVar(jan)
+        osVar13 = StringVar(jan1)
 
         def to_uppercase(*args):
             osVar13.set(osVar13.get().upper())
 
         osVar13.trace_add('write', to_uppercase)
 
-        osVar14 = StringVar(jan)
+        osVar14 = StringVar(jan1)
 
         def to_uppercase(*args):
             osVar14.set(osVar14.get().upper())
 
         osVar14.trace_add('write', to_uppercase)
 
-        osVar15 = StringVar(jan)
+        osVar15 = StringVar(jan1)
 
         def to_uppercase(*args):
             osVar15.set(osVar15.get().upper())
 
         osVar15.trace_add('write', to_uppercase)
 
-        osVar16 = StringVar(jan)
+        osVar16 = StringVar(jan1)
 
         def to_uppercase(*args):
             osVar16.set(osVar16.get().upper())
 
         osVar16.trace_add('write', to_uppercase)
 
-        osVar17 = StringVar(jan)
+        osVar17 = StringVar(jan1)
 
         def to_uppercase(*args):
             osVar17.set(osVar17.get().upper())
 
         osVar17.trace_add('write', to_uppercase)
 
-        osVar18 = StringVar(jan)
+        osVar18 = StringVar(jan1)
 
         def to_uppercase(*args):
             osVar18.set(osVar18.get().upper())
 
         osVar18.trace_add('write', to_uppercase)
 
-        osVar19 = StringVar(jan)
+        osVar19 = StringVar(jan1)
 
         def to_uppercase(*args):
             osVar19.set(osVar19.get().upper())
 
         osVar19.trace_add('write', to_uppercase)
 
-        osVar20 = StringVar(jan)
+        osVar20 = StringVar(jan1)
 
         def to_uppercase(*args):
             osVar20.set(osVar20.get().upper())
 
         osVar20.trace_add('write', to_uppercase)
 
-        osVar21 = StringVar(jan)
+        osVar21 = StringVar(jan1)
 
         def to_uppercase(*args):
             osVar21.set(osVar21.get().upper())
 
         osVar21.trace_add('write', to_uppercase)
 
-        osVar22 = StringVar(jan)
+        osVar22 = StringVar(jan1)
 
         def to_uppercase(*args):
             osVar22.set(osVar22.get().upper())
 
         osVar22.trace_add('write', to_uppercase)
 
-        osVar23 = StringVar(jan)
+        osVar23 = StringVar(jan1)
 
         def to_uppercase(*args):
             osVar23.set(osVar23.get().upper())
 
         osVar23.trace_add('write', to_uppercase)
 
-        osVar24 = StringVar(jan)
+        osVar24 = StringVar(jan1)
 
         def to_uppercase(*args):
             osVar24.set(osVar24.get().upper())
@@ -3300,7 +3493,7 @@ class Castelo:
             apagaAba9()
 
         dados_orc = os_repositorio.Os_repositorio().listar_os_id(self.num_os, sessao)
-        frame_princ_os1 = Frame(jan)
+        frame_princ_os1 = Frame(jan1)
         frame_princ_os1.pack(fill=Y, side=LEFT)
         frame_os = LabelFrame(frame_princ_os1, text='Num da Os', width=20)
         frame_os.grid(row=0, column=0, padx=10, sticky=W)
@@ -3403,7 +3596,8 @@ class Castelo:
                                    validatecommand=(testa_float, '%P'))
         self.orc_id_entry1.insert(0, self.insereNumConvertido(dados_orc.caixa_peca1))
         self.orc_id_entry1.grid(row=1, column=3)
-        self.orc_descr_entry1 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1, textvariable=osVar10)
+        self.orc_descr_entry1 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1,
+                                      textvariable=osVar10)
         self.orc_descr_entry1.insert(0, dados_orc.desc_serv1)
         self.orc_descr_entry1.grid(row=1, column=4, padx=5)
         self.orc_val_uni_entry1 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
@@ -3421,7 +3615,8 @@ class Castelo:
                                    validatecommand=(testa_float, '%P'))
         self.orc_id_entry2.insert(0, self.insereNumConvertido(dados_orc.caixa_peca2))
         self.orc_id_entry2.grid(row=2, column=3)
-        self.orc_descr_entry2 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1, textvariable=osVar11)
+        self.orc_descr_entry2 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1,
+                                      textvariable=osVar11)
         self.orc_descr_entry2.insert(0, dados_orc.desc_serv2)
         self.orc_descr_entry2.grid(row=2, column=4, padx=5)
         self.orc_val_uni_entry2 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
@@ -3439,7 +3634,8 @@ class Castelo:
                                    validatecommand=(testa_float, '%P'))
         self.orc_id_entry3.insert(0, self.insereNumConvertido(dados_orc.caixa_peca3))
         self.orc_id_entry3.grid(row=3, column=3)
-        self.orc_descr_entry3 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1, textvariable=osVar12)
+        self.orc_descr_entry3 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1,
+                                      textvariable=osVar12)
         self.orc_descr_entry3.insert(0, dados_orc.desc_serv3)
         self.orc_descr_entry3.grid(row=3, column=4, padx=5)
         self.orc_val_uni_entry3 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
@@ -3457,7 +3653,8 @@ class Castelo:
                                    validatecommand=(testa_float, '%P'))
         self.orc_id_entry4.insert(0, self.insereNumConvertido(dados_orc.caixa_peca4))
         self.orc_id_entry4.grid(row=4, column=3)
-        self.orc_descr_entry4 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1, textvariable=osVar13)
+        self.orc_descr_entry4 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1,
+                                      textvariable=osVar13)
         self.orc_descr_entry4.insert(0, dados_orc.desc_serv4)
         self.orc_descr_entry4.grid(row=4, column=4, padx=5)
         self.orc_val_uni_entry4 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
@@ -3475,7 +3672,8 @@ class Castelo:
                                    validatecommand=(testa_float, '%P'))
         self.orc_id_entry5.insert(0, self.insereNumConvertido(dados_orc.caixa_peca5))
         self.orc_id_entry5.grid(row=5, column=3)
-        self.orc_descr_entry5 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1, textvariable=osVar14)
+        self.orc_descr_entry5 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1,
+                                      textvariable=osVar14)
         self.orc_descr_entry5.insert(0, dados_orc.desc_serv5)
         self.orc_descr_entry5.grid(row=5, column=4, padx=5)
         self.orc_val_uni_entry5 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
@@ -3493,7 +3691,8 @@ class Castelo:
                                    validatecommand=(testa_float, '%P'))
         self.orc_id_entry6.insert(0, self.insereNumConvertido(dados_orc.caixa_peca6))
         self.orc_id_entry6.grid(row=6, column=3)
-        self.orc_descr_entry6 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1, textvariable=osVar15)
+        self.orc_descr_entry6 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1,
+                                      textvariable=osVar15)
         self.orc_descr_entry6.insert(0, dados_orc.desc_serv6)
         self.orc_descr_entry6.grid(row=6, column=4, padx=5)
         self.orc_val_uni_entry6 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
@@ -3511,7 +3710,8 @@ class Castelo:
                                    validatecommand=(testa_float, '%P'))
         self.orc_id_entry7.insert(0, self.insereNumConvertido(dados_orc.caixa_peca7))
         self.orc_id_entry7.grid(row=7, column=3)
-        self.orc_descr_entry7 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1, textvariable=osVar16)
+        self.orc_descr_entry7 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1,
+                                      textvariable=osVar16)
         self.orc_descr_entry7.insert(0, dados_orc.desc_serv7)
         self.orc_descr_entry7.grid(row=7, column=4, padx=5)
         self.orc_val_uni_entry7 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
@@ -3529,7 +3729,8 @@ class Castelo:
                                    validatecommand=(testa_float, '%P'))
         self.orc_id_entry8.insert(0, self.insereNumConvertido(dados_orc.caixa_peca8))
         self.orc_id_entry8.grid(row=8, column=3)
-        self.orc_descr_entry8 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1, textvariable=osVar17)
+        self.orc_descr_entry8 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1,
+                                      textvariable=osVar17)
         self.orc_descr_entry8.insert(0, dados_orc.desc_serv8)
         self.orc_descr_entry8.grid(row=8, column=4, padx=5)
         self.orc_val_uni_entry8 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
@@ -3547,7 +3748,8 @@ class Castelo:
                                    validatecommand=(testa_float, '%P'))
         self.orc_id_entry9.insert(0, self.insereNumConvertido(dados_orc.caixa_peca9))
         self.orc_id_entry9.grid(row=9, column=3)
-        self.orc_descr_entry9 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1, textvariable=osVar18)
+        self.orc_descr_entry9 = Entry(subframe_material1, width=50, relief=SUNKEN, bg=color_entry1,
+                                      textvariable=osVar18)
         self.orc_descr_entry9.insert(0, dados_orc.desc_serv9)
         self.orc_descr_entry9.grid(row=9, column=4, padx=5)
         self.orc_val_uni_entry9 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
@@ -3628,7 +3830,7 @@ class Castelo:
         self.orc_comentario3.insert(0, dados_orc.obs3)
         self.orc_comentario3.pack(pady=5)
 
-        frame_princ_os2 = Frame(jan)
+        frame_princ_os2 = Frame(jan1)
         frame_princ_os2.pack(fill=Y, side=LEFT, padx=10, pady=9)
         labelframe_mecanico_coment = LabelFrame(frame_princ_os2, text="Defeitos Encontrados")
         labelframe_mecanico_coment.pack()
@@ -3707,11 +3909,11 @@ class Castelo:
         Label(labelframe_valor_rec, text="Valor à Receber:").pack()
         self.orc_valor_receber = Label(labelframe_valor_rec, text="R$ 0,00", anchor=E, font=("", "12", ""), fg="red")
         self.orc_valor_receber.pack(fill=X, pady=5, padx=30)
-        Button(subframe_form_pag2, text="Salvar", width=8, command=lambda: [self.editar_orc(jan, 2)]).grid(row=1,
-                                                                                                           column=0,
-                                                                                                           sticky=W,
-                                                                                                           pady=5,
-                                                                                                           padx=30)
+        Button(subframe_form_pag2, text="Salvar", width=8, command=lambda: [self.editar_orc(jan, jan1, 2)]).grid(row=1,
+                                                                                                                 column=0,
+                                                                                                                 sticky=W,
+                                                                                                                 pady=5,
+                                                                                                                 padx=30)
         subframe_form_pag3 = Frame(labelframe_form_pag)
         subframe_form_pag3.pack(padx=5, fill=BOTH, side=LEFT, pady=5)
         Label(subframe_form_pag3, bg="grey", text=3, width=21, height=6).pack()
@@ -3719,9 +3921,9 @@ class Castelo:
         botoes_os = Frame(frame_princ_os2)
         botoes_os.pack(fill=X, padx=10, pady=25)
         Button(botoes_os, text="Confirmar Saída", wraplength=70, width=15, height=2,
-               command=lambda: [self.editar_orc(jan, 3)]).pack(side=LEFT, padx=20)
+               command=lambda: [self.editar_orc(jan, jan1, 3)]).pack(side=LEFT, padx=20)
         Button(botoes_os, text="Fechar", width=15, height=2,
-               command=lambda: [self.editar_orc(jan, 1), jan.destroy()]).pack(side=LEFT)
+               command=lambda: [self.editar_orc(jan, jan1, 1), jan1.destroy()]).pack(side=LEFT)
 
         self.orc_cod_entry1.bind('<Return>', elegeProduto1)
         self.orc_cod_entry2.bind('<Return>', elegeProduto2)
@@ -3733,12 +3935,13 @@ class Castelo:
         self.orc_cod_entry8.bind('<Return>', elegeProduto8)
         self.orc_cod_entry9.bind('<Return>', elegeProduto9)
 
-        jan.transient(root2)
-        jan.focus_force()
-        jan.grab_set()
+        jan1.transient(root2)
+        jan1.focus_force()
+        jan1.grab_set()
 
-    def editar_orc(self, jan, num):
+    def editar_orc(self, jan1, jan, num):
         # try:
+        self.insereNumAoClicar()
         codigo1 = self.orc_cod_entry1.get()
         codigo2 = self.orc_cod_entry2.get()
         codigo3 = self.orc_cod_entry3.get()
@@ -3873,7 +4076,7 @@ class Castelo:
             repositorio = os_repositorio.Os_repositorio()
             repositorio.editar_orcamento(self.num_os, nova_os, 5, sessao)
             sessao.commit()
-            self.saidaDeOs(jan)
+            self.saidaDeOs(jan, jan1)
             self.popularOsConserto()
             # except:
             # messagebox.showinfo(title="ERRO", message="ERRO")
@@ -3917,6 +4120,37 @@ class Castelo:
         jan.transient(root2)
         jan.focus_force()
         jan.grab_set()
+
+    def popularOsEntregueButton(self, tree_ap_entr, cli_id):
+        tree_ap_entr.delete(*tree_ap_entr.get_children())
+        repositorio = os_saida_repositorio.OsSaidaRepositorio()
+        repositorio_cliente = cliente_repositorio.ClienteRepositorio()
+        oss = repositorio.listar_os_cli_id(cli_id, sessao)
+        for i in oss:
+            if self.count % 2 == 0:
+                cliente_os = repositorio_cliente.listar_cliente_id(i.cliente_id, sessao)
+                tree_ap_entr.insert("", "end",
+                                         values=(i.os_saida, i.data_saida, cliente_os.nome, i.equipamento, i.marca,
+                                                 i.modelo, "Orçamento", i.status, i.dias,
+                                                 self.insereTotalConvertido(i.total),
+                                                 i.tecnico_id, i.operador, i.defeito, i.n_serie, i.chassi,
+                                                 i.data_orc, i.data_entrada, i.hora_entrada, i.cliente_id),
+                                         tags=('oddrow',))
+            else:
+                cliente_os = repositorio_cliente.listar_cliente_id(i.cliente_id, sessao)
+                tree_ap_entr.insert("", "end",
+                                         values=(i.os_saida, i.data_saida, cliente_os.nome, i.equipamento, i.marca,
+                                                 i.modelo, "Orçamento", i.status, i.dias,
+                                                 self.insereTotalConvertido(i.total),
+                                                 i.tecnico_id, i.operador, i.defeito, i.n_serie, i.chassi,
+                                                 i.data_orc, i.data_entrada, i.hora_entrada, i.cliente_id),
+                                         tags=('evenrow',))
+            self.count += 1
+        self.count = 0
+        children = tree_ap_entr.get_children()
+        if children:
+            tree_ap_entr.focus(children[-1])
+            tree_ap_entr.selection_set(children[-1])
 
     def popularOsEntregue(self):
         self.tree_ap_entr.delete(*self.tree_ap_entr.get_children())
@@ -3978,7 +4212,7 @@ class Castelo:
             self.tree_ap_entr.focus(children[-1])
             self.tree_ap_entr.selection_set(children[-1])
 
-    def saidaDeOs(self, jan):
+    def saidaDeOs(self, jan, jan1):
 
         if self.orc_valor_receber.cget('text') != self.orc_entry_total_material.cget('text'):
             messagebox.showinfo(title="ERRO", message="Valor a Receber Diferente do Valor Total do Serviço")
@@ -4052,6 +4286,7 @@ class Castelo:
                 self.mostrarMensagem("1", "Foi Dado Saída do Aparelho com Sucesso!")
                 self.popularOsEntregue()
                 jan.destroy()
+                jan1.destroy()
                 # except:
                 # messagebox.showinfo(title="ERRO", message="ERRO")
                 # finally:
@@ -4059,7 +4294,7 @@ class Castelo:
             else:
                 pass
 
-    def janelaAbrirOsEntregue(self):
+    def janelaAbrirOsEntregue(self, os_id):
 
         font_dados1 = ('Verdana', '8', '')
         font_dados2 = ('Verdana', '8', 'bold')
@@ -4083,11 +4318,9 @@ class Castelo:
         frame_princ_jan_os = Frame(frame_princ_jan_os0, bg=color_frame)
         frame_princ_jan_os.pack(side=LEFT, fill=BOTH, padx=10, pady=10)
 
-        os_selecionada = self.tree_ap_entr.focus()
-        dado_os = self.tree_ap_entr.item(os_selecionada, "values")
         os_saida_repo = os_saida_repositorio.OsSaidaRepositorio()
         cliente_repo = cliente_repositorio.ClienteRepositorio()
-        os_dados = os_saida_repo.listar_os_id(dado_os[0], sessao)
+        os_dados = os_saida_repo.listar_os_id(os_id, sessao)
         cliente_os_atual = cliente_repo.listar_cliente_id(os_dados.cliente_id, sessao)
 
         labelframe_dadoscli_os = LabelFrame(frame_princ_jan_os, text="Dados do Cliente", fg=self.color_fg_label,
@@ -4296,7 +4529,7 @@ class Castelo:
         frame_botao_ad = Frame(frame_princ_jan_os, bg=color_frame)
         frame_botao_ad.grid(row=2, column=1, sticky=E, padx=35)
         Button(frame_botao_ad, text="Ordem de Serviço", wraplength=80, height=2, width=7,
-               bg="#BEC7C7", command=self.janelaOrçamentoEntregue).pack(side=RIGHT, ipadx=20, padx=5)
+               bg="#BEC7C7", command=lambda: [self.janelaOrçamentoEntregue(os_id)]).pack(side=RIGHT, ipadx=20, padx=5)
 
         frame_os_final = Frame(frame_princ_jan_os, bg=color_frame)
         frame_os_final.grid(row=3, column=0, sticky=W, columnspan=2)
@@ -4349,15 +4582,13 @@ class Castelo:
         jan.focus_force()
         jan.grab_set()
 
-    def janelaOrçamentoEntregue(self):
+    def janelaOrçamentoEntregue(self, os_id):
 
         jan = Toplevel()
 
-        os_selecionada = self.tree_ap_entr.focus()
-        dado_os = self.tree_ap_entr.item(os_selecionada, "values")
         os_saida_repo = os_saida_repositorio.OsSaidaRepositorio()
         cliente_repo = cliente_repositorio.ClienteRepositorio()
-        os_dados = os_saida_repo.listar_os_id(dado_os[0], sessao)
+        os_dados = os_saida_repo.listar_os_id(os_id, sessao)
         cliente_os_atual = cliente_repo.listar_cliente_id(os_dados.cliente_id, sessao)
 
         color_entry = '#ffffe1'
@@ -4372,7 +4603,7 @@ class Castelo:
         frame_princ_os1.pack(fill=Y, side=LEFT)
         frame_os = LabelFrame(frame_princ_os1, text='Num da Os', width=20)
         frame_os.grid(row=0, column=0, padx=10, sticky=W)
-        Label(frame_os, text=20, fg='blue', font='bold').pack(pady=17, padx=5)
+        Label(frame_os, text=os_id, fg='blue', font='bold').pack(pady=17, padx=5)
 
         labelframe_status_os = LabelFrame(frame_princ_os1, text="Status", width=100)
         labelframe_status_os.grid(row=0, column=1, padx=10, pady=10, ipady=2, ipadx=10, sticky=W)
@@ -5793,7 +6024,8 @@ class Castelo:
                                                                                                          column=0,
                                                                                                          padx=5,
                                                                                                          pady=5)
-        self.categoria_prod_est = Entry(subframe_form_pag1, width=18, justify=RIGHT, state=DISABLED, textvariable=osVar5)
+        self.categoria_prod_est = Entry(subframe_form_pag1, width=18, justify=RIGHT, state=DISABLED,
+                                        textvariable=osVar5)
         self.categoria_prod_est.grid(row=1, column=1, padx=5)
         Label(subframe_form_pag1, text="Estoque Atual", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=2,
                                                                                                              column=0,
