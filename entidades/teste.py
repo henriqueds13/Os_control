@@ -386,3 +386,40 @@ osVar = StringVar(master)
             osVar.set(osVar.get().upper())
 
         osVar.trace_add('write', to_uppercase)
+
+
+
+entry = entry_locali.get()
+repositorio = os_repositorio.Os_repositorio()
+clientes = repositorio.listar_os_locali(entry, tipo, sessao)
+if len(clientes) == 0:
+    messagebox.showinfo(title="ERRO", message="OS não encontrada!")
+else:
+    self.tree_ap_manut.delete(*self.tree_ap_manut.get_children())
+    for i in clientes:
+        if self.count % 2 == 0:
+            if i.aparelho_na_oficina == 1:
+                self.tree_ap_manut.insert("", "end",
+                                          values=(
+                                              i.id, i.data_entrada, i.cliente.nome, i.equipamento, i.marca,
+                                              i.modelo, "Orçamento", i.status, i.dias,
+                                              self.insereTotalConvertido(i.total),
+                                              i.tecnico, i.operador, i.defeito, i.n_serie, i.chassi,
+                                              i.dias, 0, i.hora_entrada, i.cliente_id), tags=('oddrow',))
+        else:
+            if i.aparelho_na_oficina == 1:
+                self.tree_ap_manut.insert("", "end",
+                                          values=(
+                                              i.id, i.data_entrada, i.cliente.nome, i.equipamento, i.marca,
+                                              i.modelo, "Orçamento", i.status, i.dias,
+                                              self.insereTotalConvertido(i.total),
+                                              i.tecnico, i.operador, i.defeito, i.n_serie, i.chassi,
+                                              i.dias, 0, i.hora_entrada, i.cliente_id), tags=('evenrow',))
+        self.count += 1
+    self.count = 0
+    self.tree_ap_manut.focus_set()
+    children = self.tree_ap_manut.get_children()
+    if children:
+        self.tree_ap_manut.focus(children[0])
+        self.tree_ap_manut.selection_set(children[0])
+    jan.destroy()

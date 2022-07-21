@@ -68,3 +68,4 @@ class OsSaidaRepositorio():
     def editar_os_saida(self, id_os, os, sessao):
         query_os = os_saida_query.OsSaidaQuery()
         query_os.editar_os_saida(id_os, os, sessao)
+

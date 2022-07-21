@@ -2,6 +2,8 @@ from tkinter import *
 from tkinter import ttk, messagebox
 from tkinter.ttk import Style
 
+from sqlalchemy.util import NoneType
+
 from fabricas import fabrica_conexao
 from repositorios import cliente_repositorio, os_repositorio, os_saida_repositorio, produto_repositorio, \
     revendedor_repositorio, estoque_repositorio, produto_venda_repositorio, os_venda_repositorio
@@ -374,7 +376,8 @@ class Castelo:
 
         self.subframe4_botoes_os = Frame(self.subframe_listagem_clientes)
         self.botao_nova_os = Button(self.subframe4_botoes_os, text="Ordem de Serviço", width=10, wraplength=70,
-                                    font=font_label, underline=0, bg='#959595', command=self.janelaCriarOs)
+                                    font=font_label, underline=0, bg='#959595',
+                                    command=lambda: [self.janelaCriarOs('', '', 1)])
         self.botao_fechar_cliente = Button(self.subframe4_botoes_os, text="Fechar", width=10,
                                            wraplength=50, font=font_label, underline=0, bg='#BEC7C7', height=2,
                                            command=self.frame_cadastro_clientes.forget)
@@ -1782,9 +1785,9 @@ class Castelo:
         jan.focus_force()
         jan.grab_set()
 
-    def janelaCriarOs(self):
-        lista_aparelhos = ["Roçadeira", "Lav.Alta Pressão", "Cort.Grama Elétrico"]
-        lista_marca = ["Karcher", "Stihl", "Trapp"]
+    def janelaCriarOs(self, cliente, os_id, opt):
+        lista_aparelhos = ["ROÇADEIRA", "LAV.ALTA PRESSÃO", "CORT.GRAMA ElÉTRICO"]
+        lista_marca = ["KARCHER", "STIHL", "TRAPP"]
         lista_tecnicos = [1, 2]
         global radio_loc_text_os
         radio_loc_text_os = IntVar()
@@ -1853,10 +1856,13 @@ class Castelo:
         osVar7.trace_add('write', to_uppercase)
 
         # --------------------------------------------------------------------------------------
+        if opt == 1:
+            cliente_selecionado = self.tree_cliente.focus()
+            dado_cli = self.tree_cliente.item(cliente_selecionado, "values")
+            cliente_dados = cliente_repositorio.ClienteRepositorio().listar_cliente_id(dado_cli[0], sessao)
+        else:
+            cliente_dados = cliente
 
-        cliente_selecionado = self.tree_cliente.focus()
-        dado_cli = self.tree_cliente.item(cliente_selecionado, "values")
-        cliente_dados = cliente_repositorio.ClienteRepositorio().listar_cliente_id(dado_cli[0], sessao)
         self.os_idcliente = cliente_dados.id
 
         testa_tensao = jan.register(self.testaEntradaNumTensao)
@@ -2025,6 +2031,32 @@ class Castelo:
         self.os_garantiacompl = Entry(labelframe_garantia, width=18, validate='all',
                                       validatecommand=(testa_garantia, '%P'), state='disabled')
         self.os_garantiacompl.grid(row=1, column=3, sticky=W)
+
+        if opt == 2:
+            def encontraIndexLista(lista, obj):  # Metodo para poder capturar valor dos combobox no BD
+                try:
+                    ind = lista.index(obj)
+                    return ind
+                except:
+                    pass
+            repositorio_entr = os_saida_repositorio.OsSaidaRepositorio()
+            os_entr = repositorio_entr.listar_os_id(os_id, sessao)
+            self.os_aparelho.current(encontraIndexLista(lista_aparelhos, os_entr.equipamento))
+            self.os_aparelho.configure(state=DISABLED)
+            self.os_marca.current(encontraIndexLista(lista_marca, os_entr.marca))
+            self.os_marca.configure(state=DISABLED)
+            self.os_modelo.insert(0, os_entr.modelo)
+            self.os_modelo.configure(state=DISABLED)
+            self.os_numserie.insert(0, os_entr.n_serie)
+            self.os_numserie.configure(state=DISABLED)
+            self.os_chassis.insert(0, os_entr.chassi)
+            self.os_chassis.configure(state=DISABLED)
+            self.os_tensao.insert(0, os_entr.tensao)
+            self.os_tensao.configure(state=DISABLED)
+            radio_orc.configure(state=DISABLED)
+            radio_gar_fabrica.configure(state=DISABLED)
+            radio_gar_serv.configure(state=NORMAL)
+            radio_loc_text_os.set("2")
 
         def habilitaGarantia(value):
             if value == 'disabled':
@@ -2379,7 +2411,7 @@ class Castelo:
             repositorio = os_saida_repositorio.OsSaidaRepositorio()
             oss = repositorio.listar_os_cli_id(cliente_os_atual.id, sessao)
             if len(oss)== 0:
-                messagebox.showinfo(title="ERRO", message="Cliente não possui manutenção anteriores ainda!")
+                messagebox.showinfo(title="ERRO", message="Este cliente não possui manutenção anteriores!")
 
             else:
                 jan1 = Toplevel()
@@ -4097,15 +4129,19 @@ class Castelo:
         y_cordinate = int((self.h / 2) - (150 / 2))
         jan.geometry("{}x{}+{}+{}".format(400, 150, x_cordinate, y_cordinate))
 
-        radio_loc_text = StringVar()
+        global radio_loc_text1
+
+        radio_loc_text1 = IntVar()
+
+        radio_loc_text1.set("1")
         frame_localizar_jan1 = Frame(jan)
         frame_localizar_jan1.pack(padx=10, fill=X)
         labelframe_local = LabelFrame(frame_localizar_jan1, text="Opção de Busca", fg="blue")
         labelframe_local.pack(side=LEFT, pady=10)
-        radio_os_locali = Radiobutton(labelframe_local, text="Ordem de Serviço", value="os", variable=radio_loc_text)
+        radio_os_locali = Radiobutton(labelframe_local, text="Ordem de Serviço", value="1", variable=radio_loc_text1)
         radio_os_locali.grid(row=0, column=0, padx=5, sticky=W)
-        radio_nserie_locali = Radiobutton(labelframe_local, text="Número de Série", value="nserie",
-                                          variable=radio_loc_text)
+        radio_nserie_locali = Radiobutton(labelframe_local, text="Número Série", value="2",
+                                          variable=radio_loc_text1)
         radio_nserie_locali.grid(row=1, column=0, padx=5, sticky=W)
 
         frame_localizar_jan2 = Frame(jan)
@@ -4113,13 +4149,38 @@ class Castelo:
         entry_locali = Entry(frame_localizar_jan2, width=30, relief="sunken", borderwidth=2)
         entry_locali.pack(side=LEFT, padx=10)
         Button(frame_localizar_jan2, text="Iniciar Pesquisa", width=10, wraplength=70,
-               underline=0, font=('Verdana', '9', 'bold'), height=2).pack(side=LEFT, padx=5)
+               underline=0, font=('Verdana', '9', 'bold'), height=2,
+               command=lambda: [popularOsEntregueLocalizar(jan)]).pack(side=LEFT, padx=5)
         Button(frame_localizar_jan2, text="Fechar", width=10, wraplength=70,
                underline=0, font=('Verdana', '9', 'bold'), height=2, command=jan.destroy).pack(side=LEFT, padx=5)
 
         jan.transient(root2)
         jan.focus_force()
         jan.grab_set()
+
+
+        def popularOsEntregueLocalizar(jan):
+            entry = entry_locali.get()
+            repositorio = os_saida_repositorio.OsSaidaRepositorio()
+            repositorio_cliente = cliente_repositorio.ClienteRepositorio()
+            oss = repositorio.listar_os_id(entry, sessao)
+            if type(oss) == NoneType:
+                messagebox.showinfo(title="ERRO", message="Os não encotrada!")
+            else:
+                self.tree_ap_entr.delete(*self.tree_ap_entr.get_children())
+                cliente_os = repositorio_cliente.listar_cliente_id(oss.cliente_id, sessao)
+                self.tree_ap_entr.insert("", "end",
+                                         values=(oss.os_saida, oss.data_saida, cliente_os.nome, oss.equipamento, oss.marca,
+                                                 oss.modelo, "Orçamento", oss.status, oss.dias,
+                                                 self.insereTotalConvertido(oss.total),
+                                                 oss.tecnico_id, oss.operador, oss.defeito, oss.n_serie, oss.chassi,
+                                                 oss.data_orc, oss.data_entrada, oss.hora_entrada, oss.cliente_id),
+                                         tags=('oddrow',))
+                children = self.tree_ap_entr.get_children()
+                if children:
+                    self.tree_ap_entr.focus(children[-1])
+                    self.tree_ap_entr.selection_set(children[-1])
+                jan.destroy()
 
     def popularOsEntregueButton(self, tree_ap_entr, cli_id):
         tree_ap_entr.delete(*tree_ap_entr.get_children())
@@ -4364,7 +4425,8 @@ class Castelo:
         ap_cidade_os.config(validate='all', validatecommand=(impede_escrita, '%P'))
         frame_sub_dc1 = Frame(frame_sub_dc, bg=color_frame)
         frame_sub_dc1.grid(row=0, column=2, rowspan=3, sticky=S, ipadx=13)
-        Button(frame_sub_dc1, text="1", width=7).pack(ipady=8, side=RIGHT)
+        Button(frame_sub_dc1, text="1", width=7,
+               command=lambda: [abreCliente(cliente_os_atual.id), jan.destroy()]).pack(ipady=8, side=RIGHT)
 
         Label(sub_frame_dc_os2, text="Tel.Res.", font=font_dados1,
               bg=color_frame).grid(row=0, column=0, sticky=W)
@@ -4571,12 +4633,22 @@ class Castelo:
         frame_os_buttons = Frame(frame_os_final, bg=color_frame)
         frame_os_buttons.pack(side=LEFT)
         Button(frame_os_buttons, text="Nova Ordem de Serviço", wraplength=80, height=2, width=7,
-               bg="#BEC7C7", command=lambda: [jan.destroy(), self.frame_ap_entregue.forget(),
-                                              self.janelaCriarOs()]).grid(row=0, column=0, ipadx=20, padx=5)
+               bg="#BEC7C7",
+               command=lambda: [jan.destroy(), criaNovaOs(cliente_os_atual)]).grid(row=0, column=0, ipadx=20, padx=5)
         Button(frame_os_buttons, text="Imprimir OS", height=2, width=7,
                bg="#BEC7C7").grid(row=1, column=0, ipadx=20, padx=5, pady=5)
         Button(frame_os_buttons, text="Fechar", wraplength=50, height=2, width=7,
                bg="#BEC7C7", command=jan.destroy).grid(row=2, column=0, ipadx=20)
+
+        def abreCliente(id):
+            self.abrirJanelaCliente()
+            self.popularPesquisaId(id)
+
+        def criaNovaOs(cliente):
+            self.frame_ap_entregue.forget()
+            self.janelaCriarOs(cliente_os_atual, os_dados.os_saida, 2)
+
+
 
         jan.transient(root2)
         jan.focus_force()
