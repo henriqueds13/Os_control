@@ -136,7 +136,7 @@ class Castelo:
         menuArquivo.add_command(label='Clientes', command=self.abrirJanelaCliente)
         menuArquivo.add_command(label='Fornecedores', command=lambda: [self.janelaBuscaFornecedor(1)])
         menuArquivo.add_command(label='Orçamento', command=self.abrirJanelaOrçamento)
-        menuArquivo.add_command(label='Configurações', command=self.semComando)
+        menuArquivo.add_command(label='Configurações', command=self.abreJanelaConfigurações)
         menuArquivo.add_separator()
         menuArquivo.add_command(label='Sair', command=master.quit)
         barraDeMenus.add_cascade(label='Arquivo', menu=menuArquivo)
@@ -6472,7 +6472,10 @@ class Castelo:
 
     def janelaNovaVenda(self, opt):
 
-        jan = Toplevel()
+        bg_tela = '#015958'
+        bg_entry = '#C5D7D9'
+
+        jan = Toplevel(bg=bg_tela)
 
         # Centraliza a janela
         x_cordinate = int((self.w / 2) - (1010 / 2))
@@ -6481,6 +6484,7 @@ class Castelo:
 
         self.lista_produto_venda = []
         self.venda_valor_total_add = 0
+
 
         # --------------------------------------------------------------------------------------
 
@@ -6639,15 +6643,15 @@ class Castelo:
         def atualizaValorArecebeButton(event):
             atualizaValorAreceber()
 
-        frame_princ = Frame(jan)
+        frame_princ = Frame(jan, bg=bg_tela)
         frame_princ.pack(fill=BOTH)
-        frame_princ1 = Frame(frame_princ)
+        frame_princ1 = Frame(frame_princ, bg=bg_tela)
         frame_princ1.pack(fill=BOTH, padx=10, pady=10)
 
-        subframe_cliente = Frame(frame_princ1)
+        subframe_cliente = Frame(frame_princ1, bg=bg_tela)
         subframe_cliente.pack(fill=X)
-        Label(subframe_cliente, text='Cliente').grid(row=0, column=0, sticky=W)
-        self.venda_cliente = Entry(subframe_cliente, width=150, textvariable=osVar1)
+        Label(subframe_cliente, text='Cliente', bg=bg_tela).grid(row=0, column=0, sticky=W)
+        self.venda_cliente = Entry(subframe_cliente, width=150, textvariable=osVar1, bg=bg_entry)
         self.venda_cliente.grid(row=1, column=0, sticky=W)
         self.venda_button_busca_cliente = Button(subframe_cliente, text='Buscar', command=self.janelaBuscaCliente)
         self.venda_button_busca_cliente.grid(row=1, column=1, padx=10, ipadx=10)
@@ -6655,24 +6659,24 @@ class Castelo:
         testa_float = jan.register(self.testaEntradaFloat)
         testa_inteiro = jan.register(self.testaEntradaInteiro)
 
-        subframe_prod = Frame(frame_princ1)
+        subframe_prod = Frame(frame_princ1, bg=bg_tela)
         subframe_prod.pack(fill=X, pady=10)
-        frame_prod = LabelFrame(subframe_prod)
+        frame_prod = LabelFrame(subframe_prod, bg=bg_tela)
         frame_prod.grid(row=0, column=0, sticky=W, ipady=3)
-        Label(frame_prod, text='Cód. do item').grid(sticky=W, padx=10)
-        self.venda_cod_item = Entry(frame_prod, width=15, textvariable=osVar2)
+        Label(frame_prod, text='Cód. do item', bg=bg_tela).grid(sticky=W, padx=10)
+        self.venda_cod_item = Entry(frame_prod, width=15, textvariable=osVar2, bg=bg_entry)
         self.venda_cod_item.config(state=DISABLED)
         self.venda_cod_item.grid(row=1, column=0, sticky=W, padx=10)
-        Label(frame_prod, text='Descrição do item').grid(row=0, column=1, sticky=W)
-        self.venda_descr_item = Entry(frame_prod, width=90, textvariable=osVar3)
+        Label(frame_prod, text='Descrição do item', bg=bg_tela).grid(row=0, column=1, sticky=W)
+        self.venda_descr_item = Entry(frame_prod, width=90, textvariable=osVar3, bg=bg_entry)
         self.venda_descr_item.config(state=DISABLED)
         self.venda_descr_item.grid(row=1, column=1, sticky=W)
-        Label(frame_prod, text='Preço Unit.').grid(row=0, column=2, sticky=W, padx=10)
-        self.venda_preco_item = Entry(frame_prod, width=10, validate='all', validatecommand=(testa_float, '%P'))
+        Label(frame_prod, text='Preço Unit.', bg=bg_tela).grid(row=0, column=2, sticky=W, padx=10)
+        self.venda_preco_item = Entry(frame_prod, width=10, validate='all', validatecommand=(testa_float, '%P'), bg=bg_entry)
         self.venda_preco_item.config(state=DISABLED)
         self.venda_preco_item.grid(row=1, column=2, sticky=W, padx=10)
-        Label(frame_prod, text='Qtd.').grid(row=0, column=3, sticky=W)
-        self.venda_qtd_item = Entry(frame_prod, width=5, validate='all', validatecommand=(testa_inteiro, '%P'))
+        Label(frame_prod, text='Qtd.', bg=bg_tela).grid(row=0, column=3, sticky=W)
+        self.venda_qtd_item = Entry(frame_prod, width=5, validate='all', validatecommand=(testa_inteiro, '%P'), bg=bg_entry)
         self.venda_qtd_item.grid(row=1, column=3, sticky=W)
         self.venda_button_busca_prod = Button(frame_prod, text='Buscar', command=lambda: [self.janelaBuscaProduto(4)])
         self.venda_button_busca_prod.grid(row=1, column=4, padx=10, ipadx=10)
@@ -6684,7 +6688,7 @@ class Castelo:
         self.venda_button_remove_prod = Button(subframe_prod, text='2', width=3, height=2, command=removeProdutoEstoque)
         self.venda_button_remove_prod.grid(row=0, column=2, padx=0, ipadx=10)
 
-        subframe_prod1 = Frame(frame_princ1)
+        subframe_prod1 = Frame(frame_princ1, bg=bg_tela)
         subframe_prod1.pack(fill=BOTH)
 
         tree_est_venda = ttk.Treeview(subframe_prod1,
@@ -6707,92 +6711,92 @@ class Castelo:
 
         tree_est_venda.grid(sticky=W)
 
-        labelframe_form_pag = LabelFrame(subframe_prod1, text="Forma de Pagamento")
+        labelframe_form_pag = LabelFrame(subframe_prod1, text="Forma de Pagamento", bg=bg_tela)
         labelframe_form_pag.grid(row=0, column=1, sticky=NW, padx=10)
-        subframe_form_pag1 = Frame(labelframe_form_pag)
+        subframe_form_pag1 = Frame(labelframe_form_pag, bg=bg_tela)
         subframe_form_pag1.pack(padx=15, pady=18)
-        Label(subframe_form_pag1, text="Dinheiro", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=0, column=0,
+        Label(subframe_form_pag1, text="Dinheiro", fg="red", anchor=E, font=('Verdana', "10", ""), bg=bg_tela).grid(row=0, column=0,
                                                                                                         padx=5)
         self.venda_entry_dinh = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all',
-                                      validatecommand=(testa_float, '%P'))
+                                      validatecommand=(testa_float, '%P'), bg=bg_entry)
         self.venda_entry_dinh.grid(row=0, column=1, padx=5)
-        Label(subframe_form_pag1, text="Cheque", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=1, column=0,
+        Label(subframe_form_pag1, text="Cheque", fg="red", anchor=E, font=('Verdana', "10", ""), bg=bg_tela).grid(row=1, column=0,
                                                                                                       padx=5, pady=5)
         self.venda_entry_cheque = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all',
-                                        validatecommand=(testa_float, '%P'))
+                                        validatecommand=(testa_float, '%P'), bg=bg_entry)
         self.venda_entry_cheque.grid(row=1, column=1, padx=5)
-        Label(subframe_form_pag1, text="Cartão de Crédito", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=2,
+        Label(subframe_form_pag1, text="Cartão de Crédito", fg="red", anchor=E, font=('Verdana', "10", ""), bg=bg_tela).grid(row=2,
                                                                                                                  column=0,
                                                                                                                  padx=5)
         self.venda_entry_ccredito = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all',
-                                          validatecommand=(testa_float, '%P'))
+                                          validatecommand=(testa_float, '%P'), bg=bg_entry)
         self.venda_entry_ccredito.grid(row=2, column=1, padx=5)
-        Label(subframe_form_pag1, text="Cartão de Débito", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=3,
+        Label(subframe_form_pag1, text="Cartão de Débito", fg="red", anchor=E, font=('Verdana', "10", ""), bg=bg_tela).grid(row=3,
                                                                                                                 column=0,
                                                                                                                 padx=5,
                                                                                                                 pady=5)
         self.venda_entry_cdebito = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all',
-                                         validatecommand=(testa_float, '%P'))
+                                         validatecommand=(testa_float, '%P'), bg=bg_entry)
         self.venda_entry_cdebito.grid(row=3, column=1, padx=5)
-        Label(subframe_form_pag1, text="PIX", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=4, column=0,
+        Label(subframe_form_pag1, text="PIX", fg="red", anchor=E, font=('Verdana', "10", ""), bg=bg_tela).grid(row=4, column=0,
                                                                                                    padx=5)
         self.venda_entry_pix = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all',
-                                     validatecommand=(testa_float, '%P'))
+                                     validatecommand=(testa_float, '%P'), bg=bg_entry)
         self.venda_entry_pix.grid(row=4, column=1, padx=5)
-        Label(subframe_form_pag1, text="Outros", fg="red", anchor=E, font=('Verdana', "10", "")).grid(row=5, column=0,
+        Label(subframe_form_pag1, text="Outros", fg="red", anchor=E, font=('Verdana', "10", ""), bg=bg_tela).grid(row=5, column=0,
                                                                                                       padx=5, pady=5)
         self.venda_entry_outros = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all',
-                                        validatecommand=(testa_float, '%P'))
+                                        validatecommand=(testa_float, '%P'), bg=bg_entry)
         self.venda_entry_outros.grid(row=5, column=1, padx=5)
-        subframe_form_pag2 = Frame(labelframe_form_pag)
+        subframe_form_pag2 = Frame(labelframe_form_pag, bg=bg_tela)
         subframe_form_pag2.pack(padx=10, fill=X, side=LEFT)
-        labelframe_valor_rec = LabelFrame(subframe_form_pag2)
+        labelframe_valor_rec = LabelFrame(subframe_form_pag2, bg=bg_tela)
         labelframe_valor_rec.grid(row=0, column=0, sticky=W, pady=5)
-        Label(labelframe_valor_rec, text="Valor à Receber:").pack()
-        self.venda_valor_areceber = Label(labelframe_valor_rec, text="R$ 0,00", anchor=E, font=("", "12", ""), fg="red")
+        Label(labelframe_valor_rec, text="Valor à Receber:", bg=bg_tela).pack()
+        self.venda_valor_areceber = Label(labelframe_valor_rec, text="R$ 0,00", anchor=E, font=("", "12", ""), fg="red", bg=bg_tela)
         self.venda_valor_areceber.pack(fill=X, pady=5, padx=30)
         self.venda_button_salvar = Button(subframe_form_pag2, text="Salvar", width=8, command=atualizaValorAreceber)
         self.venda_button_salvar.grid(row=1, column=0, sticky=W, pady=5, padx=30)
-        subframe_form_pag3 = Frame(labelframe_form_pag)
+        subframe_form_pag3 = Frame(labelframe_form_pag, bg=bg_tela)
         subframe_form_pag3.pack(padx=5, fill=BOTH, side=LEFT, pady=7)
-        Label(subframe_form_pag3, bg="grey", text=3, width=21, height=6).pack()
+        Label(subframe_form_pag3, text=3, width=21, height=6, bg='gray').pack()
 
-        labelframe_pag_coment = LabelFrame(subframe_prod1, text="Observações de Pagamento")
+        labelframe_pag_coment = LabelFrame(subframe_prod1, text="Observações de Pagamento", bg=bg_tela)
         labelframe_pag_coment.grid(row=1, column=0, sticky=W)
-        self.venda_obs1 = Entry(labelframe_pag_coment, width=108, textvariable=osVar4)
+        self.venda_obs1 = Entry(labelframe_pag_coment, width=108, textvariable=osVar4, bg=bg_entry)
         self.venda_obs1.pack(padx=5, pady=5)
-        self.venda_obs2 = Entry(labelframe_pag_coment, width=108, textvariable=osVar5)
+        self.venda_obs2 = Entry(labelframe_pag_coment, width=108, textvariable=osVar5, bg=bg_entry)
         self.venda_obs2.pack(padx=5)
-        self.venda_obs3 = Entry(labelframe_pag_coment, width=108, textvariable=osVar6)
+        self.venda_obs3 = Entry(labelframe_pag_coment, width=108, textvariable=osVar6, bg=bg_entry)
         self.venda_obs3.pack(pady=5, padx=5)
 
-        labelframe_desc_vend = LabelFrame(subframe_prod1)
+        labelframe_desc_vend = LabelFrame(subframe_prod1, bg=bg_tela)
         labelframe_desc_vend.grid(row=1, column=1, sticky=SW, padx=10, ipady=1)
-        frame_descr_vend = Frame(labelframe_desc_vend)
+        frame_descr_vend = Frame(labelframe_desc_vend, bg=bg_tela)
         frame_descr_vend.pack(fill=BOTH, padx=10, pady=10)
-        Label(frame_descr_vend, text='SubTotal:').grid()
-        self.venda_label_subtotal = Label(frame_descr_vend, text='R$0,00', fg='blue', font=('', '12', ''))
+        Label(frame_descr_vend, text='SubTotal:', bg=bg_tela).grid()
+        self.venda_label_subtotal = Label(frame_descr_vend, text='R$0,00', fg='blue', font=('', '12', ''), bg=bg_tela)
         self.venda_label_subtotal.grid(row=0, column=1)
-        Label(frame_descr_vend, text='desconto:').grid(row=1, column=0)
-        self.venda_desconto = Entry(frame_descr_vend, width=10, validate='all', validatecommand=(testa_float, '%P'))
+        Label(frame_descr_vend, text='desconto:', bg=bg_tela).grid(row=1, column=0)
+        self.venda_desconto = Entry(frame_descr_vend, width=10, validate='all', validatecommand=(testa_float, '%P'), bg=bg_entry)
         self.venda_desconto.grid(row=1, column=1)
-        Label(frame_descr_vend, width=2).grid(row=0, column=2, padx=5)
-        frame_valor_total = LabelFrame(frame_descr_vend)
+        Label(frame_descr_vend, width=2, bg=bg_tela).grid(row=0, column=2, padx=5)
+        frame_valor_total = LabelFrame(frame_descr_vend, bg=bg_tela)
         frame_valor_total.grid(row=0, column=3, rowspan=2, padx=5)
-        Label(frame_valor_total, text='TOTAL:', font=('verdana', '12', 'bold')).pack(pady=1)
-        self.venda_label_total = Label(frame_valor_total, text='R$0,00', font=('verdana', '15', 'bold'), fg='red')
+        Label(frame_valor_total, text='TOTAL:', font=('verdana', '12', 'bold'), bg=bg_tela).pack(pady=1)
+        self.venda_label_total = Label(frame_valor_total, text='R$0,00', font=('verdana', '15', 'bold'), fg='red', bg=bg_tela)
         self.venda_label_total.pack(padx=10, pady=1)
 
-        frame_orcamento = Frame(subframe_prod1)
+        frame_orcamento = Frame(subframe_prod1, bg=bg_tela)
         frame_orcamento.grid(row=2, column=0, sticky=W)
         self.venda_button_orcamento = Button(frame_orcamento, text='Orçamento')
         self.venda_button_orcamento.grid(row=0, column=0, ipady=10, ipadx=10, sticky=W)
-        Label(frame_orcamento, width=56).grid(row=0, column=1)
-        Label(frame_orcamento, text="Vendedor:").grid(row=0, column=2, padx=10)
+        Label(frame_orcamento, width=56, bg=bg_tela).grid(row=0, column=1)
+        Label(frame_orcamento, text="Vendedor:", bg=bg_tela).grid(row=0, column=2, padx=10)
         self.venda_vendedor = Entry(frame_orcamento, width=15, justify=RIGHT, relief=SUNKEN, bd=2, show='*')
         self.venda_vendedor.grid(row=0, column=3)
 
-        frame_button_confirma = Frame(subframe_prod1)
+        frame_button_confirma = Frame(subframe_prod1, bg=bg_tela)
         frame_button_confirma.grid(row=2, column=1, pady=10, sticky=E)
         self.venda_button_fechar = Button(frame_button_confirma, text='Fechar', command=jan.destroy)
         self.venda_button_fechar.pack(side=LEFT, ipady=10, ipadx=30)
@@ -7794,6 +7798,161 @@ class Castelo:
             self.est_fornec.delete(0, END)
             self.est_fornec.insert(0, self.revendedor_obj.Empresa)
             jan.destroy()
+
+    def abreJanelaConfigurações(self):
+
+        jan = Toplevel()
+
+        # Centraliza a janela
+        x_cordinate = int((self.w / 2) - (630 / 2))
+        y_cordinate = int((self.h / 2) - (450 / 2))
+        jan.geometry("{}x{}+{}+{}".format(630, 450, x_cordinate, y_cordinate))
+
+        font_entry = ('', '9', 'bold')
+
+        frame_princ = Frame(jan)
+        frame_princ.pack(fill=BOTH, padx=10, pady=10)
+
+        abas_config = ttk.Notebook(frame_princ, width=600)
+        abas_config.grid(row=0, column=0, ipady=4)
+        aba_empresa = Frame(abas_config)
+        aba_autorizada = Frame(abas_config)
+        aba_mao_obra_status = Frame(abas_config)
+        aba_operadores = Frame(abas_config)
+        aba_Mensagens = Frame(abas_config)
+
+        abas_config.add(aba_empresa, text='Empresa')
+        abas_config.add(aba_autorizada, text='Serviço Autorizado')
+        abas_config.add(aba_mao_obra_status, text='M.O / Status')
+        abas_config.add(aba_operadores, text='Operadores')
+        abas_config.add(aba_Mensagens, text='Mensagens')
+
+        #Aba Empresa -----------------------------------------------------
+
+        frame1_empres = Frame(aba_empresa)
+        frame1_empres.grid(row=0, column=0)
+        frame2_empres = Frame(aba_empresa)
+        frame2_empres.grid(row=0, column=1, sticky=S)
+
+        sub_frame_empres1 = Frame(frame1_empres, padx=10)
+        sub_frame_empres1.pack(fill=X)
+        sub_frame_empres2 = Frame(frame1_empres, padx=10)
+        sub_frame_empres2.pack(fill=X)
+        sub_frame_empres3 = Frame(frame1_empres, padx=10)
+        sub_frame_empres3.pack(fill=X)
+        sub_frame_empres4 = Frame(frame1_empres, padx=10)
+        sub_frame_empres4.pack(fill=X)
+        sub_frame_empres5 = Frame(frame1_empres, padx=10)
+        sub_frame_empres5.pack(fill=X)
+
+        labelF_nome_empr = LabelFrame(sub_frame_empres1, text='Nome Fantasia da Empresa')
+        labelF_nome_empr.grid(row=0, column=0, ipady=2, pady=8)
+        labelf_sigla_empr = LabelFrame(sub_frame_empres1, text='Sigla')
+        labelf_sigla_empr.grid(row=0, column=1, ipady=2, padx=10)
+        labelF_nomeReal_empr = LabelFrame(sub_frame_empres2, text='Nome da Empresa')
+        labelF_nomeReal_empr.grid(row=0, column=0, ipady=2)
+        labelf_end_empr = LabelFrame(sub_frame_empres2, text='Endereço Completo')
+        labelf_end_empr.grid(row=1, column=0, ipady=2, pady=8)
+        labelF_cep = LabelFrame(sub_frame_empres3, text='Cep')
+        labelF_cep.grid(row=0, column=0, ipady=2)
+        labelF_cidade = LabelFrame(sub_frame_empres3, text='Cidade / Estado')
+        labelF_cidade.grid(row=0, column=1, ipady=2, padx=10)
+        labelF_telefone = LabelFrame(sub_frame_empres4, text='Telefone')
+        labelF_telefone.grid(row=0, column=0, ipady=2, pady=8)
+        labelF_celular = LabelFrame(sub_frame_empres4, text='Celular')
+        labelF_celular.grid(row=0, column=1, ipady=2, padx=10)
+        labelF_whats = LabelFrame(sub_frame_empres4, text='Whatsapp')
+        labelF_whats.grid(row=0, column=2, ipady=2)
+        labelF_cnpj = LabelFrame(sub_frame_empres5, text='CNPJ')
+        labelF_cnpj.grid(row=0, column=0, ipady=2)
+        labelF_IE = LabelFrame(sub_frame_empres5, text='Inscrição Estadual')
+        labelF_IE.grid(row=0, column=1, ipady=2, padx=10)
+        labelF_IM = LabelFrame(sub_frame_empres5, text='Inscrição Municipal')
+        labelF_IM.grid(row=1, column=0, ipady=2, pady=8)
+        labelF_email = LabelFrame(sub_frame_empres5, text='Email')
+        labelF_email.grid(row=1, column=1, ipady=2)
+
+
+        nome_empresa_entry = Entry(labelF_nome_empr, width=57)
+        nome_empresa_entry.pack(fill=BOTH, padx=5)
+        sigla_empresa_entry = Entry(labelf_sigla_empr, width=2)
+        sigla_empresa_entry.pack(fill=BOTH, padx=5)
+        nomeR_empresa_entry = Entry(labelF_nomeReal_empr, width=65)
+        nomeR_empresa_entry.pack(fill=BOTH, padx=5)
+        endereço_empresa_entry = Entry(labelf_end_empr, width=65)
+        endereço_empresa_entry.pack(fill=BOTH, padx=5)
+        cep_empresa_entry = Entry(labelF_cep, width=28)
+        cep_empresa_entry.pack(fill=BOTH, padx=5)
+        cidade_empresa_entry = Entry(labelF_cidade, width=25)
+        cidade_empresa_entry.grid(row=0, column=0, padx=5)
+        uf_empresa_entry = Entry(labelF_cidade, width=5)
+        uf_empresa_entry.grid(row=0, column=1, padx=5)
+        tel_empresa_entry = Entry(labelF_telefone, width=19)
+        tel_empresa_entry.pack(fill=BOTH, padx=5)
+        cel_empresa_entry = Entry(labelF_celular, width=18)
+        cel_empresa_entry.pack(fill=BOTH, padx=5)
+        whats_empresa_entry = Entry(labelF_whats, width=19)
+        whats_empresa_entry.pack(fill=BOTH, padx=5)
+        cnpj_empresa_entry = Entry(labelF_cnpj, width=30)
+        cnpj_empresa_entry.pack(fill=BOTH, padx=5)
+        ie_empresa_entry = Entry(labelF_IE, width=31)
+        ie_empresa_entry.pack(fill=BOTH, padx=5)
+        im_empresa_entry = Entry(labelF_IM, width=30)
+        im_empresa_entry.pack(fill=BOTH, padx=5)
+        email_empresa_entry = Entry(labelF_email, width=31)
+        email_empresa_entry.pack(fill=BOTH, padx=5)
+
+
+        LabelF_logo = LabelFrame(frame2_empres, text='Logotipo', height=100, width=145)
+        LabelF_logo.grid(row=0, column=0, sticky=SE, pady=7)
+
+        # Aba Autorizada -----------------------------------------------------
+
+        frame_autorizada = Frame(aba_autorizada)
+        frame_autorizada.pack(fill=BOTH, padx=10, pady=10)
+
+        labelF_Autorizada = LabelFrame(frame_autorizada, text='Serviço Autorizado')
+        labelF_Autorizada.grid(row=0, column=0, ipadx=10, ipady=8)
+        entry_aut1 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER)
+        entry_aut1.grid(row=0, column=0, padx=10, pady=10)
+        entry_aut1.insert(0, 'Autorizada1')
+        entry_aut2 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER)
+        entry_aut2.grid(row=0, column=1)
+        entry_aut2.insert(0, 'Autorizada2')
+        entry_aut3 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER)
+        entry_aut3.grid(row=1, column=0)
+        entry_aut3.insert(0, 'Autorizada3')
+        entry_aut4 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER)
+        entry_aut4.grid(row=1, column=1)
+        entry_aut4.insert(0, 'Autorizada4')
+        entry_aut5 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER)
+        entry_aut5.grid(row=2, column=0, padx=10, pady=10)
+        entry_aut5.insert(0, 'Autorizada5')
+        entry_aut6 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER)
+        entry_aut6.grid(row=2, column=1)
+        entry_aut6.insert(0, 'Autorizada6')
+        entry_aut7 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER)
+        entry_aut7.grid(row=3, column=0)
+        entry_aut7.insert(0, 'Autorizada7')
+        entry_aut8 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER)
+        entry_aut8.grid(row=3, column=1)
+        entry_aut8.insert(0, 'Autorizada8')
+        entry_aut9 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER)
+        entry_aut9.grid(row=4, column=0, padx=10, pady=10)
+        entry_aut9.insert(0, 'Autorizada9')
+        entry_aut10 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER)
+        entry_aut10.grid(row=4, column=1)
+        entry_aut10.insert(0, 'Autorizada10')
+        entry_aut11 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER)
+        entry_aut11.grid(row=5, column=0)
+        entry_aut11.insert(0, 'Autorizada11')
+        entry_aut12 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER)
+        entry_aut12.grid(row=5, column=1)
+        entry_aut12.insert(0, 'Autorizada12')
+
+        jan.transient(root2)
+        jan.focus_force()
+        jan.grab_set()
 
 
 fabrica = fabrica_conexao.FabricaConexão()

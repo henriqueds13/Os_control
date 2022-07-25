@@ -423,3 +423,26 @@ else:
         self.tree_ap_manut.focus(children[0])
         self.tree_ap_manut.selection_set(children[0])
     jan.destroy()
+
+
+    def janelaNovaVenda(self, opt):
+
+        bg_tela = '#015958'
+        bg_entry = '#C5D7D9'
+
+        jan = Toplevel(bg=bg_tela)
+
+        jan.transient(root2)
+        jan.focus_force()
+        jan.grab_set()
+
+        frame_os_final = Frame(frame_princ_jan_os, bg=color_frame)
+        frame_os_final.grid(row=4, column=0, sticky=W)
+        nb_os = ttk.Notebook(frame_os_final, height=125, width=350, style='s2.TNotebook')
+        nb_os.grid(row=0, column=0, sticky=W)
+        labelframe_os_prob = LabelFrame(nb_os, text="Histórico", fg="Blue", bg=color_frame)
+        labelframe_os_andamento = LabelFrame(nb_os, text="Andamento do Serviço", fg="Blue", bg=color_frame)
+        labelframe_os_status = LabelFrame(nb_os, text="Status", fg="blue", bg=color_frame)
+        labelframe_os_tecnicos = LabelFrame(nb_os, text="Técnicos", fg="blue", bg=color_frame)
+        nb_os.add(frame_est_dados, text="Dados")
+        nb_os.add(frame_est_tributos, text="Tributos")
