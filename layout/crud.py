@@ -7805,16 +7805,17 @@ class Castelo:
 
         # Centraliza a janela
         x_cordinate = int((self.w / 2) - (630 / 2))
-        y_cordinate = int((self.h / 2) - (450 / 2))
-        jan.geometry("{}x{}+{}+{}".format(630, 450, x_cordinate, y_cordinate))
+        y_cordinate = int((self.h / 2) - (460 / 2))
+        jan.geometry("{}x{}+{}+{}".format(630, 460, x_cordinate, y_cordinate))
 
         font_entry = ('', '9', 'bold')
 
         frame_princ = Frame(jan)
-        frame_princ.pack(fill=BOTH, padx=10, pady=10)
+        frame_princ.pack(fill=X, padx=10, pady=10)
+
 
         abas_config = ttk.Notebook(frame_princ, width=600)
-        abas_config.grid(row=0, column=0, ipady=4)
+        abas_config.grid(row=0, column=0, ipady=0)
         aba_empresa = Frame(abas_config)
         aba_autorizada = Frame(abas_config)
         aba_mao_obra_status = Frame(abas_config)
@@ -7826,6 +7827,12 @@ class Castelo:
         abas_config.add(aba_mao_obra_status, text='M.O / Status')
         abas_config.add(aba_operadores, text='Operadores')
         abas_config.add(aba_Mensagens, text='Mensagens')
+
+        frame_princ_2 = Frame(frame_princ)
+        frame_princ_2.grid(row=1, column=0, sticky=E)
+
+        button_fecha_conf = Button(frame_princ_2, text='Fechar', width=13)
+        button_fecha_conf.grid(row=0, column=0, sticky=W, pady=10, ipady=3)
 
         #Aba Empresa -----------------------------------------------------
 
@@ -7950,9 +7957,159 @@ class Castelo:
         entry_aut12.grid(row=5, column=1)
         entry_aut12.insert(0, 'Autorizada12')
 
+        # Aba Mao de obra -----------------------------------------------------
+
+        frame_mao_obra = Frame(aba_mao_obra_status)
+        frame_mao_obra.pack(fill=BOTH, padx=10, pady=0, ipady=10, ipadx=10)
+
+        labelF_mao_obra = LabelFrame(frame_mao_obra, text='Tabela Mão de Obra')
+        labelF_mao_obra.grid(row=0, column=0)
+        labelF_tecnico = LabelFrame(frame_mao_obra, text='Técnico')
+        labelF_tecnico.grid(row=0, column=1, padx=10, sticky=NE)
+        labelF_aparelho = LabelFrame(frame_mao_obra, text='Aparelho')
+        labelF_aparelho.grid(row=1, column=0, ipady=5)
+        labelF_marca = LabelFrame(frame_mao_obra, text='Marca')
+        labelF_marca.grid(row=1, column=1, ipady=5, pady=10)
+
+        subframe_mao_obra = Frame(labelF_mao_obra)
+        subframe_mao_obra.grid(row=1, column=0, sticky=W)
+        subframe_mao_obra1 = Frame(subframe_mao_obra)
+        subframe_mao_obra1.grid(row=0, column=0, sticky=W)
+        subframe_mao_obra2 = Frame(subframe_mao_obra)
+        subframe_mao_obra2.grid(row=0, column=1, sticky=W)
+
+        text_mao_obra = Text(labelF_mao_obra, height=5, width=35)
+        text_mao_obra.grid(row=0, column=0, padx=5, pady=5)
+
+        Label(subframe_mao_obra1, text='Descrição').grid(row=0, column=0, padx=5)
+        Label(subframe_mao_obra1, text='Preço').grid(row=1, column=0, sticky=E, padx=5, pady=5)
+        entry_descr_mao_obra = Entry(subframe_mao_obra1, width=23)
+        entry_descr_mao_obra.grid(row=0, column=1)
+        entry_preço_mao_obra = Entry(subframe_mao_obra1, width=13)
+        entry_preço_mao_obra.grid(row=1, column=1, sticky=W)
+
+        button_conf_mao_obra = Button(subframe_mao_obra2, text='Gravar', width=8)
+        button_conf_mao_obra.grid(row=0, column=0, padx=10, sticky=W)
+        button_del_mao_obra = Button(subframe_mao_obra2, text='Excluir', width=8)
+        button_del_mao_obra.grid(row=1, column=0, pady=5)
+
+        text_tecnico = Text(labelF_tecnico, height=5, width=31)
+        text_tecnico.grid(row=0, column=0, padx=5, pady=5)
+        subframe_tecnico = Frame(labelF_tecnico)
+        subframe_tecnico.grid(row=1, column=0, sticky=NW)
+
+        button_conf_tecnico = Button(subframe_tecnico, text='Novo Técnico', width=10, wraplength=50)
+        button_conf_tecnico.grid(row=0, column=0, padx=10, sticky=W, pady=11)
+        button_del_tecnico = Button(subframe_tecnico, text='Excluir Técnico', width=10, wraplength=50)
+        button_del_tecnico.grid(row=0, column=1, pady=5)
+
+        text_aparelho = Text(labelF_aparelho, height=7, width=23)
+        text_aparelho.grid(row=0, column=0, padx=5, pady=5)
+        subframe_aparelho = Frame(labelF_aparelho)
+        subframe_aparelho.grid(row=0, column=1, sticky=NW)
+
+        button_conf_aparelho = Button(subframe_aparelho, text='Novo Aparelho', width=10, wraplength=50)
+        button_conf_aparelho.grid(row=0, column=0, padx=10, sticky=W)
+        button_del_aparelho = Button(subframe_aparelho, text='Excluir Aparelho', width=10, wraplength=50)
+        button_del_aparelho.grid(row=1, column=0, pady=5)
+
+        text_marca = Text(labelF_marca, height=7, width=19)
+        text_marca.grid(row=0, column=0, padx=5, pady=5)
+        subframe_marca = Frame(labelF_marca)
+        subframe_marca.grid(row=0, column=1, sticky=NW)
+
+        button_conf_marca = Button(subframe_marca, text='Novo Marca', width=10, wraplength=50)
+        button_conf_marca.grid(row=0, column=0, padx=9, sticky=W)
+        button_del_marca = Button(subframe_marca, text='Excluir Marca', width=10, wraplength=50)
+        button_del_marca.grid(row=1, column=0, pady=6)
+
+        # Aba Operadores -----------------------------------------------------
+
+        frame_op = Frame(aba_operadores)
+        frame_op.pack(fill=BOTH, padx=10, pady=10)
+
+        labelF_op = LabelFrame(frame_op, text='Operadores / Niveis de Acesso')
+        labelF_op.grid(row=0, column=0)
+
+        tree_conf_op = ttk.Treeview(labelF_op,
+                                    columns=('operador', 'iniciar', 'emitir', 'baixa', 'estoque', 'usuario',
+                                             'configuração', 'financeiro'),
+                                    show='headings',
+                                    selectmode='browse',
+                                    height=5)
+
+        tree_conf_op.column('operador', width=200, minwidth=10, stretch=False)
+        tree_conf_op.column('iniciar', width=50, minwidth=10, stretch=False)
+        tree_conf_op.column('emitir', width=50, minwidth=10, stretch=False)
+        tree_conf_op.column('baixa', width=50, minwidth=10, stretch=False)
+        tree_conf_op.column('estoque', width=50, minwidth=10, stretch=False)
+        tree_conf_op.column('usuario', width=50, minwidth=10, stretch=False)
+        tree_conf_op.column('configuração', width=50, minwidth=10, stretch=False)
+        tree_conf_op.column('financeiro', width=50, minwidth=10, stretch=False)
+
+        tree_conf_op.heading('operador', text='Operador')
+        tree_conf_op.heading('iniciar', text='INI')
+        tree_conf_op.heading('emitir', text='EM')
+        tree_conf_op.heading('baixa', text='BX')
+        tree_conf_op.heading('estoque', text='CE')
+        tree_conf_op.heading('usuario', text='USU')
+        tree_conf_op.heading('configuração', text='CON')
+        tree_conf_op.heading('financeiro', text='FIN')
+
+        tree_conf_op.grid(sticky=W, padx=10, pady=10)
+
+        subframe_op = Frame(frame_op)
+        subframe_op.grid(row=1, column=0, sticky=W, pady=10)
+
+        labelF_op_legenda = LabelFrame(subframe_op, text='Legenda')
+        labelF_op_legenda.grid(row=0, column=0, ipadx=10, sticky=E, padx=10)
+        labelF_op_buttons = LabelFrame(subframe_op)
+        labelF_op_buttons.grid(row=0, column=1, sticky=SE, padx=0, ipadx=5, ipady=5)
+        imagem_op = Frame(subframe_op, height=170, width=124, bg='yellow')
+        imagem_op.grid(row=0, column=2, padx=10)
+
+        Label(labelF_op_legenda, text='INI = Inicializar o Sistema', anchor=W).pack(fill=X)
+        Label(labelF_op_legenda, text='EM  = Emitir Ordem de Serviço', anchor=W).pack(fill=X)
+        Label(labelF_op_legenda, text='BX  = Dar Baixa em Ordem de Serviço', anchor=W).pack(fill=X)
+        Label(labelF_op_legenda, text='CE  = Controle de Estoque', anchor=W).pack(fill=X)
+        Label(labelF_op_legenda, text='USU = Cadastro de Usúario', anchor=W).pack(fill=X)
+        Label(labelF_op_legenda, text='CON = Configuração do Sistema', anchor=W).pack(fill=X)
+        Label(labelF_op_legenda, text='FIN = Financeiro', anchor=W).pack(fill=X)
+
+        button_op_novo = Button(labelF_op_buttons, text='Novo Operador', wraplength=50, width=10)
+        button_op_novo.grid(row=0, column=0, padx=10, pady=10)
+        button_op_del = Button(labelF_op_buttons, text='Excluir Operador', wraplength=50, width=10)
+        button_op_del.grid(row=0, column=1)
+        button_op_alter_senha = Button(labelF_op_buttons, text='Alterar Senha', wraplength=50, width=10)
+        button_op_alter_senha.grid(row=1, column=0)
+        button_op_alter_aces = Button(labelF_op_buttons, text='Alterar Acesso', wraplength=50, width=10)
+        button_op_alter_aces.grid(row=1, column=1)
+
         jan.transient(root2)
         jan.focus_force()
         jan.grab_set()
+
+        # Aba Mensagens -----------------------------------------------------
+
+        frame_mensagens = Frame(aba_Mensagens)
+        frame_mensagens.pack(fill=BOTH, padx=10, pady=10)
+
+        Label(frame_mensagens, text='Mensagens que serão Impressas na Ordem de Serviço', bg='yellow').pack()
+
+        labelF_mens1 = LabelFrame(frame_mensagens, text='Mensagem 1')
+        labelF_mens1.pack(fill=X)
+        labelF_mens2 = LabelFrame(frame_mensagens, text='Mensagem 2')
+        labelF_mens2.pack(fill=X)
+        labelF_mens3 = LabelFrame(frame_mensagens, text='Mensagem 3')
+        labelF_mens3.pack(fill=X)
+
+        entry_mens1 = Entry(labelF_mens1, width=60)
+        entry_mens1.pack(fill=BOTH, padx=10, pady=10)
+        entry_mens2 = Entry(labelF_mens2, width=60)
+        entry_mens2.pack(fill=BOTH, padx=10, pady=10)
+        entry_mens3 = Entry(labelF_mens3, width=60)
+        entry_mens3.pack(fill=BOTH, padx=10, pady=10)
+
 
 
 fabrica = fabrica_conexao.FabricaConexão()
