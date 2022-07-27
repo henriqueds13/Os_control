@@ -446,3 +446,19 @@ else:
         labelframe_os_tecnicos = LabelFrame(nb_os, text="Técnicos", fg="blue", bg=color_frame)
         nb_os.add(frame_est_dados, text="Dados")
         nb_os.add(frame_est_tributos, text="Tributos")
+
+        self.list_status_os = Listbox(labelframe_os_status, bg="#ffe0c0")
+        self.list_status_os.insert(1, "EM ANDAMENTO")
+        self.list_status_os.insert(2, "EM SERVIÇO")
+        self.list_status_os.insert(3, "N/ AUTORIZADO")
+        self.list_status_os.insert(4, "PENDENTE")
+        self.list_status_os.insert(5, "PRONTO")
+        self.list_status_os.insert(6, "SEM CONSERTO")
+        self.list_status_os.pack(side=LEFT, padx=5, pady=5)
+        frame_status_os = Frame(labelframe_os_status, bg=color_frame)
+        frame_status_os.pack(side=LEFT, padx=5, fill=Y)
+        self.os_status = Label(frame_status_os, text=os_dados.status, fg="blue",
+                               bg="#ffe0c0", bd=2, relief=SUNKEN, width=15)
+        self.os_status.grid(row=0, column=0, ipadx=10, padx=5)
+        Button(frame_status_os, text="Salvar", command=lambda: [seleciona_status(1)]).grid(row=1, column=0, pady=20,
+                                                                                           ipadx=10)

@@ -109,6 +109,8 @@ class Castelo:
         self.count = 0
 
 
+
+
         def on_enter(e):
             e.widget['relief'] = 'raised'
 
@@ -7809,6 +7811,259 @@ class Castelo:
         jan.geometry("{}x{}+{}+{}".format(630, 460, x_cordinate, y_cordinate))
 
         font_entry = ('', '9', 'bold')
+        list_mao_obra=[['REBOBINAMENTO DO MOTOR', 'R$200,00', 0],
+                       ['LIMPEZA CARBURADOR', 'R$120,00', 1]]
+        with open('aparelhos.txt', 'r+', encoding='utf8') as aparelhos_txt:
+            list_aparelhos = aparelhos_txt.readlines()
+        with open('tecnicos.txt', 'r+', encoding='utf8') as tecnicos_txt:
+            list_tecnicos = tecnicos_txt.readlines()
+        with open('marcas.txt', 'r+', encoding='utf8') as marcas_txt:
+            list_marcas = marcas_txt.readlines()
+
+        # --------------------------------------------------------------------------------------
+
+        osVar1 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar1.set(osVar1.get().upper())
+
+        osVar1.trace_add('write', to_uppercase)
+
+        osVar2 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar2.set(osVar2.get().upper())
+
+        osVar2.trace_add('write', to_uppercase)
+
+        osVar3 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar3.set(osVar3.get().upper())
+
+        osVar3.trace_add('write', to_uppercase)
+
+        osVar4 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar4.set(osVar4.get().upper())
+
+        osVar4.trace_add('write', to_uppercase)
+
+        osVar5 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar5.set(osVar5.get().upper())
+
+        osVar5.trace_add('write', to_uppercase)
+
+        osVar6 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar6.set(osVar6.get().upper())
+
+        osVar6.trace_add('write', to_uppercase)
+
+        osVar7 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar7.set(osVar7.get().upper())
+
+        osVar7.trace_add('write', to_uppercase)
+
+        osVar8 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar8.set(osVar8.get().upper())
+
+        osVar8.trace_add('write', to_uppercase)
+
+        osVar9 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar9.set(osVar9.get().upper())
+
+        osVar9.trace_add('write', to_uppercase)
+
+        osVar10 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar10.set(osVar10.get().upper())
+
+        osVar10.trace_add('write', to_uppercase)
+
+        osVar11 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar11.set(osVar11.get().upper())
+
+        osVar11.trace_add('write', to_uppercase)
+
+        osVar12 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar12.set(osVar12.get().upper())
+
+        osVar12.trace_add('write', to_uppercase)
+
+        osVar13 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar13.set(osVar13.get().upper())
+
+        osVar13.trace_add('write', to_uppercase)
+
+        osVar14 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar14.set(osVar14.get().upper())
+
+        osVar14.trace_add('write', to_uppercase)
+
+        osVar15 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar15.set(osVar15.get().upper())
+
+        osVar15.trace_add('write', to_uppercase)
+
+        osVar16 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar16.set(osVar16.get().upper())
+
+        osVar16.trace_add('write', to_uppercase)
+
+        osVar17 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar17.set(osVar17.get().upper())
+
+        osVar17.trace_add('write', to_uppercase)
+
+        osVar18 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar18.set(osVar18.get().upper())
+
+        osVar18.trace_add('write', to_uppercase)
+
+        osVar19 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar19.set(osVar19.get().upper())
+
+        osVar19.trace_add('write', to_uppercase)
+
+        osVar20 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar20.set(osVar20.get().upper())
+
+        osVar20.trace_add('write', to_uppercase)
+
+        osVar21 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar21.set(osVar21.get().upper())
+
+        osVar21.trace_add('write', to_uppercase)
+
+        osVar22 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar22.set(osVar22.get().upper())
+
+        osVar22.trace_add('write', to_uppercase)
+
+        osVar23 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar23.set(osVar23.get().upper())
+
+        osVar23.trace_add('write', to_uppercase)
+
+        osVar24 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar24.set(osVar24.get().upper())
+
+        osVar24.trace_add('write', to_uppercase)
+
+        osVar25 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar25.set(osVar25.get().upper())
+
+        osVar25.trace_add('write', to_uppercase)
+
+        osVar26 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar26.set(osVar26.get().upper())
+
+        osVar26.trace_add('write', to_uppercase)
+
+        osVar27 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar27.set(osVar27.get().upper())
+
+        osVar27.trace_add('write', to_uppercase)
+
+        osVar28 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar28.set(osVar28.get().upper())
+
+        osVar28.trace_add('write', to_uppercase)
+
+        osVar29 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar29.set(osVar29.get().upper())
+
+        osVar29.trace_add('write', to_uppercase)
+
+        osVar30 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar30.set(osVar30.get().upper())
+
+        osVar30.trace_add('write', to_uppercase)
+
+        osVar31 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar31.set(osVar31.get().upper())
+
+        osVar31.trace_add('write', to_uppercase)
+
+        osVar32 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar32.set(osVar32.get().upper())
+
+        osVar32.trace_add('write', to_uppercase)
+
+        osVar33 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar33.set(osVar33.get().upper())
+
+        osVar33.trace_add('write', to_uppercase)
+
+        osVar34 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar34.set(osVar34.get().upper())
+
+        osVar34.trace_add('write', to_uppercase)
+        # --------------------------------------------------------------------------------------
+
+        def popularMaoObra():
+            for i in list_mao_obra:
+                treeview_mao_obra.insert("", "end", values=(i[0], i[1], i[2]))
 
         frame_princ = Frame(jan)
         frame_princ.pack(fill=X, padx=10, pady=10)
@@ -7880,34 +8135,35 @@ class Castelo:
         labelF_email.grid(row=1, column=1, ipady=2)
 
 
-        nome_empresa_entry = Entry(labelF_nome_empr, width=57)
-        nome_empresa_entry.pack(fill=BOTH, padx=5)
-        sigla_empresa_entry = Entry(labelf_sigla_empr, width=2)
-        sigla_empresa_entry.pack(fill=BOTH, padx=5)
-        nomeR_empresa_entry = Entry(labelF_nomeReal_empr, width=65)
-        nomeR_empresa_entry.pack(fill=BOTH, padx=5)
-        endereço_empresa_entry = Entry(labelf_end_empr, width=65)
-        endereço_empresa_entry.pack(fill=BOTH, padx=5)
-        cep_empresa_entry = Entry(labelF_cep, width=28)
-        cep_empresa_entry.pack(fill=BOTH, padx=5)
-        cidade_empresa_entry = Entry(labelF_cidade, width=25)
-        cidade_empresa_entry.grid(row=0, column=0, padx=5)
-        uf_empresa_entry = Entry(labelF_cidade, width=5)
-        uf_empresa_entry.grid(row=0, column=1, padx=5)
-        tel_empresa_entry = Entry(labelF_telefone, width=19)
-        tel_empresa_entry.pack(fill=BOTH, padx=5)
-        cel_empresa_entry = Entry(labelF_celular, width=18)
-        cel_empresa_entry.pack(fill=BOTH, padx=5)
-        whats_empresa_entry = Entry(labelF_whats, width=19)
-        whats_empresa_entry.pack(fill=BOTH, padx=5)
-        cnpj_empresa_entry = Entry(labelF_cnpj, width=30)
-        cnpj_empresa_entry.pack(fill=BOTH, padx=5)
-        ie_empresa_entry = Entry(labelF_IE, width=31)
-        ie_empresa_entry.pack(fill=BOTH, padx=5)
-        im_empresa_entry = Entry(labelF_IM, width=30)
-        im_empresa_entry.pack(fill=BOTH, padx=5)
-        email_empresa_entry = Entry(labelF_email, width=31)
-        email_empresa_entry.pack(fill=BOTH, padx=5)
+
+        self.nome_empresa_entry = Entry(labelF_nome_empr, width=57, textvariable=osVar1)
+        self.nome_empresa_entry.pack(fill=BOTH, padx=5)
+        self.sigla_empresa_entry = Entry(labelf_sigla_empr, width=2, textvariable=osVar2)
+        self.sigla_empresa_entry.pack(fill=BOTH, padx=5)
+        self.nomeR_empresa_entry = Entry(labelF_nomeReal_empr, width=65, textvariable=osVar3)
+        self.nomeR_empresa_entry.pack(fill=BOTH, padx=5)
+        self.endereço_empresa_entry = Entry(labelf_end_empr, width=65, textvariable=osVar4)
+        self.endereço_empresa_entry.pack(fill=BOTH, padx=5)
+        self.cep_empresa_entry = Entry(labelF_cep, width=28, textvariable=osVar5)
+        self.cep_empresa_entry.pack(fill=BOTH, padx=5)
+        self.cidade_empresa_entry = Entry(labelF_cidade, width=25, textvariable=osVar6)
+        self.cidade_empresa_entry.grid(row=0, column=0, padx=5)
+        self.uf_empresa_entry = Entry(labelF_cidade, width=5, textvariable=osVar7)
+        self.uf_empresa_entry.grid(row=0, column=1, padx=5)
+        self.tel_empresa_entry = Entry(labelF_telefone, width=19, textvariable=osVar8)
+        self.tel_empresa_entry.pack(fill=BOTH, padx=5)
+        self.cel_empresa_entry = Entry(labelF_celular, width=18, textvariable=osVar9)
+        self.cel_empresa_entry.pack(fill=BOTH, padx=5)
+        self.whats_empresa_entry = Entry(labelF_whats, width=19, textvariable=osVar10)
+        self.whats_empresa_entry.pack(fill=BOTH, padx=5)
+        self.cnpj_empresa_entry = Entry(labelF_cnpj, width=30, textvariable=osVar11)
+        self.cnpj_empresa_entry.pack(fill=BOTH, padx=5)
+        self.ie_empresa_entry = Entry(labelF_IE, width=31, textvariable=osVar12)
+        self.ie_empresa_entry.pack(fill=BOTH, padx=5)
+        self.m_empresa_entry = Entry(labelF_IM, width=30, textvariable=osVar13)
+        self.m_empresa_entry.pack(fill=BOTH, padx=5)
+        self.email_empresa_entry = Entry(labelF_email, width=31, textvariable=osVar14)
+        self.email_empresa_entry.pack(fill=BOTH, padx=5)
 
 
         LabelF_logo = LabelFrame(frame2_empres, text='Logotipo', height=100, width=145)
@@ -7920,56 +8176,58 @@ class Castelo:
 
         labelF_Autorizada = LabelFrame(frame_autorizada, text='Serviço Autorizado')
         labelF_Autorizada.grid(row=0, column=0, ipadx=10, ipady=8)
-        entry_aut1 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER)
-        entry_aut1.grid(row=0, column=0, padx=10, pady=10)
-        entry_aut1.insert(0, 'Autorizada1')
-        entry_aut2 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER)
-        entry_aut2.grid(row=0, column=1)
-        entry_aut2.insert(0, 'Autorizada2')
-        entry_aut3 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER)
-        entry_aut3.grid(row=1, column=0)
-        entry_aut3.insert(0, 'Autorizada3')
-        entry_aut4 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER)
-        entry_aut4.grid(row=1, column=1)
-        entry_aut4.insert(0, 'Autorizada4')
-        entry_aut5 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER)
-        entry_aut5.grid(row=2, column=0, padx=10, pady=10)
-        entry_aut5.insert(0, 'Autorizada5')
-        entry_aut6 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER)
-        entry_aut6.grid(row=2, column=1)
-        entry_aut6.insert(0, 'Autorizada6')
-        entry_aut7 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER)
-        entry_aut7.grid(row=3, column=0)
-        entry_aut7.insert(0, 'Autorizada7')
-        entry_aut8 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER)
-        entry_aut8.grid(row=3, column=1)
-        entry_aut8.insert(0, 'Autorizada8')
-        entry_aut9 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER)
-        entry_aut9.grid(row=4, column=0, padx=10, pady=10)
-        entry_aut9.insert(0, 'Autorizada9')
-        entry_aut10 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER)
-        entry_aut10.grid(row=4, column=1)
-        entry_aut10.insert(0, 'Autorizada10')
-        entry_aut11 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER)
-        entry_aut11.grid(row=5, column=0)
-        entry_aut11.insert(0, 'Autorizada11')
-        entry_aut12 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER)
-        entry_aut12.grid(row=5, column=1)
-        entry_aut12.insert(0, 'Autorizada12')
+        self.entry_aut1 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER, textvariable=osVar15)
+        self.entry_aut1.grid(row=0, column=0, padx=10, pady=10)
+        self.entry_aut1.insert(0, 'Autorizada1')
+        self.entry_aut2 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER, textvariable=osVar16)
+        self.entry_aut2.grid(row=0, column=1)
+        self.entry_aut2.insert(0, 'Autorizada2')
+        self.entry_aut3 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER, textvariable=osVar17)
+        self.entry_aut3.grid(row=1, column=0)
+        self.entry_aut3.insert(0, 'Autorizada3')
+        self.entry_aut4 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER, textvariable=osVar18)
+        self.entry_aut4.grid(row=1, column=1)
+        self.entry_aut4.insert(0, 'Autorizada4')
+        self.entry_aut5 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER, textvariable=osVar19)
+        self.entry_aut5.grid(row=2, column=0, padx=10, pady=10)
+        self.entry_aut5.insert(0, 'Autorizada5')
+        self.entry_aut6 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER, textvariable=osVar20)
+        self.entry_aut6.grid(row=2, column=1)
+        self.entry_aut6.insert(0, 'Autorizada6')
+        self.entry_aut7 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER, textvariable=osVar21)
+        self.entry_aut7.grid(row=3, column=0)
+        self.entry_aut7.insert(0, 'Autorizada7')
+        self.entry_aut8 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER, textvariable=osVar22)
+        self.entry_aut8.grid(row=3, column=1)
+        self.entry_aut8.insert(0, 'Autorizada8')
+        self.entry_aut9 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER, textvariable=osVar23)
+        self.entry_aut9.grid(row=4, column=0, padx=10, pady=10)
+        self.entry_aut9.insert(0, 'Autorizada9')
+        self.entry_aut10 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER, textvariable=osVar24)
+        self.entry_aut10.grid(row=4, column=1)
+        self.entry_aut10.insert(0, 'Autorizada10')
+        self.entry_aut11 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER, textvariable=osVar25)
+        self.entry_aut11.grid(row=5, column=0)
+        self.entry_aut11.insert(0, 'Autorizada11')
+        self.entry_aut12 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER, textvariable=osVar26)
+        self.entry_aut12.grid(row=5, column=1)
+        self.entry_aut12.insert(0, 'Autorizada12')
 
         # Aba Mao de obra -----------------------------------------------------
 
         frame_mao_obra = Frame(aba_mao_obra_status)
-        frame_mao_obra.pack(fill=BOTH, padx=10, pady=0, ipady=10, ipadx=10)
+        frame_mao_obra.pack(fill=BOTH, padx=10, pady=0, ipadx=10)
+        frame_mao_obra1 = Frame(aba_mao_obra_status)
+        frame_mao_obra1.pack(fill=BOTH, padx=10, pady=0, ipady=10, ipadx=10)
 
         labelF_mao_obra = LabelFrame(frame_mao_obra, text='Tabela Mão de Obra')
         labelF_mao_obra.grid(row=0, column=0)
         labelF_tecnico = LabelFrame(frame_mao_obra, text='Técnico')
-        labelF_tecnico.grid(row=0, column=1, padx=10, sticky=NE)
-        labelF_aparelho = LabelFrame(frame_mao_obra, text='Aparelho')
-        labelF_aparelho.grid(row=1, column=0, ipady=5)
-        labelF_marca = LabelFrame(frame_mao_obra, text='Marca')
-        labelF_marca.grid(row=1, column=1, ipady=5, pady=10)
+        labelF_tecnico.grid(row=0, column=1, padx=5, sticky=NW)
+        labelF_aparelho = LabelFrame(frame_mao_obra1, text='Aparelho')
+        labelF_aparelho.grid(row=0, column=0, ipady=5)
+        labelF_marca = LabelFrame(frame_mao_obra1, text='Marca')
+        labelF_marca.grid(row=0, column=1, ipady=5, pady=10, padx=10)
 
         subframe_mao_obra = Frame(labelF_mao_obra)
         subframe_mao_obra.grid(row=1, column=0, sticky=W)
@@ -7978,12 +8236,23 @@ class Castelo:
         subframe_mao_obra2 = Frame(subframe_mao_obra)
         subframe_mao_obra2.grid(row=0, column=1, sticky=W)
 
-        text_mao_obra = Text(labelF_mao_obra, height=5, width=35)
-        text_mao_obra.grid(row=0, column=0, padx=5, pady=5)
+        ftree_mao_obra = Frame(labelF_mao_obra, height=5, width=35)
+        ftree_mao_obra.grid(row=0, column=0, padx=5, pady=5)
+        treeview_mao_obra = ttk.Treeview(ftree_mao_obra,
+                                         columns=('descricao', 'valor', 'id'),
+                                         show='tree',
+                                         selectmode='browse',
+                                         height=4)
+        treeview_mao_obra.column('#0', width=0, stretch=NO)
+        treeview_mao_obra.column('descricao', width=250, minwidth=100, stretch=False, anchor=W)
+        treeview_mao_obra.column('valor', width=70, minwidth=25, stretch=False)
+        treeview_mao_obra.column('id', width=0, stretch=NO)
+        treeview_mao_obra.grid(sticky=W)
+        popularMaoObra()
 
         Label(subframe_mao_obra1, text='Descrição').grid(row=0, column=0, padx=5)
         Label(subframe_mao_obra1, text='Preço').grid(row=1, column=0, sticky=E, padx=5, pady=5)
-        entry_descr_mao_obra = Entry(subframe_mao_obra1, width=23)
+        entry_descr_mao_obra = Entry(subframe_mao_obra1, width=23, textvariable=osVar27)
         entry_descr_mao_obra.grid(row=0, column=1)
         entry_preço_mao_obra = Entry(subframe_mao_obra1, width=13)
         entry_preço_mao_obra.grid(row=1, column=1, sticky=W)
@@ -7993,36 +8262,137 @@ class Castelo:
         button_del_mao_obra = Button(subframe_mao_obra2, text='Excluir', width=8)
         button_del_mao_obra.grid(row=1, column=0, pady=5)
 
-        text_tecnico = Text(labelF_tecnico, height=5, width=31)
+        text_tecnico = Listbox(labelF_tecnico, height=5, width=35)
         text_tecnico.grid(row=0, column=0, padx=5, pady=5)
         subframe_tecnico = Frame(labelF_tecnico)
         subframe_tecnico.grid(row=1, column=0, sticky=NW)
 
-        button_conf_tecnico = Button(subframe_tecnico, text='Novo Técnico', width=10, wraplength=50)
+
+        button_conf_tecnico = Button(subframe_tecnico, text='Novo Técnico', width=10, wraplength=50,
+                                     command=lambda: [janelaInsereDados(1)])
         button_conf_tecnico.grid(row=0, column=0, padx=10, sticky=W, pady=11)
-        button_del_tecnico = Button(subframe_tecnico, text='Excluir Técnico', width=10, wraplength=50)
+        button_del_tecnico = Button(subframe_tecnico, text='Excluir Técnico', width=10, wraplength=50,
+                                    command=lambda:[excluiDados(1)])
         button_del_tecnico.grid(row=0, column=1, pady=5)
 
-        text_aparelho = Text(labelF_aparelho, height=7, width=23)
+        text_aparelho = Listbox(labelF_aparelho, height=7, width=30)
         text_aparelho.grid(row=0, column=0, padx=5, pady=5)
         subframe_aparelho = Frame(labelF_aparelho)
         subframe_aparelho.grid(row=0, column=1, sticky=NW)
 
-        button_conf_aparelho = Button(subframe_aparelho, text='Novo Aparelho', width=10, wraplength=50)
+        button_conf_aparelho = Button(subframe_aparelho, text='Novo Aparelho', width=10, wraplength=50,
+                                      command=lambda: [janelaInsereDados(2)])
         button_conf_aparelho.grid(row=0, column=0, padx=10, sticky=W)
-        button_del_aparelho = Button(subframe_aparelho, text='Excluir Aparelho', width=10, wraplength=50)
+        button_del_aparelho = Button(subframe_aparelho, text='Excluir Aparelho', width=10, wraplength=50,
+                                     command=lambda:[excluiDados(2)])
         button_del_aparelho.grid(row=1, column=0, pady=5)
 
-        text_marca = Text(labelF_marca, height=7, width=19)
-        text_marca.grid(row=0, column=0, padx=5, pady=5)
+        text_marca = Listbox(labelF_marca, height=7, width=25)
+        text_marca.grid(row=0, column=0, padx=5, pady=6)
         subframe_marca = Frame(labelF_marca)
         subframe_marca.grid(row=0, column=1, sticky=NW)
 
-        button_conf_marca = Button(subframe_marca, text='Novo Marca', width=10, wraplength=50)
+        button_conf_marca = Button(subframe_marca, text='Novo Marca', width=10, wraplength=50,
+                                   command=lambda: [janelaInsereDados(3)])
         button_conf_marca.grid(row=0, column=0, padx=9, sticky=W)
-        button_del_marca = Button(subframe_marca, text='Excluir Marca', width=10, wraplength=50)
+        button_del_marca = Button(subframe_marca, text='Excluir Marca', width=10, wraplength=50,
+                                  command=lambda:[excluiDados(3)])
         button_del_marca.grid(row=1, column=0, pady=6)
 
+        def popularListBox():
+
+
+
+            text_tecnico.delete(0, END)
+            text_marca.delete(0, END)
+            text_aparelho.delete(0, END)
+            for i in list_tecnicos:
+                text_tecnico.insert(END, i)
+            for i in list_marcas:
+                text_marca.insert(END, i)
+            for i in list_aparelhos:
+                text_aparelho.insert(END, i)
+
+
+
+        def excluiDados(num):
+
+            if num == 1:
+                dados_conf = str(text_tecnico.get(ACTIVE))
+                list_tecnicos.remove(dados_conf)
+                with open('tecnicos.txt', 'r+', encoding='utf8') as tecnicos_txt:
+                    tecnicos_txt.truncate(0)
+                    for i in list_tecnicos:
+                        tecnicos_txt.write(i)
+                        tecnicos_txt.write('\n')
+            elif num == 2:
+                dados_conf = str(text_aparelho.get(ACTIVE))
+                list_aparelhos.remove(dados_conf)
+                with open('aparelhos.txt', 'r+', encoding='utf8') as aparelhos_txt:
+                    aparelhos_txt.truncate(0)
+                    for i in list_aparelhos:
+                        aparelhos_txt.write(i)
+                        aparelhos_txt.write('\n')
+            else:
+                dados_conf = str(text_marca.get(ACTIVE))
+                list_marcas.remove(dados_conf)
+                with open('marcas.txt', 'r+', encoding='utf8') as marcas_txt:
+                    marcas_txt.truncate(0)
+                    for i in list_marcas:
+                        marcas_txt.write(i)
+                        marcas_txt.write('\n')
+            popularListBox()
+
+        def janelaInsereDados(num):
+            jan = Toplevel()
+
+            # Centraliza a janela
+            x_cordinate = int((self.w / 2) - (400 / 2))
+            y_cordinate = int((self.h / 2) - (90 / 2))
+            jan.geometry("{}x{}+{}+{}".format(400, 90, x_cordinate, y_cordinate))
+
+            label_text = ''
+
+            if num == 1:
+                label_text = 'Digite o nome do Técnico:'
+            elif num == 2:
+                label_text = 'Digite o Novo Aparelho:'
+            else:
+                label_text = 'Digite a Nova Marca:'
+
+            frame_localizar_jan1 = Frame(jan)
+            frame_localizar_jan1.pack(padx=10, fill=X)
+            Label(frame_localizar_jan1, text=label_text).pack(side=LEFT)
+
+            frame_localizar_jan2 = Frame(jan)
+            frame_localizar_jan2.pack(pady=10, fill=X)
+            entry_locali = Entry(frame_localizar_jan2, width=30, relief="sunken", borderwidth=2)
+            entry_locali.pack(side=LEFT, padx=10)
+            localButton = Button(frame_localizar_jan2, text="Inserir", width=10, wraplength=70,
+                                 underline=0, font=('Verdana', '9', 'bold'), height=2,
+                                 command=lambda: [InsereDadosLista(num, jan)])
+            localButton.pack(side=LEFT, padx=5)
+            Button(frame_localizar_jan2, text="Fechar", width=10, wraplength=70,
+                   underline=0, font=('Verdana', '9', 'bold'), height=2, command=jan.destroy).pack(side=LEFT, padx=5)
+
+            def InsereDadosLista(num, jan):
+
+                if num == 1:
+                    list_tecnicos.append(entry_locali.get())
+
+                elif num == 2:
+                    list_aparelhos.append(entry_locali.get())
+                else:
+                    list_marcas.append(entry_locali.get())
+
+                popularListBox()
+                jan.destroy()
+
+            jan.transient(root2)
+            jan.focus_force()
+            jan.grab_set()
+
+        popularListBox()
         # Aba Operadores -----------------------------------------------------
 
         frame_op = Frame(aba_operadores)
@@ -8085,10 +8455,6 @@ class Castelo:
         button_op_alter_aces = Button(labelF_op_buttons, text='Alterar Acesso', wraplength=50, width=10)
         button_op_alter_aces.grid(row=1, column=1)
 
-        jan.transient(root2)
-        jan.focus_force()
-        jan.grab_set()
-
         # Aba Mensagens -----------------------------------------------------
 
         frame_mensagens = Frame(aba_Mensagens)
@@ -8103,13 +8469,16 @@ class Castelo:
         labelF_mens3 = LabelFrame(frame_mensagens, text='Mensagem 3')
         labelF_mens3.pack(fill=X)
 
-        entry_mens1 = Entry(labelF_mens1, width=60)
-        entry_mens1.pack(fill=BOTH, padx=10, pady=10)
-        entry_mens2 = Entry(labelF_mens2, width=60)
-        entry_mens2.pack(fill=BOTH, padx=10, pady=10)
-        entry_mens3 = Entry(labelF_mens3, width=60)
-        entry_mens3.pack(fill=BOTH, padx=10, pady=10)
+        self.entry_mens1 = Entry(labelF_mens1, width=60, textvariable=osVar28)
+        self.entry_mens1.pack(fill=BOTH, padx=10, pady=10)
+        self.entry_mens2 = Entry(labelF_mens2, width=60, textvariable=osVar29)
+        self.entry_mens2.pack(fill=BOTH, padx=10, pady=10)
+        self.entry_mens3 = Entry(labelF_mens3, width=60, textvariable=osVar30)
+        self.entry_mens3.pack(fill=BOTH, padx=10, pady=10)
 
+        jan.transient(root2)
+        jan.focus_force()
+        jan.grab_set()
 
 
 fabrica = fabrica_conexao.FabricaConexão()
