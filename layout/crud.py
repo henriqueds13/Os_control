@@ -1,6 +1,6 @@
+import pickle
 from tkinter import *
 from tkinter import ttk, messagebox
-
 
 from sqlalchemy.util import NoneType
 
@@ -107,9 +107,6 @@ class Castelo:
         self.lista_revendedor = ["CCM DO BRASIL", "INTERBRASIL"]
 
         self.count = 0
-
-
-
 
         def on_enter(e):
             e.widget['relief'] = 'raised'
@@ -2042,6 +2039,7 @@ class Castelo:
                     return ind
                 except:
                     pass
+
             repositorio_entr = os_saida_repositorio.OsSaidaRepositorio()
             os_entr = repositorio_entr.listar_os_id(os_id, sessao)
             self.os_aparelho.current(encontraIndexLista(lista_aparelhos, os_entr.equipamento))
@@ -2413,7 +2411,7 @@ class Castelo:
 
             repositorio = os_saida_repositorio.OsSaidaRepositorio()
             oss = repositorio.listar_os_cli_id(cliente_os_atual.id, sessao)
-            if len(oss)== 0:
+            if len(oss) == 0:
                 messagebox.showinfo(title="ERRO", message="Este cliente não possui manutenção anteriores!")
 
             else:
@@ -2513,12 +2511,12 @@ class Castelo:
                 os_selecionada = tree_ap_entr.focus()
                 self.dado_os_entr1 = tree_ap_entr.item(os_selecionada, "values")
 
-
                 label_pesquisa_entr = LabelFrame(subframe_ap_entr2, text="Digite um Nome para Pesquisar",
                                                  bg="#F2E8B3")
                 label_pesquisa_entr.pack(side=LEFT, padx=10, pady=5)
                 variable_int_os_entr = IntVar()
-                entr_pesq_entr = Entry(label_pesquisa_entr, relief=SUNKEN, width=35, textvariable=osVarEntr, state=DISABLED)
+                entr_pesq_entr = Entry(label_pesquisa_entr, relief=SUNKEN, width=35, textvariable=osVarEntr,
+                                       state=DISABLED)
                 entr_pesq_entr.pack(side=LEFT, padx=5)
                 botao_pesqu_entr = Button(label_pesquisa_entr, text="C", width=5, command=self.popularOsEntregue,
                                           state=DISABLED)
@@ -2902,7 +2900,6 @@ class Castelo:
         labelframe_os_andamento = LabelFrame(nb_os, text="Andamento do Serviço", fg="Blue", bg=color_frame)
         labelframe_os_status = LabelFrame(nb_os, text="Status", fg="blue", bg=color_frame)
         labelframe_os_tecnicos = LabelFrame(nb_os, text="Técnicos", fg="blue", bg=color_frame)
-
 
         self.style.configure('s2.TNotebook', tabposition='ne', background=color_frame)
 
@@ -4161,7 +4158,6 @@ class Castelo:
         jan.focus_force()
         jan.grab_set()
 
-
         def popularOsEntregueLocalizar(jan):
             entry = entry_locali.get()
             repositorio = os_saida_repositorio.OsSaidaRepositorio()
@@ -4173,11 +4169,12 @@ class Castelo:
                 self.tree_ap_entr.delete(*self.tree_ap_entr.get_children())
                 cliente_os = repositorio_cliente.listar_cliente_id(oss.cliente_id, sessao)
                 self.tree_ap_entr.insert("", "end",
-                                         values=(oss.os_saida, oss.data_saida, cliente_os.nome, oss.equipamento, oss.marca,
-                                                 oss.modelo, "Orçamento", oss.status, oss.dias,
-                                                 self.insereTotalConvertido(oss.total),
-                                                 oss.tecnico_id, oss.operador, oss.defeito, oss.n_serie, oss.chassi,
-                                                 oss.data_orc, oss.data_entrada, oss.hora_entrada, oss.cliente_id),
+                                         values=(
+                                         oss.os_saida, oss.data_saida, cliente_os.nome, oss.equipamento, oss.marca,
+                                         oss.modelo, "Orçamento", oss.status, oss.dias,
+                                         self.insereTotalConvertido(oss.total),
+                                         oss.tecnico_id, oss.operador, oss.defeito, oss.n_serie, oss.chassi,
+                                         oss.data_orc, oss.data_entrada, oss.hora_entrada, oss.cliente_id),
                                          tags=('oddrow',))
                 children = self.tree_ap_entr.get_children()
                 if children:
@@ -4194,21 +4191,21 @@ class Castelo:
             if self.count % 2 == 0:
                 cliente_os = repositorio_cliente.listar_cliente_id(i.cliente_id, sessao)
                 tree_ap_entr.insert("", "end",
-                                         values=(i.os_saida, i.data_saida, cliente_os.nome, i.equipamento, i.marca,
-                                                 i.modelo, "Orçamento", i.status, i.dias,
-                                                 self.insereTotalConvertido(i.total),
-                                                 i.tecnico_id, i.operador, i.defeito, i.n_serie, i.chassi,
-                                                 i.data_orc, i.data_entrada, i.hora_entrada, i.cliente_id),
-                                         tags=('oddrow',))
+                                    values=(i.os_saida, i.data_saida, cliente_os.nome, i.equipamento, i.marca,
+                                            i.modelo, "Orçamento", i.status, i.dias,
+                                            self.insereTotalConvertido(i.total),
+                                            i.tecnico_id, i.operador, i.defeito, i.n_serie, i.chassi,
+                                            i.data_orc, i.data_entrada, i.hora_entrada, i.cliente_id),
+                                    tags=('oddrow',))
             else:
                 cliente_os = repositorio_cliente.listar_cliente_id(i.cliente_id, sessao)
                 tree_ap_entr.insert("", "end",
-                                         values=(i.os_saida, i.data_saida, cliente_os.nome, i.equipamento, i.marca,
-                                                 i.modelo, "Orçamento", i.status, i.dias,
-                                                 self.insereTotalConvertido(i.total),
-                                                 i.tecnico_id, i.operador, i.defeito, i.n_serie, i.chassi,
-                                                 i.data_orc, i.data_entrada, i.hora_entrada, i.cliente_id),
-                                         tags=('evenrow',))
+                                    values=(i.os_saida, i.data_saida, cliente_os.nome, i.equipamento, i.marca,
+                                            i.modelo, "Orçamento", i.status, i.dias,
+                                            self.insereTotalConvertido(i.total),
+                                            i.tecnico_id, i.operador, i.defeito, i.n_serie, i.chassi,
+                                            i.data_orc, i.data_entrada, i.hora_entrada, i.cliente_id),
+                                    tags=('evenrow',))
             self.count += 1
         self.count = 0
         children = tree_ap_entr.get_children()
@@ -4650,8 +4647,6 @@ class Castelo:
         def criaNovaOs(cliente):
             self.frame_ap_entregue.forget()
             self.janelaCriarOs(cliente_os_atual, os_dados.os_saida, 2)
-
-
 
         jan.transient(root2)
         jan.focus_force()
@@ -5169,8 +5164,8 @@ class Castelo:
         lista_marca = ["Kawashima", "Stihl", "Raisman"]
         un_medida = ["UN", "METRO", "Kg"]
         layout_Princ = '#9AEBA3'
-        layout_Princ1= '#45C4B0'
-        layout_entry='#DAFDBA'
+        layout_Princ1 = '#45C4B0'
+        layout_entry = '#DAFDBA'
 
         jan = Toplevel(bg=layout_Princ1)
 
@@ -5226,7 +5221,6 @@ class Castelo:
         frame_est_dados = Frame(nb_os, bg=layout_Princ)
         frame_est_tributos = Frame(nb_os, bg=layout_Princ)
 
-
         self.style.configure('s1.TNotebook', tabposition='ne', background=layout_Princ1)
         self.style.configure("s1.TCombobox", fieldbackground='red', background=layout_entry,
                              selectforeground=layout_entry)
@@ -5251,7 +5245,8 @@ class Castelo:
         Label(subframe_est_dados1, text="Descrição", bg=layout_Princ).grid(row=1, column=0, sticky=W, padx=10)
         descricao_entry = Entry(subframe_est_dados1, width=87, textvariable=osVar2, bg=layout_entry)
         descricao_entry.grid(row=1, column=1, columnspan=4, sticky=W, padx=20)
-        Label(subframe_est_dados1, text="Utilizado em:", bg=layout_Princ).grid(row=2, column=0, sticky=W, pady=10, padx=10)
+        Label(subframe_est_dados1, text="Utilizado em:", bg=layout_Princ).grid(row=2, column=0, sticky=W, pady=10,
+                                                                               padx=10)
         utilizado_entry = Entry(subframe_est_dados1, width=87, textvariable=osVar3, bg=layout_entry)
         utilizado_entry.grid(row=2, column=1, columnspan=4, sticky=W, padx=20)
         Label(subframe_est_dados1, text="Categoria", bg=layout_Princ).grid(row=3, column=0, sticky=W, padx=10)
@@ -5269,42 +5264,50 @@ class Castelo:
         Label(subframe_est_dados1, text="Localização", bg=layout_Princ).grid(row=5, column=0, sticky=W, padx=10)
         localizacao_entry = Entry(subframe_est_dados1, width=20, textvariable=osVar4, bg=layout_entry)
         localizacao_entry.grid(row=5, column=1, sticky=W, padx=20)
-        Label(subframe_est_dados1, width=20, relief=SUNKEN, height=7, bg=layout_Princ).grid(row=0, column=5, rowspan=5, sticky=N,
-                                                                           pady=10)
+        Label(subframe_est_dados1, width=20, relief=SUNKEN, height=7, bg=layout_Princ).grid(row=0, column=5, rowspan=5,
+                                                                                            sticky=N,
+                                                                                            pady=10)
         Button(subframe_est_dados1, text="IMG", width=5).grid(row=4, column=5, sticky=E)
 
-
-        ttk.Separator(subframe_est_dados1, orient=HORIZONTAL).grid(row=6, column=0, columnspan=8, sticky=EW, pady=10, padx=10)
+        ttk.Separator(subframe_est_dados1, orient=HORIZONTAL).grid(row=6, column=0, columnspan=8, sticky=EW, pady=10,
+                                                                   padx=10)
 
         Label(subframe_est_dados1, text="Preço de Venda", font=("", 8, "bold"),
               bg=layout_Princ).grid(row=7, column=0, sticky=W, padx=10)
-        preco_venda_entry = Entry(subframe_est_dados1, width=20, validate='all', validatecommand=(testa_float, '%P'), bg=layout_entry)
+        preco_venda_entry = Entry(subframe_est_dados1, width=20, validate='all', validatecommand=(testa_float, '%P'),
+                                  bg=layout_entry)
         preco_venda_entry.grid(row=7, column=1, sticky=W, padx=20)
-        Label(subframe_est_dados1, text="Preço de Custo", bg=layout_Princ).grid(row=8, column=0, sticky=W, pady=10, padx=10)
-        preco_custo_entry = Entry(subframe_est_dados1, width=20, validate='all', validatecommand=(testa_float, '%P'), bg=layout_entry)
+        Label(subframe_est_dados1, text="Preço de Custo", bg=layout_Princ).grid(row=8, column=0, sticky=W, pady=10,
+                                                                                padx=10)
+        preco_custo_entry = Entry(subframe_est_dados1, width=20, validate='all', validatecommand=(testa_float, '%P'),
+                                  bg=layout_entry)
         preco_custo_entry.grid(row=8, column=1, sticky=W, padx=20)
         Label(subframe_est_dados1, text="Caixa Peça (Conserto)", bg=layout_Princ).grid(row=7, column=3, sticky=E)
-        caixa_peca_entry = Entry(subframe_est_dados1, width=20, validate='all', validatecommand=(testa_float, '%P'), bg=layout_entry)
+        caixa_peca_entry = Entry(subframe_est_dados1, width=20, validate='all', validatecommand=(testa_float, '%P'),
+                                 bg=layout_entry)
         caixa_peca_entry.grid(row=7, column=4, sticky=W, padx=20)
 
         ttk.Separator(subframe_est_dados1, orient=HORIZONTAL).grid(row=9, column=0, columnspan=6, sticky=EW, padx=10)
 
         Label(subframe_est_dados1, text="Estoque Atual", font=("", 8, "bold"),
               bg=layout_Princ).grid(row=10, column=0, sticky=W, pady=10, padx=10)
-        quantidade_entry = Entry(subframe_est_dados1, width=20, validate='all', validatecommand=(testa_inteiro, '%P'), bg=layout_entry)
+        quantidade_entry = Entry(subframe_est_dados1, width=20, validate='all', validatecommand=(testa_inteiro, '%P'),
+                                 bg=layout_entry)
         quantidade_entry.grid(row=10, column=1, sticky=W, padx=20)
         Label(subframe_est_dados1, text="Unidade de Medida", bg=layout_Princ).grid(row=11, column=0, sticky=W, padx=10)
         option_medida = ttk.Combobox(subframe_est_dados1, values=un_medida, state="readonly", width=17,
                                      style='s1.TCombobox')
         option_medida.grid(row=11, column=1, sticky=W, padx=20)
-        Label(subframe_est_dados1, text="Estoque Mínimo", bg=layout_Princ).grid(row=12, column=0, sticky=W, pady=10, padx=10)
+        Label(subframe_est_dados1, text="Estoque Mínimo", bg=layout_Princ).grid(row=12, column=0, sticky=W, pady=10,
+                                                                                padx=10)
         estoque_min_entry = Entry(subframe_est_dados1, width=20, validate='all',
                                   validatecommand=(testa_inteiro, '%P'), bg=layout_entry)
         estoque_min_entry.grid(row=12, column=1, sticky=W, padx=20)
 
         ttk.Separator(subframe_est_dados1, orient=HORIZONTAL).grid(row=13, column=0, columnspan=6, sticky=EW, padx=10)
 
-        Label(subframe_est_dados1, text="Observações", bg=layout_Princ).grid(row=14, column=0, sticky=NW, pady=10, padx=10)
+        Label(subframe_est_dados1, text="Observações", bg=layout_Princ).grid(row=14, column=0, sticky=NW, pady=10,
+                                                                             padx=10)
         obs_criar_prod = Text(subframe_est_dados1, relief=SUNKEN, height=5, width=67, bg=layout_entry)
         obs_criar_prod.grid(row=14, column=1, sticky=W, columnspan=5, padx=20, pady=10)
 
@@ -5424,8 +5427,8 @@ class Castelo:
 
         nb_os = ttk.Notebook(frame_princ2, width=350, style='editProd.TNotebook')
         nb_os.pack(fill=BOTH)
-        frame_est_dados = Frame(nb_os, bg= bg_frame2)
-        frame_est_tributos = Frame(nb_os, bg= bg_frame2)
+        frame_est_dados = Frame(nb_os, bg=bg_frame2)
+        frame_est_tributos = Frame(nb_os, bg=bg_frame2)
 
         nb_os.add(frame_est_dados, text="Dados")
         nb_os.add(frame_est_tributos, text="Tributos")
@@ -5472,23 +5475,29 @@ class Castelo:
         localizacao_entry = Entry(subframe_est_dados1, width=20, textvariable=osVar4, bg=bg_entry)
         localizacao_entry.insert(0, produto_dados.localizacao)
         localizacao_entry.grid(row=5, column=1, sticky=W, padx=20)
-        Label(subframe_est_dados1, width=20, relief=SUNKEN, height=7, bg=bg_frame2).grid(row=0, column=5, rowspan=5, sticky=N,
-                                                                           pady=10)
+        Label(subframe_est_dados1, width=20, relief=SUNKEN, height=7, bg=bg_frame2).grid(row=0, column=5, rowspan=5,
+                                                                                         sticky=N,
+                                                                                         pady=10)
         Button(subframe_est_dados1, text="IMG", width=5).grid(row=4, column=5, sticky=E)
 
-        ttk.Separator(subframe_est_dados1, orient=HORIZONTAL).grid(row=6, column=0, columnspan=8, sticky=EW, pady=10, padx=10)
+        ttk.Separator(subframe_est_dados1, orient=HORIZONTAL).grid(row=6, column=0, columnspan=8, sticky=EW, pady=10,
+                                                                   padx=10)
 
         Label(subframe_est_dados1, text="Preço de Venda", font=("", 8, "bold"),
               bg=bg_frame2).grid(row=7, column=0, sticky=W, padx=10)
-        preco_venda_entry = Entry(subframe_est_dados1, width=20, validate='all', validatecommand=(testa_float, '%P'), bg=bg_entry)
+        preco_venda_entry = Entry(subframe_est_dados1, width=20, validate='all', validatecommand=(testa_float, '%P'),
+                                  bg=bg_entry)
         preco_venda_entry.insert(0, self.insereNumConvertido(produto_dados.valor_venda))
         preco_venda_entry.grid(row=7, column=1, sticky=W, padx=20)
-        Label(subframe_est_dados1, text="Preço de Custo", bg=bg_frame2).grid(row=8, column=0, sticky=W, pady=10, padx=10)
-        preco_custo_entry = Entry(subframe_est_dados1, width=20, validate='all', validatecommand=(testa_float, '%P'), bg=bg_entry)
+        Label(subframe_est_dados1, text="Preço de Custo", bg=bg_frame2).grid(row=8, column=0, sticky=W, pady=10,
+                                                                             padx=10)
+        preco_custo_entry = Entry(subframe_est_dados1, width=20, validate='all', validatecommand=(testa_float, '%P'),
+                                  bg=bg_entry)
         preco_custo_entry.insert(0, self.insereNumConvertido(produto_dados.valor_compra))
         preco_custo_entry.grid(row=8, column=1, sticky=W, padx=20)
         Label(subframe_est_dados1, text="Caixa Peça (Conserto)", bg=bg_frame2).grid(row=7, column=3, sticky=E)
-        caixa_peca_entry = Entry(subframe_est_dados1, width=20, validate='all', validatecommand=(testa_float, '%P'), bg=bg_entry)
+        caixa_peca_entry = Entry(subframe_est_dados1, width=20, validate='all', validatecommand=(testa_float, '%P'),
+                                 bg=bg_entry)
         caixa_peca_entry.insert(0, self.insereNumConvertido(produto_dados.caixa_peca))
         caixa_peca_entry.grid(row=7, column=4, sticky=W, padx=20)
 
@@ -5496,7 +5505,8 @@ class Castelo:
 
         Label(subframe_est_dados1, text="Estoque Atual", font=("", 8, "bold"),
               bg=bg_frame2).grid(row=10, column=0, sticky=W, pady=10, padx=10)
-        quantidade_entry = Entry(subframe_est_dados1, width=20, validate='all', validatecommand=(testa_inteiro, '%P'), bg=bg_entry)
+        quantidade_entry = Entry(subframe_est_dados1, width=20, validate='all', validatecommand=(testa_inteiro, '%P'),
+                                 bg=bg_entry)
         quantidade_entry.insert(0, self.insereZero(produto_dados.qtd))
         quantidade_entry.grid(row=10, column=1, sticky=W, padx=20)
         Label(subframe_est_dados1, text="Unidade de Medida", bg=bg_frame2).grid(row=11, column=0, sticky=W, padx=10)
@@ -5504,8 +5514,10 @@ class Castelo:
                                      style='editProd.TCombobox')
         option_medida.current(encontraIndexLista(un_medida, produto_dados.un_medida))
         option_medida.grid(row=11, column=1, sticky=W, padx=20)
-        Label(subframe_est_dados1, text="Estoque Mínimo", bg=bg_frame2).grid(row=12, column=0, sticky=W, pady=10, padx=10)
-        estoque_min_entry = Entry(subframe_est_dados1, width=20, validate='all', validatecommand=(testa_inteiro, '%P'), bg=bg_entry)
+        Label(subframe_est_dados1, text="Estoque Mínimo", bg=bg_frame2).grid(row=12, column=0, sticky=W, pady=10,
+                                                                             padx=10)
+        estoque_min_entry = Entry(subframe_est_dados1, width=20, validate='all', validatecommand=(testa_inteiro, '%P'),
+                                  bg=bg_entry)
         estoque_min_entry.insert(0, self.insereZero(produto_dados.estoque_min))
         estoque_min_entry.grid(row=12, column=1, sticky=W, padx=20)
 
@@ -5662,7 +5674,8 @@ class Castelo:
         descricao_entry = Entry(subframe_est_dados1, width=87, textvariable=osVar2, bg=layout_entry)
         descricao_entry.insert(0, produto_dados.descricao)
         descricao_entry.grid(row=1, column=1, columnspan=4, sticky=W, padx=20)
-        Label(subframe_est_dados1, text="Utilizado em:", bg=layout_Princ).grid(row=2, column=0, sticky=W, pady=10, padx=10)
+        Label(subframe_est_dados1, text="Utilizado em:", bg=layout_Princ).grid(row=2, column=0, sticky=W, pady=10,
+                                                                               padx=10)
         utilizado_entry = Entry(subframe_est_dados1, width=87, textvariable=osVar3, bg=layout_entry)
         utilizado_entry.insert(0, produto_dados.utilizado)
         utilizado_entry.grid(row=2, column=1, columnspan=4, sticky=W, padx=20)
@@ -5808,7 +5821,7 @@ class Castelo:
 
     def janelaEntradaEstoque(self, opt):
 
-        bg_entry='#ffffe1'
+        bg_entry = '#ffffe1'
 
         jan = Toplevel()
 
@@ -6099,12 +6112,14 @@ class Castelo:
         self.est_desc_item.config(state=DISABLED)
         self.est_desc_item.grid(row=1, column=1, sticky=W)
         Label(frame_prod, text='Preço Unit.').grid(row=0, column=2, sticky=W, padx=10)
-        self.est_preco_item = Entry(frame_prod, width=10, validate='all', validatecommand=(testa_float, '%P'), bg=bg_entry)
+        self.est_preco_item = Entry(frame_prod, width=10, validate='all', validatecommand=(testa_float, '%P'),
+                                    bg=bg_entry)
         self.est_preco_item.config(state=DISABLED)
         self.est_preco_item.grid(row=1, column=2, sticky=W, padx=10)
 
         Label(frame_prod, text='Qtd.').grid(row=0, column=3, sticky=W)
-        self.est_qtd_prod = Entry(frame_prod, width=5, validate='all', validatecommand=(testa_inteiro, '%P'), bg=bg_entry)
+        self.est_qtd_prod = Entry(frame_prod, width=5, validate='all', validatecommand=(testa_inteiro, '%P'),
+                                  bg=bg_entry)
         self.est_qtd_prod.grid(row=1, column=3, sticky=W)
         busca_prod_button = Button(frame_prod, text='Buscar', command=lambda: [self.janelaBuscaProduto(opt)])
         busca_prod_button.grid(row=1, column=4, padx=10, ipadx=10)
@@ -6212,7 +6227,8 @@ class Castelo:
         self.est_nota = Entry(frame_descr_vend, fg='blue', width=10, bg=bg_entry)
         self.est_nota.grid(row=0, column=1)
         Label(frame_descr_vend, text='Frete:').grid(row=1, column=0)
-        self.est_frete = Entry(frame_descr_vend, width=10, validate='all', validatecommand=(testa_float, '%P'), bg=bg_entry)
+        self.est_frete = Entry(frame_descr_vend, width=10, validate='all', validatecommand=(testa_float, '%P'),
+                               bg=bg_entry)
         self.est_frete.grid(row=1, column=1)
         Label(frame_descr_vend, width=2).grid(row=0, column=2, padx=5)
         frame_valor_total = LabelFrame(frame_descr_vend)
@@ -6487,7 +6503,6 @@ class Castelo:
         self.lista_produto_venda = []
         self.venda_valor_total_add = 0
 
-
         # --------------------------------------------------------------------------------------
 
         osVar1 = StringVar(jan)
@@ -6674,11 +6689,13 @@ class Castelo:
         self.venda_descr_item.config(state=DISABLED)
         self.venda_descr_item.grid(row=1, column=1, sticky=W)
         Label(frame_prod, text='Preço Unit.', bg=bg_tela).grid(row=0, column=2, sticky=W, padx=10)
-        self.venda_preco_item = Entry(frame_prod, width=10, validate='all', validatecommand=(testa_float, '%P'), bg=bg_entry)
+        self.venda_preco_item = Entry(frame_prod, width=10, validate='all', validatecommand=(testa_float, '%P'),
+                                      bg=bg_entry)
         self.venda_preco_item.config(state=DISABLED)
         self.venda_preco_item.grid(row=1, column=2, sticky=W, padx=10)
         Label(frame_prod, text='Qtd.', bg=bg_tela).grid(row=0, column=3, sticky=W)
-        self.venda_qtd_item = Entry(frame_prod, width=5, validate='all', validatecommand=(testa_inteiro, '%P'), bg=bg_entry)
+        self.venda_qtd_item = Entry(frame_prod, width=5, validate='all', validatecommand=(testa_inteiro, '%P'),
+                                    bg=bg_entry)
         self.venda_qtd_item.grid(row=1, column=3, sticky=W)
         self.venda_button_busca_prod = Button(frame_prod, text='Buscar', command=lambda: [self.janelaBuscaProduto(4)])
         self.venda_button_busca_prod.grid(row=1, column=4, padx=10, ipadx=10)
@@ -6717,36 +6734,44 @@ class Castelo:
         labelframe_form_pag.grid(row=0, column=1, sticky=NW, padx=10)
         subframe_form_pag1 = Frame(labelframe_form_pag, bg=bg_tela)
         subframe_form_pag1.pack(padx=15, pady=18)
-        Label(subframe_form_pag1, text="Dinheiro", fg="red", anchor=E, font=('Verdana', "10", ""), bg=bg_tela).grid(row=0, column=0,
-                                                                                                        padx=5)
+        Label(subframe_form_pag1, text="Dinheiro", fg="red", anchor=E, font=('Verdana', "10", ""), bg=bg_tela).grid(
+            row=0, column=0,
+            padx=5)
         self.venda_entry_dinh = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all',
                                       validatecommand=(testa_float, '%P'), bg=bg_entry)
         self.venda_entry_dinh.grid(row=0, column=1, padx=5)
-        Label(subframe_form_pag1, text="Cheque", fg="red", anchor=E, font=('Verdana', "10", ""), bg=bg_tela).grid(row=1, column=0,
-                                                                                                      padx=5, pady=5)
+        Label(subframe_form_pag1, text="Cheque", fg="red", anchor=E, font=('Verdana', "10", ""), bg=bg_tela).grid(row=1,
+                                                                                                                  column=0,
+                                                                                                                  padx=5,
+                                                                                                                  pady=5)
         self.venda_entry_cheque = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all',
                                         validatecommand=(testa_float, '%P'), bg=bg_entry)
         self.venda_entry_cheque.grid(row=1, column=1, padx=5)
-        Label(subframe_form_pag1, text="Cartão de Crédito", fg="red", anchor=E, font=('Verdana', "10", ""), bg=bg_tela).grid(row=2,
-                                                                                                                 column=0,
-                                                                                                                 padx=5)
+        Label(subframe_form_pag1, text="Cartão de Crédito", fg="red", anchor=E, font=('Verdana', "10", ""),
+              bg=bg_tela).grid(row=2,
+                               column=0,
+                               padx=5)
         self.venda_entry_ccredito = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all',
                                           validatecommand=(testa_float, '%P'), bg=bg_entry)
         self.venda_entry_ccredito.grid(row=2, column=1, padx=5)
-        Label(subframe_form_pag1, text="Cartão de Débito", fg="red", anchor=E, font=('Verdana', "10", ""), bg=bg_tela).grid(row=3,
-                                                                                                                column=0,
-                                                                                                                padx=5,
-                                                                                                                pady=5)
+        Label(subframe_form_pag1, text="Cartão de Débito", fg="red", anchor=E, font=('Verdana', "10", ""),
+              bg=bg_tela).grid(row=3,
+                               column=0,
+                               padx=5,
+                               pady=5)
         self.venda_entry_cdebito = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all',
                                          validatecommand=(testa_float, '%P'), bg=bg_entry)
         self.venda_entry_cdebito.grid(row=3, column=1, padx=5)
-        Label(subframe_form_pag1, text="PIX", fg="red", anchor=E, font=('Verdana', "10", ""), bg=bg_tela).grid(row=4, column=0,
-                                                                                                   padx=5)
+        Label(subframe_form_pag1, text="PIX", fg="red", anchor=E, font=('Verdana', "10", ""), bg=bg_tela).grid(row=4,
+                                                                                                               column=0,
+                                                                                                               padx=5)
         self.venda_entry_pix = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all',
                                      validatecommand=(testa_float, '%P'), bg=bg_entry)
         self.venda_entry_pix.grid(row=4, column=1, padx=5)
-        Label(subframe_form_pag1, text="Outros", fg="red", anchor=E, font=('Verdana', "10", ""), bg=bg_tela).grid(row=5, column=0,
-                                                                                                      padx=5, pady=5)
+        Label(subframe_form_pag1, text="Outros", fg="red", anchor=E, font=('Verdana', "10", ""), bg=bg_tela).grid(row=5,
+                                                                                                                  column=0,
+                                                                                                                  padx=5,
+                                                                                                                  pady=5)
         self.venda_entry_outros = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all',
                                         validatecommand=(testa_float, '%P'), bg=bg_entry)
         self.venda_entry_outros.grid(row=5, column=1, padx=5)
@@ -6755,7 +6780,8 @@ class Castelo:
         labelframe_valor_rec = LabelFrame(subframe_form_pag2, bg=bg_tela)
         labelframe_valor_rec.grid(row=0, column=0, sticky=W, pady=5)
         Label(labelframe_valor_rec, text="Valor à Receber:", bg=bg_tela).pack()
-        self.venda_valor_areceber = Label(labelframe_valor_rec, text="R$ 0,00", anchor=E, font=("", "12", ""), fg="red", bg=bg_tela)
+        self.venda_valor_areceber = Label(labelframe_valor_rec, text="R$ 0,00", anchor=E, font=("", "12", ""), fg="red",
+                                          bg=bg_tela)
         self.venda_valor_areceber.pack(fill=X, pady=5, padx=30)
         self.venda_button_salvar = Button(subframe_form_pag2, text="Salvar", width=8, command=atualizaValorAreceber)
         self.venda_button_salvar.grid(row=1, column=0, sticky=W, pady=5, padx=30)
@@ -6780,13 +6806,15 @@ class Castelo:
         self.venda_label_subtotal = Label(frame_descr_vend, text='R$0,00', fg='blue', font=('', '12', ''), bg=bg_tela)
         self.venda_label_subtotal.grid(row=0, column=1)
         Label(frame_descr_vend, text='desconto:', bg=bg_tela).grid(row=1, column=0)
-        self.venda_desconto = Entry(frame_descr_vend, width=10, validate='all', validatecommand=(testa_float, '%P'), bg=bg_entry)
+        self.venda_desconto = Entry(frame_descr_vend, width=10, validate='all', validatecommand=(testa_float, '%P'),
+                                    bg=bg_entry)
         self.venda_desconto.grid(row=1, column=1)
         Label(frame_descr_vend, width=2, bg=bg_tela).grid(row=0, column=2, padx=5)
         frame_valor_total = LabelFrame(frame_descr_vend, bg=bg_tela)
         frame_valor_total.grid(row=0, column=3, rowspan=2, padx=5)
         Label(frame_valor_total, text='TOTAL:', font=('verdana', '12', 'bold'), bg=bg_tela).pack(pady=1)
-        self.venda_label_total = Label(frame_valor_total, text='R$0,00', font=('verdana', '15', 'bold'), fg='red', bg=bg_tela)
+        self.venda_label_total = Label(frame_valor_total, text='R$0,00', font=('verdana', '15', 'bold'), fg='red',
+                                       bg=bg_tela)
         self.venda_label_total.pack(padx=10, pady=1)
 
         frame_orcamento = Frame(subframe_prod1, bg=bg_tela)
@@ -7811,14 +7839,28 @@ class Castelo:
         jan.geometry("{}x{}+{}+{}".format(630, 460, x_cordinate, y_cordinate))
 
         font_entry = ('', '9', 'bold')
-        list_mao_obra=[['REBOBINAMENTO DO MOTOR', 'R$200,00', 0],
-                       ['LIMPEZA CARBURADOR', 'R$120,00', 1]]
-        with open('aparelhos.txt', 'r+', encoding='utf8') as aparelhos_txt:
-            list_aparelhos = aparelhos_txt.readlines()
-        with open('tecnicos.txt', 'r+', encoding='utf8') as tecnicos_txt:
-            list_tecnicos = tecnicos_txt.readlines()
-        with open('marcas.txt', 'r+', encoding='utf8') as marcas_txt:
-            list_marcas = marcas_txt.readlines()
+
+        list_aparelhos = []
+        list_tecnicos = []
+        list_marcas = []
+        list_mao_obra = []
+
+
+        with open('mao_de_obra.txt', 'rb') as mao_obra_txt:
+            list_mao_obra = pickle.load(mao_obra_txt)
+
+        with open('aparelhos.txt', 'r', encoding='utf8') as aparelhos_txt:
+            for i in aparelhos_txt:
+                if i != "\n":
+                    list_aparelhos.append(i)
+        with open('tecnicos.txt', 'r', encoding='utf8') as tecnicos_txt:
+            for i in tecnicos_txt:
+                if i != "\n":
+                    list_tecnicos.append(i)
+        with open('marcas.txt', 'r', encoding='utf8') as marcas_txt:
+            for i in marcas_txt:
+                if i != "\n":
+                    list_marcas.append(i)
 
         # --------------------------------------------------------------------------------------
 
@@ -8059,15 +8101,11 @@ class Castelo:
             osVar34.set(osVar34.get().upper())
 
         osVar34.trace_add('write', to_uppercase)
-        # --------------------------------------------------------------------------------------
 
-        def popularMaoObra():
-            for i in list_mao_obra:
-                treeview_mao_obra.insert("", "end", values=(i[0], i[1], i[2]))
+        # --------------------------------------------------------------------------------------
 
         frame_princ = Frame(jan)
         frame_princ.pack(fill=X, padx=10, pady=10)
-
 
         abas_config = ttk.Notebook(frame_princ, width=600)
         abas_config.grid(row=0, column=0, ipady=0)
@@ -8089,7 +8127,7 @@ class Castelo:
         button_fecha_conf = Button(frame_princ_2, text='Fechar', width=13)
         button_fecha_conf.grid(row=0, column=0, sticky=W, pady=10, ipady=3)
 
-        #Aba Empresa -----------------------------------------------------
+        # Aba Empresa -----------------------------------------------------
 
         frame1_empres = Frame(aba_empresa)
         frame1_empres.grid(row=0, column=0)
@@ -8134,8 +8172,6 @@ class Castelo:
         labelF_email = LabelFrame(sub_frame_empres5, text='Email')
         labelF_email.grid(row=1, column=1, ipady=2)
 
-
-
         self.nome_empresa_entry = Entry(labelF_nome_empr, width=57, textvariable=osVar1)
         self.nome_empresa_entry.pack(fill=BOTH, padx=5)
         self.sigla_empresa_entry = Entry(labelf_sigla_empr, width=2, textvariable=osVar2)
@@ -8164,7 +8200,6 @@ class Castelo:
         self.m_empresa_entry.pack(fill=BOTH, padx=5)
         self.email_empresa_entry = Entry(labelF_email, width=31, textvariable=osVar14)
         self.email_empresa_entry.pack(fill=BOTH, padx=5)
-
 
         LabelF_logo = LabelFrame(frame2_empres, text='Logotipo', height=100, width=145)
         LabelF_logo.grid(row=0, column=0, sticky=SE, pady=7)
@@ -8248,6 +8283,34 @@ class Castelo:
         treeview_mao_obra.column('valor', width=70, minwidth=25, stretch=False)
         treeview_mao_obra.column('id', width=0, stretch=NO)
         treeview_mao_obra.grid(sticky=W)
+
+        def popularMaoObra():
+            treeview_mao_obra.delete(*treeview_mao_obra.get_children())
+            for i in list_mao_obra:
+                treeview_mao_obra.insert("", "end", values=(i[0], i[1], i[2]))
+            print(list_mao_obra)
+
+        def insereMaoObra():
+            count = list_mao_obra[-1][2] + 1
+            list_desc = [entry_descr_mao_obra.get(), entry_preço_mao_obra.get(), count]
+            list_mao_obra.append(list_desc)
+
+            with open('mao_de_obra.txt', 'wb') as mao_obra_txt:
+                pickle.dump(list_mao_obra, mao_obra_txt)
+
+            popularMaoObra()
+
+        def deletaMaoObra():
+            MO_selecionada = treeview_mao_obra.focus()
+            dado_MO = treeview_mao_obra.item(MO_selecionada, 'values')
+            for i in list_mao_obra:
+                if i[2] == int(dado_MO[2]):
+                    list_mao_obra.remove(i)
+
+            with open('mao_de_obra.txt', 'wb') as mao_obra_txt:
+                pickle.dump(list_mao_obra, mao_obra_txt)
+            popularMaoObra()
+
         popularMaoObra()
 
         Label(subframe_mao_obra1, text='Descrição').grid(row=0, column=0, padx=5)
@@ -8257,9 +8320,9 @@ class Castelo:
         entry_preço_mao_obra = Entry(subframe_mao_obra1, width=13)
         entry_preço_mao_obra.grid(row=1, column=1, sticky=W)
 
-        button_conf_mao_obra = Button(subframe_mao_obra2, text='Gravar', width=8)
+        button_conf_mao_obra = Button(subframe_mao_obra2, text='Gravar', width=8, command= insereMaoObra )
         button_conf_mao_obra.grid(row=0, column=0, padx=10, sticky=W)
-        button_del_mao_obra = Button(subframe_mao_obra2, text='Excluir', width=8)
+        button_del_mao_obra = Button(subframe_mao_obra2, text='Excluir', width=8, command=deletaMaoObra)
         button_del_mao_obra.grid(row=1, column=0, pady=5)
 
         text_tecnico = Listbox(labelF_tecnico, height=5, width=35)
@@ -8267,12 +8330,11 @@ class Castelo:
         subframe_tecnico = Frame(labelF_tecnico)
         subframe_tecnico.grid(row=1, column=0, sticky=NW)
 
-
         button_conf_tecnico = Button(subframe_tecnico, text='Novo Técnico', width=10, wraplength=50,
                                      command=lambda: [janelaInsereDados(1)])
         button_conf_tecnico.grid(row=0, column=0, padx=10, sticky=W, pady=11)
         button_del_tecnico = Button(subframe_tecnico, text='Excluir Técnico', width=10, wraplength=50,
-                                    command=lambda:[excluiDados(1)])
+                                    command=lambda: [excluiDados(1)])
         button_del_tecnico.grid(row=0, column=1, pady=5)
 
         text_aparelho = Listbox(labelF_aparelho, height=7, width=30)
@@ -8284,7 +8346,7 @@ class Castelo:
                                       command=lambda: [janelaInsereDados(2)])
         button_conf_aparelho.grid(row=0, column=0, padx=10, sticky=W)
         button_del_aparelho = Button(subframe_aparelho, text='Excluir Aparelho', width=10, wraplength=50,
-                                     command=lambda:[excluiDados(2)])
+                                     command=lambda: [excluiDados(2)])
         button_del_aparelho.grid(row=1, column=0, pady=5)
 
         text_marca = Listbox(labelF_marca, height=7, width=25)
@@ -8296,51 +8358,51 @@ class Castelo:
                                    command=lambda: [janelaInsereDados(3)])
         button_conf_marca.grid(row=0, column=0, padx=9, sticky=W)
         button_del_marca = Button(subframe_marca, text='Excluir Marca', width=10, wraplength=50,
-                                  command=lambda:[excluiDados(3)])
+                                  command=lambda: [excluiDados(3)])
         button_del_marca.grid(row=1, column=0, pady=6)
 
         def popularListBox():
-
-
 
             text_tecnico.delete(0, END)
             text_marca.delete(0, END)
             text_aparelho.delete(0, END)
             for i in list_tecnicos:
-                text_tecnico.insert(END, i)
+                if i != '\n':
+                    text_tecnico.insert(END, i)
             for i in list_marcas:
-                text_marca.insert(END, i)
+                if i != '\n':
+                    text_marca.insert(END, i)
             for i in list_aparelhos:
-                text_aparelho.insert(END, i)
-
-
+                if i != '\n':
+                    text_aparelho.insert(END, i)
 
         def excluiDados(num):
 
             if num == 1:
                 dados_conf = str(text_tecnico.get(ACTIVE))
                 list_tecnicos.remove(dados_conf)
-                with open('tecnicos.txt', 'r+', encoding='utf8') as tecnicos_txt:
+                with open('tecnicos.txt', 'w', encoding='utf8') as tecnicos_txt:
                     tecnicos_txt.truncate(0)
                     for i in list_tecnicos:
-                        tecnicos_txt.write(i)
-                        tecnicos_txt.write('\n')
+                        if i != '\n':
+                            tecnicos_txt.write(f'{i}\n')
             elif num == 2:
                 dados_conf = str(text_aparelho.get(ACTIVE))
                 list_aparelhos.remove(dados_conf)
-                with open('aparelhos.txt', 'r+', encoding='utf8') as aparelhos_txt:
+                with open('aparelhos.txt', 'w', encoding='utf8') as aparelhos_txt:
                     aparelhos_txt.truncate(0)
                     for i in list_aparelhos:
-                        aparelhos_txt.write(i)
-                        aparelhos_txt.write('\n')
+                        if i != '\n':
+                            aparelhos_txt.write(f'{i}\n')
             else:
                 dados_conf = str(text_marca.get(ACTIVE))
                 list_marcas.remove(dados_conf)
-                with open('marcas.txt', 'r+', encoding='utf8') as marcas_txt:
+                with open('marcas.txt', 'w', encoding='utf8') as marcas_txt:
                     marcas_txt.truncate(0)
                     for i in list_marcas:
-                        marcas_txt.write(i)
-                        marcas_txt.write('\n')
+                        if i != '\n':
+                            marcas_txt.write(f'{i}\n')
+
             popularListBox()
 
         def janelaInsereDados(num):
@@ -8379,11 +8441,25 @@ class Castelo:
 
                 if num == 1:
                     list_tecnicos.append(entry_locali.get())
-
+                    with open('tecnicos.txt', 'r+', encoding='utf8') as tecnicos_txt:
+                        tecnicos_txt.truncate(0)
+                        for i in list_tecnicos:
+                            if i != '\n':
+                                tecnicos_txt.write(f'{i}\n')
                 elif num == 2:
                     list_aparelhos.append(entry_locali.get())
+                    with open('aparelhos.txt', 'r+', encoding='utf8') as aparelhos_txt:
+                        aparelhos_txt.truncate(0)
+                        for i in list_aparelhos:
+                            if i != '\n':
+                                aparelhos_txt.write(f'{i}\n')
                 else:
                     list_marcas.append(entry_locali.get())
+                    with open('marcas.txt', 'r+', encoding='utf8') as marcas_txt:
+                        marcas_txt.truncate(0)
+                        for i in list_marcas:
+                            if i != '\n':
+                                marcas_txt.write(f'{i}\n')
 
                 popularListBox()
                 jan.destroy()
