@@ -6,7 +6,7 @@ from sqlalchemy.util import NoneType
 
 from fabricas import fabrica_conexao
 from repositorios import cliente_repositorio, os_repositorio, os_saida_repositorio, produto_repositorio, \
-    revendedor_repositorio, estoque_repositorio, produto_venda_repositorio, os_venda_repositorio
+    revendedor_repositorio, estoque_repositorio, produto_venda_repositorio, os_venda_repositorio, tecnico_repositorio
 from entidades import cliente, os, os_saida, produto, revendedor, estoque, produto_venda, os_venda
 import locale
 
@@ -8249,7 +8249,7 @@ class Castelo:
         self.entry_aut12.insert(0, 'Autorizada12')
 
         # Aba Mao de obra -----------------------------------------------------
-
+        testa_float = jan.register(self.testaEntradaFloat)
         frame_mao_obra = Frame(aba_mao_obra_status)
         frame_mao_obra.pack(fill=BOTH, padx=10, pady=0, ipadx=10)
         frame_mao_obra1 = Frame(aba_mao_obra_status)
@@ -8287,18 +8287,25 @@ class Castelo:
         def popularMaoObra():
             treeview_mao_obra.delete(*treeview_mao_obra.get_children())
             for i in list_mao_obra:
-                treeview_mao_obra.insert("", "end", values=(i[0], i[1], i[2]))
-            print(list_mao_obra)
+                treeview_mao_obra.insert("", "end", values=(i[0], self.insereTotalConvertido(i[1]), i[2]))
+
 
         def insereMaoObra():
-            count = list_mao_obra[-1][2] + 1
-            list_desc = [entry_descr_mao_obra.get(), entry_preço_mao_obra.get(), count]
-            list_mao_obra.append(list_desc)
+            if entry_descr_mao_obra.get() == '':
+                messagebox.showinfo(title="ERRO", message="Digite uma Descrição!")
+            elif entry_preço_mao_obra.get() == '':
+                messagebox.showinfo(title="ERRO", message="Digite um valor!")
+            else:
+                count = list_mao_obra[-1][2] + 1
+                list_desc = [entry_descr_mao_obra.get(), entry_preço_mao_obra.get(), count]
+                list_mao_obra.append(list_desc)
 
-            with open('mao_de_obra.txt', 'wb') as mao_obra_txt:
-                pickle.dump(list_mao_obra, mao_obra_txt)
+                with open('mao_de_obra.txt', 'wb') as mao_obra_txt:
+                    pickle.dump(list_mao_obra, mao_obra_txt)
 
-            popularMaoObra()
+                popularMaoObra()
+                entry_descr_mao_obra.delete(0, END)
+                entry_preço_mao_obra.delete(0, END)
 
         def deletaMaoObra():
             MO_selecionada = treeview_mao_obra.focus()
@@ -8317,7 +8324,7 @@ class Castelo:
         Label(subframe_mao_obra1, text='Preço').grid(row=1, column=0, sticky=E, padx=5, pady=5)
         entry_descr_mao_obra = Entry(subframe_mao_obra1, width=23, textvariable=osVar27)
         entry_descr_mao_obra.grid(row=0, column=1)
-        entry_preço_mao_obra = Entry(subframe_mao_obra1, width=13)
+        entry_preço_mao_obra = Entry(subframe_mao_obra1, width=13,  validate='all', validatecommand=(testa_float, '%P'))
         entry_preço_mao_obra.grid(row=1, column=1, sticky=W)
 
         button_conf_mao_obra = Button(subframe_mao_obra2, text='Gravar', width=8, command= insereMaoObra )
@@ -8413,8 +8420,6 @@ class Castelo:
             y_cordinate = int((self.h / 2) - (90 / 2))
             jan.geometry("{}x{}+{}+{}".format(400, 90, x_cordinate, y_cordinate))
 
-            label_text = ''
-
             if num == 1:
                 label_text = 'Digite o nome do Técnico:'
             elif num == 2:
@@ -8477,6 +8482,152 @@ class Castelo:
         labelF_op = LabelFrame(frame_op, text='Operadores / Niveis de Acesso')
         labelF_op.grid(row=0, column=0)
 
+        def popularOperador():
+            tree_conf_op.delete(*tree_conf_op.get_children())
+            repositorio = tecnico_repositorio.TecnicoRepositorio()
+            conf_operador = repositorio.listar_tecnicos(sessao)
+            for i in conf_operador:
+                tree_conf_op.insert('', 'end',
+                                    values=(i.nome, 'SIM', 'SIM', 'SIM', 'SIM', 'SIM', 'SIM', 'SIM'))
+            tree_conf_op.focus_set()
+            children = tree_conf_op.get_children()
+            if children:
+                tree_conf_op.focus(children[-1])
+                tree_conf_op.selection_set(children[-1])
+
+        def janelaInsereoperador():
+            jan = Toplevel()
+
+            # Centraliza a janela
+            x_cordinate = int((self.w / 2) - (460 / 2))
+            y_cordinate = int((self.h / 2) - (260 / 2))
+            jan.geometry("{}x{}+{}+{}".format(460, 260, x_cordinate, y_cordinate))
+
+            frame_novo_op = Frame(jan)
+            frame_novo_op.pack(fill=BOTH, padx=10, pady=10)
+
+            subframe1_novo_op = Frame(frame_novo_op)
+            subframe1_novo_op.grid(row=0, column=0, sticky=NW)
+            subframe2_novo_op = Frame(frame_novo_op)
+            subframe2_novo_op.grid(row=0, column=1, sticky=W, padx=5)
+            subframe3_novo_op = Frame(frame_novo_op)
+            subframe3_novo_op.grid(row=1, column=1, sticky=W, padx=5, pady=10)
+
+            frame_dados1_op = Frame(subframe1_novo_op)
+            frame_dados1_op.grid(row=0, column=0, sticky=NW)
+            frame_dados2_op = Frame(subframe1_novo_op)
+            frame_dados2_op.grid(row=1, column=0, sticky=NW)
+
+            intro_dados1 = Frame(frame_dados1_op)
+            intro_dados1.grid(row=0, column=0, sticky=W)
+            intro_dados2 = Frame(frame_dados1_op)
+            intro_dados2.grid(row=0, column=1, sticky=SW)
+            intro_dados3 = Frame(frame_dados2_op)
+            intro_dados3.grid(row=0, column=0, sticky=W, padx=5, pady=15)
+
+            sub_intro1 = LabelFrame(intro_dados1)
+            sub_intro1.grid(row=0, column=0, padx=5, ipady=5)
+            sub_intro2 = Frame(intro_dados1)
+            sub_intro2.grid(row=1, column=0, padx=5, pady=5)
+
+            Label(sub_intro1, text='Senha Operador Autorizado').pack(padx=5)
+            entry_senha_op_Aut = Entry(sub_intro1, width=20)
+            entry_senha_op_Aut.pack()
+
+            Label(sub_intro2, text='Nome Novo Operador').pack()
+            entry_senha_op_Aut = Entry(sub_intro2, width=20)
+            entry_senha_op_Aut.pack()
+
+            Label(intro_dados2, height=5, width=5, bg='yellow').pack(padx=5)
+
+            Label(intro_dados3, text='Senha Novo Operador').pack(padx=20)
+            entry_senha_op_Aut = Entry(intro_dados3, width=15)
+            entry_senha_op_Aut.pack()
+
+            labelF_tec_acesso = LabelFrame(subframe2_novo_op, text='Níveis de Acesso')
+            labelF_tec_acesso.grid(row=0, column=0, sticky=NE)
+            frame_tec_acesso1 = Frame(labelF_tec_acesso)
+            frame_tec_acesso1.grid(row=0, column=0, sticky=NE, padx=5, pady=5)
+
+            variable_acess1 = IntVar()
+            variable_acess2 = IntVar()
+            variable_acess3 = IntVar()
+            variable_acess4 = IntVar()
+            variable_acess5 = IntVar()
+            variable_acess6 = IntVar()
+            variable_acess7 = IntVar()
+
+            check_INI = Checkbutton(frame_tec_acesso1, text='Inicializar o Sistema', variable=variable_acess1, onvalue=1,
+                                    offvalue=0)
+            check_INI.grid(row=0, column=0, sticky=W)
+            check_EM = Checkbutton(frame_tec_acesso1, text='Emitir Ordem de Serviço', variable=variable_acess2, onvalue=1,
+                                    offvalue=0)
+            check_EM.grid(row=1, column=0, sticky=W)
+            check_BX = Checkbutton(frame_tec_acesso1, text='Dar Baixa em Ordem de Serviço', variable=variable_acess3, onvalue=1,
+                                    offvalue=0)
+            check_BX.grid(row=2, column=0, sticky=W)
+            check_CE = Checkbutton(frame_tec_acesso1, text='Controle de Estoque', variable=variable_acess4, onvalue=1,
+                                    offvalue=0)
+            check_CE.grid(row=3, column=0, sticky=W)
+            check_USU = Checkbutton(frame_tec_acesso1, text='Cadastro de Usúario', variable=variable_acess5, onvalue=1,
+                                    offvalue=0)
+            check_USU.grid(row=4, column=0, sticky=W)
+            check_CON = Checkbutton(frame_tec_acesso1, text='Configuração do Sistema', variable=variable_acess6, onvalue=1,
+                                    offvalue=0)
+            check_CON.grid(row=5, column=0, sticky=W)
+            check_FIN = Checkbutton(frame_tec_acesso1, text='Financeiro', variable=variable_acess7, onvalue=1,
+                                    offvalue=0)
+            check_FIN.grid(row=6, column=0, sticky=W)
+
+            button_cancelar = Button(subframe3_novo_op, text='Cancelar', width=10)
+            button_cancelar.grid(row=0, column=1, sticky=E, padx=45)
+            button_excluir = Button(subframe3_novo_op, text='Cadastrar', width=10)
+            button_excluir.grid(row=0, column=0, sticky=W)
+
+            jan.transient(root2)
+            jan.focus_force()
+            jan.grab_set()
+
+        def janelaExcluiOperador():
+            jan = Toplevel()
+
+            # Centraliza a janela
+            x_cordinate = int((self.w / 2) - (300 / 2))
+            y_cordinate = int((self.h / 2) - (180 / 2))
+            jan.geometry("{}x{}+{}+{}".format(300, 180, x_cordinate, y_cordinate))
+
+            frame_exclui_op = Frame(jan)
+            frame_exclui_op.pack(fill=BOTH, padx=10, pady=10)
+
+            subframe1_exclui_op = Frame(frame_exclui_op)
+            subframe1_exclui_op.grid(row=0, column=0, sticky=W)
+            subframe2_exclui_op = Frame(frame_exclui_op)
+            subframe2_exclui_op.grid(row=1, column=0, sticky=E, padx=5, pady=10)
+
+            frame_ex1_op = Frame(subframe1_exclui_op)
+            frame_ex1_op.grid(row=0, column=0, sticky=NW)
+            frame_ex2_op = Frame(subframe1_exclui_op)
+            frame_ex2_op.grid(row=0, column=1, sticky=NW, padx=10)
+
+            Label(frame_ex1_op, text='Usuário a ser Excluído:').grid(row=0, column=0, sticky=NW)
+            entry_exclui_op = Entry(frame_ex1_op, width=20)
+            entry_exclui_op.grid(row=1, column=0, pady=10)
+            Label(frame_ex1_op, text='Digite a senha de um \n Operador autorizado e \n Tecle Excluir').grid(row=2, column=0)
+
+            Label(frame_ex2_op, text='ADMINISTRADOR').grid(row=0, column=0, sticky=NW)
+            Label(frame_ex2_op, bg='yellow', height=5, width=15).grid(row=1, column=0, sticky=NW)
+
+            button_cancelar = Button(subframe2_exclui_op, text='Cancelar', width=10)
+            button_cancelar.pack(side=RIGHT, ipady=5)
+            button_excluir = Button(subframe2_exclui_op, text='Excluir', width=10)
+            button_excluir.pack(side=RIGHT, padx=55, ipady=5)
+
+
+            jan.transient(root2)
+            jan.focus_force()
+            jan.grab_set()
+
+
         tree_conf_op = ttk.Treeview(labelF_op,
                                     columns=('operador', 'iniciar', 'emitir', 'baixa', 'estoque', 'usuario',
                                              'configuração', 'financeiro'),
@@ -8503,6 +8654,7 @@ class Castelo:
         tree_conf_op.heading('financeiro', text='FIN')
 
         tree_conf_op.grid(sticky=W, padx=10, pady=10)
+        popularOperador()
 
         subframe_op = Frame(frame_op)
         subframe_op.grid(row=1, column=0, sticky=W, pady=10)
@@ -8522,14 +8674,17 @@ class Castelo:
         Label(labelF_op_legenda, text='CON = Configuração do Sistema', anchor=W).pack(fill=X)
         Label(labelF_op_legenda, text='FIN = Financeiro', anchor=W).pack(fill=X)
 
-        button_op_novo = Button(labelF_op_buttons, text='Novo Operador', wraplength=50, width=10)
+        button_op_novo = Button(labelF_op_buttons, text='Novo Operador', wraplength=50, width=10,
+                                command=janelaInsereoperador)
         button_op_novo.grid(row=0, column=0, padx=10, pady=10)
-        button_op_del = Button(labelF_op_buttons, text='Excluir Operador', wraplength=50, width=10)
+        button_op_del = Button(labelF_op_buttons, text='Excluir Operador', wraplength=50, width=10,
+                               command=janelaExcluiOperador)
         button_op_del.grid(row=0, column=1)
         button_op_alter_senha = Button(labelF_op_buttons, text='Alterar Senha', wraplength=50, width=10)
         button_op_alter_senha.grid(row=1, column=0)
         button_op_alter_aces = Button(labelF_op_buttons, text='Alterar Acesso', wraplength=50, width=10)
         button_op_alter_aces.grid(row=1, column=1)
+
 
         # Aba Mensagens -----------------------------------------------------
 

@@ -462,3 +462,15 @@ else:
         self.os_status.grid(row=0, column=0, ipadx=10, padx=5)
         Button(frame_status_os, text="Salvar", command=lambda: [seleciona_status(1)]).grid(row=1, column=0, pady=20,
                                                                                            ipadx=10)
+
+        self.check_pesq_avan_estoq = Checkbutton(self.frame_pesq_estoq, text="Busca Avançada", bg=color_est1,
+                                                 variable=self.variable_int_produto,
+                                                 onvalue=1, offvalue=0)
+
+        Label(labelF_op_legenda, text='INI = Inicializar o Sistema', anchor=W).pack(fill=X)
+        Label(labelF_op_legenda, text='EM  = Emitir Ordem de Serviço', anchor=W).pack(fill=X)
+        Label(labelF_op_legenda, text='BX  = Dar Baixa em Ordem de Serviço', anchor=W).pack(fill=X)
+        Label(labelF_op_legenda, text='CE  = Controle de Estoque', anchor=W).pack(fill=X)
+        Label(labelF_op_legenda, text='USU = Cadastro de Usúario', anchor=W).pack(fill=X)
+        Label(labelF_op_legenda, text='CON = Configuração do Sistema', anchor=W).pack(fill=X)
+        Label(labelF_op_legenda, text='FIN = Financeiro', anchor=W).pack(fill=X)
