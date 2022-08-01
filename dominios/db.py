@@ -14,6 +14,39 @@ produto_os = Table('produto_os', Base.metadata,
                    Column('id_os', Integer, ForeignKey('ordem_de_servico.id'))
                    )
 
+class Empresa(Base):
+    __tablename__ = 'empresa'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    nome = Column(String(50), nullable=False)
+    nome_fantasia = Column(String(50), nullable=False)
+    sigla = Column(String(2), nullable=True)
+    celular = Column(String(15), nullable=True)
+    cnpj = Column(String(18), nullable=True)
+    tel_fixo = Column(String(15), nullable=True)
+    ie = Column(String(15), nullable=True)
+    im = Column(String(15), nullable=True)
+    logradouro = Column(String(50), nullable=True)
+    uf = Column(String(2), nullable=True)
+    cep = Column(Integer, nullable=True)
+    cidade = Column(String(15), nullable=True)
+    email = Column(String(50), nullable=True)
+    whats = Column(String(15), nullable=True)
+    tel_comercial = Column(String(15), nullable=True)
+    complemento1 = Column(String(80), nullable=True)
+    complemento2 = Column(String(80), nullable=True)
+    complemento3 = Column(String(80), nullable=True)
+    autorizada1 = Column(String(30), nullable=True)
+    autorizada2 = Column(String(30), nullable=True)
+    autorizada3 = Column(String(30), nullable=True)
+    autorizada4 = Column(String(30), nullable=True)
+    autorizada5 = Column(String(30), nullable=True)
+    autorizada6 = Column(String(30), nullable=True)
+    autorizada7 = Column(String(30), nullable=True)
+    autorizada8 = Column(String(30), nullable=True)
+    autorizada9 = Column(String(30), nullable=True)
+
+
+
 
 class Cliente(Base):
     __tablename__ = 'cliente'
