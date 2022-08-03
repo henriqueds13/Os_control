@@ -32,9 +32,9 @@ class Empresa(Base):
     email = Column(String(50), nullable=True)
     whats = Column(String(15), nullable=True)
     tel_comercial = Column(String(15), nullable=True)
-    complemento1 = Column(String(80), nullable=True)
-    complemento2 = Column(String(80), nullable=True)
-    complemento3 = Column(String(80), nullable=True)
+    complemento1 = Column(String(100), nullable=True)
+    complemento2 = Column(String(100), nullable=True)
+    complemento3 = Column(String(100), nullable=True)
     autorizada1 = Column(String(30), nullable=True)
     autorizada2 = Column(String(30), nullable=True)
     autorizada3 = Column(String(30), nullable=True)
@@ -44,6 +44,9 @@ class Empresa(Base):
     autorizada7 = Column(String(30), nullable=True)
     autorizada8 = Column(String(30), nullable=True)
     autorizada9 = Column(String(30), nullable=True)
+    autorizada10 = Column(String(30), nullable=True)
+    autorizada11 = Column(String(30), nullable=True)
+    autorizada12 = Column(String(30), nullable=True)
 
 
 

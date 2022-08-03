@@ -6,9 +6,9 @@ from sqlalchemy.util import NoneType
 
 from fabricas import fabrica_conexao
 from repositorios import cliente_repositorio, os_repositorio, os_saida_repositorio, produto_repositorio, \
-    revendedor_repositorio, estoque_repositorio, produto_venda_repositorio, os_venda_repositorio, tecnico_repositorio,\
+    revendedor_repositorio, estoque_repositorio, produto_venda_repositorio, os_venda_repositorio, tecnico_repositorio, \
     empresa_repositorio
-from entidades import cliente, os, os_saida, produto, revendedor, estoque, produto_venda, os_venda, empresa
+from entidades import cliente, os, os_saida, produto, revendedor, estoque, produto_venda, os_venda, empresa, tecnico
 import locale
 
 locale.setlocale(locale.LC_ALL, '')
@@ -4171,11 +4171,11 @@ class Castelo:
                 cliente_os = repositorio_cliente.listar_cliente_id(oss.cliente_id, sessao)
                 self.tree_ap_entr.insert("", "end",
                                          values=(
-                                         oss.os_saida, oss.data_saida, cliente_os.nome, oss.equipamento, oss.marca,
-                                         oss.modelo, "Orçamento", oss.status, oss.dias,
-                                         self.insereTotalConvertido(oss.total),
-                                         oss.tecnico_id, oss.operador, oss.defeito, oss.n_serie, oss.chassi,
-                                         oss.data_orc, oss.data_entrada, oss.hora_entrada, oss.cliente_id),
+                                             oss.os_saida, oss.data_saida, cliente_os.nome, oss.equipamento, oss.marca,
+                                             oss.modelo, "Orçamento", oss.status, oss.dias,
+                                             self.insereTotalConvertido(oss.total),
+                                             oss.tecnico_id, oss.operador, oss.defeito, oss.n_serie, oss.chassi,
+                                             oss.data_orc, oss.data_entrada, oss.hora_entrada, oss.cliente_id),
                                          tags=('oddrow',))
                 children = self.tree_ap_entr.get_children()
                 if children:
@@ -7846,7 +7846,6 @@ class Castelo:
         list_marcas = []
         list_mao_obra = []
 
-
         with open('mao_de_obra.txt', 'rb') as mao_obra_txt:
             list_mao_obra = pickle.load(mao_obra_txt)
 
@@ -7866,6 +7865,10 @@ class Castelo:
         # --------------------------------------------------------------------------------------
 
         osVar1 = StringVar(jan)
+        repositorio = empresa_repositorio.EmpresaRepositorio()
+        repositorio_op = tecnico_repositorio.TecnicoRepositorio()
+        dados_empresa = repositorio.listar_empresa(sessao)
+
 
         def to_uppercase(*args):
             osVar1.set(osVar1.get().upper())
@@ -8105,42 +8108,49 @@ class Castelo:
 
         # --------------------------------------------------------------------------------------
 
-        def alteraDadosEmpresa(opt):
-            nome = self.nomeR_empresa_entry
-            nome_fantasia = self.nome_empresa_entry
-            sigla = self.sigla_empresa_entry
-            celular = self.cel_empresa_entry
-            cnpj = self.cnpj_empresa_entry
-            tel_fixo = self.tel_empresa_entry
-            ie = self.ie_empresa_entry
-            im = self.im_empresa_entry
-            logradouro = self.endereço_empresa_entry
-            uf = self.uf_empresa_entry
-            cep = self.cep_empresa_entry
-            cidade = self.cidade_empresa_entry
-            email = self.email_empresa_entry
-            whats = self.whats_empresa_entry
+        def alteraDadosEmpresa(jan):
+            nome = self.nome_empresa_entry.get()
+            nome_fantasia = self.nomeR_empresa_entry.get()
+            sigla = self.sigla_empresa_entry.get()
+            celular = self.cel_empresa_entry.get()
+            cnpj = self.cnpj_empresa_entry.get()
+            tel_fixo = self.tel_empresa_entry.get()
+            ie = self.ie_empresa_entry.get()
+            im = self.im_empresa_entry.get()
+            logradouro = self.endereço_empresa_entry.get()
+            uf = self.uf_empresa_entry.get()
+            cep = self.cep_empresa_entry.get()
+            cidade = self.cidade_empresa_entry.get()
+            email = self.email_empresa_entry.get()
+            whats = self.whats_empresa_entry.get()
             tel_comercial = 0
-            complemento1 = self.entry_mens1
-            complemento2 = self.entry_mens2
-            complemento3 = self.entry_mens
-            autorizada1 = self.entry_aut1
-            autorizada2 = self.entry_aut2
-            autorizada3 = self.entry_aut3
-            autorizada4 = self.entry_aut4
-            autorizada5 = self.entry_aut5
-            autorizada6 = self.entry_aut6
-            autorizada7 = self.entry_aut7
-            autorizada8 = self.entry_aut8
-            autorizada9 = self.entry_aut9
+            complemento1 = self.entry_mens1.get()
+            complemento2 = self.entry_mens2.get()
+            complemento3 = self.entry_mens3.get()
+            autorizada1 = self.entry_aut1.get()
+            autorizada2 = self.entry_aut2.get()
+            autorizada3 = self.entry_aut3.get()
+            autorizada4 = self.entry_aut4.get()
+            autorizada5 = self.entry_aut5.get()
+            autorizada6 = self.entry_aut6.get()
+            autorizada7 = self.entry_aut7.get()
+            autorizada8 = self.entry_aut8.get()
+            autorizada9 = self.entry_aut9.get()
+            autorizada10 = self.entry_aut10.get()
+            autorizada11 = self.entry_aut11.get()
+            autorizada12 = self.entry_aut12.get()
 
-            nova_empresa = empresa.Empresa(nome, nome_fantasia, sigla, celular, cnpj, tel_fixo, ie, im, logradouro, uf, cep, cidade, email,
-                 whats, tel_comercial, complemento1, complemento2, complemento3, autorizada1, autorizada2, autorizada3,
-                 autorizada4, autorizada5, autorizada6, autorizada7, autorizada8, autorizada9)
+            nova_empresa = empresa.Empresa(nome, nome_fantasia, sigla, celular, cnpj, tel_fixo, ie, im, logradouro, uf,
+                                           cep, cidade, email,
+                                           whats, tel_comercial, complemento1, complemento2, complemento3, autorizada1,
+                                           autorizada2, autorizada3,
+                                           autorizada4, autorizada5, autorizada6, autorizada7, autorizada8, autorizada9,
+                                           autorizada10, autorizada11, autorizada12)
 
             repositorio = empresa_repositorio.EmpresaRepositorio()
-            repositorio.editar_empresa(nova_empresa, opt, sessao)
+            repositorio.editar_empresa(nova_empresa, sessao)
             sessao.commit()
+            jan.destroy()
 
         frame_princ = Frame(jan)
         frame_princ.pack(fill=X, padx=10, pady=10)
@@ -8162,7 +8172,7 @@ class Castelo:
         frame_princ_2 = Frame(frame_princ)
         frame_princ_2.grid(row=1, column=0, sticky=E)
 
-        button_fecha_conf = Button(frame_princ_2, text='Fechar', width=13)
+        button_fecha_conf = Button(frame_princ_2, text='Fechar', width=13, command=lambda: [alteraDadosEmpresa(jan)])
         button_fecha_conf.grid(row=0, column=0, sticky=W, pady=10, ipady=3)
 
         # Aba Empresa -----------------------------------------------------
@@ -8212,32 +8222,46 @@ class Castelo:
 
         self.nome_empresa_entry = Entry(labelF_nome_empr, width=57, textvariable=osVar1)
         self.nome_empresa_entry.pack(fill=BOTH, padx=5)
+        self.nome_empresa_entry.insert(0,dados_empresa.nome)
         self.sigla_empresa_entry = Entry(labelf_sigla_empr, width=2, textvariable=osVar2)
         self.sigla_empresa_entry.pack(fill=BOTH, padx=5)
+        self.sigla_empresa_entry.insert(0, dados_empresa.sigla)
         self.nomeR_empresa_entry = Entry(labelF_nomeReal_empr, width=65, textvariable=osVar3)
         self.nomeR_empresa_entry.pack(fill=BOTH, padx=5)
+        self.nomeR_empresa_entry.insert(0, dados_empresa.nome_fantasia)
         self.endereço_empresa_entry = Entry(labelf_end_empr, width=65, textvariable=osVar4)
         self.endereço_empresa_entry.pack(fill=BOTH, padx=5)
+        self.endereço_empresa_entry.insert(0, dados_empresa.logradouro)
         self.cep_empresa_entry = Entry(labelF_cep, width=28, textvariable=osVar5)
         self.cep_empresa_entry.pack(fill=BOTH, padx=5)
+        self.cep_empresa_entry.insert(0, dados_empresa.cep)
         self.cidade_empresa_entry = Entry(labelF_cidade, width=25, textvariable=osVar6)
         self.cidade_empresa_entry.grid(row=0, column=0, padx=5)
+        self.cidade_empresa_entry.insert(0, dados_empresa.cidade)
         self.uf_empresa_entry = Entry(labelF_cidade, width=5, textvariable=osVar7)
         self.uf_empresa_entry.grid(row=0, column=1, padx=5)
+        self.uf_empresa_entry.insert(0, dados_empresa.uf)
         self.tel_empresa_entry = Entry(labelF_telefone, width=19, textvariable=osVar8)
         self.tel_empresa_entry.pack(fill=BOTH, padx=5)
+        self.tel_empresa_entry.insert(0, dados_empresa.tel_fixo)
         self.cel_empresa_entry = Entry(labelF_celular, width=18, textvariable=osVar9)
         self.cel_empresa_entry.pack(fill=BOTH, padx=5)
+        self.cel_empresa_entry.insert(0, dados_empresa.celular)
         self.whats_empresa_entry = Entry(labelF_whats, width=19, textvariable=osVar10)
         self.whats_empresa_entry.pack(fill=BOTH, padx=5)
+        self.whats_empresa_entry.insert(0, dados_empresa.whats)
         self.cnpj_empresa_entry = Entry(labelF_cnpj, width=30, textvariable=osVar11)
         self.cnpj_empresa_entry.pack(fill=BOTH, padx=5)
+        self.cnpj_empresa_entry.insert(0, dados_empresa.cnpj)
         self.ie_empresa_entry = Entry(labelF_IE, width=31, textvariable=osVar12)
         self.ie_empresa_entry.pack(fill=BOTH, padx=5)
+        self.ie_empresa_entry.insert(0, dados_empresa.ie)
         self.im_empresa_entry = Entry(labelF_IM, width=30, textvariable=osVar13)
         self.im_empresa_entry.pack(fill=BOTH, padx=5)
+        self.im_empresa_entry.insert(0, dados_empresa.im)
         self.email_empresa_entry = Entry(labelF_email, width=31, textvariable=osVar14)
         self.email_empresa_entry.pack(fill=BOTH, padx=5)
+        self.email_empresa_entry.insert(0, dados_empresa.email)
 
         LabelF_logo = LabelFrame(frame2_empres, text='Logotipo', height=100, width=145)
         LabelF_logo.grid(row=0, column=0, sticky=SE, pady=7)
@@ -8253,40 +8277,40 @@ class Castelo:
         labelF_Autorizada.grid(row=0, column=0, ipadx=10, ipady=8)
         self.entry_aut1 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER, textvariable=osVar15)
         self.entry_aut1.grid(row=0, column=0, padx=10, pady=10)
-        self.entry_aut1.insert(0, 'Autorizada1')
+        self.entry_aut1.insert(0, dados_empresa.autorizada1)
         self.entry_aut2 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER, textvariable=osVar16)
         self.entry_aut2.grid(row=0, column=1)
-        self.entry_aut2.insert(0, 'Autorizada2')
+        self.entry_aut2.insert(0, dados_empresa.autorizada2)
         self.entry_aut3 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER, textvariable=osVar17)
         self.entry_aut3.grid(row=1, column=0)
-        self.entry_aut3.insert(0, 'Autorizada3')
+        self.entry_aut3.insert(0, dados_empresa.autorizada3)
         self.entry_aut4 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER, textvariable=osVar18)
         self.entry_aut4.grid(row=1, column=1)
-        self.entry_aut4.insert(0, 'Autorizada4')
+        self.entry_aut4.insert(0, dados_empresa.autorizada4)
         self.entry_aut5 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER, textvariable=osVar19)
         self.entry_aut5.grid(row=2, column=0, padx=10, pady=10)
-        self.entry_aut5.insert(0, 'Autorizada5')
+        self.entry_aut5.insert(0, dados_empresa.autorizada5)
         self.entry_aut6 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER, textvariable=osVar20)
         self.entry_aut6.grid(row=2, column=1)
-        self.entry_aut6.insert(0, 'Autorizada6')
+        self.entry_aut6.insert(0, dados_empresa.autorizada6)
         self.entry_aut7 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER, textvariable=osVar21)
         self.entry_aut7.grid(row=3, column=0)
-        self.entry_aut7.insert(0, 'Autorizada7')
+        self.entry_aut7.insert(0, dados_empresa.autorizada7)
         self.entry_aut8 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER, textvariable=osVar22)
         self.entry_aut8.grid(row=3, column=1)
-        self.entry_aut8.insert(0, 'Autorizada8')
+        self.entry_aut8.insert(0, dados_empresa.autorizada8)
         self.entry_aut9 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER, textvariable=osVar23)
         self.entry_aut9.grid(row=4, column=0, padx=10, pady=10)
-        self.entry_aut9.insert(0, 'Autorizada9')
+        self.entry_aut9.insert(0, dados_empresa.autorizada9)
         self.entry_aut10 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER, textvariable=osVar24)
         self.entry_aut10.grid(row=4, column=1)
-        self.entry_aut10.insert(0, 'Autorizada10')
+        self.entry_aut10.insert(0, dados_empresa.autorizada10)
         self.entry_aut11 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER, textvariable=osVar25)
         self.entry_aut11.grid(row=5, column=0)
-        self.entry_aut11.insert(0, 'Autorizada11')
+        self.entry_aut11.insert(0, dados_empresa.autorizada11)
         self.entry_aut12 = Entry(labelF_Autorizada, font=font_entry, width=25, justify=CENTER, textvariable=osVar26)
         self.entry_aut12.grid(row=5, column=1)
-        self.entry_aut12.insert(0, 'Autorizada12')
+        self.entry_aut12.insert(0, dados_empresa.autorizada12)
 
         # Aba Mao de obra -----------------------------------------------------
         testa_float = jan.register(self.testaEntradaFloat)
@@ -8329,7 +8353,6 @@ class Castelo:
             for i in list_mao_obra:
                 treeview_mao_obra.insert("", "end", values=(i[0], self.insereTotalConvertido(i[1]), i[2]))
 
-
         def insereMaoObra():
             if entry_descr_mao_obra.get() == '':
                 messagebox.showinfo(title="ERRO", message="Digite uma Descrição!")
@@ -8364,10 +8387,10 @@ class Castelo:
         Label(subframe_mao_obra1, text='Preço').grid(row=1, column=0, sticky=E, padx=5, pady=5)
         entry_descr_mao_obra = Entry(subframe_mao_obra1, width=23, textvariable=osVar27)
         entry_descr_mao_obra.grid(row=0, column=1)
-        entry_preço_mao_obra = Entry(subframe_mao_obra1, width=13,  validate='all', validatecommand=(testa_float, '%P'))
+        entry_preço_mao_obra = Entry(subframe_mao_obra1, width=13, validate='all', validatecommand=(testa_float, '%P'))
         entry_preço_mao_obra.grid(row=1, column=1, sticky=W)
 
-        button_conf_mao_obra = Button(subframe_mao_obra2, text='Gravar', width=8, command= insereMaoObra )
+        button_conf_mao_obra = Button(subframe_mao_obra2, text='Gravar', width=8, command=insereMaoObra)
         button_conf_mao_obra.grid(row=0, column=0, padx=10, sticky=W)
         button_del_mao_obra = Button(subframe_mao_obra2, text='Excluir', width=8, command=deletaMaoObra)
         button_del_mao_obra.grid(row=1, column=0, pady=5)
@@ -8528,7 +8551,7 @@ class Castelo:
             conf_operador = repositorio.listar_tecnicos(sessao)
             for i in conf_operador:
                 tree_conf_op.insert('', 'end',
-                                    values=(i.nome, 'SIM', 'SIM', 'SIM', 'SIM', 'SIM', 'SIM', 'SIM'))
+                                    values=(i.nome, 'SIM', 'SIM', 'SIM', 'SIM', 'SIM', 'SIM', 'SIM', i.id))
             tree_conf_op.focus_set()
             children = tree_conf_op.get_children()
             if children:
@@ -8542,6 +8565,21 @@ class Castelo:
             x_cordinate = int((self.w / 2) - (460 / 2))
             y_cordinate = int((self.h / 2) - (260 / 2))
             jan.geometry("{}x{}+{}+{}".format(460, 260, x_cordinate, y_cordinate))
+
+            def InsereOp(jan):
+                try:
+                    novo_operador = tecnico.Tecnico(entry_nome_op.get(), entry_senha_op.get())
+                    repositorio_op.inserir_tecnico(novo_operador, sessao)
+                    sessao.commit()
+                    self.mostrarMensagem("1", "Cadastro Editado com Sucesso!")
+                    popularOperador()
+                    jan.destroy()
+                except:
+                    sessao.rollback()
+                    raise
+                finally:
+                    sessao.close()
+
 
             frame_novo_op = Frame(jan)
             frame_novo_op.pack(fill=BOTH, padx=10, pady=10)
@@ -8575,14 +8613,15 @@ class Castelo:
             entry_senha_op_Aut.pack()
 
             Label(sub_intro2, text='Nome Novo Operador').pack()
-            entry_senha_op_Aut = Entry(sub_intro2, width=20)
-            entry_senha_op_Aut.pack()
+            entry_nome_op = Entry(sub_intro2, width=20)
+            entry_nome_op.pack()
 
             Label(intro_dados2, height=5, width=5, bg='yellow').pack(padx=5)
 
             Label(intro_dados3, text='Senha Novo Operador').pack(padx=20)
-            entry_senha_op_Aut = Entry(intro_dados3, width=15)
-            entry_senha_op_Aut.pack()
+            entry_senha_op = Entry(intro_dados3, width=15)
+            entry_senha_op.pack()
+
 
             labelF_tec_acesso = LabelFrame(subframe2_novo_op, text='Níveis de Acesso')
             labelF_tec_acesso.grid(row=0, column=0, sticky=NE)
@@ -8597,32 +8636,37 @@ class Castelo:
             variable_acess6 = IntVar()
             variable_acess7 = IntVar()
 
-            check_INI = Checkbutton(frame_tec_acesso1, text='Inicializar o Sistema', variable=variable_acess1, onvalue=1,
+            check_INI = Checkbutton(frame_tec_acesso1, text='Inicializar o Sistema', variable=variable_acess1,
+                                    onvalue=1,
                                     offvalue=0)
             check_INI.grid(row=0, column=0, sticky=W)
-            check_EM = Checkbutton(frame_tec_acesso1, text='Emitir Ordem de Serviço', variable=variable_acess2, onvalue=1,
-                                    offvalue=0)
+            check_EM = Checkbutton(frame_tec_acesso1, text='Emitir Ordem de Serviço', variable=variable_acess2,
+                                   onvalue=1,
+                                   offvalue=0)
             check_EM.grid(row=1, column=0, sticky=W)
-            check_BX = Checkbutton(frame_tec_acesso1, text='Dar Baixa em Ordem de Serviço', variable=variable_acess3, onvalue=1,
-                                    offvalue=0)
+            check_BX = Checkbutton(frame_tec_acesso1, text='Dar Baixa em Ordem de Serviço', variable=variable_acess3,
+                                   onvalue=1,
+                                   offvalue=0)
             check_BX.grid(row=2, column=0, sticky=W)
             check_CE = Checkbutton(frame_tec_acesso1, text='Controle de Estoque', variable=variable_acess4, onvalue=1,
-                                    offvalue=0)
+                                   offvalue=0)
             check_CE.grid(row=3, column=0, sticky=W)
             check_USU = Checkbutton(frame_tec_acesso1, text='Cadastro de Usúario', variable=variable_acess5, onvalue=1,
                                     offvalue=0)
             check_USU.grid(row=4, column=0, sticky=W)
-            check_CON = Checkbutton(frame_tec_acesso1, text='Configuração do Sistema', variable=variable_acess6, onvalue=1,
+            check_CON = Checkbutton(frame_tec_acesso1, text='Configuração do Sistema', variable=variable_acess6,
+                                    onvalue=1,
                                     offvalue=0)
             check_CON.grid(row=5, column=0, sticky=W)
             check_FIN = Checkbutton(frame_tec_acesso1, text='Financeiro', variable=variable_acess7, onvalue=1,
                                     offvalue=0)
             check_FIN.grid(row=6, column=0, sticky=W)
 
-            button_cancelar = Button(subframe3_novo_op, text='Cancelar', width=10)
+            button_cancelar = Button(subframe3_novo_op, text='Cancelar', width=10, command=jan.destroy)
             button_cancelar.grid(row=0, column=1, sticky=E, padx=45)
-            button_excluir = Button(subframe3_novo_op, text='Cadastrar', width=10)
-            button_excluir.grid(row=0, column=0, sticky=W)
+            button_inserir = Button(subframe3_novo_op, text='Cadastrar', width=10, command=lambda: [InsereOp(jan)])
+            button_inserir.grid(row=0, column=0, sticky=W)
+
 
             jan.transient(root2)
             jan.focus_force()
@@ -8635,6 +8679,24 @@ class Castelo:
             x_cordinate = int((self.w / 2) - (300 / 2))
             y_cordinate = int((self.h / 2) - (180 / 2))
             jan.geometry("{}x{}+{}+{}".format(300, 180, x_cordinate, y_cordinate))
+
+            def excluiOperador():
+                try:
+                    repositorio_op.remover_tecnico(dados_op_tree[8], sessao)
+                    sessao.commit()
+                    self.mostrarMensagem("1", "Cadastro Excluido com Sucesso!")
+                    popularOperador()
+                    jan.destroy()
+
+                except:
+                    sessao.rollback()
+                    raise
+
+                finally:
+                    sessao.close()
+
+            cadastro_selecionado = tree_conf_op.focus()
+            dados_op_tree = tree_conf_op.item(cadastro_selecionado, 'values')
 
             frame_exclui_op = Frame(jan)
             frame_exclui_op.pack(fill=BOTH, padx=10, pady=10)
@@ -8652,16 +8714,16 @@ class Castelo:
             Label(frame_ex1_op, text='Usuário a ser Excluído:').grid(row=0, column=0, sticky=NW)
             entry_exclui_op = Entry(frame_ex1_op, width=20)
             entry_exclui_op.grid(row=1, column=0, pady=10)
-            Label(frame_ex1_op, text='Digite a senha de um \n Operador autorizado e \n Tecle Excluir').grid(row=2, column=0)
+            Label(frame_ex1_op, text='Digite a senha de um \n Operador autorizado e \n Tecle Excluir').grid(row=2,
+                                                                                                            column=0)
 
             Label(frame_ex2_op, text='ADMINISTRADOR').grid(row=0, column=0, sticky=NW)
             Label(frame_ex2_op, bg='yellow', height=5, width=15).grid(row=1, column=0, sticky=NW)
 
-            button_cancelar = Button(subframe2_exclui_op, text='Cancelar', width=10)
+            button_cancelar = Button(subframe2_exclui_op, text='Cancelar', width=10, command=jan.destroy)
             button_cancelar.pack(side=RIGHT, ipady=5)
-            button_excluir = Button(subframe2_exclui_op, text='Excluir', width=10)
+            button_excluir = Button(subframe2_exclui_op, text='Excluir', width=10, command=excluiOperador)
             button_excluir.pack(side=RIGHT, padx=55, ipady=5)
-
 
             jan.transient(root2)
             jan.focus_force()
@@ -8674,6 +8736,30 @@ class Castelo:
             x_cordinate = int((self.w / 2) - (400 / 2))
             y_cordinate = int((self.h / 2) - (200 / 2))
             jan.geometry("{}x{}+{}+{}".format(400, 200, x_cordinate, y_cordinate))
+
+            def alteraSenhaOp():
+                try:
+                    nova_senha = entry_senha_op.get()
+                    if nova_senha == '':
+                        self.mostrarMensagem("1", "crie uma senha de 4 digitos!")
+                    else:
+                        operador = tecnico.Tecnico(dados_op_tree[0], nova_senha)
+                        repositorio_op.editar_tecnico(dados_op_tree[8], operador, sessao)
+                        sessao.commit()
+                        self.mostrarMensagem("1", "Senha Alterada com Sucesso!")
+                        popularOperador()
+                        jan.destroy()
+
+                except:
+                    sessao.rollback()
+                    raise
+
+                finally:
+                    sessao.close()
+
+
+            cadastro_selecionado = tree_conf_op.focus()
+            dados_op_tree = tree_conf_op.item(cadastro_selecionado, 'values')
 
             frame_novo_op = Frame(jan)
             frame_novo_op.pack(fill=BOTH, padx=10, pady=10)
@@ -8704,22 +8790,19 @@ class Castelo:
             entry_senha_op_Aut = Entry(sub_intro1, width=20)
             entry_senha_op_Aut.pack()
 
-            Label(sub_intro2, text='Nome Novo Operador').pack()
-            entry_senha_op_Aut = Entry(sub_intro2, width=20)
-            entry_senha_op_Aut.pack()
+            Label(sub_intro2, text='Nova Senha Operador').pack()
+            entry_senha_op = Entry(sub_intro2, width=20)
+            entry_senha_op.pack()
 
-            Label(intro_dados3, text='Senha Novo Operador').pack(padx=20)
-            entry_senha_op_Aut = Entry(intro_dados3, width=15)
-            entry_senha_op_Aut.pack()
 
             labelF_tec_acesso = Frame(subframe2_novo_op, bg='yellow', height=130, width=160)
             labelF_tec_acesso.grid(row=0, column=0, sticky=NW, padx=10)
             frame_tec_acesso1 = Frame(subframe2_novo_op)
             frame_tec_acesso1.grid(row=1, column=0, sticky=SE, padx=5, pady=5)
 
-            button_cancelar = Button(frame_tec_acesso1, text='Cancelar', width=10)
+            button_cancelar = Button(frame_tec_acesso1, text='Cancelar', width=10, command=jan.destroy)
             button_cancelar.grid(row=0, column=1, sticky=E, padx=10)
-            button_excluir = Button(frame_tec_acesso1, text='Cadastrar', width=10)
+            button_excluir = Button(frame_tec_acesso1, text='Cadastrar', width=10, command=alteraSenhaOp)
             button_excluir.grid(row=0, column=0, sticky=W)
 
             jan.transient(root2)
@@ -8778,22 +8861,26 @@ class Castelo:
             variable_acess6 = IntVar()
             variable_acess7 = IntVar()
 
-            check_INI = Checkbutton(frame_tec_acesso1, text='Inicializar o Sistema', variable=variable_acess1, onvalue=1,
+            check_INI = Checkbutton(frame_tec_acesso1, text='Inicializar o Sistema', variable=variable_acess1,
+                                    onvalue=1,
                                     offvalue=0)
             check_INI.grid(row=0, column=0, sticky=W)
-            check_EM = Checkbutton(frame_tec_acesso1, text='Emitir Ordem de Serviço', variable=variable_acess2, onvalue=1,
-                                    offvalue=0)
+            check_EM = Checkbutton(frame_tec_acesso1, text='Emitir Ordem de Serviço', variable=variable_acess2,
+                                   onvalue=1,
+                                   offvalue=0)
             check_EM.grid(row=1, column=0, sticky=W)
-            check_BX = Checkbutton(frame_tec_acesso1, text='Dar Baixa em Ordem de Serviço', variable=variable_acess3, onvalue=1,
-                                    offvalue=0)
+            check_BX = Checkbutton(frame_tec_acesso1, text='Dar Baixa em Ordem de Serviço', variable=variable_acess3,
+                                   onvalue=1,
+                                   offvalue=0)
             check_BX.grid(row=2, column=0, sticky=W)
             check_CE = Checkbutton(frame_tec_acesso1, text='Controle de Estoque', variable=variable_acess4, onvalue=1,
-                                    offvalue=0)
+                                   offvalue=0)
             check_CE.grid(row=3, column=0, sticky=W)
             check_USU = Checkbutton(frame_tec_acesso1, text='Cadastro de Usúario', variable=variable_acess5, onvalue=1,
                                     offvalue=0)
             check_USU.grid(row=4, column=0, sticky=W)
-            check_CON = Checkbutton(frame_tec_acesso1, text='Configuração do Sistema', variable=variable_acess6, onvalue=1,
+            check_CON = Checkbutton(frame_tec_acesso1, text='Configuração do Sistema', variable=variable_acess6,
+                                    onvalue=1,
                                     offvalue=0)
             check_CON.grid(row=5, column=0, sticky=W)
             check_FIN = Checkbutton(frame_tec_acesso1, text='Financeiro', variable=variable_acess7, onvalue=1,
@@ -8809,10 +8896,9 @@ class Castelo:
             jan.focus_force()
             jan.grab_set()
 
-
         tree_conf_op = ttk.Treeview(labelF_op,
                                     columns=('operador', 'iniciar', 'emitir', 'baixa', 'estoque', 'usuario',
-                                             'configuração', 'financeiro'),
+                                             'configuração', 'financeiro', 'id'),
                                     show='headings',
                                     selectmode='browse',
                                     height=5)
@@ -8825,6 +8911,7 @@ class Castelo:
         tree_conf_op.column('usuario', width=50, minwidth=10, stretch=False)
         tree_conf_op.column('configuração', width=50, minwidth=10, stretch=False)
         tree_conf_op.column('financeiro', width=50, minwidth=10, stretch=False)
+        tree_conf_op.column('id', width=0, minwidth=0, stretch=False)
 
         tree_conf_op.heading('operador', text='Operador')
         tree_conf_op.heading('iniciar', text='INI')
@@ -8834,6 +8921,7 @@ class Castelo:
         tree_conf_op.heading('usuario', text='USU')
         tree_conf_op.heading('configuração', text='CON')
         tree_conf_op.heading('financeiro', text='FIN')
+        tree_conf_op.heading('id')
 
         tree_conf_op.grid(sticky=W, padx=10, pady=10)
         popularOperador()
@@ -8869,7 +8957,6 @@ class Castelo:
                                       command=janelaAlteraAcessoOp)
         button_op_alter_aces.grid(row=1, column=1)
 
-
         # Aba Mensagens -----------------------------------------------------
 
         frame_mensagens = Frame(aba_Mensagens)
@@ -8886,10 +8973,13 @@ class Castelo:
 
         self.entry_mens1 = Entry(labelF_mens1, width=60, textvariable=osVar28)
         self.entry_mens1.pack(fill=BOTH, padx=10, pady=10)
+        self.entry_mens1.insert(0, dados_empresa.complemento1)
         self.entry_mens2 = Entry(labelF_mens2, width=60, textvariable=osVar29)
         self.entry_mens2.pack(fill=BOTH, padx=10, pady=10)
+        self.entry_mens2.insert(0, dados_empresa.complemento2)
         self.entry_mens3 = Entry(labelF_mens3, width=60, textvariable=osVar30)
         self.entry_mens3.pack(fill=BOTH, padx=10, pady=10)
+        self.entry_mens3.insert(0, dados_empresa.complemento3)
 
         jan.transient(root2)
         jan.focus_force()

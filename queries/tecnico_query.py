@@ -17,7 +17,7 @@ class TecnicoQuery():
     def editar_tecnico(self, id_tecnico, tecnico, sessao):
         tecnic = self.listar_tecnico_id(id_tecnico, sessao)
         tecnic.nome = tecnico.nome
-        tecnic.senha_tecnico = tecnic.senha_tecnico
+        tecnic.senha_tecnico = tecnico.senha_tecnico
 
     def listar_tecnico_nome(self, nome_tecnico, sessao):
         tecnico = sessao.query(Tecnico).filter(Tecnico.nome == nome_tecnico).all()
