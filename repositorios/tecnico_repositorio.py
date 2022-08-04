@@ -16,12 +16,13 @@ class TecnicoRepositorio():
 
     def inserir_tecnico(self, tecnico, sessao):
         query_tecnico = tecnico_query.TecnicoQuery()
-        novo_tecnico = Tecnico(nome=tecnico.nome, senha_tecnico=tecnico.senha_tecnico)
+        novo_tecnico = Tecnico(nome=tecnico.nome, senha_tecnico=tecnico.senha_tecnico, INI=tecnico.INI, EM=tecnico.EM,
+                               BX=tecnico.BX, CE=tecnico.CE, USU=tecnico.USU, CON=tecnico.CON, FIN=tecnico.FIN)
         query_tecnico.inserir_tecnico(novo_tecnico, sessao)
 
-    def editar_tecnico(self, id_tecnico, tecnico, sessao):
+    def editar_tecnico(self, id_tecnico, tecnico, opt, sessao):
         query_tecnico = tecnico_query.TecnicoQuery()
-        query_tecnico.editar_tecnico(id_tecnico, tecnico, sessao)
+        query_tecnico.editar_tecnico(id_tecnico, tecnico, opt, sessao)
 
     def listar_tecnico_nome(self, tecnico_nome, sessao):
         query_tecnico = tecnico_query.TecnicoQuery()

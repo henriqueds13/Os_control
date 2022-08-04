@@ -300,6 +300,13 @@ class Tecnico(Base):
     id = Column(Integer, primary_key=True)
     nome = Column(String(30), nullable=False)
     senha_tecnico = Column(Integer, nullable=False)
+    INI = Column(Integer)
+    EM = Column(Integer)
+    BX = Column(Integer)
+    CE = Column(Integer)
+    USU = Column(Integer)
+    CON = Column(Integer)
+    FIN = Column(Integer)
 
     ostec = relationship('OS', back_populates='tecnico')
     ostec_saida = relationship('OSSaida', back_populates='tecnico_saida')

@@ -474,3 +474,16 @@ else:
         Label(labelF_op_legenda, text='USU = Cadastro de Usúario', anchor=W).pack(fill=X)
         Label(labelF_op_legenda, text='CON = Configuração do Sistema', anchor=W).pack(fill=X)
         Label(labelF_op_legenda, text='FIN = Financeiro', anchor=W).pack(fill=X)
+
+        def concederAcesso5(*args):
+            if len(op_cad_cli.get()) == 4:
+                for i in self.operadores_total:
+                    if int(op_cad_cli.get()) == int(i[0]):
+                        self.button_cad_cli.configure(state=NORMAL)
+                        self.cad_cli_oper.delete(0, END)
+                        self.cad_cli_oper.configure(validate='none')
+                        self.cad_cli_oper.insert(0, i[1])
+                        self.cad_cli_oper.configure(state=DISABLED)
+                        return
+                self.cad_cli_oper.delete(0, END)
+                messagebox.showinfo(title="ERRO", message="Operador Não Cadastrado!")

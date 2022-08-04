@@ -14,10 +14,18 @@ class TecnicoQuery():
     def inserir_tecnico(self, tecnico, sessao):
         sessao.add(tecnico)
 
-    def editar_tecnico(self, id_tecnico, tecnico, sessao):
+    def editar_tecnico(self, id_tecnico, tecnico, opt, sessao):
         tecnic = self.listar_tecnico_id(id_tecnico, sessao)
-        tecnic.nome = tecnico.nome
-        tecnic.senha_tecnico = tecnico.senha_tecnico
+        if opt == 1:
+            tecnic.senha_tecnico = tecnico.senha_tecnico
+        else:
+            tecnic.INI = tecnico.INI
+            tecnic.EM = tecnico.EM
+            tecnic.BX = tecnico.BX
+            tecnic.CE = tecnico.CE
+            tecnic.USU = tecnico.USU
+            tecnic.CON = tecnico.CON
+            tecnic.FIN = tecnico.FIN
 
     def listar_tecnico_nome(self, nome_tecnico, sessao):
         tecnico = sessao.query(Tecnico).filter(Tecnico.nome == nome_tecnico).all()
