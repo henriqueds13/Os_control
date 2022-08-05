@@ -97,6 +97,7 @@ class Castelo:
 
         self.count = 0
 
+
         def on_enter(e):
             e.widget['relief'] = 'raised'
 
@@ -104,48 +105,94 @@ class Castelo:
             e.widget['relief'] = 'flat'
 
         def concederAcessoSistema():
-            jan = Toplevel()
+
+            bg_janela = '#506266'
+            jan = Toplevel(bg=bg_janela)
+
+            jan.protocol("WM_DELETE_WINDOW", self.__callback)
 
             # Centraliza a janela
-            x_cordinate = int((self.w / 2) - (460 / 2))
-            y_cordinate = int((self.h / 2) - (260 / 2))
-            jan.geometry("{}x{}+{}+{}".format(460, 260, x_cordinate, y_cordinate))
+            x_cordinate = int((self.w / 2) - (530 / 2))
+            y_cordinate = int((self.h / 2) - (200 / 2))
+            jan.geometry("{}x{}+{}+{}".format(530, 230, x_cordinate, y_cordinate))
 
-            def conferir():
-                NOME = nome1.get()
-                SENHA = senha.get()
-                if NOME == SENHA:
-                    msg['text'] = 'ACESSO PERMITIDO'
-                    msg['fg'] = 'darkgreen'
-                else:
-                    msg['text'] = 'ACESSO NEGADO'
-                    msg['fg'] = 'red'
-                    nome1.focus_force()
+            def concederAcesso8(*args):
+                if len(op_login1.get()) == 4:
+                    for i in self.operadores_total:
+                        if int(op_login1.get()) == int(i[0]):
+                            button_login.configure(state=NORMAL)
+                            entry_usu.delete(0, END)
+                            entry_usu.configure(validate='none')
+                            entry_usu.insert(0, i[1])
+                            entry_usu.configure(state=DISABLED)
+                            return
+                    entry_usu.delete(0, END)
+                    messagebox.showinfo(title="ERRO", message="Operador Não Cadastrado!")
 
-            frame1 = Frame(jan)
-            frame2 = Frame(jan)
-            frame3 = Frame(jan)
-            frame4 = Frame(jan, pady=10)
-            frame1.pack(in_=jan)
-            frame2.pack()
-            frame3.pack()
-            frame4.pack()
+            def liberarAcesso(jan):
+                jan.destroy()
 
-            Label(frame1, text="PASSWORDS", fg='darkblue', font=('Verdana', '14', 'bold'), height=3).pack()
+            frame=Frame(jan, bg=bg_janela)
+            frame1 = Frame(frame, bg=bg_janela)
+            frame2 = Frame(frame, bg=bg_janela)
+            sub_frame1 = Frame(frame2, bg=bg_janela)
+            sub_frame2 = Frame(frame2, bg=bg_janela)
+            sub_frame3 = Frame(frame2, bg=bg_janela)
+            frame.pack(padx=10, fill=BOTH, pady=10)
+            frame1.pack(fill=X, pady=20)
+            frame2.pack(fill=X)
+            sub_frame1.grid(row=0, column=0)
+            sub_frame2.grid(row=0, column=1, padx=10)
+            sub_frame3.grid(row=0, column=2)
 
-            fonte1 = ('Verdana', '10', 'bold')
-            Label(frame2, text="Nome: ", font=fonte1, width=8).pack(side=LEFT)
-            nome1 = Entry(frame2, width=10, font=fonte1)
-            nome1.focus_force()
-            nome1.pack(side=LEFT)
+            frame_sub1 = Frame(frame1, bg=bg_janela)
+            frame_sub1.grid(row=0, column=0, sticky=NW)
+            frame_sub2 = Frame(frame1, bg=bg_janela)
+            frame_sub2.grid(row=1, column=0, sticky=NW)
 
-            Label(frame3, text="Senha: ", font=fonte1, width=8).pack(side=LEFT)
-            senha = Entry(frame3, width=10, show='*', font=fonte1)
-            senha.pack(side=LEFT)
-            confere = Button(frame4, font=fonte1, text='Conferir', bg='pink', command=conferir)
-            confere.pack()
-            msg = Label(frame4, font=fonte1, height=3, text='AGUARDANDO...')
-            msg.pack()
+            Label(frame_sub1, text="Boa Noite, são: ", fg='yellow', font=('Verdana', '14', ''),
+                  bg=bg_janela).pack(side=LEFT, pady=0)
+            Label(frame_sub1, text="20:39:19", fg='yellow', font=('Verdana', '16', 'bold'),
+                  bg=bg_janela).pack(side=LEFT, padx=15)
+
+            Label(frame_sub2, text="Hoje é: ", fg='white', font=('Verdana', '13', ''), height=3,
+                  bg=bg_janela).pack(side=LEFT)
+            Label(frame_sub2, text="quinta-feira, 4 de agosto de 2022 ", fg='white', font=('Verdana', '11', 'bold'),
+                  bg=bg_janela).pack(side=LEFT)
+
+            Label(sub_frame1,
+                  text="Se a Data e a Hora estiverem \n  corretos Digite a Senha do \n   Operador e Clique em ok",
+                  fg='white', font=('Verdana', '11', ''),
+                  height=3, bg=bg_janela).grid(row=0, column=0, sticky=W)
+
+            labelFrameEntry = LabelFrame(sub_frame2, text='Usuário', fg='yellow',
+                                         font=('Verdana', '9', ''),bg=bg_janela)
+            labelFrameEntry.pack()
+            global op_login1
+            op_login1 = StringVar()
+            op_login1.trace_add('write', concederAcesso8)
+            entry_usu = Entry(labelFrameEntry, width=20, bg='#ffffe1', textvariable=op_login1)
+            entry_usu.pack(pady=5, padx=5)
+
+            button_login = Button(sub_frame3, text="Ok", wraplength=70, underline=0, width=9,
+                                  font=('Verdana', '10', 'bold'), state=DISABLED, command=lambda: [liberarAcesso(jan)])
+            button_login.pack(pady=10, padx=10)
+            Button(sub_frame3, text="Cancelar", wraplength=70, underline=0, font=('Verdana', '10', 'bold'),
+                   width=9, command=master.quit).pack()
+
+            # fonte1 = ('Verdana', '10', 'bold')
+            # Label(frame2, text="Nome: ", font=fonte1, width=8).pack(side=LEFT)
+            # nome1 = Entry(frame2, width=10, font=fonte1)
+            # nome1.focus_force()
+            # nome1.pack(side=LEFT)
+            #
+            # Label(frame3, text="Senha: ", font=fonte1, width=8).pack(side=LEFT)
+            # senha = Entry(frame3, width=10, show='*', font=fonte1)
+            # senha.pack(side=LEFT)
+            # confere = Button(frame4, font=fonte1, text='Conferir', bg='pink', command=conferir)
+            # confere.pack()
+            # msg = Label(frame4, font=fonte1, height=3, text='AGUARDANDO...')
+            # msg.pack()
 
             jan.transient(root2)
             jan.focus_force()
@@ -169,7 +216,7 @@ class Castelo:
 
         self.var.trace_add('write', to_uppercase)
 
-        # concederAcesso1()
+        concederAcessoSistema()
 
         # Barra de menus
 
@@ -8523,18 +8570,22 @@ class Castelo:
         subframe_mao_obra2 = Frame(subframe_mao_obra)
         subframe_mao_obra2.grid(row=0, column=1, sticky=W)
 
-        ftree_mao_obra = Frame(labelF_mao_obra, height=5, width=35)
+        ftree_mao_obra = Frame(labelF_mao_obra, height=5, width=40)
         ftree_mao_obra.grid(row=0, column=0, padx=5, pady=5)
+        scrollbar_reg_h = Scrollbar(ftree_mao_obra, orient=VERTICAL)
         treeview_mao_obra = ttk.Treeview(ftree_mao_obra,
                                          columns=('descricao', 'valor', 'id'),
                                          show='tree',
                                          selectmode='browse',
-                                         height=4)
+                                         height=4,
+                                         yscrollcommand=scrollbar_reg_h.set)
         treeview_mao_obra.column('#0', width=0, stretch=NO)
         treeview_mao_obra.column('descricao', width=250, minwidth=100, stretch=False, anchor=W)
-        treeview_mao_obra.column('valor', width=70, minwidth=25, stretch=False)
+        treeview_mao_obra.column('valor', width=90, minwidth=25, stretch=False)
         treeview_mao_obra.column('id', width=0, stretch=NO)
-        treeview_mao_obra.grid(sticky=W)
+        treeview_mao_obra.pack(side=LEFT)
+        scrollbar_reg_h.config(command=treeview_mao_obra.yview)
+        scrollbar_reg_h.pack(fill=Y, side=LEFT)
 
         def popularMaoObra():
             treeview_mao_obra.delete(*treeview_mao_obra.get_children())
@@ -8583,7 +8634,7 @@ class Castelo:
         button_del_mao_obra = Button(subframe_mao_obra2, text='Excluir', width=8, command=deletaMaoObra)
         button_del_mao_obra.grid(row=1, column=0, pady=5)
 
-        text_tecnico = Listbox(labelF_tecnico, height=5, width=35)
+        text_tecnico = Listbox(labelF_tecnico, height=5, width=30)
         text_tecnico.grid(row=0, column=0, padx=5, pady=5)
         subframe_tecnico = Frame(labelF_tecnico)
         subframe_tecnico.grid(row=1, column=0, sticky=NW)
@@ -8595,7 +8646,7 @@ class Castelo:
                                     command=lambda: [excluiDados(1)])
         button_del_tecnico.grid(row=0, column=1, pady=5)
 
-        text_aparelho = Listbox(labelF_aparelho, height=7, width=30)
+        text_aparelho = Listbox(labelF_aparelho, height=7, width=31)
         text_aparelho.grid(row=0, column=0, padx=5, pady=5)
         subframe_aparelho = Frame(labelF_aparelho)
         subframe_aparelho.grid(row=0, column=1, sticky=NW)
@@ -9208,6 +9259,8 @@ class Castelo:
         self.entry_mens3.pack(fill=BOTH, padx=10, pady=10)
         self.entry_mens3.insert(0, dados_empresa.complemento3)
 
+        jan.protocol("WM_DELETE_WINDOW", self.__callback)
+
         jan.transient(root2)
         jan.focus_force()
         jan.grab_set()
@@ -9223,6 +9276,10 @@ class Castelo:
                     return
             self.os_operador.delete(0, END)
             messagebox.showinfo(title="ERRO", message="Operador Não Cadastrado!")
+
+    @staticmethod
+    def __callback():
+        return
 
 
 fabrica = fabrica_conexao.FabricaConexão()

@@ -487,3 +487,6 @@ else:
                         return
                 self.cad_cli_oper.delete(0, END)
                 messagebox.showinfo(title="ERRO", message="Operador Não Cadastrado!")
+
+
+    jan.protocol("WM_DELETE_WINDOW", self.__callback)
