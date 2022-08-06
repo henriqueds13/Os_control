@@ -490,3 +490,7 @@ else:
 
 
     jan.protocol("WM_DELETE_WINDOW", self.__callback)
+
+    Entry(self.jan, width=50, validate='all', validatecommand=(testa_tamanho_nome, '%P'),
+
+     testa_inteiro_op = self.jan.register(self.testaEntradaNumOperador)

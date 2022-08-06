@@ -97,7 +97,6 @@ class Castelo:
 
         self.count = 0
 
-
         def on_enter(e):
             e.widget['relief'] = 'raised'
 
@@ -122,17 +121,18 @@ class Castelo:
                         if int(op_login1.get()) == int(i[0]):
                             button_login.configure(state=NORMAL)
                             entry_usu.delete(0, END)
-                            entry_usu.configure(validate='none')
+                            entry_usu.configure(validate='none', show='')
                             entry_usu.insert(0, i[1])
                             entry_usu.configure(state=DISABLED)
+                            jan.bind('<Return>', liberarAcesso)
                             return
                     entry_usu.delete(0, END)
                     messagebox.showinfo(title="ERRO", message="Operador Não Cadastrado!")
 
-            def liberarAcesso(jan):
+            def liberarAcesso(e):
                 jan.destroy()
 
-            frame=Frame(jan, bg=bg_janela)
+            frame = Frame(jan, bg=bg_janela)
             frame1 = Frame(frame, bg=bg_janela)
             frame2 = Frame(frame, bg=bg_janela)
             sub_frame1 = Frame(frame2, bg=bg_janela)
@@ -166,16 +166,17 @@ class Castelo:
                   height=3, bg=bg_janela).grid(row=0, column=0, sticky=W)
 
             labelFrameEntry = LabelFrame(sub_frame2, text='Usuário', fg='yellow',
-                                         font=('Verdana', '9', ''),bg=bg_janela)
+                                         font=('Verdana', '9', ''), bg=bg_janela)
             labelFrameEntry.pack()
             global op_login1
             op_login1 = StringVar()
             op_login1.trace_add('write', concederAcesso8)
-            entry_usu = Entry(labelFrameEntry, width=20, bg='#ffffe1', textvariable=op_login1)
+            entry_usu = Entry(labelFrameEntry, width=20, bg='#ffffe1', textvariable=op_login1, show='*')
             entry_usu.pack(pady=5, padx=5)
+            entry_usu.focus()
 
             button_login = Button(sub_frame3, text="Ok", wraplength=70, underline=0, width=9,
-                                  font=('Verdana', '10', 'bold'), state=DISABLED, command=lambda: [liberarAcesso(jan)])
+                                  font=('Verdana', '10', 'bold'), state=DISABLED, command=jan.destroy)
             button_login.pack(pady=10, padx=10)
             Button(sub_frame3, text="Cancelar", wraplength=70, underline=0, font=('Verdana', '10', 'bold'),
                    width=9, command=master.quit).pack()
@@ -205,9 +206,7 @@ class Castelo:
             else:
                 pass
 
-
         self.atualizaListaOp()
-
 
         self.var = StringVar(master)
 
@@ -306,7 +305,6 @@ class Castelo:
         self.frame_princ.pack(fill="both", expand=TRUE)
 
         # ------------------------------- Janela Cadastro de Clientes----------------------------------------------
-
         font_label = ('Verdana', '9', 'bold')
         self.frame_cadastro_clientes = Frame(self.frame_princ)
 
@@ -321,6 +319,8 @@ class Castelo:
                                               bg="#FFF", textvariable=self.var)  # Entrada para pesquisa
         self.check_pesq_avan_cli = Checkbutton(self.subframe2_entry_cliente, text='Busca Avançada',
                                                variable=self.variable_int_cli, onvalue=1, offvalue=0)
+
+        self.entrada_pesquisa_cliente.focus()
 
         self.frame_num_clientes = LabelFrame(self.subframe2_entry_cliente, text='Núm de Clientes')
         self.label_num_cliente = Label(self.frame_num_clientes, text=2, fg='blue', font='bold')
@@ -754,7 +754,6 @@ class Castelo:
         self.tree_ap_manut.tag_configure('oddrow', background='#ffffe1')
         self.tree_ap_manut.tag_configure('evenrow', background='#F2EDDC')
 
-        self.popularOsConserto()
 
         self.tree_ap_manut.tag_configure('oddrow', background='#ffffe1')
         self.tree_ap_manut.tag_configure('evenrow', background='#D9D0C1')
@@ -777,6 +776,8 @@ class Castelo:
         self.check_pesq_avan_os_man = Checkbutton(self.label_pesquisa_manut, text='Busca Avançada',
                                                   variable=self.variable_int_os, onvalue=1, offvalue=0, bg="#D9D0C1")
         self.check_pesq_avan_os_man.pack(side=RIGHT, padx=5, pady=2)
+
+        self.popularOsConserto()
 
         self.label_n_aparelhos = LabelFrame(self.subframe_ap_manut2, text="N Aparelhos", bg="#D9D0C1")
         self.label_n_aparelhos.pack(side=LEFT, padx=20, pady=5, ipadx=5)
@@ -881,7 +882,7 @@ class Castelo:
         self.scrollbar_entr_h.config(command=self.tree_ap_entr.xview)
         self.scrollbar_entr_h.pack(fill=X)
 
-        self.popularOsEntregue()
+
 
         self.tree_ap_entr.tag_configure('oddrow', background='#ffffe1')
         self.tree_ap_entr.tag_configure('evenrow', background='#F2E8B3')
@@ -906,7 +907,7 @@ class Castelo:
                                                   variable=self.variable_int_os_entr, onvalue=1, offvalue=0,
                                                   bg="#F2E8B3")
         self.check_pesq_avan_os_ent.pack(side=RIGHT, padx=5, pady=2)
-
+        self.popularOsEntregue()
         self.label_n_aparelhos_entr = LabelFrame(self.subframe_ap_entr2, text="N Aparelhos", bg="#F2E8B3")
         self.label_n_aparelhos_entr.pack(side=LEFT, padx=20, pady=5, ipadx=5)
         self.widget1_n_aparelhos_entr = Label(self.label_n_aparelhos_entr, text="1", bg="#F2E8B3")
@@ -1278,12 +1279,18 @@ class Castelo:
                     if int(op_senha.get()) == int(i[0]):
                         button_senha.configure(state=NORMAL)
                         entry_locali.delete(0, END)
-                        entry_locali.configure(validate='none')
+                        entry_locali.configure(validate='none', show='')
                         entry_locali.insert(0, i[1])
                         entry_locali.configure(state=DISABLED)
+                        button_senha.focus()
+                        jan.bind('<Return>', aceitaOption)
                         return
                 entry_locali.delete(0, END)
                 messagebox.showinfo(title="ERRO", message="Operador Não Cadastrado!")
+
+        def aceitaOption(e):
+            self.abreJanelaConfigurações()
+            jan.destroy()
 
         frame_senha_jan = Frame(jan)
         frame_senha_jan.grid(row=0, column=0, padx=10, pady=10)
@@ -1296,14 +1303,15 @@ class Castelo:
         global op_senha
         op_senha = StringVar()
         op_senha.trace_add('write', concederAcesso7)
-        entry_locali = Entry(frame_senha_jan1, width=30, relief="sunken", borderwidth=2, textvariable=op_senha)
+        entry_locali = Entry(frame_senha_jan1, width=30, relief="sunken", borderwidth=2, textvariable=op_senha, show='*')
         entry_locali.grid(row=0, column=0, padx=10)
+        entry_locali.focus()
         labelframe_local = Frame(frame_senha_jan1, bg="blue", height=60, width=80)
         labelframe_local.grid(row=1, column=0, pady=10)
 
-
         button_senha = Button(frame_senha_jan2, text="Ok", width=8, wraplength=70, state=DISABLED,
-               underline=0, font=('Verdana', '9', 'bold'), command=lambda: [self.abreJanelaConfigurações(), jan.destroy()])
+                              underline=0, font=('Verdana', '9', 'bold'),
+                              command=lambda: [self.abreJanelaConfigurações(), jan.destroy()])
         button_senha.grid(row=0, column=0, padx=5, ipady=5, pady=10)
         Button(frame_senha_jan2, text="Cancelar", wraplength=70, width=8,
                underline=0, font=('Verdana', '9', 'bold'), command=jan.destroy).grid(row=1, column=0, padx=5, ipady=5)
@@ -1337,6 +1345,7 @@ class Castelo:
         print()
 
     def abrirJanelaCliente(self):
+
         self.nome_frame.pack_forget()
         self.frame_cadastro_clientes.pack(fill="both", expand=TRUE)
         self.nome_frame = self.frame_cadastro_clientes
@@ -1408,7 +1417,7 @@ class Castelo:
                     if int(op_cad_cli.get()) == int(i[0]):
                         self.button_cad_cli.configure(state=NORMAL)
                         self.cad_cli_oper.delete(0, END)
-                        self.cad_cli_oper.configure(validate='none')
+                        self.cad_cli_oper.configure(validate='none', show='')
                         self.cad_cli_oper.insert(0, i[1])
                         self.cad_cli_oper.configure(state=DISABLED)
                         return
@@ -1471,7 +1480,7 @@ class Castelo:
         global op_cad_cli
         op_cad_cli = StringVar()
         op_cad_cli.trace_add('write', concederAcesso3)
-        self.cad_cli_oper = Entry(self.jan, width=20, validate='all',
+        self.cad_cli_oper = Entry(self.jan, width=20, validate='all', show='*',
                                   validatecommand=(testa_inteiro_op, '%P'), textvariable=op_cad_cli)
         self.cad_cli_oper.grid(row=12, column=1, sticky=W, padx=10)
         self.botao_entr_frame = Frame(self.jan)
@@ -1508,6 +1517,7 @@ class Castelo:
         if children:
             self.tree_cliente.focus(children[0])
             self.tree_cliente.selection_set(children[0])
+        self.entrada_pesquisa_cliente.focus()
 
     def popularPesquisaNome(self, tipo):
         self.tree_cliente.delete(*self.tree_cliente.get_children())
@@ -1530,6 +1540,7 @@ class Castelo:
         if children:
             self.tree_cliente.focus(children[0])
             self.tree_cliente.selection_set(children[0])
+        self.entrada_pesquisa_cliente.focus()
 
     def popularPesquisaId(self, id):
         self.tree_cliente.delete(*self.tree_cliente.get_children())
@@ -1540,6 +1551,7 @@ class Castelo:
         children = self.tree_cliente.get_children()
         self.tree_cliente.focus(children[0])
         self.tree_cliente.selection_set(children[0])
+        self.entrada_pesquisa_cliente.focus()
 
     def popularPesquisaLocaliza(self, tipo, jan):
 
@@ -1566,6 +1578,7 @@ class Castelo:
             if children:
                 self.tree_cliente.focus(children[0])
                 self.tree_cliente.selection_set(children[0])
+            self.entrada_pesquisa_cliente.focus()
             jan.destroy()
 
     def cadastrarCliente(self):
@@ -1587,7 +1600,7 @@ class Castelo:
                 celular = self.cad_cli_cel.get()
                 whats = self.cad_cli_whats.get()
                 email = self.cad_cli_email.get()
-                operador = self.insereZero(self.cad_cli_oper.get())
+                operador = self.insereZero(1234)
 
                 novo_cliente = cliente.Cliente(nome, operador, celular, cpf, tel_fixo, '-', endereco, estado, bairro,
                                                complemento, cep, cidade, email, whats, '-', tel_comercial)
@@ -1697,7 +1710,7 @@ class Castelo:
                     if int(operador_edit_cliente.get()) == int(i[0]):
                         self.alterar_button.configure(state=NORMAL)
                         self.cad_cli_oper.delete(0, END)
-                        self.cad_cli_oper.configure(validate='none')
+                        self.cad_cli_oper.configure(validate='none', show='')
                         self.cad_cli_oper.insert(0, i[1])
                         self.cad_cli_oper.configure(state=DISABLED)
                         return
@@ -1714,7 +1727,7 @@ class Castelo:
         global operador_edit_cliente
         operador_edit_cliente = StringVar()
         operador_edit_cliente.trace_add('write', concederAcesso2)
-        self.cad_cli_oper = Entry(self.first_frame, width=20, textvariable=operador_edit_cliente)
+        self.cad_cli_oper = Entry(self.first_frame, width=20, textvariable=operador_edit_cliente, show='*')
         self.cad_cli_oper.pack(side=RIGHT, padx=10)
         Label(self.first_frame, text="Operador:", bg="#ffffe1").pack(side=RIGHT, ipadx=0)
         self.second_frame = Frame(jan, bg="#ffffe1")
@@ -2172,7 +2185,7 @@ class Castelo:
         global op_variable1
         op_variable1 = StringVar()
         self.os_operador = Entry(frame_dadosapare_os3, width=11, font=('Verdana', '10', 'bold'),
-                                 textvariable=op_variable1)
+                                 textvariable=op_variable1, show='*')
         self.os_operador.grid(row=5, column=1, sticky=E)
         op_variable1.trace_add('write', self.concederAcesso1)
 
@@ -2292,6 +2305,7 @@ class Castelo:
         if children:
             self.tree_ap_manut.focus(children[-1])
             self.tree_ap_manut.selection_set(children[-1])
+        self.entr_pesq_manut.focus()
 
     def popularOsConsertoOrdenado(self, num):
         self.tree_ap_manut.delete(*self.tree_ap_manut.get_children())
@@ -2328,6 +2342,7 @@ class Castelo:
         if children:
             self.tree_ap_manut.focus(children[-1])
             self.tree_ap_manut.selection_set(children[-1])
+        self.entr_pesq_manut.focus()
 
     def cadastrarOs(self, jan):
 
@@ -3714,7 +3729,7 @@ class Castelo:
                     if int(op_orc.get()) == int(i[0]):
                         button_orc_saida.configure(state=NORMAL)
                         self.orc_operador.delete(0, END)
-                        self.orc_operador.configure(validate='none')
+                        self.orc_operador.configure(validate='none', show='')
                         self.orc_operador.insert(0, i[1])
                         self.orc_operador.configure(state=DISABLED)
                         return
@@ -3755,7 +3770,7 @@ class Castelo:
         global op_orc
         op_orc = StringVar()
         op_orc.trace_add('write', concederAcesso4)
-        self.orc_operador = Entry(frame_os_su3, width=20, relief=SUNKEN, textvariable=op_orc)
+        self.orc_operador = Entry(frame_os_su3, width=20, relief=SUNKEN, textvariable=op_orc, show='*')
         self.orc_operador.pack(padx=10, pady=17)
 
         testa_float = frame_princ_os1.register(self.testaEntradaFloat)
@@ -4413,6 +4428,7 @@ class Castelo:
         if children:
             tree_ap_entr.focus(children[-1])
             tree_ap_entr.selection_set(children[-1])
+        self.entr_pesq_entr.focus()
 
     def popularOsEntregue(self):
         self.tree_ap_entr.delete(*self.tree_ap_entr.get_children())
@@ -4444,6 +4460,7 @@ class Castelo:
         if children:
             self.tree_ap_entr.focus(children[-1])
             self.tree_ap_entr.selection_set(children[-1])
+        self.entr_pesq_entr.focus()
 
     def popularOsEntregueOrdenado(self, num):
         self.tree_ap_entr.delete(*self.tree_ap_entr.get_children())
@@ -4473,6 +4490,7 @@ class Castelo:
         if children:
             self.tree_ap_entr.focus(children[-1])
             self.tree_ap_entr.selection_set(children[-1])
+        self.entr_pesq_entr.focus()
 
     def saidaDeOs(self, jan, jan1):
 
@@ -5296,6 +5314,7 @@ class Castelo:
         children = self.tree_est_prod.get_children()
         if children:
             self.tree_est_prod.selection_set(children[0])
+        self.entry_descr_esto.focus()
 
     def popularProdutoEstoquePesqId(self, setor):
         self.tree_est_prod.delete(*self.tree_est_prod.get_children())
@@ -5331,6 +5350,7 @@ class Castelo:
         children = self.tree_est_prod.get_children()
         if children:
             self.tree_est_prod.selection_set(children[0])
+        self.entry_cod_esto.focus()
 
     def popularProdutoEstoqueBusca(self):
         self.treeview_busca_produto.delete(*self.treeview_busca_produto.get_children())
@@ -8548,7 +8568,29 @@ class Castelo:
         self.entry_aut12.insert(0, dados_empresa.autorizada12)
 
         # Aba Mao de obra -----------------------------------------------------
+        def testaTamTexto25(text):
+            if len(text) < 26:
+                return True
+            else:
+                return False
+
+        def testaTamTexto20(text):
+            if len(text) < 21:
+                return True
+            else:
+                return False
+
+        def testaEntradaInteiro(valor):
+            if valor.isdigit() and len(valor) < 5 or valor == '':
+                return True
+            else:
+                return False
+
         testa_float = jan.register(self.testaEntradaFloat)
+        testa_texto1_25 = jan.register(testaTamTexto25)
+        testa_texto1_20 = jan.register(testaTamTexto20)
+        testa_texto1_4 = jan.register(testaEntradaInteiro)
+
         frame_mao_obra = Frame(aba_mao_obra_status)
         frame_mao_obra.pack(fill=BOTH, padx=10, pady=0, ipadx=10)
         frame_mao_obra1 = Frame(aba_mao_obra_status)
@@ -8624,7 +8666,8 @@ class Castelo:
 
         Label(subframe_mao_obra1, text='Descrição').grid(row=0, column=0, padx=5)
         Label(subframe_mao_obra1, text='Preço').grid(row=1, column=0, sticky=E, padx=5, pady=5)
-        entry_descr_mao_obra = Entry(subframe_mao_obra1, width=23, textvariable=osVar27)
+        entry_descr_mao_obra = Entry(subframe_mao_obra1, width=23, textvariable=osVar27, validate='all',
+                                     validatecommand=(testa_texto1_25, '%P'))
         entry_descr_mao_obra.grid(row=0, column=1)
         entry_preço_mao_obra = Entry(subframe_mao_obra1, width=13, validate='all', validatecommand=(testa_float, '%P'))
         entry_preço_mao_obra.grid(row=1, column=1, sticky=W)
@@ -8735,7 +8778,8 @@ class Castelo:
 
             frame_localizar_jan2 = Frame(jan)
             frame_localizar_jan2.pack(pady=10, fill=X)
-            entry_locali = Entry(frame_localizar_jan2, width=30, relief="sunken", borderwidth=2)
+            entry_locali = Entry(frame_localizar_jan2, width=30, relief="sunken", borderwidth=2, validate='all',
+                                 validatecommand=(testa_texto1_20, '%P'), textvariable=osVar31)
             entry_locali.pack(side=LEFT, padx=10)
             localButton = Button(frame_localizar_jan2, text="Inserir", width=10, wraplength=70,
                                  underline=0, font=('Verdana', '9', 'bold'), height=2,
@@ -8784,6 +8828,22 @@ class Castelo:
         labelF_op = LabelFrame(frame_op, text='Operadores / Niveis de Acesso')
         labelF_op.grid(row=0, column=0)
 
+        def confereSenhaOp(entry1, entry2):
+            if entry1.get() == entry2.get():
+                return True
+            else:
+                return False
+
+        def confereSenhaExiste(entry1):
+            lista_senha = []
+            tecnicos = repositorio_op.listar_tecnicos(sessao)
+            for i in tecnicos:
+                lista_senha.append(i.senha_tecnico)
+            if int(entry1) in lista_senha:
+                return True
+            else:
+                return False
+
         def popularOperador():
 
             def converteBool(entrada):
@@ -8816,21 +8876,47 @@ class Castelo:
             jan.geometry("{}x{}+{}+{}".format(460, 260, x_cordinate, y_cordinate))
 
             def InsereOp(jan):
-                try:
-                    novo_operador = tecnico.Tecnico(entry_nome_op.get(), entry_senha_op.get(), variable_acess1.get(),
-                                                    variable_acess2.get(), variable_acess3.get(), variable_acess4.get(),
-                                                    variable_acess5.get(), variable_acess6.get(), variable_acess7.get())
-                    repositorio_op.inserir_tecnico(novo_operador, sessao)
-                    sessao.commit()
-                    self.mostrarMensagem("1", "Cadastro Editado com Sucesso!")
-                    popularOperador()
-                    self.atualizaListaOp()
-                    jan.destroy()
-                except:
-                    sessao.rollback()
-                    raise
-                finally:
-                    sessao.close()
+                if len(entry_nome_op.get()) == 0:
+                    messagebox.showinfo(title="ERRO", message="Digite o nome do novo Operador!")
+                elif len(entry_senha_op.get()) < 4:
+                    messagebox.showinfo(title="ERRO", message="A Senha deve possuir 4 Dígitos!")
+                elif confereSenhaExiste(entry_senha_op.get()):
+                    messagebox.showinfo(title="ERRO", message="Senha já em uso, Insira uma diferente!")
+                else:
+                    if confereSenhaOp(entry_senha_op, entry_senha_op1):
+                        try:
+                            novo_operador = tecnico.Tecnico(entry_nome_op.get(), entry_senha_op.get(),
+                                                            variable_acess1.get(),
+                                                            variable_acess2.get(), variable_acess3.get(),
+                                                            variable_acess4.get(),
+                                                            variable_acess5.get(), variable_acess6.get(),
+                                                            variable_acess7.get())
+                            repositorio_op.inserir_tecnico(novo_operador, sessao)
+                            sessao.commit()
+                            self.mostrarMensagem("1", "Cadastro Criado com Sucesso!")
+                            popularOperador()
+                            self.atualizaListaOp()
+                            jan.destroy()
+                        except:
+                            sessao.rollback()
+                            raise
+                        finally:
+                            sessao.close()
+                    else:
+                        messagebox.showinfo(title="ERRO", message="Senhas não conferem!")
+
+            def concederAcesso(*args):
+                if len(op_entry_cadOp.get()) == 4:
+                    for i in self.operadores_total:
+                        if int(op_entry_cadOp.get()) == int(i[0]):
+                            button_inserir.configure(state=NORMAL)
+                            entry_senha_op_Aut.delete(0, END)
+                            entry_senha_op_Aut.configure(validate='none', show='')
+                            entry_senha_op_Aut.insert(0, i[1])
+                            entry_senha_op_Aut.configure(state=DISABLED)
+                            return
+                    entry_senha_op_Aut.delete(0, END)
+                    messagebox.showinfo(title="ERRO", message="Operador Não Cadastrado!")
 
             frame_novo_op = Frame(jan)
             frame_novo_op.pack(fill=BOTH, padx=10, pady=10)
@@ -8838,9 +8924,9 @@ class Castelo:
             subframe1_novo_op = Frame(frame_novo_op)
             subframe1_novo_op.grid(row=0, column=0, sticky=NW)
             subframe2_novo_op = Frame(frame_novo_op)
-            subframe2_novo_op.grid(row=0, column=1, sticky=W, padx=5)
-            subframe3_novo_op = Frame(frame_novo_op)
-            subframe3_novo_op.grid(row=1, column=1, sticky=W, padx=5, pady=10)
+            subframe2_novo_op.grid(row=0, column=1, sticky=NW, padx=5)
+            subframe3_novo_op = Frame(subframe2_novo_op)
+            subframe3_novo_op.grid(row=1, column=0, sticky=NE, pady=5)
 
             frame_dados1_op = Frame(subframe1_novo_op)
             frame_dados1_op.grid(row=0, column=0, sticky=NW)
@@ -8852,7 +8938,7 @@ class Castelo:
             intro_dados2 = Frame(frame_dados1_op)
             intro_dados2.grid(row=0, column=1, sticky=SW)
             intro_dados3 = Frame(frame_dados2_op)
-            intro_dados3.grid(row=0, column=0, sticky=W, padx=5, pady=15)
+            intro_dados3.grid(row=0, column=0, sticky=NW, padx=5, pady=15)
 
             sub_intro1 = LabelFrame(intro_dados1)
             sub_intro1.grid(row=0, column=0, padx=5, ipady=5)
@@ -8860,18 +8946,28 @@ class Castelo:
             sub_intro2.grid(row=1, column=0, padx=5, pady=5)
 
             Label(sub_intro1, text='Senha Operador Autorizado').pack(padx=5)
-            entry_senha_op_Aut = Entry(sub_intro1, width=20)
+            global op_entry_cadOp
+            op_entry_cadOp = StringVar()
+            op_entry_cadOp.trace_add('write', concederAcesso)
+            entry_senha_op_Aut = Entry(sub_intro1, width=20, textvariable=op_entry_cadOp, show='*')
             entry_senha_op_Aut.pack()
 
             Label(sub_intro2, text='Nome Novo Operador').pack()
-            entry_nome_op = Entry(sub_intro2, width=20)
+            entry_nome_op = Entry(sub_intro2, width=20, textvariable=osVar32, validate='all',
+                                  validatecommand=(testa_texto1_20, '%P'))
             entry_nome_op.pack()
 
             Label(intro_dados2, height=5, width=5, bg='yellow').pack(padx=5)
 
             Label(intro_dados3, text='Senha Novo Operador').pack(padx=20)
-            entry_senha_op = Entry(intro_dados3, width=15)
-            entry_senha_op.pack()
+            entry_senha_op = Entry(intro_dados3, width=15, validate='all', validatecommand=(testa_texto1_4, '%P'),
+                                   show='*')
+            entry_senha_op.pack(pady=5)
+
+            Label(intro_dados3, text='Confirmar Senha ').pack(padx=20, pady=5)
+            entry_senha_op1 = Entry(intro_dados3, width=15, validate='all', validatecommand=(testa_texto1_4, '%P'),
+                                    show='*')
+            entry_senha_op1.pack()
 
             labelF_tec_acesso = LabelFrame(subframe2_novo_op, text='Níveis de Acesso')
             labelF_tec_acesso.grid(row=0, column=0, sticky=NE)
@@ -8913,9 +9009,10 @@ class Castelo:
             check_FIN.grid(row=6, column=0, sticky=W)
 
             button_cancelar = Button(subframe3_novo_op, text='Cancelar', width=10, command=jan.destroy)
-            button_cancelar.grid(row=0, column=1, sticky=E, padx=45)
-            button_inserir = Button(subframe3_novo_op, text='Cadastrar', width=10, command=lambda: [InsereOp(jan)])
-            button_inserir.grid(row=0, column=0, sticky=W)
+            button_cancelar.grid(row=0, column=0, sticky=W, padx=15)
+            button_inserir = Button(subframe3_novo_op, text='Cadastrar', width=10, command=lambda: [InsereOp(jan)],
+                                    state=DISABLED)
+            button_inserir.grid(row=0, column=1, sticky=W)
 
             jan.transient(root2)
             jan.focus_force()
@@ -8928,6 +9025,19 @@ class Castelo:
             x_cordinate = int((self.w / 2) - (300 / 2))
             y_cordinate = int((self.h / 2) - (180 / 2))
             jan.geometry("{}x{}+{}+{}".format(300, 180, x_cordinate, y_cordinate))
+
+            def concederAcesso(*args):
+                if len(op_exclui_op_entry.get()) == 4:
+                    for i in self.operadores_total:
+                        if int(op_exclui_op_entry.get()) == int(i[0]):
+                            button_excluir.configure(state=NORMAL)
+                            entry_exclui_op.delete(0, END)
+                            entry_exclui_op.configure(validate='none', show='')
+                            entry_exclui_op.insert(0, i[1])
+                            entry_exclui_op.configure(state=DISABLED)
+                            return
+                    entry_exclui_op.delete(0, END)
+                    messagebox.showinfo(title="ERRO", message="Operador Não Cadastrado!")
 
             def excluiOperador():
                 try:
@@ -8962,7 +9072,10 @@ class Castelo:
             frame_ex2_op.grid(row=0, column=1, sticky=NW, padx=10)
 
             Label(frame_ex1_op, text='Usuário a ser Excluído:').grid(row=0, column=0, sticky=NW)
-            entry_exclui_op = Entry(frame_ex1_op, width=20)
+            global op_exclui_op_entry
+            op_exclui_op_entry = StringVar()
+            op_exclui_op_entry.trace_add('write', concederAcesso)
+            entry_exclui_op = Entry(frame_ex1_op, width=20, textvariable=op_exclui_op_entry, show='*')
             entry_exclui_op.grid(row=1, column=0, pady=10)
             Label(frame_ex1_op, text='Digite a senha de um \n Operador autorizado e \n Tecle Excluir').grid(row=2,
                                                                                                             column=0)
@@ -8972,7 +9085,8 @@ class Castelo:
 
             button_cancelar = Button(subframe2_exclui_op, text='Cancelar', width=10, command=jan.destroy)
             button_cancelar.pack(side=RIGHT, ipady=5)
-            button_excluir = Button(subframe2_exclui_op, text='Excluir', width=10, command=excluiOperador)
+            button_excluir = Button(subframe2_exclui_op, text='Excluir', width=10, command=excluiOperador,
+                                    state=DISABLED)
             button_excluir.pack(side=RIGHT, padx=55, ipady=5)
 
             jan.transient(root2)
@@ -8987,26 +9101,44 @@ class Castelo:
             y_cordinate = int((self.h / 2) - (200 / 2))
             jan.geometry("{}x{}+{}+{}".format(400, 200, x_cordinate, y_cordinate))
 
+            def concederAcesso(*args):
+                if len(op_altera_entry_op.get()) == 4:
+                    for i in self.operadores_total:
+                        if int(op_altera_entry_op.get()) == int(i[0]):
+                            button_excluir.configure(state=NORMAL)
+                            entry_senha_op_Aut.delete(0, END)
+                            entry_senha_op_Aut.configure(validate='none', show='')
+                            entry_senha_op_Aut.insert(0, i[1])
+                            entry_senha_op_Aut.configure(state=DISABLED)
+                            return
+                    entry_senha_op_Aut.delete(0, END)
+                    messagebox.showinfo(title="ERRO", message="Operador Não Cadastrado!")
+
+
             def alteraSenhaOp():
-                try:
-                    nova_senha = entry_senha_op.get()
-                    if nova_senha == '':
-                        self.mostrarMensagem("1", "crie uma senha de 4 digitos!")
+                if len(entry_senha_op.get()) < 4:
+                    messagebox.showinfo(title="ERRO", message="A Senha deve possuir 4 Dígitos!")
+                elif confereSenhaExiste(entry_senha_op.get()):
+                    messagebox.showinfo(title="ERRO", message="Senha já em uso, Insira uma diferente!")
+                else:
+                    if confereSenhaOp(entry_senha_op, entry_senha_op1):
+                        try:
+                            nova_senha = entry_senha_op.get()
+                            operador = tecnico.Tecnico(dados_op_tree[0], nova_senha, '', '', '', '', '', '', '')
+                            repositorio_op.editar_tecnico(dados_op_tree[8], operador, 1, sessao)
+                            sessao.commit()
+                            self.mostrarMensagem("1", "Senha Alterada com Sucesso!")
+                            self.atualizaListaOp()
+                            popularOperador()
+                            jan.destroy()
+                        except:
+                            sessao.rollback()
+                            raise
+
+                        finally:
+                            sessao.close()
                     else:
-                        operador = tecnico.Tecnico(dados_op_tree[0], nova_senha, '', '', '', '', '', '', '')
-                        repositorio_op.editar_tecnico(dados_op_tree[8], operador, 1, sessao)
-                        sessao.commit()
-                        self.mostrarMensagem("1", "Senha Alterada com Sucesso!")
-                        self.atualizaListaOp()
-                        popularOperador()
-                        jan.destroy()
-
-                except:
-                    sessao.rollback()
-                    raise
-
-                finally:
-                    sessao.close()
+                        messagebox.showinfo(title="ERRO", message="Senhas não conferem!")
 
             cadastro_selecionado = tree_conf_op.focus()
             dados_op_tree = tree_conf_op.item(cadastro_selecionado, 'values')
@@ -9037,12 +9169,21 @@ class Castelo:
             sub_intro2.grid(row=1, column=0, padx=5, pady=5)
 
             Label(sub_intro1, text='Senha Operador Autorizado').pack(padx=5)
-            entry_senha_op_Aut = Entry(sub_intro1, width=20)
+            global op_altera_entry_op
+            op_altera_entry_op = StringVar()
+            op_altera_entry_op.trace_add('write', concederAcesso)
+            entry_senha_op_Aut = Entry(sub_intro1, width=20, textvariable=op_altera_entry_op, show='*')
             entry_senha_op_Aut.pack()
 
             Label(sub_intro2, text='Nova Senha Operador').pack()
-            entry_senha_op = Entry(sub_intro2, width=20)
-            entry_senha_op.pack()
+            entry_senha_op = Entry(sub_intro2, width=20, validate='all', validatecommand=(testa_texto1_4, '%P'),
+                                   show='*')
+            entry_senha_op.pack(pady=5)
+
+            Label(sub_intro2, text='Nova Senha Operador').pack()
+            entry_senha_op1 = Entry(sub_intro2, width=20, show='*', validate='all',
+                                    validatecommand=(testa_texto1_4, '%P'))
+            entry_senha_op1.pack()
 
             labelF_tec_acesso = Frame(subframe2_novo_op, bg='yellow', height=130, width=160)
             labelF_tec_acesso.grid(row=0, column=0, sticky=NW, padx=10)
@@ -9051,7 +9192,7 @@ class Castelo:
 
             button_cancelar = Button(frame_tec_acesso1, text='Cancelar', width=10, command=jan.destroy)
             button_cancelar.grid(row=0, column=1, sticky=E, padx=10)
-            button_excluir = Button(frame_tec_acesso1, text='Alterar', width=10, command=alteraSenhaOp)
+            button_excluir = Button(frame_tec_acesso1, text='Alterar', width=10, command=alteraSenhaOp, state=DISABLED)
             button_excluir.grid(row=0, column=0, sticky=W)
 
             jan.transient(root2)
@@ -9065,6 +9206,19 @@ class Castelo:
             x_cordinate = int((self.w / 2) - (430 / 2))
             y_cordinate = int((self.h / 2) - (260 / 2))
             jan.geometry("{}x{}+{}+{}".format(430, 260, x_cordinate, y_cordinate))
+
+            def concederAcesso(*args):
+                if len(op_atual_acess_op.get()) == 4:
+                    for i in self.operadores_total:
+                        if int(op_atual_acess_op.get()) == int(i[0]):
+                            button_excluir.configure(state=NORMAL)
+                            entry_senha_op_Aut.delete(0, END)
+                            entry_senha_op_Aut.configure(validate='none', show='')
+                            entry_senha_op_Aut.insert(0, i[1])
+                            entry_senha_op_Aut.configure(state=DISABLED)
+                            return
+                    entry_senha_op_Aut.delete(0, END)
+                    messagebox.showinfo(title="ERRO", message="Operador Não Cadastrado!")
 
             def alteraAcessoOp():
                 operador = tecnico.Tecnico('', '', variable_acess1.get(), variable_acess2.get(),
@@ -9106,7 +9260,10 @@ class Castelo:
             sub_intro2.grid(row=1, column=0, padx=5, pady=5)
 
             Label(sub_intro1, text='Senha Operador Autorizado').pack(padx=5)
-            entry_senha_op_Aut = Entry(sub_intro1, width=20)
+            global op_atual_acess_op
+            op_atual_acess_op = StringVar()
+            op_atual_acess_op.trace_add('write', concederAcesso)
+            entry_senha_op_Aut = Entry(sub_intro1, width=20, textvariable=op_atual_acess_op, show='*')
             entry_senha_op_Aut.pack()
 
             Label(intro_dados2, height=8, width=20, bg='yellow').pack(padx=17)
@@ -9167,7 +9324,7 @@ class Castelo:
 
             button_cancelar = Button(subframe3_novo_op, text='Cancelar', width=10, command=jan.destroy)
             button_cancelar.grid(row=0, column=1, sticky=E, padx=45)
-            button_excluir = Button(subframe3_novo_op, text='Alterar', width=10, command=alteraAcessoOp)
+            button_excluir = Button(subframe3_novo_op, text='Alterar', width=10, command=alteraAcessoOp, state=DISABLED)
             button_excluir.grid(row=0, column=0, sticky=W)
 
             jan.transient(root2)
@@ -9272,7 +9429,7 @@ class Castelo:
                     self.button_entradaOs.configure(state=NORMAL)
                     self.os_operador.delete(0, END)
                     self.os_operador.insert(0, i[1])
-                    self.os_operador.configure(state=DISABLED)
+                    self.os_operador.configure(show='',state=DISABLED)
                     return
             self.os_operador.delete(0, END)
             messagebox.showinfo(title="ERRO", message="Operador Não Cadastrado!")
