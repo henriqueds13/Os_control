@@ -1,18 +1,21 @@
+import locale
 import pickle
+from datetime import datetime, date
+from time import strftime
 from tkinter import *
-from tkinter import ttk, messagebox
+from tkinter import ttk, messagebox, font
 
 from sqlalchemy.util import NoneType
 
+from entidades import cliente, os, os_saida, produto, revendedor, estoque, produto_venda, os_venda, empresa, tecnico
 from fabricas import fabrica_conexao
 from repositorios import cliente_repositorio, os_repositorio, os_saida_repositorio, produto_repositorio, \
     revendedor_repositorio, estoque_repositorio, produto_venda_repositorio, os_venda_repositorio, tecnico_repositorio, \
     empresa_repositorio
-from entidades import cliente, os, os_saida, produto, revendedor, estoque, produto_venda, os_venda, empresa, tecnico
-import locale
 
+# coding: utf8
 locale.setlocale(locale.LC_ALL, '')
-
+locale.setlocale(locale.LC_TIME, 'pt_BR.UTF-8')
 
 # class Application:
 #     def __init__(self, master=None):
@@ -97,6 +100,11 @@ class Castelo:
 
         self.count = 0
 
+        self.data_atual = datetime.now()
+        self.date = date.today()
+        self.dias = ('Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado', 'Domingo')
+
+
         def on_enter(e):
             e.widget['relief'] = 'raised'
 
@@ -115,22 +123,38 @@ class Castelo:
             y_cordinate = int((self.h / 2) - (200 / 2))
             jan.geometry("{}x{}+{}+{}".format(530, 230, x_cordinate, y_cordinate))
 
+            fonte1 = font.Font(weight='bold', slant='italic', family='Verdana', size=11)
+
             def concederAcesso8(*args):
+                repositorio_tec = tecnico_repositorio.TecnicoRepositorio()
                 if len(op_login1.get()) == 4:
                     for i in self.operadores_total:
                         if int(op_login1.get()) == int(i[0]):
-                            button_login.configure(state=NORMAL)
-                            entry_usu.delete(0, END)
-                            entry_usu.configure(validate='none', show='')
-                            entry_usu.insert(0, i[1])
-                            entry_usu.configure(state=DISABLED)
-                            jan.bind('<Return>', liberarAcesso)
-                            return
+                            acess_tec = repositorio_tec.listar_tecnico_senha(int(i[0]), sessao)
+                            if acess_tec.INI == 1:
+                                button_login.configure(state=NORMAL)
+                                entry_usu.delete(0, END)
+                                entry_usu.configure(validate='none', show='')
+                                entry_usu.insert(0, i[1])
+                                entry_usu.configure(state=DISABLED)
+                                jan.bind('<Return>', liberarAcesso)
+                                return
+                            else:
+                                messagebox.showinfo(title="ERRO", message="Acesso Negado! Operador Sem Permissão "
+                                                                     "para esta Função")
+                                entry_usu.delete(0, END)
+                                return
                     entry_usu.delete(0, END)
                     messagebox.showinfo(title="ERRO", message="Operador Não Cadastrado!")
 
             def liberarAcesso(e):
                 jan.destroy()
+
+            def horaAtual():
+                hora_atual = strftime('%H:%M:%S')
+                label_hora.config(text=hora_atual)
+                label_hora.after(1000, horaAtual)
+
 
             frame = Frame(jan, bg=bg_janela)
             frame1 = Frame(frame, bg=bg_janela)
@@ -152,12 +176,15 @@ class Castelo:
 
             Label(frame_sub1, text="Boa Noite, são: ", fg='yellow', font=('Verdana', '14', ''),
                   bg=bg_janela).pack(side=LEFT, pady=0)
-            Label(frame_sub1, text="20:39:19", fg='yellow', font=('Verdana', '16', 'bold'),
-                  bg=bg_janela).pack(side=LEFT, padx=15)
+            label_hora = Label(frame_sub1, fg='yellow', font=('Verdana', '16', 'bold'),
+                  bg=bg_janela)
+            label_hora.pack(side=LEFT, padx=15)
+            horaAtual()
 
             Label(frame_sub2, text="Hoje é: ", fg='white', font=('Verdana', '13', ''), height=3,
                   bg=bg_janela).pack(side=LEFT)
-            Label(frame_sub2, text="quinta-feira, 4 de agosto de 2022 ", fg='white', font=('Verdana', '11', 'bold'),
+            Label(frame_sub2, text=f'{self.dias[self.date.weekday()]}, {self.data_atual.strftime("%d de %B de %Y")}',
+                  fg='white', font=fonte1,
                   bg=bg_janela).pack(side=LEFT)
 
             Label(sub_frame1,
@@ -219,6 +246,8 @@ class Castelo:
 
         # Barra de menus
 
+        fonte1 = font.Font(weight='bold', slant='italic', family='Verdana', size=12)
+
         barraDeMenus = Menu(master)
         menuArquivo = Menu(barraDeMenus, tearoff=0)
         menuArquivo.add_command(label='Clientes', command=self.abrirJanelaCliente)
@@ -273,7 +302,9 @@ class Castelo:
         button_princ7 = Button(menu_frame, text="EXIT", height='2', width='5', relief='flat',
                                command=fecharPrograma)
         button_princ7.pack(side=LEFT)
-        horario_menu = Label(menu_frame, text="Quinta feira, 16 de setembro de 2021", font=('Verdana', '12', 'bold'),
+        horario_menu = Label(menu_frame,
+                             text=f'{self.dias[self.date.weekday()]}, {self.data_atual.strftime("%d de %B de %Y")}',
+                             font=fonte1,
                              fg="gray")
         horario_menu.pack(side=BOTTOM)
 
@@ -922,16 +953,15 @@ class Castelo:
                                                                                                           ipady=7,
                                                                                                           padx=5)
         Button(self.label_botoes_ap_entr, text="3", width=5,
-               command=lambda: [self.janelaAbrirOsEntregue(self.dado_os_entr[0])]).pack(side=LEFT,
+               command=self.janelaAbrirOsEntregue).pack(side=LEFT,
                                                                                         ipady=7, padx=5)
         Button(self.label_botoes_ap_entr, text="4", width=5, command=self.frame_ap_entregue.forget).pack(side=LEFT,
                                                                                                          ipady=7,
                                                                                                          padx=5)
 
         def abreApEntrBind(event):
-            os_selecionada = self.tree_ap_entr.focus()
-            self.dado_os_entr = self.tree_ap_entr.item(os_selecionada, "values")
-            self.janelaAbrirOsEntregue(self.dado_os_entr[0])
+
+            self.janelaAbrirOsEntregue()
 
         def selecionaOS(event):
             os_selecionada = self.tree_ap_entr.focus()
@@ -1274,17 +1304,25 @@ class Castelo:
         jan.geometry("{}x{}+{}+{}".format(330, 110, x_cordinate, y_cordinate))
 
         def concederAcesso7(*args):
+            repositorio_tec = tecnico_repositorio.TecnicoRepositorio()
             if len(op_senha.get()) == 4:
                 for i in self.operadores_total:
                     if int(op_senha.get()) == int(i[0]):
-                        button_senha.configure(state=NORMAL)
-                        entry_locali.delete(0, END)
-                        entry_locali.configure(validate='none', show='')
-                        entry_locali.insert(0, i[1])
-                        entry_locali.configure(state=DISABLED)
-                        button_senha.focus()
-                        jan.bind('<Return>', aceitaOption)
-                        return
+                        acess_tec = repositorio_tec.listar_tecnico_senha(int(i[0]), sessao)
+                        if acess_tec.CON == 1:
+                            button_senha.configure(state=NORMAL)
+                            entry_locali.delete(0, END)
+                            entry_locali.configure(validate='none', show='')
+                            entry_locali.insert(0, i[1])
+                            entry_locali.configure(state=DISABLED)
+                            button_senha.focus()
+                            jan.bind('<Return>', aceitaOption)
+                            return
+                        else:
+                            messagebox.showinfo(title="ERRO", message="Acesso Negado! Operador Sem Permissão "
+                                                                      "para esta Função")
+                            entry_locali.delete(0, END)
+                            return
                 entry_locali.delete(0, END)
                 messagebox.showinfo(title="ERRO", message="Operador Não Cadastrado!")
 
@@ -1412,16 +1450,23 @@ class Castelo:
         # --------------------------------------------------------------------------------------
 
         def concederAcesso3(*args):
+            repositorio_tec = tecnico_repositorio.TecnicoRepositorio()
             if len(op_cad_cli.get()) == 4:
                 for i in self.operadores_total:
                     if int(op_cad_cli.get()) == int(i[0]):
-                        self.button_cad_cli.configure(state=NORMAL)
-                        self.cad_cli_oper.delete(0, END)
-                        self.cad_cli_oper.configure(validate='none', show='')
-                        self.cad_cli_oper.insert(0, i[1])
-                        self.cad_cli_oper.configure(state=DISABLED)
-                        return
-
+                        acess_tec = repositorio_tec.listar_tecnico_senha(int(i[0]), sessao)
+                        if acess_tec.USU == 1:
+                            self.button_cad_cli.configure(state=NORMAL)
+                            self.cad_cli_oper.delete(0, END)
+                            self.cad_cli_oper.configure(validate='none', show='')
+                            self.cad_cli_oper.insert(0, i[1])
+                            self.cad_cli_oper.configure(state=DISABLED)
+                            return
+                        else:
+                            messagebox.showinfo(title="ERRO", message="Acesso Negado! Operador Sem Permissão "
+                                                                      "para esta Função")
+                            self.cad_cli_oper.delete(0, END)
+                            return
                 self.cad_cli_oper.delete(0, END)
                 messagebox.showinfo(title="ERRO", message="Operador Não Cadastrado!")
 
@@ -1705,15 +1750,23 @@ class Castelo:
         # --------------------------------------------------------------------------------------
 
         def concederAcesso2(*args):
+            repositorio_tec = tecnico_repositorio.TecnicoRepositorio()
             if len(operador_edit_cliente.get()) == 4:
                 for i in self.operadores_total:
                     if int(operador_edit_cliente.get()) == int(i[0]):
-                        self.alterar_button.configure(state=NORMAL)
-                        self.cad_cli_oper.delete(0, END)
-                        self.cad_cli_oper.configure(validate='none', show='')
-                        self.cad_cli_oper.insert(0, i[1])
-                        self.cad_cli_oper.configure(state=DISABLED)
-                        return
+                        acess_tec = repositorio_tec.listar_tecnico_senha(int(i[0]), sessao)
+                        if acess_tec.USU == 1:
+                            self.alterar_button.configure(state=NORMAL)
+                            self.cad_cli_oper.delete(0, END)
+                            self.cad_cli_oper.configure(validate='none', show='')
+                            self.cad_cli_oper.insert(0, i[1])
+                            self.cad_cli_oper.configure(state=DISABLED)
+                            return
+                        else:
+                            messagebox.showinfo(title="ERRO", message="Acesso Negado! Operador Sem Permissão "
+                                                                      "para esta função")
+                            self.cad_cli_oper.delete(0, END)
+                            return
                 self.cad_cli_oper.delete(0, END)
                 messagebox.showinfo(title="ERRO", message="Operador Não Cadastrado!")
 
@@ -2608,12 +2661,6 @@ class Castelo:
 
         def manAnteriores():
 
-            repositorio = os_saida_repositorio.OsSaidaRepositorio()
-            oss = repositorio.listar_os_cli_id(cliente_os_atual.id, sessao)
-            if len(oss) == 0:
-                messagebox.showinfo(title="ERRO", message="Este cliente não possui manutenção anteriores!")
-
-            else:
                 jan1 = Toplevel()
 
                 # Centraliza a janela
@@ -2738,7 +2785,7 @@ class Castelo:
                 Button(label_botoes_ap_entr, text="2", width=5, command=self.janelaLocalizarOsEntregue,
                        state=DISABLED).pack(side=LEFT, ipady=7, padx=5)
                 Button(label_botoes_ap_entr, text="3", width=5,
-                       command=lambda: [self.janelaAbrirOsEntregue(self.dado_os_entr1[0])]).pack(side=LEFT,
+                       command=self.janelaAbrirOsEntregue).pack(side=LEFT,
                                                                                                  ipady=7,
                                                                                                  padx=5)
                 Button(label_botoes_ap_entr, text="4", width=5, command=jan1.destroy).pack(side=LEFT, ipady=7, padx=5)
@@ -2746,7 +2793,7 @@ class Castelo:
                 def abreApEntrBind(event):
                     os_selecionada = tree_ap_entr.focus()
                     self.dado_os_entr1 = tree_ap_entr.item(os_selecionada, "values")
-                    self.janelaAbrirOsEntregue(self.dado_os_entr1[0])
+                    self.janelaAbrirOsEntregue()
 
                 def selecionaOS(event):
                     os_selecionada = tree_ap_entr.focus()
@@ -3136,6 +3183,11 @@ class Castelo:
 
         text_andamento_os.bind("<KeyRelease>", get_stringvar)
         # ------------------------------------------------------------
+        def ativaBotaoManAnt():
+            repositorio = os_saida_repositorio.OsSaidaRepositorio()
+            oss = repositorio.listar_os_cli_id(cliente_os_atual.id, sessao)
+            if len(oss) == 0:
+                button_manAnt.config(state=DISABLED, bg='#f0f0f0')
 
         self.list_status_os = Listbox(labelframe_os_status, bg="#ffe0c0")
         self.list_status_os.insert(1, "EM ANDAMENTO")
@@ -3164,8 +3216,10 @@ class Castelo:
               bg="#ffe0c0", bd=2, relief=SUNKEN, width=15).grid(row=0, column=0, ipadx=10, padx=5)
         Button(frame_tecnico_os, text="Salvar").grid(row=1, column=0, pady=20, ipadx=10)
 
-        Button(frame_os_final, width=10, text="Manutenções Anteriores",
-               wraplength=80, command=manAnteriores).grid(row=0, column=1, sticky=S, padx=30, ipadx=15, pady=5)
+        button_manAnt = Button(frame_os_final, width=10, text="Manutenções Anteriores",
+               wraplength=80, command=manAnteriores, bg="#BEC7C7")
+        button_manAnt.grid(row=0, column=1, sticky=S, padx=30, ipadx=15, pady=5)
+        ativaBotaoManAnt()
 
         labelframe_os_buttons = LabelFrame(frame_princ_jan_os, bg=color_frame)
         labelframe_os_buttons.grid(row=4, column=1, ipady=10)
@@ -3724,15 +3778,23 @@ class Castelo:
             apagaAba9()
 
         def concederAcesso4(*args):
+            repositorio_tec = tecnico_repositorio.TecnicoRepositorio()
             if len(op_orc.get()) == 4:
                 for i in self.operadores_total:
                     if int(op_orc.get()) == int(i[0]):
-                        button_orc_saida.configure(state=NORMAL)
-                        self.orc_operador.delete(0, END)
-                        self.orc_operador.configure(validate='none', show='')
-                        self.orc_operador.insert(0, i[1])
-                        self.orc_operador.configure(state=DISABLED)
-                        return
+                        acess_tec = repositorio_tec.listar_tecnico_senha(int(i[0]), sessao)
+                        if acess_tec.BX == 1:
+                            button_orc_saida.configure(state=NORMAL)
+                            self.orc_operador.delete(0, END)
+                            self.orc_operador.configure(validate='none', show='')
+                            self.orc_operador.insert(0, i[1])
+                            self.orc_operador.configure(state=DISABLED)
+                            return
+                        else:
+                            messagebox.showinfo(title="ERRO", message="Acesso Negado! Operador Sem Permissão "
+                                                                      "para esta função")
+                            self.orc_operador.delete(0, END)
+                            return
                 self.orc_operador.delete(0, END)
                 messagebox.showinfo(title="ERRO", message="Operador Não Cadastrado!")
 
@@ -4574,7 +4636,7 @@ class Castelo:
             else:
                 pass
 
-    def janelaAbrirOsEntregue(self, os_id):
+    def janelaAbrirOsEntregue(self):
 
         font_dados1 = ('Verdana', '8', '')
         font_dados2 = ('Verdana', '8', 'bold')
@@ -4598,9 +4660,12 @@ class Castelo:
         frame_princ_jan_os = Frame(frame_princ_jan_os0, bg=color_frame)
         frame_princ_jan_os.pack(side=LEFT, fill=BOTH, padx=10, pady=10)
 
+        os_selecionada = self.tree_ap_entr.focus()
+        self.dado_os_entr = self.tree_ap_entr.item(os_selecionada, "values")
+
         os_saida_repo = os_saida_repositorio.OsSaidaRepositorio()
         cliente_repo = cliente_repositorio.ClienteRepositorio()
-        os_dados = os_saida_repo.listar_os_id(os_id, sessao)
+        os_dados = os_saida_repo.listar_os_id(self.dado_os_entr[0], sessao)
         cliente_os_atual = cliente_repo.listar_cliente_id(os_dados.cliente_id, sessao)
 
         labelframe_dadoscli_os = LabelFrame(frame_princ_jan_os, text="Dados do Cliente", fg=self.color_fg_label,
@@ -4810,7 +4875,7 @@ class Castelo:
         frame_botao_ad = Frame(frame_princ_jan_os, bg=color_frame)
         frame_botao_ad.grid(row=2, column=1, sticky=E, padx=35)
         Button(frame_botao_ad, text="Ordem de Serviço", wraplength=80, height=2, width=7,
-               bg="#BEC7C7", command=lambda: [self.janelaOrçamentoEntregue(os_id)]).pack(side=RIGHT, ipadx=20, padx=5)
+               bg="#BEC7C7", command=lambda: [self.janelaOrçamentoEntregue(self.dado_os_entr[0])]).pack(side=RIGHT, ipadx=20, padx=5)
 
         frame_os_final = Frame(frame_princ_jan_os, bg=color_frame)
         frame_os_final.grid(row=3, column=0, sticky=W, columnspan=2)
@@ -5274,8 +5339,10 @@ class Castelo:
                                               i.utilizado, revendedor_prod, i.id_prod), tags=('evenrow'))
             self.count += 1
         self.count = 0
+        self.tree_est_prod.focus_set()
         children = self.tree_est_prod.get_children()
         if children:
+            self.tree_est_prod.focus(children[0])
             self.tree_est_prod.selection_set(children[0])
 
     def popularProdutoEstoquePesqNome(self, num, setor):
@@ -5311,8 +5378,10 @@ class Castelo:
                                               i.utilizado, revendedor_prod, i.id_prod), tags=('evenrow',))
             self.count += 1
         self.count = 0
+        self.tree_est_prod.focus_set()
         children = self.tree_est_prod.get_children()
         if children:
+            self.tree_est_prod.focus(children[0])
             self.tree_est_prod.selection_set(children[0])
         self.entry_descr_esto.focus()
 
@@ -5347,8 +5416,10 @@ class Castelo:
                                               i.utilizado, revendedor_prod, i.id_prod), tags=('evenrow',))
             self.count += 1
         self.count = 0
+        self.tree_est_prod.focus_set()
         children = self.tree_est_prod.get_children()
         if children:
+            self.tree_est_prod.focus(children[0])
             self.tree_est_prod.selection_set(children[0])
         self.entry_cod_esto.focus()
 
@@ -5369,9 +5440,12 @@ class Castelo:
                                                    self.insereTotalConvertido(i.valor_venda),
                                                    i.localizacao, i.marca,
                                                    i.utilizado, revendedor_prod, i.id_prod))
+        self.treeview_busca_produto.focus_set()
         children = self.treeview_busca_produto.get_children()
         if children:
+            self.treeview_busca_produto.focus(children[0])
             self.treeview_busca_produto.selection_set(children[0])
+
 
     def abrirJanelaEstoque(self):
         self.nome_frame.pack_forget()
@@ -6309,15 +6383,23 @@ class Castelo:
                     sessao.close()
 
         def concederAcesso5(*args):
+            repositorio_tec = tecnico_repositorio.TecnicoRepositorio()
             if len(op_estoque.get()) == 4:
                 for i in self.operadores_total:
                     if int(op_estoque.get()) == int(i[0]):
-                        self.est_button_entr.configure(state=NORMAL)
-                        self.est_vendedor.delete(0, END)
-                        self.est_vendedor.configure(validate='none', show='')
-                        self.est_vendedor.insert(0, i[1])
-                        self.est_vendedor.configure(state=DISABLED)
-                        return
+                        acess_tec = repositorio_tec.listar_tecnico_senha(int(i[0]), sessao)
+                        if acess_tec.CE == 1:
+                            self.est_button_entr.configure(state=NORMAL)
+                            self.est_vendedor.delete(0, END)
+                            self.est_vendedor.configure(validate='none', show='')
+                            self.est_vendedor.insert(0, i[1])
+                            self.est_vendedor.configure(state=DISABLED)
+                            return
+                        else:
+                            messagebox.showinfo(title="ERRO", message="Acesso Negado! Operador Sem Permissão "
+                                                                      "para esta função")
+                            self.est_vendedor.delete(0, END)
+                            return
                 self.est_vendedor.delete(0, END)
                 messagebox.showinfo(title="ERRO", message="Operador Não Cadastrado!")
 
@@ -7164,10 +7246,10 @@ class Castelo:
                     outros = self.formataParaFloat(self.venda_entry_outros.get())
                     sub_total = self.formataParaFloat(self.venda_label_subtotal.cget('text').split()[1])
                     desconto = self.formataParaFloat(self.venda_desconto.get())
-                    operador = self.formataParaIteiro(self.venda_vendedor.get())
+                    operador = self.venda_vendedor.get()
                     total = self.formataParaFloat(self.venda_label_total.cget('text').split()[1])
 
-                    nova_venda = os_venda.OsVenda(cliente, operador, obs1, obs2, obs3, dinheiro, cheque, cdebito,
+                    nova_venda = os_venda.OsVenda(cliente, 0, obs1, obs2, obs3, dinheiro, cheque, cdebito,
                                                   ccredito,
                                                   pix, outros, desconto, sub_total, None, None, total)
 
@@ -7357,12 +7439,6 @@ class Castelo:
         scrollbar_busca_x.config(command=self.treeview_busca_produto.xview)
         scrollbar_busca_x.pack(fill=X)
 
-        self.treeview_busca_produto.focus_set()
-        children = self.treeview_busca_produto.get_children()
-        if children:
-            self.treeview_busca_produto.focus(children[0])
-            self.treeview_busca_produto.selection_set(children[0])
-
         self.popularProdutoEstoqueBusca()
 
         subframe2 = Frame(frame_principal)
@@ -7416,6 +7492,7 @@ class Castelo:
             if children:
                 self.treeview_busca_produto.focus(children[0])
                 self.treeview_busca_produto.selection_set(children[0])
+            busca_prod_cod.focus()
 
         def popularProdutoEstoquePesqNome(num):
             self.treeview_busca_produto.delete(*self.treeview_busca_produto.get_children())
@@ -7440,6 +7517,7 @@ class Castelo:
             if children:
                 self.treeview_busca_produto.focus(children[0])
                 self.treeview_busca_produto.selection_set(children[0])
+            busca_prod_nome.focus()
 
         def pesquisaNomeProduto(event):
             popularProdutoEstoquePesqNome(variable_int_produto.get())
@@ -7455,11 +7533,7 @@ class Castelo:
         jan.grab_set()
 
     def elegeProduto(self, opt):
-        self.treeview_busca_produto.focus_set()
-        children = self.treeview_busca_produto.get_children()
-        if children:
-            self.treeview_busca_produto.focus(children[0])
-            self.treeview_busca_produto.selection_set(children[0])
+
         produto_selecionado = self.treeview_busca_produto.focus()
         dado_prod = self.treeview_busca_produto.item(produto_selecionado, 'values')
         produto_dados = produto_repositorio.ProdutoRepositorio().listar_produto_id(dado_prod[8], sessao)
@@ -7701,9 +7775,35 @@ class Castelo:
                                                       i.whats,
                                                       i.tel_fixo,
                                                       i.email))
+
+            treeview_busca_cliente.focus_set()
             children = treeview_busca_cliente.get_children()
             if children:
+                treeview_busca_cliente.focus(children[0])
                 treeview_busca_cliente.selection_set(children[0])
+            entry_pesq_cliente.focus()
+
+        def popularPesqBuscaCliente():
+            treeview_busca_cliente.delete(*treeview_busca_cliente.get_children())
+            client = entry_pesq_cliente.get()
+            repositorio = cliente_repositorio.ClienteRepositorio()
+            clientes = repositorio.listar_cliente_nome(client, 2, sessao)
+            for i in clientes:
+                treeview_busca_cliente.insert('', 'end',
+                                              values=(i.id,
+                                                      i.nome,
+                                                      i.logradouro,
+                                                      i.cidade,
+                                                      i.whats,
+                                                      i.tel_fixo,
+                                                      i.email))
+
+            treeview_busca_cliente.focus_set()
+            children = treeview_busca_cliente.get_children()
+            if children:
+                treeview_busca_cliente.focus(children[0])
+                treeview_busca_cliente.selection_set(children[0])
+            entry_pesq_cliente.focus()
 
         def selecionaCliente():
             cliente_selecionado = treeview_busca_cliente.focus()
@@ -7752,19 +7852,25 @@ class Castelo:
         scrollbar_busca_x.config(command=treeview_busca_cliente.xview)
         scrollbar_busca_x.pack(fill=X)
 
-        popularEntradaBuscaCliente()
 
         subframe2 = Frame(frame_principal)
         subframe2.pack(padx=10, pady=10, side=LEFT)
 
         frame_prod = LabelFrame(subframe2, text='Digite um Nome para Pesquisar')
         frame_prod.grid(row=0, column=0, sticky=W, ipady=3)
-        Entry(frame_prod, width=90, textvariable=osVar1).grid(row=0, column=0, sticky=W, padx=10)
+        entry_pesq_cliente = Entry(frame_prod, width=90, textvariable=osVar1)
+        entry_pesq_cliente.grid(row=0, column=0, sticky=W, padx=10)
         Button(frame_prod, text='1', height=2, command=popularEntradaBuscaCliente).grid(row=0, column=1, padx=10,
                                                                                         ipadx=15)
         Button(subframe2, text='Fechar', command=jan.destroy).grid(row=0, column=1, padx=15, ipadx=20,
                                                                    ipady=5)
         Button(subframe2, text='Selecionar', command=selecionaCliente).grid(row=0, column=2, ipadx=20, ipady=5)
+
+        def pesquisClient(event):
+            popularPesqBuscaCliente()
+
+        entry_pesq_cliente.bind('<Return>', pesquisClient)
+        popularEntradaBuscaCliente()
 
         jan.transient(root2)
         jan.focus_force()
@@ -7860,8 +7966,10 @@ class Castelo:
                                                           i.id, i.Empresa, i.logradouro,
                                                           i.cidade, i.whats,
                                                           i.tel_comercial, i.email))
+            self.treeview_busca_fornecedor.focus_set()
             children = self.treeview_busca_fornecedor.get_children()
             if children:
+                self.treeview_busca_fornecedor.focus(children[0])
                 self.treeview_busca_fornecedor.selection_set(children[0])
 
         def pesquisaNomeProduto(event):
@@ -8048,8 +8156,10 @@ class Castelo:
             self.treeview_busca_fornecedor.insert("", "end",
                                                   values=(i.id, i.Empresa, i.logradouro, i.cidade,
                                                           i.whats, i.tel_comercial, i.email))
+        self.treeview_busca_fornecedor.focus_set()
         children = self.treeview_busca_fornecedor.get_children()
         if children:
+            self.treeview_busca_fornecedor.focus(children[0])
             self.treeview_busca_fornecedor.selection_set(children[0])
 
     def excluirFornecedor(self, opt, jan):
@@ -9423,14 +9533,22 @@ class Castelo:
         jan.grab_set()
 
     def concederAcesso1(self, *args):
+        repositorio_tec = tecnico_repositorio.TecnicoRepositorio()
         if len(op_variable1.get()) == 4:
             for i in self.operadores_total:
                 if int(op_variable1.get()) == int(i[0]):
-                    self.button_entradaOs.configure(state=NORMAL)
-                    self.os_operador.delete(0, END)
-                    self.os_operador.insert(0, i[1])
-                    self.os_operador.configure(show='',state=DISABLED)
-                    return
+                    acess_tec = repositorio_tec.listar_tecnico_senha(int(i[0]), sessao)
+                    if acess_tec.INI == 1:
+                        self.button_entradaOs.configure(state=NORMAL)
+                        self.os_operador.delete(0, END)
+                        self.os_operador.insert(0, i[1])
+                        self.os_operador.configure(show='',state=DISABLED)
+                        return
+                    else:
+                        messagebox.showinfo(title="ERRO", message="Acesso Negado! Operador Sem Permissão "
+                                                                  "para esta função")
+                        self.os_operador.delete(0, END)
+                        return
             self.os_operador.delete(0, END)
             messagebox.showinfo(title="ERRO", message="Operador Não Cadastrado!")
 

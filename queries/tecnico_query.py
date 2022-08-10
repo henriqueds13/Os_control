@@ -31,6 +31,10 @@ class TecnicoQuery():
         tecnico = sessao.query(Tecnico).filter(Tecnico.nome == nome_tecnico).all()
         return tecnico
 
+    def listar_tecnico_senha(self, nome_senha, sessao):
+        tecnico = sessao.query(Tecnico).filter(Tecnico.senha_tecnico == nome_senha).first()
+        return tecnico
+
     def remover_tecnico(self, id_tecnico, sessao):
         tecnico = self.listar_tecnico_id(id_tecnico, sessao)
         sessao.delete(tecnico)

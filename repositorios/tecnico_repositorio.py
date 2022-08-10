@@ -29,6 +29,11 @@ class TecnicoRepositorio():
         tecnico = query_tecnico.listar_tecnico_nome(tecnico_nome, sessao)
         return tecnico
 
+    def listar_tecnico_senha(self, tecnico_senha, sessao):
+        query_tecnico = tecnico_query.TecnicoQuery()
+        tecnico = query_tecnico.listar_tecnico_senha(tecnico_senha, sessao)
+        return tecnico
+
     def remover_tecnico(self, id_tecnico, sessao):
         query_tecnico = tecnico_query.TecnicoQuery()
         query_tecnico.remover_tecnico(id_tecnico, sessao)

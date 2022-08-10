@@ -476,15 +476,23 @@ else:
         Label(labelF_op_legenda, text='FIN = Financeiro', anchor=W).pack(fill=X)
 
         def concederAcesso5(*args):
+            repositorio_tec = tecnico_repositorio.TecnicoRepositorio()
             if len(op_cad_cli.get()) == 4:
                 for i in self.operadores_total:
                     if int(op_cad_cli.get()) == int(i[0]):
-                        self.button_cad_cli.configure(state=NORMAL)
-                        self.cad_cli_oper.delete(0, END)
-                        self.cad_cli_oper.configure(validate='none')
-                        self.cad_cli_oper.insert(0, i[1])
-                        self.cad_cli_oper.configure(state=DISABLED)
-                        return
+                        acess_tec = repositorio_tec.listar_tecnico_senha(int(i[0]), sessao)
+                        if acess_tec.INI == 1:
+                            self.button_cad_cli.configure(state=NORMAL)
+                            self.cad_cli_oper.delete(0, END)
+                            self.cad_cli_oper.configure(validate='none')
+                            self.cad_cli_oper.insert(0, i[1])
+                            self.cad_cli_oper.configure(state=DISABLED)
+                            return
+                        else:
+                            messagebox.showinfo(title="ERRO", message="Acesso Negado! Operador Sem Permissão "
+                                                                      "para esta função")
+                            entry_usu.delete(0, END)
+                            return
                 self.cad_cli_oper.delete(0, END)
                 messagebox.showinfo(title="ERRO", message="Operador Não Cadastrado!")
 
@@ -494,3 +502,34 @@ else:
     Entry(self.jan, width=50, validate='all', validatecommand=(testa_tamanho_nome, '%P'),
 
      testa_inteiro_op = self.jan.register(self.testaEntradaNumOperador)
+
+    os_selecionada = self.tree_ap_entr.focus()
+    self.dado_os_entr = self.tree_ap_entr.item(os_selecionada, "values")
+
+    os_saida_repo = os_saida_repositorio.OsSaidaRepositorio()
+    cliente_repo = cliente_repositorio.ClienteRepositorio()
+    os_dados = os_saida_repo.listar_os_id(self.dado_os_entr[0], sessao)
+
+ def popularProdutoEstoquePesqNome(num):
+            self.treeview_busca_produto.delete(*self.treeview_busca_produto.get_children())
+            produto = busca_prod_nome.get()
+            repositorio = produto_repositorio.ProdutoRepositorio()
+            repositorio_revendedor = revendedor_repositorio.RevendedorRepositorio()
+            oss = repositorio.listar_produto_nome(produto, num, 'Todos', sessao)
+            for i in oss:
+                if i.revendedor_id is not None:
+                    revendedor_prod = repositorio_revendedor.listar_revendedor_id(i.revendedor_id, sessao)
+                    revendedor_prod = revendedor_prod.Empresa
+                else:
+                    revendedor_prod = i.revendedor_id
+                self.treeview_busca_produto.insert("", "end",
+                                                   values=(
+                                                       i.id_fabr, i.descricao, i.qtd,
+                                                       self.insereTotalConvertido(i.valor_venda),
+                                                       i.localizacao, i.marca,
+                                                       i.utilizado, revendedor_prod, i.id_prod))
+            self.treeview_busca_produto.focus_set()
+            children = self.treeview_busca_produto.get_children()
+            if children:
+                self.treeview_busca_produto.focus(children[0])
+                self.treeview_busca_produto.selection_set(children[0])
