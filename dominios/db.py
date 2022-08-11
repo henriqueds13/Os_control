@@ -206,6 +206,7 @@ class OSSaida(Base):
     data_orc = Column(Date)
     conclusão = Column(Date)
     operador = Column(String(20))
+    operador_entrada = Column(String(20))
     log = Column(String(500))
     codigo1 = Column(String(15))
     codigo2 = Column(String(15))

@@ -533,3 +533,5 @@ else:
             if children:
                 self.treeview_busca_produto.focus(children[0])
                 self.treeview_busca_produto.selection_set(children[0])
+
+self.id_operador = int(acess_tec.id)

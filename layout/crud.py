@@ -89,17 +89,12 @@ class Castelo:
         self.w, self.h = master.winfo_screenwidth(), master.winfo_screenheight()
         master.geometry(f"{self.w}x{self.h}")
         self.sessao = sessao
-
         self.color_fg_label = "blue"
-
         self.id_produto_selecionado = ''
-
         self.revendedor_obj = None
-
         self.lista_revendedor = ["CCM DO BRASIL", "INTERBRASIL"]
-
         self.count = 0
-
+        self.id_operador = 0
         self.data_atual = datetime.now()
         self.date = date.today()
         self.dias = ('Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado', 'Domingo')
@@ -138,6 +133,7 @@ class Castelo:
                                 entry_usu.insert(0, i[1])
                                 entry_usu.configure(state=DISABLED)
                                 jan.bind('<Return>', liberarAcesso)
+                                self.id_operador = int(acess_tec.id)
                                 return
                             else:
                                 messagebox.showinfo(title="ERRO", message="Acesso Negado! Operador Sem Permissão "
@@ -336,6 +332,12 @@ class Castelo:
         self.frame_princ.pack(fill="both", expand=TRUE)
 
         # ------------------------------- Janela Cadastro de Clientes----------------------------------------------
+
+        def retornaOperadorCli(id_tec):
+            repositorio_operador = tecnico_repositorio.TecnicoRepositorio()
+            operador_cli = repositorio_operador.listar_tecnico_id(id_tec, sessao)
+            return operador_cli.nome
+
         font_label = ('Verdana', '9', 'bold')
         self.frame_cadastro_clientes = Frame(self.frame_princ)
 
@@ -435,6 +437,7 @@ class Castelo:
         self.dado_cli = self.tree_cliente.item(self.cliente_selecionado, "values")
         self.cliente_dados = cliente_repositorio.ClienteRepositorio().listar_cliente_id(self.dado_cli[0], sessao)
 
+
         # Dados dos clientes
         Label(self.listagem_label_frame, text="Id: ", font=font_label).grid(row=0, column=0, sticky='e')
         self.id_label = Label(self.listagem_label_frame, text=self.cliente_dados.id, fg="#4146A6", font=font_label)
@@ -484,7 +487,8 @@ class Castelo:
         # self.obs_label = Label(self.listagem_label_frame, self.cliente_dados.nome, fg="#4146A6", font=font_label)
         # self.obs_label.grid(row=12, column=1, sticky='w')
         Label(self.listagem_label_frame, text="Operador: ", font=font_label).grid(row=13, column=0, sticky='e')
-        self.op_label = Label(self.listagem_label_frame, text=self.cliente_dados.operador, fg="#4146A6",
+        self.op_label = Label(self.listagem_label_frame, text=retornaOperadorCli(self.cliente_dados.operador),
+                              fg="#4146A6",
                               font=font_label)
         self.op_label.grid(row=13, column=1, sticky='w')
         Label(self.listagem_label_frame, text="Data Cadastro: ", font=font_label).grid(row=14, column=0, sticky='e')
@@ -1317,6 +1321,7 @@ class Castelo:
                             entry_locali.configure(state=DISABLED)
                             button_senha.focus()
                             jan.bind('<Return>', aceitaOption)
+                            self.id_operador = int(acess_tec.id)
                             return
                         else:
                             messagebox.showinfo(title="ERRO", message="Acesso Negado! Operador Sem Permissão "
@@ -1461,6 +1466,7 @@ class Castelo:
                             self.cad_cli_oper.configure(validate='none', show='')
                             self.cad_cli_oper.insert(0, i[1])
                             self.cad_cli_oper.configure(state=DISABLED)
+                            self.id_operador = int(acess_tec.id)
                             return
                         else:
                             messagebox.showinfo(title="ERRO", message="Acesso Negado! Operador Sem Permissão "
@@ -1645,7 +1651,7 @@ class Castelo:
                 celular = self.cad_cli_cel.get()
                 whats = self.cad_cli_whats.get()
                 email = self.cad_cli_email.get()
-                operador = self.insereZero(1234)
+                operador = self.id_operador
 
                 novo_cliente = cliente.Cliente(nome, operador, celular, cpf, tel_fixo, '-', endereco, estado, bairro,
                                                complemento, cep, cidade, email, whats, '-', tel_comercial)
@@ -1761,6 +1767,7 @@ class Castelo:
                             self.cad_cli_oper.configure(validate='none', show='')
                             self.cad_cli_oper.insert(0, i[1])
                             self.cad_cli_oper.configure(state=DISABLED)
+                            self.id_operador = int(acess_tec.id)
                             return
                         else:
                             messagebox.showinfo(title="ERRO", message="Acesso Negado! Operador Sem Permissão "
@@ -1878,7 +1885,7 @@ class Castelo:
                 celular = self.cad_cli_cel.get()
                 whats = self.cad_cli_whats.get()
                 email = self.cad_cli_email.get()
-                operador = self.cad_cli_oper.get()
+                operador = self.id_operador
 
                 novo_cliente = cliente.Cliente(nome, operador, celular, cpf, tel_fixo, '-', endereco, estado, bairro,
                                                complemento, cep, cidade, email, whats, '-', tel_comercial)
@@ -1914,7 +1921,7 @@ class Castelo:
                                                     andamento='', data_entrada=None,
                                                     hora_entrada=None, dias=0,
                                                     data_orc=None, conclusao=None,
-                                                    operador=0, log='',
+                                                    operador=0, op_entrada=0, log='',
                                                     codigo1='os_atual_db.codigo1', codigo2='os_atual_db.codigo2',
                                                     codigo3='os_atual_db.codigo3', codigo4='os_atual_db.codigo4',
                                                     codigo5='os_atual_db.codigo5', codigo6='os_atual_db.codigo6',
@@ -2452,6 +2459,12 @@ class Castelo:
                 sessao.close()
 
     def atualizandoDados(self):
+
+        def retornaOperadorCli(id_tec):
+            repositorio_operador = tecnico_repositorio.TecnicoRepositorio()
+            operador_cli = repositorio_operador.listar_tecnico_id(id_tec, sessao)
+            return operador_cli.nome
+
         cliente_selecionado = self.tree_cliente.focus()
         dado_cli = self.tree_cliente.item(cliente_selecionado, "values")
         cliente_dados = cliente_repositorio.ClienteRepositorio().listar_cliente_id(dado_cli[0], sessao)
@@ -2468,8 +2481,9 @@ class Castelo:
         self.telcom_label.config(text=cliente_dados.email)
         self.cel_label.config(text=cliente_dados.celular)
         # self.obs_label.config(text=cliente_dados.contato)
-        self.op_label.config(text=cliente_dados.operador)
+        self.op_label.config(text=retornaOperadorCli(cliente_dados.operador))
         self.datacad_label.config(text=cliente_dados.indicacao)
+
 
     def atualizarComClique(self, event):
         self.atualizandoDados()
@@ -3031,7 +3045,7 @@ class Castelo:
               font=font_dados2, bg=color_frame).grid(row=7, column=1, sticky=W)
         Label(labelframe_os, text="Operador:", fg=color_fg_labels2,
               font=font_dados2, bg=color_frame).grid(row=8, column=0, sticky=E, padx=1)
-        Label(labelframe_os, text="ADMINISTRADOR", fg=color_fg_labels,
+        Label(labelframe_os, text=os_dados.operador, fg=color_fg_labels,
               font=font_dados2, bg=color_frame).grid(row=8, column=1, sticky=W)
         Label(labelframe_os, text="Atendimento:", fg=color_fg_labels2,
               font=font_dados2, bg=color_frame).grid(row=9, column=0, sticky=E, padx=1)
@@ -3789,6 +3803,7 @@ class Castelo:
                             self.orc_operador.configure(validate='none', show='')
                             self.orc_operador.insert(0, i[1])
                             self.orc_operador.configure(state=DISABLED)
+                            self.id_operador = int(acess_tec.id)
                             return
                         else:
                             messagebox.showinfo(title="ERRO", message="Acesso Negado! Operador Sem Permissão "
@@ -4324,6 +4339,7 @@ class Castelo:
         obs_pagamento2 = self.orc_obs_pagamento2.get()
         obs_pagamento3 = self.orc_obs_pagamento3.get()
 
+
         self.os_valor_final.config(text=self.insereTotalConvertido(total))
 
         if num == 1:
@@ -4369,7 +4385,8 @@ class Castelo:
 
 
         else:
-            nova_os = os.Os('', '', '', '', '', '', '', None, '', '', '', None, None, '', None, None, '', '', codigo1,
+            nova_os = os.Os('', '', '', '', '', '', '', None, '', '', '', None, None, '', None, None, '', '',
+                            codigo1,
                             codigo2,
                             codigo3, codigo4, codigo5, codigo6, codigo7, codigo8, codigo9, descr1, descr2, descr3,
                             descr4, descr5, descr6, descr7, descr8, descr9, desconto, comentario1, comentario2,
@@ -4562,6 +4579,7 @@ class Castelo:
             res = messagebox.askyesno(None, "Deseja Realmente Dar Saída do Aparelho?")
             if res:
                 # try:
+                operador = self.orc_operador.get()
                 repositorio = os_repositorio.Os_repositorio()
                 repositorio_saida = os_saida_repositorio.OsSaidaRepositorio()
                 os_atual_db = repositorio.listar_os_id(self.num_os, sessao)
@@ -4573,7 +4591,8 @@ class Castelo:
                                              andamento=os_atual_db.andamento, data_entrada=os_atual_db.data_entrada,
                                              hora_entrada=os_atual_db.hora_entrada, dias=os_atual_db.dias,
                                              data_orc=os_atual_db.data_orc, conclusao=os_atual_db.conclusão,
-                                             operador=os_atual_db.operador, log=os_atual_db.log,
+                                             operador=operador, op_entrada=os_atual_db.operador,
+                                             log=os_atual_db.log,
                                              codigo1=os_atual_db.codigo1, codigo2=os_atual_db.codigo2,
                                              codigo3=os_atual_db.codigo3, codigo4=os_atual_db.codigo4,
                                              codigo5=os_atual_db.codigo5, codigo6=os_atual_db.codigo6,
@@ -4774,7 +4793,7 @@ class Castelo:
                                                                                                           sticky=W)
         Label(labelframe_os, text="Operador:", fg=color_fg_labels2,
               font=font_dados2, bg=color_frame).grid(row=5, column=0, sticky=E, padx=1)
-        Label(labelframe_os, text="ADMINISTRADOR", fg=color_fg_labels,
+        Label(labelframe_os, text=os_dados.operador_entrada, fg=color_fg_labels,
               font=font_dados2, bg=color_frame).grid(row=5, column=1, sticky=W)
         Label(labelframe_os, text="Atendimento:", fg=color_fg_labels2,
               font=font_dados2, bg=color_frame).grid(row=6, column=0, sticky=E, padx=1)
@@ -4907,7 +4926,7 @@ class Castelo:
               bg=color_frame).grid(row=2, column=1, sticky=W)
         Label(labelframe_saida, text="Operador:", font=font_dados2,
               bg=color_frame).grid(row=3, column=0, sticky=E, padx=5)
-        Label(labelframe_saida, text="ADMINISTRADOR", fg=color_fg_labels, font=font_dados2,
+        Label(labelframe_saida, text=os_dados.operador, fg=color_fg_labels, font=font_dados2,
               bg=color_frame).grid(row=3, column=1, sticky=W)
         Label(labelframe_saida, text="Valor Cobrado:",
               font=("Verdana", "11", "bold"), bg=color_frame).grid(row=4, column=0, sticky=E, padx=1, pady=10)
@@ -6394,6 +6413,7 @@ class Castelo:
                             self.est_vendedor.configure(validate='none', show='')
                             self.est_vendedor.insert(0, i[1])
                             self.est_vendedor.configure(state=DISABLED)
+                            self.id_operador = int(acess_tec.id)
                             return
                         else:
                             messagebox.showinfo(title="ERRO", message="Acesso Negado! Operador Sem Permissão "
@@ -6639,7 +6659,7 @@ class Castelo:
             obs3 = self.est_obs3.get()
             nota = self.formataParaIteiro(self.est_nota.get())
             frete = self.formataParaFloat(self.est_frete.get())
-            operador = self.formataParaIteiro(self.est_vendedor.get())
+            operador = self.id_operador
             total = self.formataParaFloat(self.est_total.cget('text').split()[1])
             produtos = self.lista_produto_est
 
@@ -6724,6 +6744,11 @@ class Castelo:
         finally:
             sessao.close()
 
+    def retornaOperadorNome(self, id_tec):
+        repositorio_operador = tecnico_repositorio.TecnicoRepositorio()
+        operador_cli = repositorio_operador.listar_tecnico_id(id_tec, sessao)
+        return operador_cli.nome
+
     def popularEntradaEstoque(self):
         self.tree_est_reg.delete(*self.tree_est_reg.get_children())
         repositorio = estoque_repositorio.EstoqueRepositorio()
@@ -6740,7 +6765,7 @@ class Castelo:
                                                      i.nota,
                                                      self.insereTotalConvertido(i.total),
                                                      self.insereTotalConvertido(i.frete),
-                                                     i.operador,
+                                                     self.retornaOperadorNome(i.operador),
                                                      i.obs1,
                                                      i.id), tags=('evenrow',))
                 else:
@@ -6752,7 +6777,7 @@ class Castelo:
                                                      i.nota,
                                                      self.insereTotalConvertido(i.total),
                                                      self.insereTotalConvertido(i.frete),
-                                                     i.operador,
+                                                     self.retornaOperadorNome(i.operador),
                                                      i.obs1,
                                                      i.id), tags=('evenrow',))
             else:
@@ -6764,7 +6789,7 @@ class Castelo:
                                                      i.nota,
                                                      self.insereTotalConvertido(i.total),
                                                      self.insereTotalConvertido(i.frete),
-                                                     i.operador,
+                                                     self.retornaOperadorNome(i.operador),
                                                      i.obs1,
                                                      i.id), tags=('oddrow',))
                 else:
@@ -6776,7 +6801,7 @@ class Castelo:
                                                      i.nota,
                                                      self.insereTotalConvertido(i.total),
                                                      self.insereTotalConvertido(i.frete),
-                                                     i.operador,
+                                                     self.retornaOperadorNome(i.operador),
                                                      i.obs1,
                                                      i.id), tags=('oddrow',))
             self.count += 1
@@ -6982,14 +7007,17 @@ class Castelo:
             atualizaValorAreceber()
 
         def concederAcesso6(*args):
+            repositorio_tec = tecnico_repositorio.TecnicoRepositorio()
             if len(op_venda.get()) == 4:
                 for i in self.operadores_total:
                     if int(op_venda.get()) == int(i[0]):
+                        acess_tec = repositorio_tec.listar_tecnico_senha(int(i[0]), sessao)
                         self.venda_button_confirma.configure(state=NORMAL)
                         self.venda_vendedor.delete(0, END)
                         self.venda_vendedor.configure(validate='none', show='')
                         self.venda_vendedor.insert(0, i[1])
                         self.venda_vendedor.configure(state=DISABLED)
+                        self.id_operador = int(acess_tec.id)
                         return
                 self.venda_vendedor.delete(0, END)
                 messagebox.showinfo(title="ERRO", message="Operador Não Cadastrado!")
@@ -7246,10 +7274,10 @@ class Castelo:
                     outros = self.formataParaFloat(self.venda_entry_outros.get())
                     sub_total = self.formataParaFloat(self.venda_label_subtotal.cget('text').split()[1])
                     desconto = self.formataParaFloat(self.venda_desconto.get())
-                    operador = self.venda_vendedor.get()
+                    operador = self.id_operador
                     total = self.formataParaFloat(self.venda_label_total.cget('text').split()[1])
 
-                    nova_venda = os_venda.OsVenda(cliente, 0, obs1, obs2, obs3, dinheiro, cheque, cdebito,
+                    nova_venda = os_venda.OsVenda(cliente, operador, obs1, obs2, obs3, dinheiro, cheque, cdebito,
                                                   ccredito,
                                                   pix, outros, desconto, sub_total, None, None, total)
 
@@ -7332,7 +7360,7 @@ class Castelo:
                                                     self.insereTotalConvertido(i.desconto),
                                                     self.insereTotalConvertido(i.total),
                                                     i.hora,
-                                                    i.operador,
+                                                    self.retornaOperadorNome(i.operador),
                                                     i.obs1),
                                             tags=('evenrow',))
             else:
@@ -7344,7 +7372,7 @@ class Castelo:
                                                     self.insereTotalConvertido(i.desconto),
                                                     self.insereTotalConvertido(i.total),
                                                     i.hora,
-                                                    i.operador,
+                                                    self.retornaOperadorNome(i.operador),
                                                     i.obs1),
                                             tags=('oddrow',))
             self.count += 1
@@ -9543,6 +9571,7 @@ class Castelo:
                         self.os_operador.delete(0, END)
                         self.os_operador.insert(0, i[1])
                         self.os_operador.configure(show='',state=DISABLED)
+                        self.id_operador = int(acess_tec.id)
                         return
                     else:
                         messagebox.showinfo(title="ERRO", message="Acesso Negado! Operador Sem Permissão "

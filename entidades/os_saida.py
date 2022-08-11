@@ -4,7 +4,7 @@ import entidades.os
 class OsSaida(entidades.os.Os):
     def __init__(self, equipamento, marca, modelo, acessorios, defeito, estado_aparelho,
                  n_serie, tensao, status, chassi, andamento, data_entrada,
-                 hora_entrada, dias, data_orc, conclusao, operador, log, codigo1, codigo2,
+                 hora_entrada, dias, data_orc, conclusao, operador, op_entrada, log, codigo1, codigo2,
                  codigo3, codigo4, codigo5, codigo6, codigo7, codigo8, codigo9,
                  desc_serv1, desc_serv2, desc_serv3,
                  desc_serv4,
@@ -41,11 +41,16 @@ class OsSaida(entidades.os.Os):
         self.__data_saida = data_saida
         self.__hora_saida = hora_saida
         self.__os_saida = os
+        self.__op_entrada = op_entrada
 
 
     @property
     def dataSaida(self):
         return self.__data_saida
+
+    @property
+    def opEntrada(self):
+        return self.__op_entrada
 
     @property
     def horaSaida(self):
@@ -66,3 +71,7 @@ class OsSaida(entidades.os.Os):
     @osSaida.setter
     def osSaida(self, os):
         self.__os_saida = os
+
+    @opEntrada.setter
+    def opEntrada(self, os):
+        self.__op_entrada = os
