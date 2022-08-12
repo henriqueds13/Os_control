@@ -535,3 +535,78 @@ else:
                 self.treeview_busca_produto.selection_set(children[0])
 
 self.id_operador = int(acess_tec.id)
+
+text_tecnico = Listbox(labelF_tecnico, height=5, width=30)
+text_tecnico.grid(row=0, column=0, padx=5, pady=5)
+subframe_tecnico = Frame(labelF_tecnico)
+subframe_tecnico.grid(row=1, column=0, sticky=NW)
+
+button_conf_tecnico = Button(subframe_tecnico, text='Novo Técnico', width=10, wraplength=50,
+                             command=lambda: [janelaInsereDados(1)])
+button_conf_tecnico.grid(row=0, column=0, padx=10, sticky=W, pady=11)
+button_del_tecnico = Button(subframe_tecnico, text='Excluir Técnico', width=10, wraplength=50,
+                            command=lambda: [excluiDados(1)])
+button_del_tecnico.grid(row=0, column=1, pady=5)
+
+text_aparelho = Listbox(labelF_aparelho, height=7, width=31)
+text_aparelho.grid(row=0, column=0, padx=5, pady=5)
+subframe_aparelho = Frame(labelF_aparelho)
+subframe_aparelho.grid(row=0, column=1, sticky=NW)
+
+button_conf_aparelho = Button(subframe_aparelho, text='Novo Aparelho', width=10, wraplength=50,
+                              command=lambda: [janelaInsereDados(2)])
+button_conf_aparelho.grid(row=0, column=0, padx=10, sticky=W)
+button_del_aparelho = Button(subframe_aparelho, text='Excluir Aparelho', width=10, wraplength=50,
+                             command=lambda: [excluiDados(2)])
+button_del_aparelho.grid(row=1, column=0, pady=5)
+
+text_marca = Listbox(labelF_marca, height=7, width=25)
+text_marca.grid(row=0, column=0, padx=5, pady=6)
+subframe_marca = Frame(labelF_marca)
+subframe_marca.grid(row=0, column=1, sticky=NW)
+
+button_conf_marca = Button(subframe_marca, text='Novo Marca', width=10, wraplength=50,
+                           command=lambda: [janelaInsereDados(3)])
+button_conf_marca.grid(row=0, column=0, padx=9, sticky=W)
+button_del_marca = Button(subframe_marca, text='Excluir Marca', width=10, wraplength=50,
+                          command=lambda: [excluiDados(3)])
+button_del_marca.grid(row=1, column=0, pady=6)
+
+
+def popularListBox():
+    text_tecnico.delete(0, END)
+    text_marca.delete(0, END)
+    text_aparelho.delete(0, END)
+    for i in list_tecnicos:
+        if i != '\n':
+            text_tecnico.insert(END, i)
+    for i in list_marcas:
+        if i != '\n':
+            text_marca.insert(END, i)
+    for i in list_aparelhos:
+        if i != '\n':
+            text_aparelho.insert(END, i)
+
+ list_aparelhos = []
+        list_tecnicos = []
+        list_marcas = []
+        list_mao_obra = []
+
+        with open('mao_de_obra.txt', 'rb') as mao_obra_txt:
+            list_mao_obra = pickle.load(mao_obra_txt)
+
+        with open('aparelhos.txt', 'r', encoding='utf8') as aparelhos_txt:
+            for i in aparelhos_txt:
+                if i != "\n":
+                    list_aparelhos.append(i)
+        with open('tecnicos.txt', 'r', encoding='utf8') as tecnicos_txt:
+            for i in tecnicos_txt:
+                if i != "\n":
+                    list_tecnicos.append(i)
+        with open('marcas.txt', 'r', encoding='utf8') as marcas_txt:
+            for i in marcas_txt:
+                if i != "\n":
+                    list_marcas.append(i)
+
+self.listagem_label_frame.configure(height=300, width=400)
+self.listagem_label_frame.grid_propagate(0)

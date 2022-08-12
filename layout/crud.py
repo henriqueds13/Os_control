@@ -1,6 +1,6 @@
 import locale
 import pickle
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from time import strftime
 from tkinter import *
 from tkinter import ttk, messagebox, font
@@ -98,6 +98,7 @@ class Castelo:
         self.data_atual = datetime.now()
         self.date = date.today()
         self.dias = ('Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado', 'Domingo')
+
 
 
         def on_enter(e):
@@ -1299,6 +1300,11 @@ class Castelo:
 
         self.nome_frame = self.frame_cadastro_clientes
 
+    def alteraData(self, dias, data, num):
+        if num == 1:
+            nova_data = data + timedelta(dias)
+        return nova_data.strftime('%d/%m/%Y')
+
     def janelaPedeSenha(self, opt):
         jan = Toplevel()
 
@@ -2040,21 +2046,26 @@ class Castelo:
     def janelaCriarOs(self, cliente, os_id, opt):
         lista_aparelhos = ["ROÇADEIRA", "LAV.ALTA PRESSÃO", "CORT.GRAMA ElÉTRICO"]
         lista_marca = ["KARCHER", "STIHL", "TRAPP"]
-        lista_tecnicos = [1, 2]
+        lista_tecnicos = []
         global radio_loc_text_os
         radio_loc_text_os = IntVar()
         radio_loc_text_os.set("1")
         font_dados1 = ('Verdana', '8', '')
         font_dados2 = ('Verdana', '8', 'bold')
 
+        with open('tecnicos.txt', 'r', encoding='utf8') as tecnicos_txt:
+            for i in tecnicos_txt:
+                if i != "\n":
+                    lista_tecnicos.append(i)
+
         jan = Toplevel()
 
         color_fd_labels = "blue"
 
         # Centraliza a janela
-        x_cordinate = int((self.w / 2) - (700 / 2))
+        x_cordinate = int((self.w / 2) - (715 / 2))
         y_cordinate = int((self.h / 2) - (520 / 2))
-        jan.geometry("{}x{}+{}+{}".format(700, 520, x_cordinate, y_cordinate))
+        jan.geometry("{}x{}+{}+{}".format(715, 520, x_cordinate, y_cordinate))
 
         # --------------------------------------------------------------------------------------
 
@@ -2345,19 +2356,19 @@ class Castelo:
             if self.count % 2 == 0:
                 if i.aparelho_na_oficina == 1:
                     self.tree_ap_manut.insert("", "end",
-                                              values=(i.id, i.data_entrada, i.cliente.nome, i.equipamento, i.marca,
+                                              values=(i.id, i.data_entrada.strftime('%d/%m/%Y'), i.cliente.nome, i.equipamento, i.marca,
                                                       i.modelo, "Orçamento", i.status, i.dias,
                                                       self.insereTotalConvertido(i.total),
                                                       i.tecnico, i.operador, i.defeito, i.n_serie, i.chassi,
-                                                      i.dias, 0, i.hora_entrada, i.cliente_id), tags=('oddrow',))
+                                                      i.data_orc.strftime('%d/%m/%Y'), 0, i.hora_entrada, i.cliente_id), tags=('oddrow',))
             else:
                 if i.aparelho_na_oficina == 1:
                     self.tree_ap_manut.insert("", "end",
-                                              values=(i.id, i.data_entrada, i.cliente.nome, i.equipamento, i.marca,
+                                              values=(i.id, i.data_entrada.strftime('%d/%m/%Y'), i.cliente.nome, i.equipamento, i.marca,
                                                       i.modelo, "Orçamento", i.status, i.dias,
                                                       self.insereTotalConvertido(i.total),
                                                       i.tecnico, i.operador, i.defeito, i.n_serie, i.chassi,
-                                                      i.dias, 0, i.hora_entrada, i.cliente_id), tags=('evenrow',))
+                                                      i.data_orc.strftime('%d/%m/%Y'), 0, i.hora_entrada, i.cliente_id), tags=('evenrow',))
             self.count += 1
         self.count = 0
         self.tree_ap_manut.focus_set()
@@ -2376,24 +2387,24 @@ class Castelo:
             if self.count % 2 == 0:
                 if dados_os.aparelho_na_oficina == 1:
                     self.tree_ap_manut.insert("", "end",
-                                              values=(dados_os.id, dados_os.data_entrada, dados_os.cliente.nome,
+                                              values=(dados_os.id, dados_os.data_entrada.strftime('%d/%m/%Y'), dados_os.cliente.nome,
                                                       dados_os.equipamento, dados_os.marca,
                                                       dados_os.modelo, "Orçamento", dados_os.status, dados_os.dias,
                                                       self.insereTotalConvertido(dados_os.total),
                                                       dados_os.tecnico, dados_os.operador, dados_os.defeito,
                                                       dados_os.n_serie, dados_os.chassi,
-                                                      dados_os.dias, 0, dados_os.hora_entrada, dados_os.cliente_id),
+                                                      dados_os.data_orc.strftime('%d/%m/%Y'), 0, dados_os.hora_entrada, dados_os.cliente_id),
                                               tags=('oddrow'))
             else:
                 if dados_os.aparelho_na_oficina == 1:
                     self.tree_ap_manut.insert("", "end",
-                                              values=(dados_os.id, dados_os.data_entrada, dados_os.cliente.nome,
+                                              values=(dados_os.id, dados_os.data_entrada.strftime('%d/%m/%Y'), dados_os.cliente.nome,
                                                       dados_os.equipamento, dados_os.marca,
                                                       dados_os.modelo, "Orçamento", dados_os.status, dados_os.dias,
                                                       self.insereTotalConvertido(dados_os.total),
                                                       dados_os.tecnico, dados_os.operador, dados_os.defeito,
                                                       dados_os.n_serie, dados_os.chassi,
-                                                      dados_os.dias, 0, dados_os.hora_entrada, dados_os.cliente_id),
+                                                      dados_os.data_orc.strftime('%d/%m/%Y'), 0, dados_os.hora_entrada, dados_os.cliente_id),
                                               tags=('evenrow'))
             self.count += 1
         self.count = 0
@@ -2426,15 +2437,19 @@ class Castelo:
                 chassi = self.os_chassis.get()
                 dias = self.os_dias.get()
                 operador = self.os_operador.get()
-                tecnico = self.insereZero(self.os_tecnico.get())
+                tecnico = self.os_tecnico.get()
                 loja = self.os_loja.get()
                 garantia_complementar = self.insereZero(self.os_garantiacompl.get())
                 data_compra = self.os_datacompra.get()
                 nfe = self.insereZero(self.os_notafiscal.get())
                 cli_id = self.os_idcliente
+                data_entrada = self.data_atual
+                hora_entrada = self.data_atual.strftime('%H:%M')
+                data_orc = self.data_atual + timedelta(int(dias))
+
 
                 nova_os = os.Os(equipamento, marca, modelo, acessorios, defeito, estado_aparelho, n_serie, tensao,
-                                'EM SERVIÇO', chassi, '', None, None, dias, None, None, operador, '', '', '', '', '',
+                                'EM SERVIÇO', chassi, '', data_entrada, hora_entrada, dias, data_orc, None, operador, '', '', '', '', '',
                                 '',
                                 '', '',
                                 '', '', '', '', '', '', '', '', '', '', '', 0, '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -2589,6 +2604,14 @@ class Castelo:
         x_cordinate = int((self.w / 2) - (780 / 2))
         y_cordinate = int((self.h / 2) - (520 / 2))
         jan.geometry("{}x{}+{}+{}".format(780, 520, x_cordinate, y_cordinate))
+
+        list_tecnicos = []
+
+        with open('tecnicos.txt', 'r', encoding='utf8') as tecnicos_txt:
+            for i in tecnicos_txt:
+                if i != "\n":
+                    i = i.rstrip('\n')
+                    list_tecnicos.append(i)
 
         # --------------------------------------------------------------------------------------
 
@@ -2845,6 +2868,36 @@ class Castelo:
 
                 self.os_status.configure(text=os_dados.status)
                 self.os_status_most.configure(text=os_dados.status)
+            if status == 'PRONTO':
+                label_conclusao.config(text=self.data_atual.strftime('%d/%m/%Y'))
+            else:
+                label_conclusao.config(text='')
+
+        def seleciona_tecnico():
+            tecnico_os = str(list_tecnicos_os.get(ACTIVE))
+            print(tecnico_os+'os')
+
+            nova_os = os.Os('', '', '', '', '', '', '', None, 'status', '', '', None, None, '', None, None, '', '',
+                            '',
+                            '',
+                            '', '', '', '', '', '', '', '', '', '',
+                            '', '', '', '', '', '', 0, '', '',
+                            '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                            0, 0, 0, 0, 0, 0, 0, 0,
+                            0,
+                            0, 0, 0, 0, 0, 0, 0, 0, 0,
+                            0,
+                            0, 0, 0, 0, 0, 0, 0, 0, tecnico_os, 0, '', 0, 0, 0, 0, 0,
+                            0, '',
+                            '', '', None, 0, 0, '', 0, None, 0, '')
+
+            repositorio = os_repositorio.Os_repositorio()
+            repositorio.editar_orcamento(dado_os[0], nova_os, 6, sessao)
+            sessao.commit()
+
+            label_tecnic.configure(text=os_dados.tecnico)
+            os_tec_label.configure(text=os_dados.tecnico)
+
 
         def salvaAoFechar():
             andamento = text_andamento_os.get('1.0', 'end-1c')
@@ -3013,61 +3066,67 @@ class Castelo:
         ap_id_os.config(validate='all', validatecommand=(impede_escrita, '%P'))
 
         labelframe_os = LabelFrame(frame_princ_jan_os, text="Ordem de Serviço", fg=self.color_fg_label, bg=color_frame)
-        labelframe_os.grid(row=0, column=1, padx=15, rowspan=4, ipadx=3, sticky=N)
+        labelframe_os.grid(row=0, column=1, padx=15, rowspan=4, sticky=N)
+        labelframe_os.configure(height=350, width=220)
+        labelframe_os.grid_propagate(0)
 
         Label(labelframe_os, text=os_dados.id, fg="red",
-              font=('Verdana', '20', 'bold'), bg=color_frame).grid(row=0, column=0, columnspan=2, padx=10, pady=5)
+              font=('Verdana', '20', 'bold'), bg=color_frame).grid(row=0, column=0, columnspan=2)
         Label(labelframe_os, text="Entrada:", fg=color_fg_labels2,
-              font=font_dados2, bg=color_frame).grid(row=1, column=0, sticky=E, padx=5)
-        Label(labelframe_os, text="19/10/2021", fg=color_fg_labels,
-              font=font_dados2, bg=color_frame).grid(row=1, column=1, sticky=W)
+              font=font_dados2, bg=color_frame).grid(row=1, column=0, sticky=E)
+        Label(labelframe_os, text=os_dados.data_entrada.strftime("%d/%m/%Y"), fg=color_fg_labels,
+              font=font_dados2, bg=color_frame).grid(row=1, column=1, sticky=W, ipadx=5)
         Label(labelframe_os, text="Hora:", fg=color_fg_labels2,
-              font=font_dados2, bg=color_frame).grid(row=2, column=0, sticky=E, padx=5)
-        Label(labelframe_os, text="21:28", fg=color_fg_labels,
+              font=font_dados2, bg=color_frame).grid(row=2, column=0, sticky=E)
+        Label(labelframe_os, text=os_dados.hora_entrada, fg=color_fg_labels,
               font=font_dados2, bg=color_frame).grid(row=2, column=1, sticky=W)
         Label(labelframe_os, text="Dias:", fg=color_fg_labels2,
-              font=font_dados2, bg=color_frame).grid(row=3, column=0, sticky=E, padx=5)
+              font=font_dados2, bg=color_frame).grid(row=3, column=0, sticky=E)
         Label(labelframe_os, text="1", fg=color_fg_labels,
               font=font_dados2, bg=color_frame).grid(row=3, column=1, sticky=W)
         Label(labelframe_os, text="Via:", fg=color_fg_labels2,
-              font=font_dados2, bg=color_frame).grid(row=4, column=0, sticky=E, padx=5)
+              font=font_dados2, bg=color_frame).grid(row=4, column=0, sticky=E)
         Label(labelframe_os, text="0ª", fg=color_fg_labels,
               font=font_dados2, bg=color_frame).grid(row=4, column=1, sticky=W)
         Label(labelframe_os, text="-------------------------------------",
-              fg=color_bgdc_labels, bg=color_frame).grid(row=5, column=0, columnspan=2)
+              fg=color_bgdc_labels, bg=color_frame).grid(row=5, column=0, columnspan=2, padx=3)
         Label(labelframe_os, text="Tipo:", fg=color_fg_labels2,
-              font=font_dados2, bg=color_frame).grid(row=6, column=0, sticky=E, padx=1)
+              font=font_dados2, bg=color_frame).grid(row=6, column=0, sticky=E)
         Label(labelframe_os, text="ORÇAMENTO", fg=color_fg_labels,
               font=font_dados2, bg=color_frame).grid(row=6, column=1, sticky=W)
         Label(labelframe_os, text="Orç. para Dia:", fg=color_fg_labels2,
-              font=font_dados2, bg=color_frame).grid(row=7, column=0, sticky=E, padx=1)
-        Label(labelframe_os, text="20/10/2021", fg=color_fg_labels,
-              font=font_dados2, bg=color_frame).grid(row=7, column=1, sticky=W)
+              font=font_dados2, bg=color_frame).grid(row=7, column=0, sticky=E)
+        Label(labelframe_os, text=os_dados.data_orc.strftime('%d/%m/%Y'),
+              fg=color_fg_labels, font=font_dados2, bg=color_frame).grid(row=7, column=1, sticky=W)
         Label(labelframe_os, text="Operador:", fg=color_fg_labels2,
-              font=font_dados2, bg=color_frame).grid(row=8, column=0, sticky=E, padx=1)
+              font=font_dados2, bg=color_frame).grid(row=8, column=0, sticky=E)
         Label(labelframe_os, text=os_dados.operador, fg=color_fg_labels,
               font=font_dados2, bg=color_frame).grid(row=8, column=1, sticky=W)
         Label(labelframe_os, text="Atendimento:", fg=color_fg_labels2,
-              font=font_dados2, bg=color_frame).grid(row=9, column=0, sticky=E, padx=1)
+              font=font_dados2, bg=color_frame).grid(row=9, column=0, sticky=E)
         Label(labelframe_os, text="INTERNO", fg=color_fg_labels,
               font=font_dados2, bg=color_frame).grid(row=9, column=1, sticky=W)
         Label(labelframe_os, text="------------------------------------",
-              fg=color_bgdc_labels, bg=color_frame).grid(row=10, column=0, columnspan=2)
+              fg=color_bgdc_labels, bg=color_frame).grid(row=10, column=0, columnspan=2, padx=3)
         Label(labelframe_os, text="Status", fg=color_fg_labels2,
-              font=font_dados2, bg=color_frame).grid(row=11, column=0, sticky=E, padx=1)
+              font=font_dados2, bg=color_frame).grid(row=11, column=0, sticky=E)
         self.os_status_most = Label(labelframe_os, text=os_dados.status, fg=color_fg_labels,
-                                    font=font_dados2, bg=color_frame)
+                                    font=font_dados2, bg=color_frame, anchor=W)
         self.os_status_most.grid(row=11, column=1, sticky=W)
+        self.os_status_most.configure(width=13)
+        self.os_status_most.grid_propagate(0)
         Label(labelframe_os, text="Técnico:", fg=color_fg_labels2,
-              font=font_dados2, bg=color_frame).grid(row=12, column=0, sticky=E, padx=1)
-        Label(labelframe_os, text=os_dados.tecnico, fg=color_fg_labels,
-              font=font_dados2, bg=color_frame).grid(row=12, column=1, sticky=W)
+              font=font_dados2, bg=color_frame).grid(row=12, column=0, sticky=E)
+        os_tec_label = Label(labelframe_os, text=os_dados.tecnico, fg=color_fg_labels,
+              font=font_dados2, bg=color_frame)
+        os_tec_label.grid(row=12, column=1, sticky=W)
         Label(labelframe_os, text="Conclusão:", fg=color_fg_labels2,
-              font=font_dados2, bg=color_frame).grid(row=13, column=0, sticky=E, padx=1)
-        Label(labelframe_os, text="21/10/2021", fg=color_fg_labels,
-              font=font_dados2, bg=color_frame).grid(row=13, column=1, sticky=W)
+              font=font_dados2, bg=color_frame).grid(row=13, column=0, sticky=E)
+        label_conclusao = Label(labelframe_os, text="", fg=color_fg_labels,
+              font=font_dados2, bg=color_frame)
+        label_conclusao.grid(row=13, column=1, sticky=W)
         Label(labelframe_os, text="Valor:", fg=color_fg_labels2,
-              font=font_dados2, bg=color_frame).grid(row=14, column=0, sticky=E, padx=1)
+              font=font_dados2, bg=color_frame).grid(row=14, column=0, sticky=E)
         self.os_valor_final = Label(labelframe_os, text=self.insereTotalConvertido(os_dados.total), fg=color_fg_labels,
                                     font=('', '14', 'bold'), bg=color_frame)
         self.os_valor_final.grid(row=14, column=1, sticky=W)
@@ -3220,15 +3279,17 @@ class Castelo:
                                                                                            ipadx=10)
 
         list_tecnicos_os = Listbox(labelframe_os_tecnicos, bg="#ffe0c0")
-        list_tecnicos_os.insert(1, "HENRIQUE")
-        list_tecnicos_os.insert(2, "HUGO")
-        list_tecnicos_os.insert(3, "AUGUSTO")
+        for i in list_tecnicos:
+            if i != '\n':
+                list_tecnicos_os.insert(END, i)
         list_tecnicos_os.pack(side=LEFT, padx=5, pady=5)
         frame_tecnico_os = Frame(labelframe_os_tecnicos, bg=color_frame)
         frame_tecnico_os.pack(side=LEFT, padx=5, fill=Y)
-        Label(frame_tecnico_os, text="HENRIQUE", fg="blue",
-              bg="#ffe0c0", bd=2, relief=SUNKEN, width=15).grid(row=0, column=0, ipadx=10, padx=5)
-        Button(frame_tecnico_os, text="Salvar").grid(row=1, column=0, pady=20, ipadx=10)
+        label_tecnic = Label(frame_tecnico_os, text=os_dados.tecnico, fg="blue",
+              bg="#ffe0c0", bd=2, relief=SUNKEN, width=15)
+        label_tecnic.grid(row=0, column=0, ipadx=10, padx=5)
+        Button(frame_tecnico_os, text="Salvar", command=seleciona_tecnico).grid(row=1, column=0, pady=20,
+                                                                                             ipadx=10)
 
         button_manAnt = Button(frame_os_final, width=10, text="Manutenções Anteriores",
                wraplength=80, command=manAnteriores, bg="#BEC7C7")
@@ -3813,12 +3874,16 @@ class Castelo:
                 self.orc_operador.delete(0, END)
                 messagebox.showinfo(title="ERRO", message="Operador Não Cadastrado!")
 
+
         dados_orc = os_repositorio.Os_repositorio().listar_os_id(self.num_os, sessao)
         frame_princ_os1 = Frame(jan1)
         frame_princ_os1.pack(fill=Y, side=LEFT)
         frame_os = LabelFrame(frame_princ_os1, text='Num da Os', width=20)
         frame_os.grid(row=0, column=0, padx=10, sticky=W)
         Label(frame_os, text=self.num_os, fg='blue', font='bold').pack(pady=17, padx=5)
+
+        testa_float = frame_princ_os1.register(self.testaEntradaFloat)
+        testa_inteiro = frame_princ_os1.register(self.testaEntradaInteiro)
 
         labelframe_status_os = LabelFrame(frame_princ_os1, text="Status", width=100)
         labelframe_status_os.grid(row=0, column=1, padx=10, pady=10, ipady=2, ipadx=10, sticky=W)
@@ -3834,11 +3899,14 @@ class Castelo:
         frame_os_su2 = Frame(labelframe_garantia_os)
         frame_os_su2.pack(padx=10)
         Label(frame_os_su2, text="Dias").grid(row=0, column=0, sticky=W, padx=10, pady=3)
-        self.orc_dias = Entry(frame_os_su2, width=5, bg=color_entry1)
+        self.orc_dias = Entry(frame_os_su2, width=5, bg=color_entry1, validate='all',
+                                      validatecommand=(testa_inteiro, '%P'))
         self.orc_dias.grid(row=1, column=0, padx=10)
+        self.orc_dias.insert(0, 90)
         Label(frame_os_su2, text="Garantia até:").grid(row=0, column=1, padx=10)
-        Label(frame_os_su2, text="23/01/2022", relief=SUNKEN, bd=2, width=10, bg=color_entry2).grid(row=1, column=1,
-                                                                                                    padx=10)
+        label_data = Label(frame_os_su2, text=self.alteraData(int(self.orc_dias.get()), self.data_atual, 1),
+                           relief=SUNKEN, bd=2, width=10, bg=color_entry2)
+        label_data.grid(row=1, column=1, padx=10)
 
         labelframe_operador_os = LabelFrame(frame_princ_os1, text="Operador")
         labelframe_operador_os.grid(row=0, column=3, ipady=3, padx=10, sticky=W)
@@ -3850,8 +3918,6 @@ class Castelo:
         self.orc_operador = Entry(frame_os_su3, width=20, relief=SUNKEN, textvariable=op_orc, show='*')
         self.orc_operador.pack(padx=10, pady=17)
 
-        testa_float = frame_princ_os1.register(self.testaEntradaFloat)
-        testa_inteiro = frame_princ_os1.register(self.testaEntradaInteiro)
         labelframe_material = LabelFrame(frame_princ_os1, text="Material Utilizado")
         labelframe_material.grid(row=1, column=0, padx=10, columnspan=4)
         subframe_material1 = Frame(labelframe_material)
@@ -4259,6 +4325,11 @@ class Castelo:
         self.orc_cod_entry7.bind('<Return>', elegeProduto7)
         self.orc_cod_entry8.bind('<Return>', elegeProduto8)
         self.orc_cod_entry9.bind('<Return>', elegeProduto9)
+
+        def alteraDataOrc(event):
+            label_data.configure(text=self.alteraData(int(self.orc_dias.get()), self.data_atual, 1))
+
+        self.orc_dias.bind('<Return>', alteraDataOrc)
 
         jan1.transient(root2)
         jan1.focus_force()
@@ -8246,14 +8317,17 @@ class Castelo:
         with open('aparelhos.txt', 'r', encoding='utf8') as aparelhos_txt:
             for i in aparelhos_txt:
                 if i != "\n":
+                    i = i.rstrip('\n')
                     list_aparelhos.append(i)
         with open('tecnicos.txt', 'r', encoding='utf8') as tecnicos_txt:
             for i in tecnicos_txt:
                 if i != "\n":
+                    i = i.rstrip('\n')
                     list_tecnicos.append(i)
         with open('marcas.txt', 'r', encoding='utf8') as marcas_txt:
             for i in marcas_txt:
                 if i != "\n":
+                    i = i.rstrip('\n')
                     list_marcas.append(i)
 
         # --------------------------------------------------------------------------------------
@@ -8925,6 +8999,7 @@ class Castelo:
             localButton.pack(side=LEFT, padx=5)
             Button(frame_localizar_jan2, text="Fechar", width=10, wraplength=70,
                    underline=0, font=('Verdana', '9', 'bold'), height=2, command=jan.destroy).pack(side=LEFT, padx=5)
+            entry_locali.focus()
 
             def InsereDadosLista(num, jan):
 
@@ -8949,7 +9024,7 @@ class Castelo:
                         for i in list_marcas:
                             if i != '\n':
                                 marcas_txt.write(f'{i}\n')
-
+                entry_locali.delete(0, END)
                 popularListBox()
                 jan.destroy()
 

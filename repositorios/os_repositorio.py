@@ -31,7 +31,7 @@ class Os_repositorio():
                      caixa_peca1=os.caixaPeca1, caixa_peca2=os.caixaPeca2, caixa_peca3=os.caixaPeca3,
                      caixa_peca4=os.caixaPeca4, caixa_peca5=os.caixaPeca5, caixa_peca6=os.caixaPeca6,
                      caixa_peca7=os.caixaPeca7, caixa_peca8=os.caixaPeca8, caixa_peca9=os.caixaPeca9,
-                     caixa_peca_total=os.caixaPecaTotal, tecnico=tecnico, total=os.total, defeitos=os.defeitos,
+                     caixa_peca_total=os.caixaPecaTotal, tecnico=os.tecnico, total=os.total, defeitos=os.defeitos,
                      cheque=os.cheque, ccredito=os.ccredito, cdebito=os.cdebito, pix=os.pix, dinheiro=os.dinheiro,
                      outros=os.outros, obs_pagamento1=os.obsPagamento1, obs_pagamento2=os.obsPagamento2,
                      obs_pagamento3=os.obsPagamento3, data_garantia=os.dataGarantia, notaFiscal=0, cliente=cliente,

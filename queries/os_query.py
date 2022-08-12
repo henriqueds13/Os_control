@@ -134,11 +134,11 @@ class OsQuery():
         elif num == 3:
             oss.status = os.status
 
-        elif num ==4:
+        elif num == 4:
             oss.log = os.log
             oss.andamento = os.andamento
 
-        else:
+        elif num == 5:
             oss.codigo1 = os.codigo1
             oss.codigo2 = os.codigo2
             oss.codigo3 = os.codigo3
@@ -210,6 +210,8 @@ class OsQuery():
             oss.obs_pagamento2 = os.obsPagamento2
             oss.obs_pagamento3 = os.obsPagamento3
             oss.total = os.total
+        elif num == 6:
+            oss.tecnico = os.tecnico
 
     def listar_os_locali(self, entry, tipo, sessao):
         if tipo == 1:

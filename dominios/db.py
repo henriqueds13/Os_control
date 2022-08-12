@@ -174,9 +174,7 @@ class OS(Base):
     garantia_compl = Column(Integer)
     data_compra = Column(Date)
     aparelho_na_oficina = Column(Integer)
-
-    tecnico_id = Column(Integer, ForeignKey('tecnico.id'))
-    tecnico = relationship('Tecnico', back_populates='ostec')
+    tecnico = Column(String(20))
 
 
     cliente_id = Column(Integer, ForeignKey('cliente.id'), nullable=False)
@@ -288,9 +286,7 @@ class OSSaida(Base):
     data_saida = Column(Date)
     hora_saida = Column(String(10))
     os_saida = Column(Integer)
-
-    tecnico_id = Column(Integer, ForeignKey('tecnico.id'))
-    tecnico_saida = relationship('Tecnico', back_populates='ostec_saida')
+    tecnico = Column(String(20))
 
     cliente_id = Column(Integer, ForeignKey('cliente.id'), nullable=False)
     cliente_saida = relationship('Cliente', back_populates='oss_saida')
@@ -308,9 +304,6 @@ class Tecnico(Base):
     USU = Column(Integer)
     CON = Column(Integer)
     FIN = Column(Integer)
-
-    ostec = relationship('OS', back_populates='tecnico')
-    ostec_saida = relationship('OSSaida', back_populates='tecnico_saida')
 
     def __repr__(self):
         return f"Nome: {self.nome}  Senha: {self.senha_tecnico}"
