@@ -5,12 +5,10 @@ from dominios.db import OSSaida
 
 class OsSaidaRepositorio():
 
-    def nova_os(self, id_cliente, id_tecnico, os, sessao):
+    def nova_os(self, id_cliente, os, sessao):
         repositorio_cliente = cliente_repositorio.ClienteRepositorio()
-        repositorio_tecnico = tecnico_repositorio.TecnicoRepositorio()
         query_os_saida = os_saida_query.OsSaidaQuery()
         cliente = repositorio_cliente.listar_cliente_id(id_cliente, sessao)
-        tecnico = repositorio_tecnico.listar_tecnico_id(id_tecnico, sessao)
         nova_os = OSSaida(equipamento=os.equipamento, marca=os.marca, modelo=os.modelo, acessorios=os.acessorios,
                           defeito=os.defeito, estado_aparelho=os.estado_aparelho, n_serie=os.n_serie, tensao=os.tensao,
                           status=os.status, chassi=os.chassi, andamento=os.andamento, data_entrada=os.dataEntrada,
@@ -36,7 +34,7 @@ class OsSaidaRepositorio():
                           caixa_peca1=os.caixaPeca1, caixa_peca2=os.caixaPeca2, caixa_peca3=os.caixaPeca3,
                           caixa_peca4=os.caixaPeca4, caixa_peca5=os.caixaPeca5, caixa_peca6=os.caixaPeca6,
                           caixa_peca7=os.caixaPeca7, caixa_peca8=os.caixaPeca8, caixa_peca9=os.caixaPeca9,
-                          caixa_peca_total=os.caixaPecaTotal, tecnico_saida=tecnico, total=os.total,
+                          caixa_peca_total=os.caixaPecaTotal, tecnico=os.tecnico, total=os.total,
                           defeitos=os.defeitos,
                           cheque=os.cheque, ccredito=os.ccredito, cdebito=os.cdebito, pix=os.pix, dinheiro=os.dinheiro,
                           outros=os.outros, obs_pagamento1=os.obsPagamento1, obs_pagamento2=os.obsPagamento2,

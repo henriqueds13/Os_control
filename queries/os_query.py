@@ -137,6 +137,7 @@ class OsQuery():
         elif num == 4:
             oss.log = os.log
             oss.andamento = os.andamento
+            oss.conclusão = os.conclusao
 
         elif num == 5:
             oss.codigo1 = os.codigo1
@@ -210,6 +211,7 @@ class OsQuery():
             oss.obs_pagamento2 = os.obsPagamento2
             oss.obs_pagamento3 = os.obsPagamento3
             oss.total = os.total
+            oss.data_garantia = os.dataGarantia
         elif num == 6:
             oss.tecnico = os.tecnico
 
