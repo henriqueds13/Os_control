@@ -2322,6 +2322,7 @@ class Castelo:
             self.os_chassis.configure(state=DISABLED)
             self.os_tensao.insert(0, os_entr.tensao)
             self.os_tensao.configure(state=DISABLED)
+            self.data_garantia_saida = os_entr.data_garantia
             radio_orc.configure(state=DISABLED)
             radio_gar_fabrica.configure(state=DISABLED)
             radio_gar_serv.configure(state=NORMAL)
@@ -2348,27 +2349,33 @@ class Castelo:
         jan.focus_force()
         jan.grab_set()
 
+    def retornaFaltaDias(self, data1):
+        mdate = datetime.now().strftime('%d/%m/%Y')
+        rdate = data1.strftime('%d/%m/%Y')
+        mdate1 = datetime.strptime(mdate, "%d/%m/%Y").date()
+        rdate1 = datetime.strptime(rdate, "%d/%m/%Y").date()
+        delta = (rdate1 - mdate1).days
+        return delta
+
     def popularOsConserto(self):
         self.tree_ap_manut.delete(*self.tree_ap_manut.get_children())
         repositorio = os_repositorio.Os_repositorio()
         oss = repositorio.listar_os(sessao)
         for i in oss:
             if self.count % 2 == 0:
-                if i.aparelho_na_oficina == 1:
-                    self.tree_ap_manut.insert("", "end",
-                                              values=(i.id, i.data_entrada.strftime('%d/%m/%Y'), i.cliente.nome, i.equipamento, i.marca,
-                                                      i.modelo, "Orçamento", i.status, i.dias,
-                                                      self.insereTotalConvertido(i.total),
-                                                      i.tecnico, i.operador, i.defeito, i.n_serie, i.chassi,
-                                                      i.data_orc.strftime('%d/%m/%Y'), 0, i.hora_entrada, i.cliente_id), tags=('oddrow',))
+                self.tree_ap_manut.insert("", "end",
+                                          values=(i.id, i.data_entrada.strftime('%d/%m/%Y'), i.cliente.nome, i.equipamento, i.marca,
+                                                  i.modelo,  self.converteOrc(i.aparelho_na_oficina), i.status, self.retornaFaltaDias(i.data_orc),
+                                                  self.insereTotalConvertido(i.total),
+                                                  i.tecnico, i.operador, i.defeito, i.n_serie, i.chassi,
+                                                  i.data_orc.strftime('%d/%m/%Y'), 0, i.hora_entrada, i.cliente_id), tags=('oddrow',))
             else:
-                if i.aparelho_na_oficina == 1:
-                    self.tree_ap_manut.insert("", "end",
-                                              values=(i.id, i.data_entrada.strftime('%d/%m/%Y'), i.cliente.nome, i.equipamento, i.marca,
-                                                      i.modelo, "Orçamento", i.status, i.dias,
-                                                      self.insereTotalConvertido(i.total),
-                                                      i.tecnico, i.operador, i.defeito, i.n_serie, i.chassi,
-                                                      i.data_orc.strftime('%d/%m/%Y'), 0, i.hora_entrada, i.cliente_id), tags=('evenrow',))
+                self.tree_ap_manut.insert("", "end",
+                                          values=(i.id, i.data_entrada.strftime('%d/%m/%Y'), i.cliente.nome, i.equipamento, i.marca,
+                                                  i.modelo,  self.converteOrc(i.aparelho_na_oficina), i.status, self.retornaFaltaDias(i.data_orc),
+                                                  self.insereTotalConvertido(i.total),
+                                                  i.tecnico, i.operador, i.defeito, i.n_serie, i.chassi,
+                                                  i.data_orc.strftime('%d/%m/%Y'), 0, i.hora_entrada, i.cliente_id), tags=('evenrow',))
             self.count += 1
         self.count = 0
         self.tree_ap_manut.focus_set()
@@ -2385,27 +2392,27 @@ class Castelo:
         lista_nomes = repositorio.listar_os_nome(nome, num, sessao)
         for dados_os in lista_nomes:
             if self.count % 2 == 0:
-                if dados_os.aparelho_na_oficina == 1:
-                    self.tree_ap_manut.insert("", "end",
-                                              values=(dados_os.id, dados_os.data_entrada.strftime('%d/%m/%Y'), dados_os.cliente.nome,
-                                                      dados_os.equipamento, dados_os.marca,
-                                                      dados_os.modelo, "Orçamento", dados_os.status, dados_os.dias,
-                                                      self.insereTotalConvertido(dados_os.total),
-                                                      dados_os.tecnico, dados_os.operador, dados_os.defeito,
-                                                      dados_os.n_serie, dados_os.chassi,
-                                                      dados_os.data_orc.strftime('%d/%m/%Y'), 0, dados_os.hora_entrada, dados_os.cliente_id),
-                                              tags=('oddrow'))
+                self.tree_ap_manut.insert("", "end",
+                                          values=(dados_os.id, dados_os.data_entrada.strftime('%d/%m/%Y'), dados_os.cliente.nome,
+                                                  dados_os.equipamento, dados_os.marca,
+                                                  dados_os.modelo,  self.converteOrc(dados_os.aparelho_na_oficina), dados_os.status,
+                                                  self.retornaFaltaDias(dados_os.data_orc),
+                                                  self.insereTotalConvertido(dados_os.total),
+                                                  dados_os.tecnico, dados_os.operador, dados_os.defeito,
+                                                  dados_os.n_serie, dados_os.chassi,
+                                                  dados_os.data_orc.strftime('%d/%m/%Y'), 0, dados_os.hora_entrada, dados_os.cliente_id),
+                                          tags=('oddrow'))
             else:
-                if dados_os.aparelho_na_oficina == 1:
-                    self.tree_ap_manut.insert("", "end",
-                                              values=(dados_os.id, dados_os.data_entrada.strftime('%d/%m/%Y'), dados_os.cliente.nome,
-                                                      dados_os.equipamento, dados_os.marca,
-                                                      dados_os.modelo, "Orçamento", dados_os.status, dados_os.dias,
-                                                      self.insereTotalConvertido(dados_os.total),
-                                                      dados_os.tecnico, dados_os.operador, dados_os.defeito,
-                                                      dados_os.n_serie, dados_os.chassi,
-                                                      dados_os.data_orc.strftime('%d/%m/%Y'), 0, dados_os.hora_entrada, dados_os.cliente_id),
-                                              tags=('evenrow'))
+                self.tree_ap_manut.insert("", "end",
+                                          values=(dados_os.id, dados_os.data_entrada.strftime('%d/%m/%Y'), dados_os.cliente.nome,
+                                                  dados_os.equipamento, dados_os.marca,
+                                                  dados_os.modelo,  self.converteOrc(dados_os.aparelho_na_oficina), dados_os.status,
+                                                  self.retornaFaltaDias(dados_os.data_orc),
+                                                  self.insereTotalConvertido(dados_os.total),
+                                                  dados_os.tecnico, dados_os.operador, dados_os.defeito,
+                                                  dados_os.n_serie, dados_os.chassi,
+                                                  dados_os.data_orc.strftime('%d/%m/%Y'), 0, dados_os.hora_entrada, dados_os.cliente_id),
+                                          tags=('evenrow'))
             self.count += 1
         self.count = 0
         self.tree_ap_manut.focus_set()
@@ -2446,6 +2453,8 @@ class Castelo:
                 data_entrada = self.data_atual
                 hora_entrada = self.data_atual.strftime('%H:%M')
                 data_orc = self.data_atual + timedelta(int(dias))
+                tipo = radio_loc_text_os.get()
+                data_garantia = self.data_garantia_saida
 
 
                 nova_os = os.Os(equipamento, marca, modelo, acessorios, defeito, estado_aparelho, n_serie, tensao,
@@ -2456,8 +2465,8 @@ class Castelo:
                                 0,
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                 tecnico, 0,
-                                '', 0, 0, 0, 0, 0, 0, '', '', '', None, nfe, cli_id, loja, garantia_complementar, None,
-                                1,
+                                '', 0, 0, 0, 0, 0, 0, '', '', '', data_garantia, nfe, cli_id, loja, garantia_complementar, None,
+                                tipo,
                                 0)
                 repositorio = os_repositorio.Os_repositorio()
                 repositorio.nova_os(cli_id, tecnico, nova_os, sessao)
@@ -2466,6 +2475,7 @@ class Castelo:
                 self.label_os.config(text=ordem_de_servicos[-1].id)
                 self.mostrarMensagem("1", "OS Cadastrado com Sucesso!")
                 self.popularOsConserto()
+                self.data_garantia_saida = None
                 jan.destroy()
             except:
                 sessao.rollback()
@@ -2565,7 +2575,7 @@ class Castelo:
                             self.tree_ap_manut.insert("", "end",
                                                       values=(
                                                           i.id, i.data_entrada, i.cliente.nome, i.equipamento, i.marca,
-                                                          i.modelo, "Orçamento", i.status, i.dias,
+                                                          i.modelo, "Orçamento", i.status, self.retornaFaltaDias(i.data_orc),
                                                           self.insereTotalConvertido(i.total),
                                                           i.tecnico, i.operador, i.defeito, i.n_serie, i.chassi,
                                                           i.dias, 0, i.hora_entrada, i.cliente_id), tags=('oddrow',))
@@ -2574,7 +2584,7 @@ class Castelo:
                             self.tree_ap_manut.insert("", "end",
                                                       values=(
                                                           i.id, i.data_entrada, i.cliente.nome, i.equipamento, i.marca,
-                                                          i.modelo, "Orçamento", i.status, i.dias,
+                                                          i.modelo, "Orçamento", i.status, self.retornaFaltaDias(i.data_orc),
                                                           self.insereTotalConvertido(i.total),
                                                           i.tecnico, i.operador, i.defeito, i.n_serie, i.chassi,
                                                           i.dias, 0, i.hora_entrada, i.cliente_id), tags=('evenrow',))
@@ -2868,7 +2878,7 @@ class Castelo:
 
                 self.os_status.configure(text=os_dados.status)
                 self.os_status_most.configure(text=os_dados.status)
-            if status == 'PRONTO':
+            if status == 'PRONTO' or status == 'SEM CONSERTO':
                 self.label_conclusao.config(text=self.data_atual.strftime('%d/%m/%Y'))
             else:
                 self.label_conclusao.config(text='')
@@ -3098,7 +3108,7 @@ class Castelo:
               fg=color_bgdc_labels, bg=color_frame).grid(row=5, column=0, columnspan=2, padx=3)
         Label(labelframe_os, text="Tipo:", fg=color_fg_labels2,
               font=font_dados2, bg=color_frame).grid(row=6, column=0, sticky=E)
-        Label(labelframe_os, text="ORÇAMENTO", fg=color_fg_labels,
+        Label(labelframe_os, text=self.converteOrc(os_dados.aparelho_na_oficina), fg=color_fg_labels,
               font=font_dados2, bg=color_frame).grid(row=6, column=1, sticky=W)
         Label(labelframe_os, text="Orç. para Dia:", fg=color_fg_labels2,
               font=font_dados2, bg=color_frame).grid(row=7, column=0, sticky=E)
@@ -3901,9 +3911,9 @@ class Castelo:
         frame_os_su1 = Frame(labelframe_status_os)
         frame_os_su1.pack(padx=10)
         Label(frame_os_su1, text="Status:").grid(row=0, column=0, sticky=E, padx=3, pady=5)
-        Label(frame_os_su1, text="EM SERVIÇO").grid(row=0, column=1, sticky=W)
+        Label(frame_os_su1, text=dados_orc.status).grid(row=0, column=1, sticky=W)
         Label(frame_os_su1, text="Técnico:").grid(row=1, column=0, sticky=E, padx=3)
-        Label(frame_os_su1, text="HENRIQUE").grid(row=1, column=1, sticky=W)
+        Label(frame_os_su1, text=dados_orc.tecnico).grid(row=1, column=1, sticky=W)
 
         labelframe_garantia_os = LabelFrame(frame_princ_os1, text="Garantia")
         labelframe_garantia_os.grid(row=0, column=2, padx=5, ipady=5, ipadx=2, sticky=W)
@@ -3918,6 +3928,11 @@ class Castelo:
         self.label_data = Label(frame_os_su2, text=self.alteraData(int(self.orc_dias.get()), self.data_atual, 1),
                            relief=SUNKEN, bd=2, width=10, bg=color_entry2)
         self.label_data.grid(row=1, column=1, padx=10)
+
+        if dados_orc.aparelho_na_oficina == 2:
+            self.orc_dias.insert(0, self.retornaFaltaDias(dados_orc.data_garantia))
+            self.orc_dias.config(state=DISABLED)
+            self.label_data.config(text=dados_orc.data_garantia.strftime('%d/%m/%Y'))
 
         labelframe_operador_os = LabelFrame(frame_princ_os1, text="Operador")
         labelframe_operador_os.grid(row=0, column=3, ipady=3, padx=10, sticky=W)
@@ -4472,39 +4487,46 @@ class Castelo:
 
 
         else:
-            nova_os = os.Os('', '', '', '', '', '', '', None, '', '', '', None, None, '', None, None, '', '',
-                            codigo1,
-                            codigo2,
-                            codigo3, codigo4, codigo5, codigo6, codigo7, codigo8, codigo9, descr1, descr2, descr3,
-                            descr4, descr5, descr6, descr7, descr8, descr9, desconto, comentario1, comentario2,
-                            comentario3, mao_obra, qtd1, qtd2, qtd3, qtd4, qtd5, qtd6, qtd7, qtd8, qtd9, val_uni1,
-                            val_uni2, val_uni3, val_uni4, val_uni5, val_uni6, val_uni7, val_uni8, val_uni9,
-                            val_tot1,
-                            val_tot2, val_tot3, val_tot4, val_tot5, val_tot6, val_tot7, val_tot8, val_tot9, cp1,
-                            cp2,
-                            cp3, cp4, cp5, cp6, cp7, cp8, cp9, cp_total, 0, total, defeitos, cheque, ccredito, cdebito,
-                            pix,
-                            dinheiro,
-                            pag_outros, obs_pagamento1,
-                            obs_pagamento2, obs_pagamento3, data_garantia, 0, 0, '', 0, None, 0, '')
             repositorio = os_repositorio.Os_repositorio()
-            repositorio.editar_orcamento(self.num_os, nova_os, 5, sessao)
-            sessao.commit()
-            self.saidaDeOs(jan, jan1)
-            self.popularOsConserto()
+            osEdit = repositorio.listar_os_id(self.num_os, sessao)
+            if osEdit.status == 'PRONTO' or osEdit.status == 'SEM CONSERTO':
+                nova_os = os.Os('', '', '', '', '', '', '', None, '', '', '', None, None, '', None, None, '', '',
+                                codigo1,
+                                codigo2,
+                                codigo3, codigo4, codigo5, codigo6, codigo7, codigo8, codigo9, descr1, descr2, descr3,
+                                descr4, descr5, descr6, descr7, descr8, descr9, desconto, comentario1, comentario2,
+                                comentario3, mao_obra, qtd1, qtd2, qtd3, qtd4, qtd5, qtd6, qtd7, qtd8, qtd9, val_uni1,
+                                val_uni2, val_uni3, val_uni4, val_uni5, val_uni6, val_uni7, val_uni8, val_uni9,
+                                val_tot1,
+                                val_tot2, val_tot3, val_tot4, val_tot5, val_tot6, val_tot7, val_tot8, val_tot9, cp1,
+                                cp2,
+                                cp3, cp4, cp5, cp6, cp7, cp8, cp9, cp_total, 0, total, defeitos, cheque, ccredito, cdebito,
+                                pix,
+                                dinheiro,
+                                pag_outros, obs_pagamento1,
+                                obs_pagamento2, obs_pagamento3, data_garantia, 0, 0, '', 0, None, 0, '')
+
+                repositorio.editar_orcamento(self.num_os, nova_os, 5, sessao)
+                sessao.commit()
+                self.saidaDeOs(jan, jan1)
+                self.popularOsConserto()
+                sessao.close()
+            else:
+                messagebox.showinfo(title="ERRO", message="Só poderá dar saída no Aparelho se seu status estiver como "
+                                                          "'PRONTO' ou 'SEM CONCERTO!")
             # except:
             # messagebox.showinfo(title="ERRO", message="ERRO")
             # finally:
-            sessao.close()
+            #sessao.close()
 
     # -------------------------------------------##--------------------------##------------------------------
-    def retornaGarantia(self, data1):
+    def retornaGarantia(self, data1, status):
         mdate = datetime.now().strftime('%d/%m/%Y')
         rdate = data1.strftime('%d/%m/%Y')
         mdate1 = datetime.strptime(mdate, "%d/%m/%Y").date()
         rdate1 = datetime.strptime(rdate, "%d/%m/%Y").date()
         delta = (rdate1 - mdate1).days
-        if delta < 0:
+        if delta < 0 or status == 'SEM CONSERTO':
             return 'NÃO'
         else:
             return 'SIM'
@@ -4564,7 +4586,7 @@ class Castelo:
                 self.tree_ap_entr.insert("", "end",
                                          values=(
                                              oss.os_saida, oss.data_saida.strftime('%d/%m/%Y'), cliente_os.nome, oss.equipamento, oss.marca,
-                                             oss.modelo, "Orçamento", oss.status, self.retornaGarantia(oss.data_garantia),
+                                             oss.modelo,  self.converteOrc(oss.aparelho_na_oficina), oss.status, self.retornaGarantia(oss.data_garantia, oss.status),
                                              oss.data_garantia.strftime('%d/%m/%Y'),
                                              self.insereTotalConvertido(oss.total),
                                              oss.tecnico, oss.operador, oss.defeito, oss.n_serie, oss.chassi,
@@ -4587,7 +4609,7 @@ class Castelo:
                 cliente_os = repositorio_cliente.listar_cliente_id(i.cliente_id, sessao)
                 tree_ap_entr.insert("", "end",
                                     values=(i.os_saida, i.data_saida.strftime('%d/%m/%Y'), cliente_os.nome, i.equipamento, i.marca,
-                                            i.modelo, "Orçamento", i.status, self.retornaGarantia(i.data_garantia),
+                                            i.modelo,  self.converteOrc(i.aparelho_na_oficina), i.status, self.retornaGarantia(i.data_garantia, i.status),
                                             i.data_garantia.strftime('%d/%m/%Y'),
                                             self.insereTotalConvertido(i.total),
                                             i.tecnico, i.operador, i.defeito, i.n_serie, i.chassi,
@@ -4598,7 +4620,7 @@ class Castelo:
                 cliente_os = repositorio_cliente.listar_cliente_id(i.cliente_id, sessao)
                 tree_ap_entr.insert("", "end",
                                     values=(i.os_saida, i.data_saida.strftime('%d/%m/%Y'), cliente_os.nome, i.equipamento, i.marca,
-                                            i.modelo, "Orçamento", i.status, self.retornaGarantia(i.data_garantia),
+                                            i.modelo,  self.converteOrc(i.aparelho_na_oficina), i.status, self.retornaGarantia(i.data_garantia, i.status),
                                             i.data_garantia.strftime('%d/%m/%Y'),
                                             self.insereTotalConvertido(i.total),
                                             i.tecnico, i.operador, i.defeito, i.n_serie, i.chassi,
@@ -4623,7 +4645,7 @@ class Castelo:
                 cliente_os = repositorio_cliente.listar_cliente_id(i.cliente_id, sessao)
                 self.tree_ap_entr.insert("", "end",
                                          values=(i.os_saida, i.data_saida.strftime('%d/%m/%Y'), cliente_os.nome, i.equipamento, i.marca,
-                                                 i.modelo, "Orçamento", i.status, self.retornaGarantia(i.data_garantia),
+                                                 i.modelo, self.converteOrc(i.aparelho_na_oficina), i.status, self.retornaGarantia(i.data_garantia, i.status),
                                                  i.data_garantia.strftime('%d/%m/%Y'),
                                                  self.insereTotalConvertido(i.total),
                                                  i.tecnico, i.operador, i.defeito, i.n_serie, i.chassi, i.data_entrada.strftime('%d/%m/%Y'),
@@ -4633,7 +4655,7 @@ class Castelo:
                 cliente_os = repositorio_cliente.listar_cliente_id(i.cliente_id, sessao)
                 self.tree_ap_entr.insert("", "end",
                                          values=(i.os_saida, i.data_saida.strftime('%d/%m/%Y'), cliente_os.nome, i.equipamento, i.marca,
-                                                 i.modelo, "Orçamento", i.status, self.retornaGarantia(i.data_garantia),
+                                                 i.modelo,  self.converteOrc(i.aparelho_na_oficina), i.status, self.retornaGarantia(i.data_garantia, i.status),
                                                  i.data_garantia.strftime('%d/%m/%Y'),
                                                  self.insereTotalConvertido(i.total),
                                                  i.tecnico, i.operador, i.defeito, i.n_serie, i.chassi,
@@ -4657,7 +4679,7 @@ class Castelo:
             if self.count % 2 == 0:
                 self.tree_ap_entr.insert("", "end",
                                          values=(i.os_saida, i.data_saida.strftime('%d/%m/%Y'), i.nome, i.equipamento, i.marca,
-                                                 i.modelo, "Orçamento", i.status, self.retornaGarantia(i.data_garantia),
+                                                 i.modelo,  self.converteOrc(i.aparelho_na_oficina), i.status, self.retornaGarantia(i.data_garantia, i.status),
                                                  i.data_garantia.strftime('%d/%m/%Y'),
                                                  self.insereTotalConvertido(i.total),
                                                  i.tecnico, i.operador, i.defeito, i.n_serie, i.chassi,
@@ -4667,7 +4689,7 @@ class Castelo:
             else:
                 self.tree_ap_entr.insert("", "end",
                                          values=(i.os_saida, i.data_saida.strftime('%d/%m/%Y'), i.nome, i.equipamento, i.marca,
-                                                 i.modelo, "Orçamento", i.status,self.retornaGarantia(i.data_garantia),
+                                                 i.modelo,  self.converteOrc(i.aparelho_na_oficina), i.status,self.retornaGarantia(i.data_garantia, i.status),
                                                  i.data_garantia.strftime('%d/%m/%Y'),
                                                  self.insereTotalConvertido(i.total),
                                                  i.tecnico, i.operador, i.defeito, i.n_serie, i.chassi,
@@ -4767,6 +4789,13 @@ class Castelo:
                 sessao.close()
             else:
                 pass
+    def converteOrc(self, tipo):
+        if tipo == 1:
+            return 'ORÇAMENTO'
+        elif tipo == 2:
+            return 'GAR. DE SERVIÇO'
+        else:
+            return 'GAR. DE FÁBRICA'
 
     def janelaAbrirOsEntregue(self):
 
@@ -4901,7 +4930,7 @@ class Castelo:
         Label(labelframe_os, text="Tipo:", fg=color_fg_labels2, font=font_dados2, bg=color_frame).grid(row=4, column=0,
                                                                                                        sticky=E,
                                                                                                        padx=5)
-        Label(labelframe_os, text="ORÇAMENTO", fg=color_fg_labels, font=font_dados2, bg=color_frame).grid(row=4,
+        Label(labelframe_os, text=self.converteOrc(os_dados.aparelho_na_oficina), fg=color_fg_labels, font=font_dados2, bg=color_frame).grid(row=4,
                                                                                                           column=1,
                                                                                                           sticky=W)
         Label(labelframe_os, text="Operador:", fg=color_fg_labels2,
@@ -5057,7 +5086,7 @@ class Castelo:
         Button(frame_os_buttons, text="Fechar", wraplength=50, height=2, width=7,
                bg="#BEC7C7", command=jan.destroy).grid(row=2, column=0, ipadx=20)
 
-        if self.retornaGarantia(os_dados.data_garantia) == 'SIM':
+        if self.retornaGarantia(os_dados.data_garantia, os_dados.status) == 'SIM':
             button_nova_os.config(state=NORMAL)
 
         def abreCliente(id):

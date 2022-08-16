@@ -282,7 +282,7 @@ class OSSaida(Base):
     loja = Column(String(50))
     garantia_compl = Column(Integer)
     data_compra = Column(Date)
-    aparelho_na_oficina = Column(Integer)
+    aparelho_na_oficina = Column(Integer) #1-orçamento  2-Garantia  3-Gar. Fabrica
     data_saida = Column(Date)
     hora_saida = Column(String(10))
     os_saida = Column(Integer)

@@ -610,3 +610,18 @@ def popularListBox():
 
 self.listagem_label_frame.configure(height=300, width=400)
 self.listagem_label_frame.grid_propagate(0)
+
+
+def retornaGarantia(self, data1, status):
+    mdate = datetime.now().strftime('%d/%m/%Y')
+    rdate = data1.strftime('%d/%m/%Y')
+    mdate1 = datetime.strptime(mdate, "%d/%m/%Y").date()
+    rdate1 = datetime.strptime(rdate, "%d/%m/%Y").date()
+    delta = (rdate1 - mdate1).days
+    if delta < 0 or status == 'SEM CONSERTO':
+        return 'NÃO'
+    else:
+        return 'SIM'
+
+self.orc_dias
+self.label_data
