@@ -598,18 +598,32 @@ def popularListBox():
         with open('aparelhos.txt', 'r', encoding='utf8') as aparelhos_txt:
             for i in aparelhos_txt:
                 if i != "\n":
+                    i = i.rstrip('\n')
                     list_aparelhos.append(i)
         with open('tecnicos.txt', 'r', encoding='utf8') as tecnicos_txt:
             for i in tecnicos_txt:
                 if i != "\n":
+                    i = i.rstrip('\n')
                     list_tecnicos.append(i)
         with open('marcas.txt', 'r', encoding='utf8') as marcas_txt:
             for i in marcas_txt:
                 if i != "\n":
+                    i = i.rstrip('\n')
                     list_marcas.append(i)
+with open('departamento.txt', 'r', encoding='utf8') as departamento_txt:
+    for i in departamento_txt:
+        if i != "\n":
+            i = i.rstrip('\n')
+            list_departamento.append(i)
+with open('marcas_est.txt', 'r', encoding='utf8') as marcas_est_txt:
+    for i in marcas_est_txt:
+        if i != "\n":
+            i = i.rstrip('\n')
+            list_marca_est.append(i)
 
 self.listagem_label_frame.configure(height=300, width=400)
 self.listagem_label_frame.grid_propagate(0)
+
 
 
 def retornaGarantia(self, data1, status):
@@ -625,3 +639,13 @@ def retornaGarantia(self, data1, status):
 
 self.orc_dias
 self.label_data
+
+labelframe_os = LabelFrame(frame_princ_jan_os, text="Ordem de Serviço", fg=self.color_fg_label, bg=color_frame)
+        labelframe_os.grid(row=0, column=1, padx=15, rowspan=4, sticky=N)
+        labelframe_os.configure(height=350, width=220)
+        labelframe_os.grid_propagate(0)
+
+        repositorio_revend = revendedor_repositorio.RevendedorRepositorio()
+        revendedores = repositorio_revend.listar_revendedores(sessao)
+        for i in revendedores:
+            lista_revendedor.append(i.Empresa)

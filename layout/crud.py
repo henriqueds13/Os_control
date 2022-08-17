@@ -1003,7 +1003,13 @@ class Castelo:
         self.frame_nome_jan_estoque.pack(fill=X)
         Label(self.frame_nome_jan_estoque, text="Controle de Estoque").pack()
 
-        listaSetores = ["Todos", "Roçadeiras", "Cortador de Grama", "Motoserras"]
+        listaSetores = []
+
+        with open('departamento.txt', 'r', encoding='utf8') as departamento_txt:
+            for i in departamento_txt:
+                if i != "\n":
+                    i = i.rstrip('\n')
+                    listaSetores.append(i)
 
         self.frame_buttons_prod_est = Frame(self.frame_estoque, bg=color_est2, relief='raised', borderwidth=1)
         self.frame_buttons_prod_est.pack(fill=X, pady=3)
@@ -2044,8 +2050,8 @@ class Castelo:
         jan.grab_set()
 
     def janelaCriarOs(self, cliente, os_id, opt):
-        lista_aparelhos = ["ROÇADEIRA", "LAV.ALTA PRESSÃO", "CORT.GRAMA ElÉTRICO"]
-        lista_marca = ["KARCHER", "STIHL", "TRAPP"]
+        lista_aparelhos = []
+        lista_marca = []
         lista_tecnicos = []
         global radio_loc_text_os
         radio_loc_text_os = IntVar()
@@ -2056,7 +2062,20 @@ class Castelo:
         with open('tecnicos.txt', 'r', encoding='utf8') as tecnicos_txt:
             for i in tecnicos_txt:
                 if i != "\n":
+                    i = i.rstrip('\n')
                     lista_tecnicos.append(i)
+
+        with open('aparelhos.txt', 'r', encoding='utf8') as aparelhos_txt:
+            for i in aparelhos_txt:
+                if i != "\n":
+                    i = i.rstrip('\n')
+                    lista_aparelhos.append(i)
+
+        with open('marcas.txt', 'r', encoding='utf8') as marcas_txt:
+            for i in marcas_txt:
+                if i != "\n":
+                    i = i.rstrip('\n')
+                    lista_marca.append(i)
 
         jan = Toplevel()
 
@@ -2299,6 +2318,7 @@ class Castelo:
         self.os_garantiacompl = Entry(labelframe_garantia, width=18, validate='all',
                                       validatecommand=(testa_garantia, '%P'), state='disabled')
         self.os_garantiacompl.grid(row=1, column=3, sticky=W)
+        self.data_garantia_saida = None
 
         if opt == 2:
             def encontraIndexLista(lista, obj):  # Metodo para poder capturar valor dos combobox no BD
@@ -2450,9 +2470,9 @@ class Castelo:
                 data_compra = self.os_datacompra.get()
                 nfe = self.insereZero(self.os_notafiscal.get())
                 cli_id = self.os_idcliente
-                data_entrada = self.data_atual
-                hora_entrada = self.data_atual.strftime('%H:%M')
-                data_orc = self.data_atual + timedelta(int(dias))
+                data_entrada = datetime.now()
+                hora_entrada = datetime.now().strftime('%H:%M')
+                data_orc = datetime.now()+ timedelta(int(dias))
                 tipo = radio_loc_text_os.get()
                 data_garantia = self.data_garantia_saida
 
@@ -2879,7 +2899,7 @@ class Castelo:
                 self.os_status.configure(text=os_dados.status)
                 self.os_status_most.configure(text=os_dados.status)
             if status == 'PRONTO' or status == 'SEM CONSERTO':
-                self.label_conclusao.config(text=self.data_atual.strftime('%d/%m/%Y'))
+                self.label_conclusao.config(text=datetime.now().strftime('%d/%m/%Y'))
             else:
                 self.label_conclusao.config(text='')
 
@@ -3925,7 +3945,7 @@ class Castelo:
         self.orc_dias.grid(row=1, column=0, padx=10)
         self.orc_dias.insert(0, 90)
         Label(frame_os_su2, text="Garantia até:").grid(row=0, column=1, padx=10)
-        self.label_data = Label(frame_os_su2, text=self.alteraData(int(self.orc_dias.get()), self.data_atual, 1),
+        self.label_data = Label(frame_os_su2, text=self.alteraData(int(self.orc_dias.get()), datetime.now(), 1),
                            relief=SUNKEN, bd=2, width=10, bg=color_entry2)
         self.label_data.grid(row=1, column=1, padx=10)
 
@@ -4357,7 +4377,7 @@ class Castelo:
             alteraDataOr()
 
         def alteraDataOr():
-            self.label_data.configure(text=self.alteraData(int(self.orc_dias.get()), self.data_atual, 1))
+            self.label_data.configure(text=self.alteraData(int(self.orc_dias.get()), datetime.now(), 1))
 
         self.orc_dias.bind('<Return>', alteraDataOrc)
 
@@ -4905,7 +4925,9 @@ class Castelo:
         ap_id_os.config(validate='all', validatecommand=(impede_escrita, '%P'))
 
         labelframe_os = LabelFrame(frame_princ_jan_os, text="Ordem de Serviço", fg=self.color_fg_label, bg=color_frame)
-        labelframe_os.grid(row=0, column=1, padx=15, rowspan=2, ipadx=3, sticky=N, ipady=10)
+        labelframe_os.grid(row=0, column=1, padx=15, rowspan=2, ipadx=10, sticky=N, ipady=10)
+        labelframe_os.configure(height=255, width=200)
+        labelframe_os.grid_propagate(0)
         Label(labelframe_os, text=os_dados.os_saida, fg="red", font=('Verdana', '24', 'bold'), bg=color_frame).grid(
             row=0, column=0,
             columnspan=2,
@@ -5036,7 +5058,7 @@ class Castelo:
         frame_botao_ad = Frame(frame_princ_jan_os, bg=color_frame)
         frame_botao_ad.grid(row=2, column=1, sticky=E, padx=35)
         Button(frame_botao_ad, text="Ordem de Serviço", wraplength=80, height=2, width=7,
-               bg="#BEC7C7", command=lambda: [self.janelaOrçamentoEntregue(self.dado_os_entr[0])]).pack(side=RIGHT, ipadx=20, padx=5)
+               bg="#BEC7C7", command=lambda: [self.janelaOrçamentoEntregue(self.dado_os_entr[0])]).pack(side=RIGHT, ipadx=20, padx=34)
 
         frame_os_final = Frame(frame_princ_jan_os, bg=color_frame)
         frame_os_final.grid(row=3, column=0, sticky=W, columnspan=2)
@@ -5620,12 +5642,30 @@ class Castelo:
     def janelaCadastrarProduto(self):
 
         font_fg_labels = ("Verdana", "12", "")
-        lista_categ = ["Roçadeiras", "Cortador de Grama", "Motoserras"]
-        lista_marca = ["Kawashima", "Stihl", "Raisman"]
         un_medida = ["UN", "METRO", "Kg"]
         layout_Princ = '#9AEBA3'
         layout_Princ1 = '#45C4B0'
         layout_entry = '#DAFDBA'
+        lista_categ = []
+        lista_marca = []
+        lista_revendedor = []
+
+        with open('departamento.txt', 'r', encoding='utf8') as departamento_txt:
+            for i in departamento_txt:
+                if i != "\n":
+                    i = i.rstrip('\n')
+                    lista_categ.append(i)
+
+        with open('marcas_est.txt', 'r', encoding='utf8') as marcas_est_txt:
+            for i in marcas_est_txt:
+                if i != "\n":
+                    i = i.rstrip('\n')
+                    lista_marca.append(i)
+
+        repositorio_revend = revendedor_repositorio.RevendedorRepositorio()
+        revendedores = repositorio_revend.listar_revendedores(sessao)
+        for i in revendedores:
+            lista_revendedor.append(i.Empresa)
 
         jan = Toplevel(bg=layout_Princ1)
 
@@ -5718,7 +5758,7 @@ class Castelo:
                                     width=17, style='s1.TCombobox')
         option_marca.grid(row=4, column=1, sticky=W, padx=20)
         Label(subframe_est_dados1, text="Revendedor", bg=layout_Princ).grid(row=5, column=3, sticky=E)
-        option_revendedor = ttk.Combobox(subframe_est_dados1, values=self.lista_revendedor, state="readonly", width=17,
+        option_revendedor = ttk.Combobox(subframe_est_dados1, values=lista_revendedor, state="readonly", width=17,
                                          style='s1.TCombobox')
         option_revendedor.grid(row=5, column=4, sticky=W, padx=20)
         Label(subframe_est_dados1, text="Localização", bg=layout_Princ).grid(row=5, column=0, sticky=W, padx=10)
@@ -5797,6 +5837,7 @@ class Castelo:
                 caixa_peca = self.formataParaFloat(caixa_peca_entry.get())
                 revendedor = option_revendedor.get()
 
+
                 novo_produto = produto.Produto(id_produto, descricao, qtd, marca, valor_compra, valor_venda, obs,
                                                localizacao, categoria, un_medida, estoque_min, caixa_peca, revendedor,
                                                utilizado)
@@ -5821,14 +5862,31 @@ class Castelo:
                 pass
 
         font_fg_labels = ("Verdana", "12", "")
-        lista_categ = ["Roçadeiras", "Cortador de Grama", "Motoserras"]
-        lista_marca = ["Kawashima", "Stihl", "Raisman"]
+        lista_categ = []
+        lista_marca = []
         un_medida = ["UN", "METRO", "Kg"]
-        lista_revendedor = ["1", "2", "3", "4"]
+        lista_revendedor = []
         bg_frame1 = '#9FC131'
         bg_frame2 = '#DBF227'
         bg_entry = '#D6D58E'
         jan = Toplevel(bg=bg_frame1)
+
+        with open('departamento.txt', 'r', encoding='utf8') as departamento_txt:
+            for i in departamento_txt:
+                if i != "\n":
+                    i = i.rstrip('\n')
+                    lista_categ.append(i)
+
+        with open('marcas_est.txt', 'r', encoding='utf8') as marcas_est_txt:
+            for i in marcas_est_txt:
+                if i != "\n":
+                    i = i.rstrip('\n')
+                    lista_marca.append(i)
+
+        repositorio_revend = revendedor_repositorio.RevendedorRepositorio()
+        revendedores = repositorio_revend.listar_revendedores(sessao)
+        for i in revendedores:
+            lista_revendedor.append(i.Empresa)
 
         # Centraliza a janela
         x_cordinate = int((self.w / 2) - (1000 / 2))
@@ -5927,7 +5985,7 @@ class Castelo:
         option_marca.current(encontraIndexLista(lista_marca, produto_dados.marca))
         option_marca.grid(row=4, column=1, sticky=W, padx=20)
         Label(subframe_est_dados1, text="Revendedor", bg=bg_frame2).grid(row=5, column=3, sticky=E)
-        option_revendedor = ttk.Combobox(subframe_est_dados1, values=self.lista_revendedor, state="readonly", width=17,
+        option_revendedor = ttk.Combobox(subframe_est_dados1, values=lista_revendedor, state="readonly", width=17,
                                          style='editProd.TCombobox')
         option_revendedor.set(dado_prod[8])
         option_revendedor.grid(row=5, column=4, sticky=W, padx=20)
@@ -6043,13 +6101,30 @@ class Castelo:
                 pass
 
         font_fg_labels = ("Verdana", "12", "")
-        lista_categ = ["Roçadeiras", "Cortador de Grama", "Motoserras"]
-        lista_marca = ["Kawashima", "Stihl", "Raisman"]
+        lista_categ = []
+        lista_marca = []
         un_medida = ["UN", "METRO", "Kg"]
-        lista_revendedor = ["1", "2", "3", "4"]
+        lista_revendedor = []
         layout_Princ = '#9AEBA3'
         layout_Princ1 = '#45C4B0'
         layout_entry = '#DAFDBA'
+
+        with open('departamento.txt', 'r', encoding='utf8') as departamento_txt:
+            for i in departamento_txt:
+                if i != "\n":
+                    i = i.rstrip('\n')
+                    lista_categ.append(i)
+
+        with open('marcas_est.txt', 'r', encoding='utf8') as marcas_est_txt:
+            for i in marcas_est_txt:
+                if i != "\n":
+                    i = i.rstrip('\n')
+                    lista_marca.append(i)
+
+        repositorio_revend = revendedor_repositorio.RevendedorRepositorio()
+        revendedores = repositorio_revend.listar_revendedores(sessao)
+        for i in revendedores:
+            lista_revendedor.append(i.Empresa)
 
         jan = Toplevel(bg=layout_Princ1)
 
@@ -6152,7 +6227,7 @@ class Castelo:
         Label(subframe_est_dados1, text="Revendedor", bg=layout_Princ).grid(row=5, column=3, sticky=E)
         option_revendedor = ttk.Combobox(subframe_est_dados1, values=lista_revendedor,
                                          state="readonly", width=17, style='s3.TCombobox')
-        option_revendedor.current()
+        option_revendedor.set(dado_prod[8])
         option_revendedor.grid(row=5, column=4, sticky=W, padx=20)
         Label(subframe_est_dados1, text="Localização", bg=layout_Princ).grid(row=5, column=0, sticky=W, padx=10)
         localizacao_entry = Entry(subframe_est_dados1, width=20, textvariable=osVar4, bg=layout_entry)
@@ -6237,7 +6312,7 @@ class Castelo:
                     un_medida = option_medida.get()
                     estoque_min = estoque_min_entry.get()
                     caixa_peca = self.formataParaFloat(caixa_peca_entry.get())
-                    revendedor = int(option_revendedor.get())
+                    revendedor = option_revendedor.get()
 
                     novo_produto = produto.Produto(id_produto, descricao, qtd, marca, valor_compra, valor_venda,
                                                    obs,
@@ -6261,13 +6336,13 @@ class Castelo:
         if res:
             try:
                 item_selecionado = self.tree_est_prod.selection()[0]
-                id_Produto = self.tree_est_prod.item(item_selecionado, "values")[8]
+                id_Produto = self.tree_est_prod.item(item_selecionado, "values")[9]
                 repositorio = produto_repositorio.ProdutoRepositorio()
                 repositorio.remover_produto(id_Produto, sessao)
                 sessao.commit()
                 self.tree_est_prod.delete(item_selecionado)
                 self.mostrarMensagem("1", "Cadastro Excluído com Sucesso!")
-                self.popular()
+                self.popularProdutoEstoque()
 
             except:
                 messagebox.showinfo(title="ERRO", message="Selecione um elemento a ser deletado")
@@ -8385,6 +8460,8 @@ class Castelo:
         list_tecnicos = []
         list_marcas = []
         list_mao_obra = []
+        list_departamento = []
+        list_marca_est = []
 
         with open('mao_de_obra.txt', 'rb') as mao_obra_txt:
             list_mao_obra = pickle.load(mao_obra_txt)
@@ -8404,6 +8481,16 @@ class Castelo:
                 if i != "\n":
                     i = i.rstrip('\n')
                     list_marcas.append(i)
+        with open('departamento.txt', 'r', encoding='utf8') as departamento_txt:
+            for i in departamento_txt:
+                if i != "\n":
+                    i = i.rstrip('\n')
+                    list_departamento.append(i)
+        with open('marcas_est.txt', 'r', encoding='utf8') as marcas_est_txt:
+            for i in marcas_est_txt:
+                if i != "\n":
+                    i = i.rstrip('\n')
+                    list_marca_est.append(i)
 
         # --------------------------------------------------------------------------------------
 
@@ -8702,12 +8789,14 @@ class Castelo:
         aba_empresa = Frame(abas_config)
         aba_autorizada = Frame(abas_config)
         aba_mao_obra_status = Frame(abas_config)
+        aba_departamento = Frame(abas_config)
         aba_operadores = Frame(abas_config)
         aba_Mensagens = Frame(abas_config)
 
         abas_config.add(aba_empresa, text='Empresa')
         abas_config.add(aba_autorizada, text='Serviço Autorizado')
         abas_config.add(aba_mao_obra_status, text='M.O / Status')
+        abas_config.add(aba_departamento, text='Departamento')
         abas_config.add(aba_operadores, text='Operadores')
         abas_config.add(aba_Mensagens, text='Mensagens')
 
@@ -9108,6 +9197,148 @@ class Castelo:
             jan.grab_set()
 
         popularListBox()
+
+        #Aba Departamento ----------------------------------------------------
+
+        frame_princ_departamento1 = Frame(aba_departamento)
+        frame_princ_departamento1.grid(row=0, column=0)
+        frame_princ_departamento2 = Frame(aba_departamento)
+        frame_princ_departamento2.grid(row=0, column=1)
+
+        frame_departamento = Frame(frame_princ_departamento1)
+        frame_departamento.pack(fill=BOTH, padx=10, pady=0, ipadx=10)
+        frame_departamento1 = Frame(frame_princ_departamento1)
+        frame_departamento1.pack(fill=BOTH, padx=10, pady=0, ipady=10, ipadx=10)
+
+        frame_departamento3 = Frame(frame_princ_departamento2)
+        frame_departamento3.pack()
+        Label(frame_departamento3, bg='Yellow', height=20, width=25).pack(padx=10)
+
+        labelF_departamento = LabelFrame(frame_departamento, text='Setor')
+        labelF_departamento.grid(row=0, column=1, padx=5, sticky=NW, ipady=5, pady=5)
+        labelF_marca_est = LabelFrame(frame_departamento1, text='Marca-Estoque')
+        labelF_marca_est.grid(row=0, column=0, ipady=5, padx=5, pady=5)
+
+
+        text_departamento = Listbox(labelF_departamento, height=7, width=31)
+        text_departamento.grid(row=0, column=0, padx=5, pady=5)
+        subframe_departamento = Frame(labelF_departamento)
+        subframe_departamento.grid(row=0, column=1, sticky=NW)
+
+        button_conf_departamento = Button(subframe_departamento, text='Novo Setor', width=10, wraplength=50,
+                                     command=lambda: [janelaInsereDadosDep(1)])
+        button_conf_departamento.grid(row=0, column=0, padx=10, sticky=W)
+        button_del_departamento = Button(subframe_departamento, text='Excluir Setor', width=10, wraplength=50,
+                                    command=lambda: [excluiDadosDep(1)])
+        button_del_departamento.grid(row=1, column=0, pady=5)
+
+        text_marca_est = Listbox(labelF_marca_est, height=7, width=31)
+        text_marca_est.grid(row=0, column=0, padx=5, pady=5)
+        subframe_marca_est = Frame(labelF_marca_est)
+        subframe_marca_est.grid(row=0, column=1, sticky=NW)
+
+        button_conf_marca_est = Button(subframe_marca_est, text='Nova Marca', width=10, wraplength=50,
+                                      command=lambda: [janelaInsereDadosDep(2)])
+        button_conf_marca_est.grid(row=0, column=0, padx=10, sticky=W)
+        button_del_marca_est = Button(subframe_marca_est, text='Excluir Marca', width=10, wraplength=50,
+                                     command=lambda: [excluiDadosDep(2)])
+        button_del_marca_est.grid(row=1, column=0, pady=5)
+
+
+        def popularListBoxDep():
+
+            text_departamento.delete(0, END)
+            text_marca_est.delete(0, END)
+            for i in list_departamento:
+                if i != '\n':
+                    i = i.rstrip('\n')
+                    text_departamento.insert(END, i)
+            for i in list_marca_est:
+                if i != '\n':
+                    i = i.rstrip('\n')
+                    text_marca_est.insert(END, i)
+
+        def excluiDadosDep(num):
+
+            if num == 1:
+                dados_conf = str(text_departamento.get(ACTIVE))
+                list_departamento.remove(dados_conf)
+                with open('departamento.txt', 'w', encoding='utf8') as departamento_txt:
+                    departamento_txt.truncate(0)
+                    for i in list_departamento:
+                        if i != '\n':
+                            i = i.rstrip('\n')
+                            departamento_txt.write(f'{i}\n')
+            elif num == 2:
+                dados_conf = str(text_marca_est.get(ACTIVE))
+                list_marca_est.remove(dados_conf)
+                with open('marcas_est.txt', 'w', encoding='utf8') as marcas_est_txt:
+                    marcas_est_txt.truncate(0)
+                    for i in list_marca_est:
+                        if i != '\n':
+                            i = i.rstrip('\n')
+                            marcas_est_txt.write(f'{i}\n')
+
+            popularListBoxDep()
+
+        def janelaInsereDadosDep(num):
+            jan = Toplevel()
+
+            # Centraliza a janela
+            x_cordinate = int((self.w / 2) - (400 / 2))
+            y_cordinate = int((self.h / 2) - (90 / 2))
+            jan.geometry("{}x{}+{}+{}".format(400, 90, x_cordinate, y_cordinate))
+
+            if num == 1:
+                label_text = 'Digite o ome do Setor:'
+            elif num == 2:
+                label_text = 'Digite a Nova Marca:'
+
+            frame_localizar_jan1 = Frame(jan)
+            frame_localizar_jan1.pack(padx=10, fill=X)
+            Label(frame_localizar_jan1, text=label_text).pack(side=LEFT)
+
+            frame_localizar_jan2 = Frame(jan)
+            frame_localizar_jan2.pack(pady=10, fill=X)
+            entry_locali = Entry(frame_localizar_jan2, width=30, relief="sunken", borderwidth=2, validate='all',
+                                 validatecommand=(testa_texto1_20, '%P'), textvariable=osVar31)
+            entry_locali.pack(side=LEFT, padx=10)
+            localButton = Button(frame_localizar_jan2, text="Inserir", width=10, wraplength=70,
+                                 underline=0, font=('Verdana', '9', 'bold'), height=2,
+                                 command=lambda: [InsereDadosListaDep(num, jan)])
+            localButton.pack(side=LEFT, padx=5)
+            Button(frame_localizar_jan2, text="Fechar", width=10, wraplength=70,
+                   underline=0, font=('Verdana', '9', 'bold'), height=2, command=jan.destroy).pack(side=LEFT, padx=5)
+            entry_locali.focus()
+
+            def InsereDadosListaDep(num, jan):
+
+                if num == 1:
+                    list_departamento.append(entry_locali.get())
+                    with open('departamento.txt', 'r+', encoding='utf8') as departamento_txt:
+                        departamento_txt.truncate(0)
+                        for i in list_departamento:
+                            if i != '\n':
+                                i = i.rstrip('\n')
+                                departamento_txt.write(f'{i}\n')
+                elif num == 2:
+                    list_marca_est.append(entry_locali.get())
+                    with open('marcas_est.txt', 'r+', encoding='utf8') as marcas_est_txt:
+                        marcas_est_txt.truncate(0)
+                        for i in list_marca_est:
+                            if i != '\n':
+                                i = i.rstrip('\n')
+                                marcas_est_txt.write(f'{i}\n')
+                entry_locali.delete(0, END)
+                popularListBoxDep()
+                jan.destroy()
+
+            jan.transient(root2)
+            jan.focus_force()
+            jan.grab_set()
+
+        popularListBoxDep()
+
         # Aba Operadores -----------------------------------------------------
 
         frame_op = Frame(aba_operadores)
