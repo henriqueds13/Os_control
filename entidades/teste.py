@@ -649,3 +649,4 @@ labelframe_os = LabelFrame(frame_princ_jan_os, text="Ordem de Serviço", fg=self
         revendedores = repositorio_revend.listar_revendedores(sessao)
         for i in revendedores:
             lista_revendedor.append(i.Empresa)
+

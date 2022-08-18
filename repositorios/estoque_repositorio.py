@@ -14,7 +14,7 @@ class EstoqueRepositorio():
             revendedor = estoque.revendedor
         novo_estoque = Estoque(est_revend=revendedor, obs1=estoque.obs1, obs2=estoque.obs2, obs3=estoque.obs3,
                                nota=estoque.nota, frete=estoque.frete, tipo_operacao=estoque.tipoOp,
-                               operador=estoque.operador, total=estoque.total, data=None, hora=None)
+                               operador=estoque.operador, total=estoque.total, data=estoque.data, hora=estoque.hora)
         query_estoque.inserir_estoque(novo_estoque, sessao)
 
     def listar_estoques(self, sessao):

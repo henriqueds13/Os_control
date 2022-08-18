@@ -73,6 +73,7 @@ class Cliente(Base):
 
     oss = relationship('OS', back_populates='cliente', cascade='delete')
     oss_saida = relationship('OSSaida', back_populates='cliente_saida', cascade='delete')
+    cliente_conta = relationship('Conta', back_populates='conta_cliente')
 
 
 class OS(Base):
@@ -181,6 +182,8 @@ class OS(Base):
     cliente = relationship('Cliente', back_populates='oss')
 
     produtos = relationship('Produto', secondary='produto_os', back_populates='os_prod')
+
+    os_fin = relationship('OperaçãoLivroCaixa', back_populate='fin_os')
 
 
 class OSSaida(Base):
@@ -330,6 +333,7 @@ class OsVenda(Base):
     operador = Column(Integer)
 
     venda_produto = relationship('ProdutoVenda', back_populates='prod_venda', cascade='delete')
+    venda_fin = relationship('OperaçãoLivroCaixa', back_populate='fin_venda')
 
 
 class Produto(Base):
@@ -415,6 +419,73 @@ class Revendedor(Base):
 
     revend_prod = relationship('Produto', back_populates='prod_revend')
     revend_est = relationship('Estoque', back_populates='est_revend', cascade='delete')
+    revendedor_conta = relationship('Conta', back_populates='conta_revendedor')
+
+class OperaçãoLivroCaixa(Base):
+    __tablename__ = 'operação_livro_caixa'
+    id = Column(Integer, primary_key=True)
+    data = Column(Date)
+    hora = Column(Time)
+    tipo_operação = Column(Integer, nullable=False) # 1=Entrada, 2=Saida
+    historico = Column(String(100), nullable=True)
+    entrada = Column(Integer)
+    saida = Column(Integer)
+    entrada_cp = Column(Integer)
+    saida_cp = Column(Integer)
+    grupo = Column(String(50))
+    sub_grupo = Column(String(50))
+    sub_grupo2 = Column(String(50))
+    cheque = Column(Float)
+    ccredito = Column(Float)
+    cdebito = Column(Float)
+    pix = Column(Float)
+    dinheiro = Column(Float)
+    outros = Column(Float)
+    operador = Column(Integer, nullable=False)
+    id_venda = Column(Integer, ForeignKey('os_venda.id_venda'))
+    id_os = Column(Integer, ForeignKey('ordem_de_servico.id'))
+
+    fin_venda = relationship('Produto', back_populates='venda_fin')
+    fin_os = relationship('OS', back_populates='os_fin')
+
+class LivroCaixa(Base):
+    __tablename__ = 'livro_caixa'
+    id = Column(Integer, primary_key=True)
+    data_abertura = Column(Date)
+    data_fechamento = Column(Date)
+    saldo_cn = Column(Integer)
+    saldo_cp = Column(Integer)
+    cheque = Column(Float)
+    ccredito = Column(Float)
+    cdebito = Column(Float)
+    pix = Column(Float)
+    dinheiro = Column(Float)
+    outros = Column(Float)
+    mes = Column(String(15))
+    ano = Column(Integer)
+    operador = Column(Integer, nullable=False)
+
+class Contas(Base):
+    __tablename__ = 'contas'
+    id = Column(Integer, primary_key=True)
+    cliente_fornecedor = Column(String(50))
+    cliente_id = Column(Integer, ForeignKey('cliente.id'))
+    revendedor_id = Column(Integer, ForeignKey('revendedor.id'))
+    contato = Column(String(50))
+    discriminação = Column(String(50))
+    tipo_doc = Column(String(30))
+    num_doc = Column(Integer)
+    num_os = Column(Integer)
+    os_venda = Column(Integer)
+    data_venc = Column(Date)
+    data_cadastro = Column(Date)
+    valor_cn = Column(Integer)
+    valor_cp = Column(Integer)
+    conta_cliente = relationship('Cliente', back_populates='cliente_conta')
+    conta_revendedor = relationship('Revendedor', back_populates='revendedor_conta')
+    operador = Column(Integer, nullable=False)
+    parcela = Column(String(20))
+    tipo_operação = Column(Integer, nullable=False)  # 1=Entrada, 2=Saida
 
 
 Base.metadata.create_all(engine)

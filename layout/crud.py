@@ -249,6 +249,7 @@ class Castelo:
         barraDeMenus = Menu(master)
         menuArquivo = Menu(barraDeMenus, tearoff=0)
         menuArquivo.add_command(label='Clientes', command=self.abrirJanelaCliente)
+        menuArquivo.add_command(label='Financeiro', command=self.abrirJanelaFinanceiro)
         menuArquivo.add_command(label='Fornecedores', command=lambda: [self.janelaBuscaFornecedor(1)])
         menuArquivo.add_command(label='Orçamento', command=self.abrirJanelaOrçamento)
         menuArquivo.add_command(label='Configurações', command=lambda: [self.janelaPedeSenha(1)])
@@ -1296,6 +1297,227 @@ class Castelo:
         button_vend5.bind('<Leave>', on_leave)
         button_vend6.bind('<Enter>', on_enter)
         button_vend6.bind('<Leave>', on_leave)
+        #Financeiro-----------------------------------------------------------------------------------------------------
+
+        osVarFin1 = StringVar(master)
+
+        def to_uppercase(*args):
+            osVarFin1.set(osVarFin1.get().upper())
+
+        osVarFin1.trace_add('write', to_uppercase)
+
+        osVarFin2 = StringVar(master)
+
+        def to_uppercase(*args):
+            osVarFin2.set(osVarFin2.get().upper())
+
+        osVarFin2.trace_add('write', to_uppercase)
+
+        color_est2 = "#BFBFBF"
+        color_est1 = "#878787"
+        self.frame_financeiro = Frame(self.frame_princ, bg=color_est1)
+        self.frame_nome_jan_financeiro = Frame(self.frame_financeiro, relief='raised', borderwidth=1)
+        self.frame_nome_jan_financeiro.pack(fill=X)
+        Label(self.frame_nome_jan_financeiro, text="Controle de Estoque").pack()
+
+        listaSetores = []
+
+        with open('departamento.txt', 'r', encoding='utf8') as departamento_txt:
+            for i in departamento_txt:
+                if i != "\n":
+                    i = i.rstrip('\n')
+                    listaSetores.append(i)
+
+        self.frame_buttons_prod_financeiro = Frame(self.frame_financeiro, bg=color_est2, relief='raised', borderwidth=1)
+        self.frame_buttons_prod_financeiro.pack(fill=X, pady=3)
+        button_est1 = Button(self.frame_buttons_prod_financeiro, text="Cadastrar Produto", width=15, relief=FLAT,
+                             wraplength=50, bg=color_est2, command=self.janelaCadastrarProduto)
+        button_est1.pack(side=LEFT)
+        ttk.Separator(self.frame_buttons_prod_financeiro, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
+        button_est2 = Button(self.frame_buttons_prod_financeiro, text="Editar Produto", width=15, relief=FLAT,
+                             wraplength=50, bg=color_est2, command=self.janelaEditarProduto)
+        button_est2.pack(side=LEFT)
+        ttk.Separator(self.frame_buttons_prod_financeiro, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
+        button_est3 = Button(self.frame_buttons_prod_financeiro, text="Duplicar Produto", width=15, relief=FLAT,
+                             wraplength=50, bg=color_est2, command=self.janelaClonarProduto)
+        button_est3.pack(side=LEFT)
+        ttk.Separator(self.frame_buttons_prod_financeiro, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
+        button_est4 = Button(self.frame_buttons_prod_financeiro, text="Excluir Produto", width=15, relief=FLAT,
+                             wraplength=50, bg=color_est2, command=self.deletarProduto)
+        button_est4.pack(side=LEFT)
+        ttk.Separator(self.frame_buttons_prod_financeiro, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
+
+        self.frame_pesq_financeiro = Frame(self.frame_financeiro, bg=color_est1)
+        self.frame_pesq_financeiro.pack(fill=X, ipady=5)
+        self.variable_int_financeiro = IntVar()
+        Label(self.frame_pesq_financeiro, text="Código:", bg=color_est1).grid(sticky=W, padx=10, pady=1)
+        Label(self.frame_pesq_financeiro, text="Produto:", bg=color_est1).grid(row=0, column=1, sticky=W, padx=10)
+        Label(self.frame_pesq_financeiro, text="Setor:", bg=color_est1).grid(row=0, column=2, sticky=W, padx=10)
+        self.entry_cod_financ = Entry(self.frame_pesq_financeiro, width=10, relief=SUNKEN, textvariable=osVarEst1)
+        self.entry_cod_financ.grid(row=1, column=0, padx=10)
+        self.entry_descr_financeiro = Entry(self.frame_pesq_financeiro, width=30, relief=SUNKEN, textvariable=osVarEst2)
+        self.entry_descr_financeiro.grid(row=1, column=1, padx=10)
+        self.option_setor_financeiro = ttk.Combobox(self.frame_pesq_financeiro, values=listaSetores, state="readonly")
+        self.option_setor_financeiro.set("Todos")
+        self.option_setor_financeiro.grid(row=1, column=2, padx=10)
+        Button(self.frame_pesq_financeiro, text="!", command=self.popularProdutoEstoque).grid(row=1, column=3, ipadx=10)
+        self.check_pesq_avan_financeiro = Checkbutton(self.frame_pesq_financeiro, text="Busca Avançada", bg=color_est1,
+                                                 variable=self.variable_int_financeiro,
+                                                 onvalue=1, offvalue=0)
+        self.check_pesq_avan_financeiro.grid(row=1, column=4, padx=10)
+
+        self.frame_tree_financeiro = Frame(self.frame_financeiro, bg=color_est1)
+        self.frame_tree_financeiro.pack(fill=X)
+
+        self.scrollbar_fin_h = Scrollbar(self.frame_tree_financeiro, orient=HORIZONTAL)  # Scrollbar da treeview horiz
+
+        self.tree_fin_caixa = ttk.Treeview(self.frame_tree_financeiro,
+                                          columns=(
+                                              'codigo', 'descricao', 'unidade', 'preco', 'categoria', 'setor', 'marca',
+                                              'utilizado',
+                                              'revendedor', 'cod_fabrica'),
+                                          show='headings',
+                                          xscrollcommand=self.scrollbar_fin_h.set,
+                                          selectmode='browse',
+                                          height=20)  # TreeView listagem de produtos em estoque
+
+        self.tree_fin_caixa.column('codigo', width=75, minwidth=50, stretch=False, anchor=CENTER)
+        self.tree_fin_caixa.column('descricao', width=500, minwidth=100, stretch=False)
+        self.tree_fin_caixa.column('unidade', width=75, minwidth=10, stretch=False, anchor=CENTER)
+        self.tree_fin_caixa.column('preco', width=100, minwidth=50, stretch=False)
+        self.tree_fin_caixa.column('categoria', width=200, minwidth=50, stretch=False)
+        self.tree_fin_caixa.column('setor', width=50, minwidth=100, stretch=False, anchor=CENTER)
+        self.tree_fin_caixa.column('marca', width=200, minwidth=50, stretch=False)
+        self.tree_fin_caixa.column('utilizado', width=400, minwidth=10, stretch=False)
+        self.tree_fin_caixa.column('revendedor', width=200, minwidth=10, stretch=False)
+        self.tree_fin_caixa.column('cod_fabrica', width=150, minwidth=50, stretch=False, anchor=CENTER)
+
+        self.tree_fin_caixa.heading('codigo', text='CÓDIGO')
+        self.tree_fin_caixa.heading('descricao', text='PRODUTO')
+        self.tree_fin_caixa.heading('unidade', text='Qtde.')
+        self.tree_fin_caixa.heading('preco', text='PREÇO')
+        self.tree_fin_caixa.heading('categoria', text='CATEGORIA')
+        self.tree_fin_caixa.heading('setor', text='SETOR')
+        self.tree_fin_caixa.heading('marca', text='MARCA')
+        self.tree_fin_caixa.heading('utilizado', text='UTILIZADO')
+        self.tree_fin_caixa.heading('revendedor', text='REVENDEDOR')
+        self.tree_fin_caixa.heading('cod_fabrica', text='ID')
+
+        self.tree_fin_caixa.pack(padx=5)
+        self.scrollbar_fin_h.config(command=self.tree_fin_caixa.xview)
+        self.scrollbar_fin_h.pack(fill=X, padx=5)
+
+        self.popularProdutoEstoque()
+
+        self.tree_fin_caixa.tag_configure('evenrow', background='#828E8C')
+        self.tree_fin_caixa.tag_configure('oddrow', background='#C5D0C1')
+
+        self.tree_fin_caixa.focus_set()
+        children = self.tree_fin_caixa.get_children()
+        if children:
+            self.tree_fin_caixa.focus(children[0])
+            self.tree_fin_caixa.selection_set(children[0])
+
+        self.frame_fin_contas = Frame(self.frame_financeiro, bg=color_est1)
+        self.frame_fin_contas.pack(fill=X)
+        self.frame_buttons_fin_contas = Frame(self.frame_fin_contas, bg=color_est2, relief='raised', borderwidth=1)
+        self.frame_buttons_fin_contas.pack(pady=3, side=LEFT, ipadx=1, fill=X)
+        button_est5 = Button(self.frame_buttons_fin_contas, text=" Entrada Estoque", width=15, relief=FLAT,
+                             wraplength=50, bg=color_est2, command=lambda: [self.janelaEntradaEstoque(1)])
+        button_est5.pack(side=LEFT)
+        ttk.Separator(self.frame_buttons_fin_contas, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
+        button_est6 = Button(self.frame_buttons_fin_contas, text="Saída do Estoque", width=15, relief=FLAT,
+                             wraplength=50, bg=color_est2, command=lambda: [self.janelaEntradaEstoque(2)])
+        button_est6.pack(side=LEFT)
+        ttk.Separator(self.frame_buttons_fin_contas, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
+        button_est7 = Button(self.frame_buttons_fin_contas, text="Editar Registro", width=15, relief=FLAT,
+                             wraplength=50, bg=color_est2, command=lambda: [self.janelaEntradaEstoque(3)])
+        button_est7.pack(side=LEFT)
+        ttk.Separator(self.frame_buttons_fin_contas, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
+        button_est8 = Button(self.frame_buttons_fin_contas, text="Excluir Registro", width=15, relief=FLAT,
+                             wraplength=50, bg=color_est2, command=self.excluirRegistroEstoque)
+        button_est8.pack(side=LEFT)
+
+        self.frame_tree_contas = Frame(self.frame_financeiro, bg=color_est1)
+        self.frame_tree_contas.pack(fill=X)
+        self.scrollbar_contas_h = Scrollbar(self.frame_tree_contas, orient=HORIZONTAL)  # Scrollbar da treeview horiz
+        self.tree_fin_contas = ttk.Treeview(self.frame_tree_contas,
+                                         columns=('data', 'hora', 'cliente_forn', 'nota', 'custo', 'frete', 'operador',
+                                                  'observações', 'id'),
+                                         show='headings',
+                                         xscrollcommand=self.scrollbar_contas_h.set,
+                                         selectmode='browse',
+                                         height=10)  # TreeView listagem de registro em estoque
+
+        self.tree_fin_contas.column('data', width=100, minwidth=50, stretch=False, anchor=CENTER)
+        self.tree_fin_contas.column('hora', width=100, minwidth=100, stretch=False, anchor=CENTER)
+        self.tree_fin_contas.column('cliente_forn', width=400, minwidth=50, stretch=False)
+        self.tree_fin_contas.column('nota', width=150, minwidth=100, stretch=False, anchor=CENTER)
+        self.tree_fin_contas.column('custo', width=150, minwidth=100, stretch=False)
+        self.tree_fin_contas.column('frete', width=100, minwidth=50, stretch=False)
+        self.tree_fin_contas.column('operador', width=200, minwidth=10, stretch=False)
+        self.tree_fin_contas.column('observações', width=900, minwidth=10, stretch=False)
+        self.tree_fin_contas.column('id', width=100, minwidth=50, stretch=False, anchor=CENTER)
+
+        self.tree_fin_contas.heading('data', text='DATA')
+        self.tree_fin_contas.heading('hora', text='HORA')
+        self.tree_fin_contas.heading('cliente_forn', text='CLIENTE/ FORNECEDOR')
+        self.tree_fin_contas.heading('nota', text='NOTA')
+        self.tree_fin_contas.heading('custo', text='CUSTO')
+        self.tree_fin_contas.heading('frete', text='FRETE')
+        self.tree_fin_contas.heading('operador', text='OPERADOR')
+        self.tree_fin_contas.heading('observações', text='OBSERVAÇÕES')
+        self.tree_fin_contas.heading('id', text='ID')
+
+        self.tree_fin_contas.pack(padx=5)
+        self.scrollbar_contas_h.config(command=self.tree_fin_contas.xview)
+        self.scrollbar_contas_h.pack(fill=X, padx=5)
+
+        self.popularEntradaEstoque()
+
+        self.tree_fin_contas.tag_configure('evenrow', background='#828E8C')
+        self.tree_fin_contas.tag_configure('oddrow', background='#C5D0C1')
+
+        self.tree_fin_contas.focus_set()
+        children = self.tree_fin_contas.get_children()
+        if children:
+            self.tree_fin_contas.focus(children[-1])
+            self.tree_fin_contas.selection_set(children[-1])
+
+        button_est1.bind('<Enter>', on_enter)
+        button_est1.bind('<Leave>', on_leave)
+        button_est2.bind('<Enter>', on_enter)
+        button_est2.bind('<Leave>', on_leave)
+        button_est3.bind('<Enter>', on_enter)
+        button_est3.bind('<Leave>', on_leave)
+        button_est4.bind('<Enter>', on_enter)
+        button_est4.bind('<Leave>', on_leave)
+        button_est5.bind('<Enter>', on_enter)
+        button_est5.bind('<Leave>', on_leave)
+        button_est6.bind('<Enter>', on_enter)
+        button_est6.bind('<Leave>', on_leave)
+        button_est7.bind('<Enter>', on_enter)
+        button_est7.bind('<Leave>', on_leave)
+        button_est8.bind('<Enter>', on_enter)
+        button_est8.bind('<Leave>', on_leave)
+
+        def abreEstBind(event):
+            self.janelaEntradaEstoque(3)
+
+        def abreProdBind(event):
+            self.janelaEditarProduto()
+
+        def pesquisaNomeProduto(event):
+            self.popularProdutoEstoquePesqNome(self.variable_int_financeiro.get(), self.option_setor_financeiro.get())
+
+        def pesquisaIdProduto(event):
+            self.popularProdutoEstoquePesqId(self.option_setor_financeiro.get())
+
+        self.tree_fin_contas.bind('<Double-1>', abreEstBind)
+        self.tree_fin_caixa.bind('<Double-1>', abreProdBind)
+        self.entry_descr_financeiro.bind('<Return>', pesquisaNomeProduto)
+        self.entry_cod_financ.bind('<Return>', pesquisaIdProduto)
+
         # ---------------------------------------------------------------------------------------------------------------
         # Barra inferior de tarefas
         frame_inferior = Frame(master, borderwidth=1, relief='raised')
@@ -1404,6 +1626,12 @@ class Castelo:
         self.nome_frame.pack_forget()
         self.frame_cadastro_clientes.pack(fill="both", expand=TRUE)
         self.nome_frame = self.frame_cadastro_clientes
+
+    def abrirJanelaFinanceiro(self):
+
+        self.nome_frame.pack_forget()
+        self.frame_financeiro.pack(fill="both", expand=TRUE)
+        self.nome_frame = self.frame_financeiro
 
     def janelaCadastroCliente(self):
         self.jan = Toplevel()
@@ -5833,7 +6061,7 @@ class Castelo:
                 localizacao = localizacao_entry.get()
                 categoria = option_categ.get()
                 un_medida = option_medida.get()
-                estoque_min = estoque_min_entry.get()
+                estoque_min = self.insereZero(estoque_min_entry.get())
                 caixa_peca = self.formataParaFloat(caixa_peca_entry.get())
                 revendedor = option_revendedor.get()
 
@@ -6070,7 +6298,7 @@ class Castelo:
                     localizacao = localizacao_entry.get()
                     categoria = option_categ.get()
                     un_medida = option_medida.get()
-                    estoque_min = estoque_min_entry.get()
+                    estoque_min = self.insereZero(estoque_min_entry.get())
                     caixa_peca = self.formataParaFloat(caixa_peca_entry.get())
                     revendedor = option_revendedor.get()
 
@@ -6310,7 +6538,7 @@ class Castelo:
                     localizacao = localizacao_entry.get()
                     categoria = option_categ.get()
                     un_medida = option_medida.get()
-                    estoque_min = estoque_min_entry.get()
+                    estoque_min = self.insereZero(estoque_min_entry.get())
                     caixa_peca = self.formataParaFloat(caixa_peca_entry.get())
                     revendedor = option_revendedor.get()
 
@@ -6779,7 +7007,7 @@ class Castelo:
         labelframe_desc_vend = LabelFrame(subframe_prod1)
         labelframe_desc_vend.grid(row=1, column=1, sticky=SW, padx=10, ipady=1)
         frame_descr_vend = Frame(labelframe_desc_vend)
-        frame_descr_vend.pack(fill=BOTH, padx=10, pady=10)
+        frame_descr_vend.pack(fill=BOTH, padx=5, pady=10)
         Label(frame_descr_vend, text='N° Nota:').grid()
         self.est_nota = Entry(frame_descr_vend, fg='blue', width=10, bg=bg_entry)
         self.est_nota.grid(row=0, column=1)
@@ -6787,13 +7015,15 @@ class Castelo:
         self.est_frete = Entry(frame_descr_vend, width=10, validate='all', validatecommand=(testa_float, '%P'),
                                bg=bg_entry)
         self.est_frete.grid(row=1, column=1)
-        Label(frame_descr_vend, width=2).grid(row=0, column=2, padx=5)
+        Label(frame_descr_vend, width=2).grid(row=0, column=2, padx=0)
         frame_valor_total = LabelFrame(frame_descr_vend)
         frame_valor_total.grid(row=0, column=3, rowspan=2, padx=5)
-        Label(frame_valor_total, text='TOTAL:', font=('verdana', '12', 'bold')).pack(pady=1)
+        Label(frame_valor_total, text='TOTAL:', font=('verdana', '12', 'bold')).pack(pady=1, padx=30)
         self.est_total = Label(frame_valor_total, text=self.insereTotalConvertido(self.est_valor_total_add),
-                               font=('verdana', '15', 'bold'), fg='red')
-        self.est_total.pack(padx=10, pady=1)
+                               font=('verdana', '13', 'bold'), fg='red')
+        self.est_total.pack(padx=5, pady=1)
+        self.est_total.configure(width=11, height=1)
+        self.est_total.grid_propagate(0)
 
         frame_orcamento = Frame(subframe_prod1)
         frame_orcamento.grid(row=2, column=0, sticky=W)
@@ -6883,13 +7113,15 @@ class Castelo:
             operador = self.id_operador
             total = self.formataParaFloat(self.est_total.cget('text').split()[1])
             produtos = self.lista_produto_est
+            data = datetime.now()
+            hora = datetime.now()
 
             if op == 1 and revendedor is None:
                 messagebox.showinfo(title="ERRO", message="Defina um Fornecedor!")
 
             else:
                 novo_estoque = estoque.Estoque(revendedor, obs1, obs2, obs3, nota, frete, op, operador, total, produtos,
-                                               None, None)
+                                               data, hora)
 
                 repositorio = estoque_repositorio.EstoqueRepositorio()
 
@@ -6980,8 +7212,8 @@ class Castelo:
 
                 if i.revendedor_id is None:
                     self.tree_est_reg.insert('', 'end',
-                                             values=(i.data,
-                                                     i.hora,
+                                             values=(i.data.strftime('%d/%m/%Y'),
+                                                     i.hora.strftime('%H:%M'),
                                                      'SAÍDA DE ESTOQUE',
                                                      i.nota,
                                                      self.insereTotalConvertido(i.total),
@@ -6992,8 +7224,8 @@ class Castelo:
                 else:
                     revendedor_atual = repositorio_revend.listar_revendedor_id(i.revendedor_id, sessao)
                     self.tree_est_reg.insert('', 'end',
-                                             values=(i.data,
-                                                     i.hora,
+                                             values=(i.data.strftime('%d/%m/%Y'),
+                                                     i.hora.strftime('%H:%M'),
                                                      revendedor_atual.Empresa,
                                                      i.nota,
                                                      self.insereTotalConvertido(i.total),
@@ -7004,8 +7236,8 @@ class Castelo:
             else:
                 if i.revendedor_id is None:
                     self.tree_est_reg.insert('', 'end',
-                                             values=(i.data,
-                                                     i.hora,
+                                             values=(i.data.strftime('%d/%m/%Y'),
+                                                     i.hora.strftime('%H:%M'),
                                                      'SAÍDA DE ESTOQUE',
                                                      i.nota,
                                                      self.insereTotalConvertido(i.total),
@@ -7016,8 +7248,8 @@ class Castelo:
                 else:
                     revendedor_atual = repositorio_revend.listar_revendedor_id(i.revendedor_id, sessao)
                     self.tree_est_reg.insert('', 'end',
-                                             values=(i.data,
-                                                     i.hora,
+                                             values=(i.data.strftime('%d/%m/%Y'),
+                                                     i.hora.strftime('%H:%M'),
                                                      revendedor_atual.Empresa,
                                                      i.nota,
                                                      self.insereTotalConvertido(i.total),
@@ -7063,9 +7295,9 @@ class Castelo:
         jan = Toplevel(bg=bg_tela)
 
         # Centraliza a janela
-        x_cordinate = int((self.w / 2) - (1010 / 2))
+        x_cordinate = int((self.w / 2) - (1030 / 2))
         y_cordinate = int((self.h / 2) - (625 / 2))
-        jan.geometry("{}x{}+{}+{}".format(1010, 625, x_cordinate, y_cordinate))
+        jan.geometry("{}x{}+{}+{}".format(1030, 625, x_cordinate, y_cordinate))
 
         self.lista_produto_venda = []
         self.venda_valor_total_add = 0
@@ -7362,10 +7594,12 @@ class Castelo:
         subframe_form_pag2.pack(padx=10, fill=X, side=LEFT)
         labelframe_valor_rec = LabelFrame(subframe_form_pag2, bg=bg_tela)
         labelframe_valor_rec.grid(row=0, column=0, sticky=W, pady=5)
-        Label(labelframe_valor_rec, text="Valor à Receber:", bg=bg_tela).pack()
-        self.venda_valor_areceber = Label(labelframe_valor_rec, text="R$ 0,00", anchor=E, font=("", "12", ""), fg="red",
+        Label(labelframe_valor_rec, text="Valor à Receber:", bg=bg_tela).pack( padx=20)
+        self.venda_valor_areceber = Label(labelframe_valor_rec, text="R$ 0,00", font=("", "12", ""), fg="red",
                                           bg=bg_tela)
-        self.venda_valor_areceber.pack(fill=X, pady=5, padx=30)
+        self.venda_valor_areceber.pack(fill=X, pady=5)
+        self.venda_valor_areceber.configure(width=10, height=1)
+        self.venda_valor_areceber.grid_propagate(0)
         self.venda_button_salvar = Button(subframe_form_pag2, text="Salvar", width=8, command=atualizaValorAreceber)
         self.venda_button_salvar.grid(row=1, column=0, sticky=W, pady=5, padx=30)
         subframe_form_pag3 = Frame(labelframe_form_pag, bg=bg_tela)
@@ -7382,23 +7616,27 @@ class Castelo:
         self.venda_obs3.pack(pady=5, padx=5)
 
         labelframe_desc_vend = LabelFrame(subframe_prod1, bg=bg_tela)
-        labelframe_desc_vend.grid(row=1, column=1, sticky=SW, padx=10, ipady=1)
+        labelframe_desc_vend.grid(row=1, column=1, sticky=SW, padx=10, ipady=1, ipadx=5)
         frame_descr_vend = Frame(labelframe_desc_vend, bg=bg_tela)
-        frame_descr_vend.pack(fill=BOTH, padx=10, pady=10)
+        frame_descr_vend.pack(fill=BOTH, padx=2, pady=10)
         Label(frame_descr_vend, text='SubTotal:', bg=bg_tela).grid()
         self.venda_label_subtotal = Label(frame_descr_vend, text='R$0,00', fg='blue', font=('', '12', ''), bg=bg_tela)
         self.venda_label_subtotal.grid(row=0, column=1)
+        self.venda_label_subtotal.configure(height=1, width=10)
+        self.venda_label_subtotal.grid_propagate(0)
         Label(frame_descr_vend, text='desconto:', bg=bg_tela).grid(row=1, column=0)
         self.venda_desconto = Entry(frame_descr_vend, width=10, validate='all', validatecommand=(testa_float, '%P'),
                                     bg=bg_entry)
         self.venda_desconto.grid(row=1, column=1)
-        Label(frame_descr_vend, width=2, bg=bg_tela).grid(row=0, column=2, padx=5)
+        Label(frame_descr_vend, width=2, bg=bg_tela).grid(row=0, column=2, padx=1)
         frame_valor_total = LabelFrame(frame_descr_vend, bg=bg_tela)
-        frame_valor_total.grid(row=0, column=3, rowspan=2, padx=5)
-        Label(frame_valor_total, text='TOTAL:', font=('verdana', '12', 'bold'), bg=bg_tela).pack(pady=1)
-        self.venda_label_total = Label(frame_valor_total, text='R$0,00', font=('verdana', '15', 'bold'), fg='red',
+        frame_valor_total.grid(row=0, column=3, rowspan=2, padx=0)
+        Label(frame_valor_total, text='TOTAL:', font=('verdana', '12', 'bold'), bg=bg_tela).pack(pady=1, padx=30)
+        self.venda_label_total = Label(frame_valor_total, text='R$0,00', font=('verdana', '13', 'bold'), fg='red',
                                        bg=bg_tela)
-        self.venda_label_total.pack(padx=10, pady=1)
+        self.venda_label_total.pack(padx=5, pady=1)
+        self.venda_label_total.configure(width=10, height=1)
+        self.venda_label_total.grid_propagate(0)
 
         frame_orcamento = Frame(subframe_prod1, bg=bg_tela)
         frame_orcamento.grid(row=2, column=0, sticky=W)
@@ -9965,6 +10203,8 @@ class Castelo:
     @staticmethod
     def __callback():
         return
+
+
 
 
 fabrica = fabrica_conexao.FabricaConexão()
