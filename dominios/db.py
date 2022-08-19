@@ -73,7 +73,7 @@ class Cliente(Base):
 
     oss = relationship('OS', back_populates='cliente', cascade='delete')
     oss_saida = relationship('OSSaida', back_populates='cliente_saida', cascade='delete')
-    cliente_conta = relationship('Conta', back_populates='conta_cliente')
+    cliente_conta = relationship('Contas', back_populates='conta_cliente')
 
 
 class OS(Base):
@@ -183,7 +183,7 @@ class OS(Base):
 
     produtos = relationship('Produto', secondary='produto_os', back_populates='os_prod')
 
-    os_fin = relationship('OperaçãoLivroCaixa', back_populate='fin_os')
+    os_fin = relationship('OperaçãoLivroCaixa', back_populates='fin_os')
 
 
 class OSSaida(Base):
@@ -333,7 +333,7 @@ class OsVenda(Base):
     operador = Column(Integer)
 
     venda_produto = relationship('ProdutoVenda', back_populates='prod_venda', cascade='delete')
-    venda_fin = relationship('OperaçãoLivroCaixa', back_populate='fin_venda')
+    venda_fin = relationship('OperaçãoLivroCaixa', back_populates='fin_venda')
 
 
 class Produto(Base):
@@ -419,7 +419,7 @@ class Revendedor(Base):
 
     revend_prod = relationship('Produto', back_populates='prod_revend')
     revend_est = relationship('Estoque', back_populates='est_revend', cascade='delete')
-    revendedor_conta = relationship('Conta', back_populates='conta_revendedor')
+    revendedor_conta = relationship('Contas', back_populates='conta_revendedor')
 
 class OperaçãoLivroCaixa(Base):
     __tablename__ = 'operação_livro_caixa'
@@ -445,7 +445,7 @@ class OperaçãoLivroCaixa(Base):
     id_venda = Column(Integer, ForeignKey('os_venda.id_venda'))
     id_os = Column(Integer, ForeignKey('ordem_de_servico.id'))
 
-    fin_venda = relationship('Produto', back_populates='venda_fin')
+    fin_venda = relationship('OsVenda', back_populates='venda_fin')
     fin_os = relationship('OS', back_populates='os_fin')
 
 class LivroCaixa(Base):
