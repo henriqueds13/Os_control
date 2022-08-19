@@ -1056,7 +1056,7 @@ class Castelo:
                                               'utilizado',
                                               'revendedor', 'cod_fabrica'),
                                           show='headings',
-                                          xscrollcommand=self.scrollbar_entr_h.set,
+                                          xscrollcommand=self.scrollbar_prod_h.set,
                                           selectmode='browse',
                                           height=20)  # TreeView listagem de produtos em estoque
 
@@ -1241,9 +1241,9 @@ class Castelo:
                                             columns=('id', 'data', 'cliente', 'subtotal', 'desconto', 'vtotal',
                                                      'hora', 'vendedor', 'obs'),
                                             show='headings',
-                                            xscrollcommand=self.scrollbar_entr_h.set,
+                                            xscrollcommand=self.scrollbar_vend_h.set,
                                             selectmode='browse',
-                                            height=41)  # TreeView listagem de produtos em estoque
+                                            height=39)  # TreeView listagem de produtos em estoque
 
         self.tree_est_vendas.column('id', width=100, minwidth=50, stretch=False, anchor=CENTER)
         self.tree_est_vendas.column('data', width=100, minwidth=100, stretch=False, anchor=CENTER)
@@ -1267,7 +1267,7 @@ class Castelo:
 
         self.tree_est_vendas.pack()
         self.scrollbar_vend_h.config(command=self.tree_est_vendas.xview)
-        self.scrollbar_vend_h.pack(fill=X, padx=5)
+        self.scrollbar_vend_h.pack(fill=X)
 
         self.popularEntradaVenda()
 
@@ -1323,12 +1323,12 @@ class Castelo:
         self.frame_princ1 = Frame(self.sub_frame_financ1, bg=color_est1)
         self.frame_princ1.grid(row=0, column=0, sticky=N)
         self.frame_princ2 = Frame(self.sub_frame_financ1, bg=color_est1)
-        self.frame_princ2.grid(row=0, column=1)
+        self.frame_princ2.grid(row=0, column=1, sticky=N)
         self.frame_princ3 = Frame(self.sub_frame_financ2, bg=color_est1)
         self.frame_princ3.grid(row=0, column=0, sticky=N)
         self.frame_princ4 = Frame(self.sub_frame_financ2, bg=color_est1)
         self.frame_princ4.grid(row=0, column=1, sticky=N)
-        Label(self.frame_nome_jan_financeiro, text="Controle de Estoque").pack()
+        Label(self.frame_nome_jan_financeiro, text="Financeiro").pack()
 
         listaSetores = []
 
@@ -1340,7 +1340,7 @@ class Castelo:
 
         self.frame_barra_lateral1 = LabelFrame(self.frame_princ1, bg=color_est1)
         self.frame_barra_lateral1.pack(fill=X, padx=5, pady=5)
-        Label(self.frame_barra_lateral1, bg='yellow', height=5, width=10).pack(pady=20)
+        Label(self.frame_barra_lateral1, bg='yellow', height=2, width=10).pack(pady=11, padx=45)
         frame_saldo_caixa = Frame(self.frame_barra_lateral1)
         frame_saldo_caixa.pack(pady=20, fill=X)
         Label(frame_saldo_caixa, text='Saldo:', anchor=W, bg=color_est1, font=('Verdana', '13'), fg='#0CF25D').pack(
@@ -1355,14 +1355,12 @@ class Castelo:
         frame_valor_cp = Frame(self.frame_barra_lateral1, bg=color_est1)
         frame_valor_cp.pack(fill=X, ipady=10)
         Label(frame_valor_cp, text='Caixa de Peça:', anchor=W, bg=color_est1, font=('Verdana', '13'),
-              fg='#72F2EB').grid(row=0, column=0)
+              fg='#72F2EB').grid(row=0, column=0, sticky=W)
         self.label_valor_cp = Label(frame_valor_cp, text='R$3000,00', bg=color_est1, font=('Verdana', '13', 'bold'),
                                     fg='#72F2EB')
         self.label_valor_cp.grid(row=1, column=0, columnspan=2)
         self.label_valor_cp.configure(width=12)
         self.label_valor_cp.grid_propagate(0)
-        self.button_mostra_val_cp = Button(frame_valor_cp, text='X')
-        self.button_mostra_val_cp.grid(row=0, column=1, ipadx=3, padx=3)
         frame_buttons_caixa = LabelFrame(self.frame_barra_lateral1, text='Resumo', bg=color_est1)
         frame_buttons_caixa.pack(pady=20)
         button_resum_diario = Button(frame_buttons_caixa, text='Diário', width=9)
@@ -1380,43 +1378,31 @@ class Castelo:
         button_resum_diario = Button(frame_ferramentas_caixa, text='3', width=4)
         button_resum_diario.pack(padx=8, side=LEFT, ipady=3)
 
-        self.frame_buttons_prod_financeiro = Frame(self.frame_princ2, bg=color_est1, borderwidth=1)
-        self.frame_buttons_prod_financeiro.pack(fill=X, pady=3)
-        button_est1 = Button(self.frame_buttons_prod_financeiro, text="Atualizar", width=15, relief='raised',
-                             wraplength=50, bg=color_est2)
-        button_est1.pack(side=LEFT)
+        button_resum_diario = Button(self.frame_barra_lateral1, text='Fechar Caixa', width=13, height=2)
+        button_resum_diario.pack(pady=10)
 
-        button_est2 = Button(self.frame_buttons_prod_financeiro, text="Editar Produto", width=15, relief=FLAT,
-                             wraplength=50, bg=color_est2, command=self.janelaEditarProduto)
-        button_est2.pack(side=LEFT, padx=10)
+
+
+        self.frame_buttons_prod_financeiro = Frame(self.frame_princ2, bg=color_est2, borderwidth=1, relief='raised')
+        self.frame_buttons_prod_financeiro.pack(fill=X, pady=3, padx=5)
+        button_est1 = Button(self.frame_buttons_prod_financeiro, text="Atualizar", width=15, relief=FLAT,
+                             wraplength=50, bg=color_est2)
+        button_est1.pack(side=LEFT, ipady=8)
         ttk.Separator(self.frame_buttons_prod_financeiro, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
-        button_est3 = Button(self.frame_buttons_prod_financeiro, text="Duplicar Produto", width=15, relief=FLAT,
+        button_est2 = Button(self.frame_buttons_prod_financeiro, text="Nova Entrada", width=15, relief=FLAT,
+                             wraplength=50, bg=color_est2, command=self.janelaEditarProduto)
+        button_est2.pack(side=LEFT)
+        ttk.Separator(self.frame_buttons_prod_financeiro, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
+        button_est3 = Button(self.frame_buttons_prod_financeiro, text="Nova Saída", width=15, relief=FLAT,
                              wraplength=50, bg=color_est2, command=self.janelaClonarProduto)
         button_est3.pack(side=LEFT)
         ttk.Separator(self.frame_buttons_prod_financeiro, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
-        button_est4 = Button(self.frame_buttons_prod_financeiro, text="Excluir Produto", width=15, relief=FLAT,
+        button_est4 = Button(self.frame_buttons_prod_financeiro, text="Editar Registro", width=15, relief=FLAT,
                              wraplength=50, bg=color_est2, command=self.deletarProduto)
         button_est4.pack(side=LEFT)
         ttk.Separator(self.frame_buttons_prod_financeiro, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
 
-        self.frame_pesq_financeiro = Frame(self.frame_princ2, bg=color_est1)
-        self.frame_pesq_financeiro.pack(fill=X, ipady=5)
-        self.variable_int_financeiro = IntVar()
-        Label(self.frame_pesq_financeiro, text="Código:", bg=color_est1).grid(sticky=W, padx=10, pady=1)
-        Label(self.frame_pesq_financeiro, text="Produto:", bg=color_est1).grid(row=0, column=1, sticky=W, padx=10)
-        Label(self.frame_pesq_financeiro, text="Setor:", bg=color_est1).grid(row=0, column=2, sticky=W, padx=10)
-        self.entry_cod_financ = Entry(self.frame_pesq_financeiro, width=10, relief=SUNKEN, textvariable=osVarEst1)
-        self.entry_cod_financ.grid(row=1, column=0, padx=10)
-        self.entry_descr_financeiro = Entry(self.frame_pesq_financeiro, width=30, relief=SUNKEN, textvariable=osVarEst2)
-        self.entry_descr_financeiro.grid(row=1, column=1, padx=10)
-        self.option_setor_financeiro = ttk.Combobox(self.frame_pesq_financeiro, values=listaSetores, state="readonly")
-        self.option_setor_financeiro.set("Todos")
-        self.option_setor_financeiro.grid(row=1, column=2, padx=10)
-        Button(self.frame_pesq_financeiro, text="!", command=self.popularProdutoEstoque).grid(row=1, column=3, ipadx=10)
-        self.check_pesq_avan_financeiro = Checkbutton(self.frame_pesq_financeiro, text="Busca Avançada", bg=color_est1,
-                                                      variable=self.variable_int_financeiro,
-                                                      onvalue=1, offvalue=0)
-        self.check_pesq_avan_financeiro.grid(row=1, column=4, padx=10)
+
 
         self.frame_tree_financeiro = Frame(self.frame_princ2, bg=color_est1)
         self.frame_tree_financeiro.pack(fill=X)
@@ -1425,35 +1411,54 @@ class Castelo:
 
         self.tree_fin_caixa = ttk.Treeview(self.frame_tree_financeiro,
                                            columns=(
-                                               'codigo', 'descricao', 'unidade', 'preco', 'categoria', 'setor', 'marca',
-                                               'utilizado',
-                                               'revendedor', 'cod_fabrica'),
+                                               'codigo', 'data', 'hora', 'descricao', 'entrada', 'saida', 'entrada_cp',
+                                               'saida_cp', 'grupo', 'sub_grupo', 'sub_grupo2', 'dinheiro', 'cheque',
+                                               'cdebito', 'ccredito', 'pix', 'outros', 'id_venda', 'id_os'),
                                            show='headings',
                                            xscrollcommand=self.scrollbar_fin_h.set,
                                            selectmode='browse',
-                                           height=20)  # TreeView listagem de produtos em estoque
+                                           height=23)  # TreeView listagem de produtos em estoque
 
-        self.tree_fin_caixa.column('codigo', width=75, minwidth=50, stretch=False, anchor=CENTER)
-        self.tree_fin_caixa.column('descricao', width=500, minwidth=100, stretch=False)
-        self.tree_fin_caixa.column('unidade', width=75, minwidth=10, stretch=False, anchor=CENTER)
-        self.tree_fin_caixa.column('preco', width=100, minwidth=50, stretch=False)
-        self.tree_fin_caixa.column('categoria', width=200, minwidth=50, stretch=False)
-        self.tree_fin_caixa.column('setor', width=50, minwidth=100, stretch=False, anchor=CENTER)
-        self.tree_fin_caixa.column('marca', width=200, minwidth=50, stretch=False)
-        self.tree_fin_caixa.column('utilizado', width=400, minwidth=10, stretch=False)
-        self.tree_fin_caixa.column('revendedor', width=200, minwidth=10, stretch=False)
-        self.tree_fin_caixa.column('cod_fabrica', width=150, minwidth=50, stretch=False, anchor=CENTER)
+        self.tree_fin_caixa.column('codigo', width=50, minwidth=50, stretch=False, anchor=CENTER)
+        self.tree_fin_caixa.column('data', width=75, minwidth=50, stretch=False)
+        self.tree_fin_caixa.column('hora', width=75, minwidth=10, stretch=False, anchor=CENTER)
+        self.tree_fin_caixa.column('descricao', width=400, minwidth=50, stretch=False)
+        self.tree_fin_caixa.column('entrada', width=100, minwidth=50, stretch=False)
+        self.tree_fin_caixa.column('saida', width=100, minwidth=50, stretch=False, anchor=CENTER)
+        self.tree_fin_caixa.column('entrada_cp', width=100, minwidth=50, stretch=False)
+        self.tree_fin_caixa.column('saida_cp', width=100, minwidth=10, stretch=False)
+        self.tree_fin_caixa.column('grupo', width=150, minwidth=10, stretch=False)
+        self.tree_fin_caixa.column('sub_grupo', width=150, minwidth=50, stretch=False, anchor=CENTER)
+        self.tree_fin_caixa.column('sub_grupo2', width=150, minwidth=50, stretch=False)
+        self.tree_fin_caixa.column('dinheiro', width=100, minwidth=10, stretch=False)
+        self.tree_fin_caixa.column('cheque', width=100, minwidth=10, stretch=False)
+        self.tree_fin_caixa.column('cdebito', width=100, minwidth=50, stretch=False, anchor=CENTER)
+        self.tree_fin_caixa.column('ccredito', width=100, minwidth=50, stretch=False)
+        self.tree_fin_caixa.column('pix', width=100, minwidth=10, stretch=False)
+        self.tree_fin_caixa.column('outros', width=100, minwidth=10, stretch=False)
+        self.tree_fin_caixa.column('id_venda', width=50, minwidth=10, stretch=False)
+        self.tree_fin_caixa.column('id_os', width=50, minwidth=10, stretch=False)
 
         self.tree_fin_caixa.heading('codigo', text='CÓDIGO')
-        self.tree_fin_caixa.heading('descricao', text='PRODUTO')
-        self.tree_fin_caixa.heading('unidade', text='Qtde.')
-        self.tree_fin_caixa.heading('preco', text='PREÇO')
-        self.tree_fin_caixa.heading('categoria', text='CATEGORIA')
-        self.tree_fin_caixa.heading('setor', text='SETOR')
-        self.tree_fin_caixa.heading('marca', text='MARCA')
-        self.tree_fin_caixa.heading('utilizado', text='UTILIZADO')
-        self.tree_fin_caixa.heading('revendedor', text='REVENDEDOR')
-        self.tree_fin_caixa.heading('cod_fabrica', text='ID')
+        self.tree_fin_caixa.heading('data', text='DATA')
+        self.tree_fin_caixa.heading('hora', text='HORA')
+        self.tree_fin_caixa.heading('descricao', text='DESCRIÇÃO')
+        self.tree_fin_caixa.heading('entrada', text='ENTRADA')
+        self.tree_fin_caixa.heading('saida', text='SAIDA')
+        self.tree_fin_caixa.heading('entrada_cp', text='ENTRADA C.P')
+        self.tree_fin_caixa.heading('saida_cp', text='SAÍDA C.P')
+        self.tree_fin_caixa.heading('grupo', text='GRUPO')
+        self.tree_fin_caixa.heading('sub_grupo', text='SUBGRUPO')
+        self.tree_fin_caixa.heading('sub_grupo2', text='SUBGRUPO2')
+        self.tree_fin_caixa.heading('dinheiro', text='DINHEIRO')
+        self.tree_fin_caixa.heading('cheque', text='CHEQUE')
+        self.tree_fin_caixa.heading('cdebito', text='C.DÉBITO')
+        self.tree_fin_caixa.heading('ccredito', text='C.CRÉDITO')
+        self.tree_fin_caixa.heading('pix', text='PIX')
+        self.tree_fin_caixa.heading('outros', text='OUTROS')
+        self.tree_fin_caixa.heading('id_venda', text='ID. VENDA')
+        self.tree_fin_caixa.heading('id_os', text='ID. OS')
+
 
         self.tree_fin_caixa.pack(padx=5)
         self.scrollbar_fin_h.config(command=self.tree_fin_caixa.xview)
@@ -1526,31 +1531,44 @@ class Castelo:
         self.scrollbar_contas_h = Scrollbar(self.frame_tree_contas, orient=HORIZONTAL)  # Scrollbar da treeview horiz
         self.tree_fin_contas = ttk.Treeview(self.frame_tree_contas,
                                             columns=(
-                                                'data', 'hora', 'cliente_forn', 'nota', 'custo', 'frete', 'operador',
-                                                'observações', 'id'),
+                                                'vencimento', 'tipo', 'cliente_forn', 'contato', 'discriminacao',
+                                                'tipo_doc', 'parcela','valor_cn', 'valor_cp', 'data_pag', 'operador',
+                                                'cadastro', 'num_doc', 'venda/os', 'id'),
                                             show='headings',
                                             xscrollcommand=self.scrollbar_contas_h.set,
                                             selectmode='browse',
-                                            height=10)  # TreeView listagem de registro em estoque
+                                            height=9)  # TreeView listagem de registro em estoque
 
-        self.tree_fin_contas.column('data', width=100, minwidth=50, stretch=False, anchor=CENTER)
-        self.tree_fin_contas.column('hora', width=100, minwidth=100, stretch=False, anchor=CENTER)
+        self.tree_fin_contas.column('vencimento', width=100, minwidth=50, stretch=False, anchor=CENTER)
+        self.tree_fin_contas.column('tipo', width=100, minwidth=100, stretch=False, anchor=CENTER)
         self.tree_fin_contas.column('cliente_forn', width=400, minwidth=50, stretch=False)
-        self.tree_fin_contas.column('nota', width=150, minwidth=100, stretch=False, anchor=CENTER)
-        self.tree_fin_contas.column('custo', width=150, minwidth=100, stretch=False)
-        self.tree_fin_contas.column('frete', width=100, minwidth=50, stretch=False)
-        self.tree_fin_contas.column('operador', width=200, minwidth=10, stretch=False)
-        self.tree_fin_contas.column('observações', width=900, minwidth=10, stretch=False)
-        self.tree_fin_contas.column('id', width=100, minwidth=50, stretch=False, anchor=CENTER)
+        self.tree_fin_contas.column('contato', width=150, minwidth=100, stretch=False, anchor=CENTER)
+        self.tree_fin_contas.column('discriminacao', width=150, minwidth=100, stretch=False)
+        self.tree_fin_contas.column('tipo_doc', width=120, minwidth=50, stretch=False)
+        self.tree_fin_contas.column('parcela', width=75, minwidth=10, stretch=False)
+        self.tree_fin_contas.column('valor_cn', width=100, minwidth=10, stretch=False)
+        self.tree_fin_contas.column('valor_cp', width=100, minwidth=50, stretch=False, anchor=CENTER)
+        self.tree_fin_contas.column('data_pag', width=75, minwidth=50, stretch=False)
+        self.tree_fin_contas.column('operador', width=130, minwidth=100, stretch=False, anchor=CENTER)
+        self.tree_fin_contas.column('cadastro', width=75, minwidth=100, stretch=False)
+        self.tree_fin_contas.column('num_doc', width=130, minwidth=50, stretch=False)
+        self.tree_fin_contas.column('venda/os', width=75, minwidth=10, stretch=False)
+        self.tree_fin_contas.column('id', width=50, minwidth=10, stretch=False)
 
-        self.tree_fin_contas.heading('data', text='DATA')
-        self.tree_fin_contas.heading('hora', text='HORA')
-        self.tree_fin_contas.heading('cliente_forn', text='CLIENTE/ FORNECEDOR')
-        self.tree_fin_contas.heading('nota', text='NOTA')
-        self.tree_fin_contas.heading('custo', text='CUSTO')
-        self.tree_fin_contas.heading('frete', text='FRETE')
+        self.tree_fin_contas.heading('vencimento', text='VENCIMENTO')
+        self.tree_fin_contas.heading('tipo', text='TIPO')
+        self.tree_fin_contas.heading('cliente_forn', text='CLIENTE')
+        self.tree_fin_contas.heading('discriminacao', text='DISCRIMINAÇÃO')
+        self.tree_fin_contas.heading('contato', text='CONTATO')
+        self.tree_fin_contas.heading('tipo_doc', text='TIPO DOCUMENTO')
+        self.tree_fin_contas.heading('parcela', text='PARCELA')
+        self.tree_fin_contas.heading('valor_cn', text='VALOR')
+        self.tree_fin_contas.heading('valor_cp', text='VALOR_CP')
+        self.tree_fin_contas.heading('data_pag', text='DATA PAG.')
         self.tree_fin_contas.heading('operador', text='OPERADOR')
-        self.tree_fin_contas.heading('observações', text='OBSERVAÇÕES')
+        self.tree_fin_contas.heading('cadastro', text='CADASTRO')
+        self.tree_fin_contas.heading('num_doc', text='NUM. DOCUMENTO')
+        self.tree_fin_contas.heading('venda/os', text='VENDA/OS')
         self.tree_fin_contas.heading('id', text='ID')
 
         self.tree_fin_contas.pack(padx=5)
@@ -1571,23 +1589,39 @@ class Castelo:
         self.frame_fin_contas = Frame(self.frame_princ4, bg=color_est1)
         self.frame_fin_contas.pack(fill=X, padx=5)
 
-        self.frame_buttons_fin_contas = Frame(self.frame_fin_contas, bg=color_est2, relief='raised', borderwidth=1)
-        self.frame_buttons_fin_contas.pack(pady=3, side=LEFT, ipadx=1, fill=X)
-        button_est5 = Button(self.frame_buttons_fin_contas, text=" Entrada Estoque", width=15, relief=FLAT,
+        self.subframe_fin_contas1 = Frame(self.frame_fin_contas, bg=color_est1)
+        self.subframe_fin_contas1.grid(row=0, column=0, sticky=W)
+        self.subframe_fin_contas2 = Frame(self.frame_fin_contas, bg=color_est1)
+        self.subframe_fin_contas2.grid(row=0, column=1, sticky=W)
+
+        label_frame_fin = LabelFrame(self.subframe_fin_contas1, text='Cliente', bg=color_est1)
+        label_frame_fin.grid(row=0, column=0)
+        entry_pesq_contas = Entry(label_frame_fin, width=30)
+        entry_pesq_contas.pack(padx=5, pady=5)
+        Button(self.subframe_fin_contas1, text=1).grid(row=0, column=1, ipadx=10, padx=10, ipady=5, sticky=S)
+
+
+        self.frame_buttons_fin_contas = Frame(self.subframe_fin_contas2, bg=color_est2, relief='raised', borderwidth=1)
+        self.frame_buttons_fin_contas.pack(pady=10, side=LEFT, ipadx=1, fill=X, padx=20)
+        button_est5 = Button(self.frame_buttons_fin_contas, text=" Nova Conta", width=15, relief=FLAT,
                              wraplength=50, bg=color_est2, command=lambda: [self.janelaEntradaEstoque(1)])
         button_est5.pack(side=LEFT)
         ttk.Separator(self.frame_buttons_fin_contas, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
-        button_est6 = Button(self.frame_buttons_fin_contas, text="Saída do Estoque", width=15, relief=FLAT,
+        button_est6 = Button(self.frame_buttons_fin_contas, text="Alterar Conta", width=15, relief=FLAT,
                              wraplength=50, bg=color_est2, command=lambda: [self.janelaEntradaEstoque(2)])
         button_est6.pack(side=LEFT)
         ttk.Separator(self.frame_buttons_fin_contas, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
-        button_est7 = Button(self.frame_buttons_fin_contas, text="Editar Registro", width=15, relief=FLAT,
+        button_est7 = Button(self.frame_buttons_fin_contas, text="Excluir Conta", width=15, relief=FLAT,
                              wraplength=50, bg=color_est2, command=lambda: [self.janelaEntradaEstoque(3)])
         button_est7.pack(side=LEFT)
         ttk.Separator(self.frame_buttons_fin_contas, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
-        button_est8 = Button(self.frame_buttons_fin_contas, text="Excluir Registro", width=15, relief=FLAT,
+        button_est8 = Button(self.frame_buttons_fin_contas, text="Filtrar Contas", width=15, relief=FLAT,
                              wraplength=50, bg=color_est2, command=self.excluirRegistroEstoque)
         button_est8.pack(side=LEFT)
+        ttk.Separator(self.frame_buttons_fin_contas, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
+        button_est9 = Button(self.frame_buttons_fin_contas, text="Fechar", width=15, relief=FLAT,
+                             wraplength=50, bg=color_est2, command=self.excluirRegistroEstoque)
+        button_est9.pack(side=LEFT, ipady=7)
 
         button_est1.bind('<Enter>', on_enter)
         button_est1.bind('<Leave>', on_leave)
@@ -1605,6 +1639,8 @@ class Castelo:
         button_est7.bind('<Leave>', on_leave)
         button_est8.bind('<Enter>', on_enter)
         button_est8.bind('<Leave>', on_leave)
+        button_est9.bind('<Enter>', on_enter)
+        button_est9.bind('<Leave>', on_leave)
 
         def abreEstBind(event):
             self.janelaEntradaEstoque(3)
@@ -1612,16 +1648,12 @@ class Castelo:
         def abreProdBind(event):
             self.janelaEditarProduto()
 
-        def pesquisaNomeProduto(event):
-            self.popularProdutoEstoquePesqNome(self.variable_int_financeiro.get(), self.option_setor_financeiro.get())
 
-        def pesquisaIdProduto(event):
-            self.popularProdutoEstoquePesqId(self.option_setor_financeiro.get())
 
         self.tree_fin_contas.bind('<Double-1>', abreEstBind)
         self.tree_fin_caixa.bind('<Double-1>', abreProdBind)
-        self.entry_descr_financeiro.bind('<Return>', pesquisaNomeProduto)
-        self.entry_cod_financ.bind('<Return>', pesquisaIdProduto)
+
+
 
         # ---------------------------------------------------------------------------------------------------------------
         # Barra inferior de tarefas

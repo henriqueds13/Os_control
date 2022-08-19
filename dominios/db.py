@@ -478,6 +478,7 @@ class Contas(Base):
     num_os = Column(Integer)
     os_venda = Column(Integer)
     data_venc = Column(Date)
+    data_pag = Column(Date)
     data_cadastro = Column(Date)
     valor_cn = Column(Integer)
     valor_cp = Column(Integer)
@@ -486,6 +487,7 @@ class Contas(Base):
     operador = Column(Integer, nullable=False)
     parcela = Column(String(20))
     tipo_operação = Column(Integer, nullable=False)  # 1=Entrada, 2=Saida
+    conta_paga = Column(Integer)  # 1=Não Paga,   2=Paga
 
 
 Base.metadata.create_all(engine)
