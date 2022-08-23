@@ -107,6 +107,7 @@ class Castelo:
         def on_leave(e):
             e.widget['relief'] = 'flat'
 
+
         def concederAcessoSistema():
 
             bg_janela = '#506266'
@@ -238,7 +239,7 @@ class Castelo:
 
         self.var.trace_add('write', to_uppercase)
 
-        concederAcessoSistema()
+        # concederAcessoSistema()
 
         # Barra de menus
 
@@ -1381,8 +1382,6 @@ class Castelo:
         button_resum_diario = Button(self.frame_barra_lateral1, text='Fechar Caixa', width=13, height=2)
         button_resum_diario.pack(pady=10)
 
-
-
         self.frame_buttons_prod_financeiro = Frame(self.frame_princ2, bg=color_est2, borderwidth=1, relief='raised')
         self.frame_buttons_prod_financeiro.pack(fill=X, pady=3, padx=5)
         button_est1 = Button(self.frame_buttons_prod_financeiro, text="Atualizar", width=15, relief=FLAT,
@@ -1390,19 +1389,17 @@ class Castelo:
         button_est1.pack(side=LEFT, ipady=8)
         ttk.Separator(self.frame_buttons_prod_financeiro, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
         button_est2 = Button(self.frame_buttons_prod_financeiro, text="Nova Entrada", width=15, relief=FLAT,
-                             wraplength=50, bg=color_est2, command=self.janelaEditarProduto)
+                             wraplength=50, bg=color_est2, command=lambda: [self.janelaEntradaCaixa(1)])
         button_est2.pack(side=LEFT)
         ttk.Separator(self.frame_buttons_prod_financeiro, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
         button_est3 = Button(self.frame_buttons_prod_financeiro, text="Nova Saída", width=15, relief=FLAT,
-                             wraplength=50, bg=color_est2, command=self.janelaClonarProduto)
+                             wraplength=50, bg=color_est2, command=lambda: [self.janelaEntradaCaixa(2)])
         button_est3.pack(side=LEFT)
         ttk.Separator(self.frame_buttons_prod_financeiro, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
         button_est4 = Button(self.frame_buttons_prod_financeiro, text="Editar Registro", width=15, relief=FLAT,
-                             wraplength=50, bg=color_est2, command=self.deletarProduto)
+                             wraplength=50, bg=color_est2, command=lambda: [self.janelaEntradaCaixa(3)])
         button_est4.pack(side=LEFT)
         ttk.Separator(self.frame_buttons_prod_financeiro, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
-
-
 
         self.frame_tree_financeiro = Frame(self.frame_princ2, bg=color_est1)
         self.frame_tree_financeiro.pack(fill=X)
@@ -1459,7 +1456,6 @@ class Castelo:
         self.tree_fin_caixa.heading('id_venda', text='ID. VENDA')
         self.tree_fin_caixa.heading('id_os', text='ID. OS')
 
-
         self.tree_fin_caixa.pack(padx=5)
         self.scrollbar_fin_h.config(command=self.tree_fin_caixa.xview)
         self.scrollbar_fin_h.pack(fill=X, padx=5)
@@ -1495,8 +1491,8 @@ class Castelo:
         Label(frame_conta_caixa1, text='A Receber:', anchor=W, bg=color_est1, fg='#FFFFFF').pack(
             fill=X)
         self.label_conta_receber = Label(frame_conta_caixa1, text='R$200,00', bg=color_est1,
-                                       font=('Verdana', '10', 'bold'),
-                                       fg='#DEEFE7')
+                                         font=('Verdana', '10', 'bold'),
+                                         fg='#DEEFE7')
         self.label_conta_receber.pack(fill=X)
         self.label_conta_receber.configure(width=5)
         self.label_conta_receber.grid_propagate(0)
@@ -1517,8 +1513,8 @@ class Castelo:
         Label(frame_conta_caixa3, text='A Receber [Vencidas]:', anchor=W, bg=color_est1, fg='#FFFFFF').pack(
             fill=X)
         self.label_conta_rvencidas = Label(frame_conta_caixa3, text='R$200,00', bg=color_est1,
-                                       font=('Verdana', '10', 'bold'),
-                                       fg='#DEEFE7')
+                                           font=('Verdana', '10', 'bold'),
+                                           fg='#DEEFE7')
         self.label_conta_rvencidas.pack(fill=X)
         self.label_conta_rvencidas.configure(width=5)
         self.label_conta_rvencidas.grid_propagate(0)
@@ -1532,7 +1528,7 @@ class Castelo:
         self.tree_fin_contas = ttk.Treeview(self.frame_tree_contas,
                                             columns=(
                                                 'vencimento', 'tipo', 'cliente_forn', 'contato', 'discriminacao',
-                                                'tipo_doc', 'parcela','valor_cn', 'valor_cp', 'data_pag', 'operador',
+                                                'tipo_doc', 'parcela', 'valor_cn', 'valor_cp', 'data_pag', 'operador',
                                                 'cadastro', 'num_doc', 'venda/os', 'id'),
                                             show='headings',
                                             xscrollcommand=self.scrollbar_contas_h.set,
@@ -1600,7 +1596,6 @@ class Castelo:
         entry_pesq_contas.pack(padx=5, pady=5)
         Button(self.subframe_fin_contas1, text=1).grid(row=0, column=1, ipadx=10, padx=10, ipady=5, sticky=S)
 
-
         self.frame_buttons_fin_contas = Frame(self.subframe_fin_contas2, bg=color_est2, relief='raised', borderwidth=1)
         self.frame_buttons_fin_contas.pack(pady=10, side=LEFT, ipadx=1, fill=X, padx=20)
         button_est5 = Button(self.frame_buttons_fin_contas, text=" Nova Conta", width=15, relief=FLAT,
@@ -1648,12 +1643,8 @@ class Castelo:
         def abreProdBind(event):
             self.janelaEditarProduto()
 
-
-
         self.tree_fin_contas.bind('<Double-1>', abreEstBind)
         self.tree_fin_caixa.bind('<Double-1>', abreProdBind)
-
-
 
         # ---------------------------------------------------------------------------------------------------------------
         # Barra inferior de tarefas
@@ -1664,6 +1655,190 @@ class Castelo:
         label_inferior.pack(side=LEFT, ipadx=5)
 
         self.nome_frame = self.frame_cadastro_clientes
+
+    def janelaEntradaCaixa(self, num):
+
+        jan = Toplevel()
+
+        bg_label_frame = '#e0e0e0'
+        bg_entry = '#FFF'
+        fg_entry = '#3100ca'
+        fg_entry2 = '#a10031'
+        bg_entry='#ffffc0'
+
+
+        lista_grupo = []
+        lista_subgrupo = []
+
+
+        # Centraliza a janela
+        x_cordinate = int((self.w / 2) - (600 / 2))
+        y_cordinate = int((self.h / 2) - (500 / 2))
+        jan.geometry("{}x{}+{}+{}".format(550, 400, x_cordinate, y_cordinate))
+
+        frame_titulo = Frame(jan, bg='#8d8d8d')
+        frame_titulo.pack(fill=X)
+        label_inicial = Label(frame_titulo, text='Nova Entrada ', anchor=W, font=('Verdana', '13', 'bold'), bg='#8d8d8d',
+              fg='#FFF')
+        label_inicial.pack(fill=X, padx=10, pady=5)
+
+        frame_princ = Frame(jan)
+        frame_princ.pack(fill=BOTH, padx=10, pady=10)
+
+        frame_princ1 = Frame(frame_princ)
+        frame_princ1.grid(row=0, column=0)
+        frame_princ2 = Frame(frame_princ)
+        frame_princ2.grid(row=0, column=1, sticky=N)
+        frame_princ3 = Frame(frame_princ)
+        frame_princ3.grid(row=1, column=0, pady=15)
+        frame_princ4 = Frame(frame_princ)
+        frame_princ4.grid(row=1, column=1, sticky=W)
+
+        label_frame_dados = LabelFrame(frame_princ1, bg=bg_label_frame)
+        label_frame_dados.pack(ipady=3)
+        Label(label_frame_dados, text='Data:', fg=fg_entry, bg=bg_label_frame).grid(row=0, column=0, sticky=E, pady=3)
+        Label(label_frame_dados, text='Hora:', fg=fg_entry, bg=bg_label_frame).grid(row=1, column=0, sticky=E)
+        Label(label_frame_dados, text='Grupo:', fg=fg_entry, bg=bg_label_frame).grid(row=2, column=0, sticky=E, pady=3)
+        Label(label_frame_dados, text='Sub Grupo:', fg=fg_entry, bg=bg_label_frame).grid(row=3, column=0, sticky=E)
+        Label(label_frame_dados, text='Id OS/Venda:', fg=fg_entry, bg=bg_label_frame).grid(row=4, column=0, sticky=E, pady=3)
+        Label(label_frame_dados, text='Descrição:', fg=fg_entry, bg=bg_label_frame).grid(row=5, column=0, sticky=E)
+
+        hora_atual = strftime('%H:%M:%S')
+
+        def horaAtual():
+            hora_atual = strftime('%H:%M:%S')
+            label_hora.config(text=hora_atual)
+            label_hora.after(1000, horaAtual)
+
+        label_dados_data = Label(label_frame_dados,
+                                 text=f'{self.dias[self.date.weekday()]}, {datetime.now().strftime("%d de %B de %Y")}')
+        label_dados_data.grid(row=0, column=1, padx=10, sticky=W)
+        label_hora = Label(label_frame_dados, text=hora_atual)
+        label_hora.grid(row=1, column=1, sticky=W, padx=10)
+        horaAtual()
+        entry_dados_grupo = ttk.Combobox(label_frame_dados, values=lista_grupo, state="readonly", width=25)
+        entry_dados_grupo.grid(row=2, column=1, sticky=W, padx=10)
+        entry_dados_subgrupo = ttk.Combobox(label_frame_dados, values=lista_grupo, state="readonly", width=25)
+        entry_dados_subgrupo.grid(row=3, column=1, sticky=W, padx=10)
+        entry_dados_os = Entry(label_frame_dados, width=15, bg=bg_entry)
+        entry_dados_os.grid(row=4, column=1, sticky=W, padx=10)
+        entry_dados_descr = Entry(label_frame_dados, width=30, bg=bg_entry)
+        entry_dados_descr.grid(row=5, column=1, sticky=W, padx=10)
+
+        label_frame_receb = LabelFrame(frame_princ3, bg=bg_label_frame, text='Recebimento')
+        label_frame_receb.pack(ipady=3, ipadx=45)
+        Label(label_frame_receb, text='Dinheiro:', fg=fg_entry2, bg=bg_label_frame).grid(row=0, column=0, sticky=E, pady=3)
+        Label(label_frame_receb, text='Cheque:', fg=fg_entry2, bg=bg_label_frame).grid(row=1, column=0, sticky=E)
+        Label(label_frame_receb, text='C.Débito:', fg=fg_entry2, bg=bg_label_frame).grid(row=2, column=0, sticky=E, pady=3)
+        Label(label_frame_receb, text='C.Crédito:', fg=fg_entry2, bg=bg_label_frame).grid(row=3, column=0, sticky=E)
+        Label(label_frame_receb, text='Pix:', fg=fg_entry2, bg=bg_label_frame).grid(row=4, column=0, sticky=E, pady=3)
+        Label(label_frame_receb, text='Outros:', fg=fg_entry2, bg=bg_label_frame).grid(row=5, column=0, sticky=E)
+
+        entry_receb_dinh = Entry(label_frame_receb, width=20, bg=bg_entry)
+        entry_receb_dinh.grid(row=0, column=1, sticky=W, padx=10)
+        entry_receb_cheque = Entry(label_frame_receb, width=20, bg=bg_entry)
+        entry_receb_cheque.grid(row=1, column=1, sticky=W, padx=10)
+        entry_receb_cdeb = Entry(label_frame_receb, width=20, bg=bg_entry)
+        entry_receb_cdeb.grid(row=2, column=1, sticky=W, padx=10)
+        entry_receb_ccred = Entry(label_frame_receb, width=20, bg=bg_entry)
+        entry_receb_ccred.grid(row=3, column=1, sticky=W, padx=10)
+        entry_receb_pix = Entry(label_frame_receb, width=20, bg=bg_entry)
+        entry_receb_pix.grid(row=4, column=1, sticky=W, padx=10)
+        entry_receb_outros = Entry(label_frame_receb, width=20, bg=bg_entry)
+        entry_receb_outros.grid(row=5, column=1, sticky=W, padx=10)
+
+        frame_vTotal = Frame(frame_princ2)
+        frame_vTotal.pack(padx=10, fill=Y)
+
+        label_frame_resum = LabelFrame(frame_vTotal, bg=bg_label_frame)
+        label_frame_resum.pack(ipady=3, pady=00)
+        Label(label_frame_resum, text='Grupo:', fg=fg_entry2, bg=bg_label_frame).grid(row=0, column=0, sticky=E)
+        Label(label_frame_resum, text='Sub Grupo:', fg=fg_entry2, bg=bg_label_frame).grid(row=1, column=0, sticky=E, pady=3)
+        Label(label_frame_resum, text='Caixa Peça:', fg=fg_entry2, bg=bg_label_frame).grid(row=2, column=0, sticky=E)
+        label_resum_grupo = Label(label_frame_resum, text='', bg=bg_label_frame, anchor=W)
+        label_resum_grupo.grid(row=0, column=1, sticky=W, padx=10)
+        label_resum_grupo.configure(width=17)
+        label_resum_grupo.grid_propagate(0)
+        label_resum_subgrupo = Label(label_frame_resum, text='', bg=bg_label_frame, anchor=W)
+        label_resum_subgrupo.grid(row=1, column=1, sticky=W, padx=10)
+        label_resum_subgrupo.configure(width=17)
+        label_resum_subgrupo.grid_propagate(0)
+        label_resum_CP = Entry(label_frame_resum, width=20, bg=bg_entry)
+        label_resum_CP.grid(row=2, column=1, sticky=W, padx=10)
+
+        Label(frame_vTotal, height=1, width=10).pack(pady=2)
+
+        label_frame_vTotal = LabelFrame(frame_vTotal, bg=bg_label_frame, text='Valor Total')
+        label_frame_vTotal.pack(pady=0, fill=X)
+        label_vTotal = Label(label_frame_vTotal, text='R$50,00', font=('Verdana', '14', 'bold'), fg='#c50000',
+                             bg=bg_label_frame)
+        label_vTotal.pack(side=RIGHT, fill=X, padx=10)
+
+        frame_op = Frame(frame_princ4)
+        frame_op.pack(fill=BOTH, padx=10)
+
+        label_frame_operador = LabelFrame(frame_op, bg=bg_label_frame, text='Operador')
+        label_frame_operador.pack(pady=0, fill=X)
+        label_op_add = Entry(label_frame_operador, width=25, bg=bg_entry)
+        label_op_add.pack(side=RIGHT, padx=10, pady=5)
+
+        sub_frame_add = Frame(frame_op)
+        sub_frame_add.pack(fill=X)
+        label_frame_buttons = LabelFrame(sub_frame_add, bg=bg_label_frame)
+        label_frame_buttons.pack(pady=26, ipadx=5, side=LEFT)
+        Button(label_frame_buttons, text='1', width=3).pack(side=LEFT, padx=10, ipady=3)
+        Button(label_frame_buttons, text='2', width=3).pack(side=LEFT, ipady=3)
+        Frame(sub_frame_add).pack(side=LEFT, ipadx=58)
+
+        frame_buttons_add = Frame(frame_op)
+        frame_buttons_add.pack(pady=0, fill=X)
+        Button(frame_buttons_add, text='Salvar', width=10).pack(side=LEFT, ipady=3)
+        Button(frame_buttons_add, text='Fechar',  width=10).pack(side=LEFT, ipady=3, padx=20)
+
+        if num == 2: #Saída
+            label_inicial.config(text='Nova Saída')
+
+        elif num == 3: #Editar
+            label_inicial.config(text='Editar Registro')
+
+        jan.transient(root2)
+        jan.focus_force()
+        jan.grab_set()
+
+    def addConta(self, num):
+        jan = Toplevel()
+
+        bg_label_frame = '#e0e0e0'
+        bg_entry = '#FFF'
+        fg_entry = '#3100ca'
+        fg_entry2 = '#a10031'
+        bg_entry = '#ffffc0'
+
+        lista_grupo = []
+        lista_subgrupo = []
+
+        # Centraliza a janela
+        x_cordinate = int((self.w / 2) - (600 / 2))
+        y_cordinate = int((self.h / 2) - (500 / 2))
+        jan.geometry("{}x{}+{}+{}".format(550, 400, x_cordinate, y_cordinate))
+
+
+        frame_titulo = Frame(jan, bg='#8d8d8d')
+        frame_titulo.pack(fill=X)
+        label_inicial = Label(frame_titulo, text="Nova Conta a Pagar ", anchor=W, font=('Verdana', '13', 'bold'), bg='#8d8d8d',
+              fg='#FFF')
+        label_inicial.pack(fill=X, padx=10, pady=5)
+
+
+        frame_princ = Frame(jan)
+        frame_princ.pack(fill=BOTH, padx=10, pady=10)
+
+
+
+        jan.transient(root2)
+        jan.focus_force()
+        jan.grab_set()
+
 
     def alteraData(self, dias, data, num):
         if num == 1:

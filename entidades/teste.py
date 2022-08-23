@@ -650,3 +650,24 @@ labelframe_os = LabelFrame(frame_princ_jan_os, text="Ordem de Serviço", fg=self
         for i in revendedores:
             lista_revendedor.append(i.Empresa)
 
+check_pesq_avan_os_ent = Checkbutton(label_pesquisa_entr, text='Busca Avançada',
+                                                 variable=self.variable_int_os_entr, onvalue=1, offvalue=0,
+                                                 bg="#F2E8B3", state=DISABLED)
+
+
+def janelaEntradaCaixa(self, num):
+    jan = Toplevel()
+
+    bg_label_frame = '#e0e0e0'
+    bg_entry = '#FFF'
+    fg_entry = '#3100ca'
+    fg_entry2 = '#a10031'
+    bg_entry = '#ffffc0'
+
+    lista_grupo = []
+    lista_subgrupo = []
+
+    # Centraliza a janela
+    x_cordinate = int((self.w / 2) - (600 / 2))
+    y_cordinate = int((self.h / 2) - (500 / 2))
+    jan.geometry("{}x{}+{}+{}".format(550, 400, x_cordinate, y_cordinate))

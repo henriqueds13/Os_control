@@ -489,5 +489,5 @@ class Contas(Base):
     tipo_operação = Column(Integer, nullable=False)  # 1=Entrada, 2=Saida
     conta_paga = Column(Integer)  # 1=Não Paga,   2=Paga
 
-
+ #concederAcessoSistema()
 Base.metadata.create_all(engine)
