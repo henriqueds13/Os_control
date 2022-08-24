@@ -1599,15 +1599,15 @@ class Castelo:
         self.frame_buttons_fin_contas = Frame(self.subframe_fin_contas2, bg=color_est2, relief='raised', borderwidth=1)
         self.frame_buttons_fin_contas.pack(pady=10, side=LEFT, ipadx=1, fill=X, padx=20)
         button_est5 = Button(self.frame_buttons_fin_contas, text=" Nova Conta", width=15, relief=FLAT,
-                             wraplength=50, bg=color_est2, command=lambda: [self.janelaEntradaEstoque(1)])
+                             wraplength=50, bg=color_est2, command=lambda: [self.addConta(1)])
         button_est5.pack(side=LEFT)
         ttk.Separator(self.frame_buttons_fin_contas, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
         button_est6 = Button(self.frame_buttons_fin_contas, text="Alterar Conta", width=15, relief=FLAT,
-                             wraplength=50, bg=color_est2, command=lambda: [self.janelaEntradaEstoque(2)])
+                             wraplength=50, bg=color_est2, command=lambda: [self.addConta(2)])
         button_est6.pack(side=LEFT)
         ttk.Separator(self.frame_buttons_fin_contas, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
         button_est7 = Button(self.frame_buttons_fin_contas, text="Excluir Conta", width=15, relief=FLAT,
-                             wraplength=50, bg=color_est2, command=lambda: [self.janelaEntradaEstoque(3)])
+                             wraplength=50, bg=color_est2, command=lambda: [self.addConta(3)])
         button_est7.pack(side=LEFT)
         ttk.Separator(self.frame_buttons_fin_contas, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
         button_est8 = Button(self.frame_buttons_fin_contas, text="Filtrar Contas", width=15, relief=FLAT,
@@ -1806,16 +1806,16 @@ class Castelo:
         jan.grab_set()
 
     def addConta(self, num):
-        jan = Toplevel()
 
-        bg_label_frame = '#e0e0e0'
-        bg_entry = '#FFF'
-        fg_entry = '#3100ca'
+        bg_label_frame = '#A68F97'
+        fg_entry = '#f5dfb1'
         fg_entry2 = '#a10031'
-        bg_entry = '#ffffc0'
+        bg_entry = '#f5dfb1'
 
-        lista_grupo = []
-        lista_subgrupo = []
+
+        jan = Toplevel(bg=bg_label_frame)
+
+        lista_doc = []
 
         # Centraliza a janela
         x_cordinate = int((self.w / 2) - (600 / 2))
@@ -1823,18 +1823,70 @@ class Castelo:
         jan.geometry("{}x{}+{}+{}".format(550, 400, x_cordinate, y_cordinate))
 
 
-        frame_titulo = Frame(jan, bg='#8d8d8d')
+        frame_titulo = Frame(jan, bg='#4B4952')
         frame_titulo.pack(fill=X)
-        label_inicial = Label(frame_titulo, text="Nova Conta a Pagar ", anchor=W, font=('Verdana', '13', 'bold'), bg='#8d8d8d',
+        label_inicial = Label(frame_titulo, text="Nova Conta a Pagar ", anchor=W, font=('Verdana', '13', 'bold'), bg='#4B4952',
               fg='#FFF')
         label_inicial.pack(fill=X, padx=10, pady=5)
 
 
-        frame_princ = Frame(jan)
-        frame_princ.pack(fill=BOTH, padx=10, pady=10)
+        frame_princ1 = Frame(jan, bg=bg_label_frame)
+        frame_princ1.pack(fill=BOTH, padx=10, pady=10)
+        frame_princ2 = Frame(jan, bg=bg_label_frame)
+        frame_princ2.pack(fill=BOTH, padx=10, pady=10)
+
+        sub_frame_conta1 = Frame(frame_princ1, bg=bg_label_frame)
+        sub_frame_conta1.grid(row=0, column=0, sticky=NW)
+        sub_frame_conta2 = Frame(sub_frame_conta1, bg=bg_label_frame)
+        sub_frame_conta2.grid(row=6, column=1, sticky=NW, rowspan=2)
+        sub_frame_conta3 = Frame(sub_frame_conta1, bg=bg_label_frame)
+        sub_frame_conta3.grid(row=0, column=1, sticky=NW)
 
 
+        Label(sub_frame_conta1, text='Cliente:', anchor=E, bg=bg_label_frame).grid(row=0, column=0, sticky=E)
+        Label(sub_frame_conta1, text='Contato:', anchor=E, bg=bg_label_frame).grid(row=1, column=0, sticky=E, pady=10)
+        Label(sub_frame_conta1, text='Discriminação:', anchor=E, bg=bg_label_frame).grid(row=2, column=0, sticky=E)
+        Label(sub_frame_conta1, text='Tipo Documento:', anchor=E, bg=bg_label_frame).grid(row=3, column=0, sticky=E, pady=10)
+        Label(sub_frame_conta1, text='Numero Documento:', anchor=E, bg=bg_label_frame).grid(row=4, column=0, sticky=E)
+        Label(sub_frame_conta1, text='Numero Os:', anchor=E, bg=bg_label_frame).grid(row=5, column=0, sticky=E, pady=10)
+        Label(sub_frame_conta1, text='Data Vencimento:', anchor=E, bg=bg_label_frame).grid(row=6, column=0, sticky=E)
+        Label(sub_frame_conta1, text='Valor Documento:', anchor=E, bg=bg_label_frame).grid(row=7, column=0, sticky=E, pady=10)
+        Label(sub_frame_conta1, text='Operador:', anchor=E, bg=bg_label_frame).grid(row=8, column=0, sticky=E)
 
+        entry_cliente_conta = Entry(sub_frame_conta3, width=48, bg=bg_entry)
+        entry_cliente_conta.pack(side=LEFT, padx=10)
+        entry_contato_conta = Entry(sub_frame_conta1, width=20, bg=bg_entry)
+        entry_contato_conta.grid(row=1, column=1, sticky=W, padx=10)
+        entry_disc_conta = Entry(sub_frame_conta1, width=35, bg=bg_entry)
+        entry_disc_conta.grid(row=2, column=1, sticky=W, padx=10)
+        entry_tipodoc_conta = ttk.Combobox(sub_frame_conta1, values=lista_doc, state="readonly", width=20)
+        entry_tipodoc_conta.grid(row=3, column=1, sticky=W, padx=10)
+        entry_numDoc_conta = Entry(sub_frame_conta1, width=18, bg=bg_entry)
+        entry_numDoc_conta.grid(row=4, column=1, sticky=W, padx=10)
+        entry_numOs_conta = Entry(sub_frame_conta1, width=18, bg=bg_entry)
+        entry_numOs_conta.grid(row=5, column=1, sticky=W, padx=10)
+        entry_venc_conta = Entry(sub_frame_conta2, width=15, bg=bg_entry)
+        entry_venc_conta.pack(side=LEFT, padx=10)
+        Button(sub_frame_conta2, text='1', width=3).pack(side=LEFT)
+        entry_valor_conta = Entry(sub_frame_conta1, width=15, bg=bg_entry)
+        entry_valor_conta.grid(row=7, column=1, sticky=W, padx=10)
+        entry_oper_conta = Entry(sub_frame_conta1, width=15, bg=bg_entry)
+        entry_oper_conta.grid(row=8, column=1, sticky=W, padx=10)
+
+        Button(sub_frame_conta3, text='C', width=3).pack(side=LEFT)
+        Button(sub_frame_conta3, text='R', width=3).pack(side=LEFT, padx=5)
+
+        Button(frame_princ2, text='Fechar', height=2, width=13).pack(side=RIGHT)
+        button_confirm = Button(frame_princ2, text='Confirmar Cadastro', wraplength=55, width=13)
+        button_confirm.pack(side=RIGHT, padx=20)
+
+        if num == 2:
+            label_inicial.config(text='Nova Conta a Receber')
+
+        elif num == 3:
+            label_inicial.config(text='Editar Conta')
+            button_confirm.config(text='Confirmar Alterações'
+                                       '')
         jan.transient(root2)
         jan.focus_force()
         jan.grab_set()
