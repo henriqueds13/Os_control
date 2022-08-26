@@ -1364,7 +1364,8 @@ class Castelo:
         self.label_valor_cp.grid_propagate(0)
         frame_buttons_caixa = LabelFrame(self.frame_barra_lateral1, text='Resumo', bg=color_est1)
         frame_buttons_caixa.pack(pady=20)
-        button_resum_diario = Button(frame_buttons_caixa, text='Diário', width=9)
+        button_resum_diario = Button(frame_buttons_caixa, text='Diário', width=9,
+                                     command=lambda: [self.resumoFinanceiro(1)])
         button_resum_diario.pack(pady=10)
         button_resum_diario = Button(frame_buttons_caixa, text='Mensal', width=9)
         button_resum_diario.pack(padx=10)
@@ -1602,12 +1603,16 @@ class Castelo:
                              wraplength=50, bg=color_est2, command=lambda: [self.addConta(1)])
         button_est5.pack(side=LEFT)
         ttk.Separator(self.frame_buttons_fin_contas, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
+        button_est5s = Button(self.frame_buttons_fin_contas, text=" Nova Cobrança", width=15, relief=FLAT,
+                              wraplength=55, bg=color_est2, command=lambda: [self.addConta(2)])
+        button_est5s.pack(side=LEFT)
+        ttk.Separator(self.frame_buttons_fin_contas, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
         button_est6 = Button(self.frame_buttons_fin_contas, text="Alterar Conta", width=15, relief=FLAT,
-                             wraplength=50, bg=color_est2, command=lambda: [self.addConta(2)])
+                             wraplength=50, bg=color_est2, command=lambda: [self.addConta(3)])
         button_est6.pack(side=LEFT)
         ttk.Separator(self.frame_buttons_fin_contas, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
         button_est7 = Button(self.frame_buttons_fin_contas, text="Excluir Conta", width=15, relief=FLAT,
-                             wraplength=50, bg=color_est2, command=lambda: [self.addConta(3)])
+                             wraplength=50, bg=color_est2)
         button_est7.pack(side=LEFT)
         ttk.Separator(self.frame_buttons_fin_contas, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
         button_est8 = Button(self.frame_buttons_fin_contas, text="Filtrar Contas", width=15, relief=FLAT,
@@ -1628,6 +1633,8 @@ class Castelo:
         button_est4.bind('<Leave>', on_leave)
         button_est5.bind('<Enter>', on_enter)
         button_est5.bind('<Leave>', on_leave)
+        button_est5s.bind('<Enter>', on_enter)
+        button_est5s.bind('<Leave>', on_leave)
         button_est6.bind('<Enter>', on_enter)
         button_est6.bind('<Leave>', on_leave)
         button_est7.bind('<Enter>', on_enter)
@@ -1664,12 +1671,10 @@ class Castelo:
         bg_entry = '#FFF'
         fg_entry = '#3100ca'
         fg_entry2 = '#a10031'
-        bg_entry='#ffffc0'
-
+        bg_entry = '#ffffc0'
 
         lista_grupo = []
         lista_subgrupo = []
-
 
         # Centraliza a janela
         x_cordinate = int((self.w / 2) - (600 / 2))
@@ -1678,8 +1683,9 @@ class Castelo:
 
         frame_titulo = Frame(jan, bg='#8d8d8d')
         frame_titulo.pack(fill=X)
-        label_inicial = Label(frame_titulo, text='Nova Entrada ', anchor=W, font=('Verdana', '13', 'bold'), bg='#8d8d8d',
-              fg='#FFF')
+        label_inicial = Label(frame_titulo, text='Nova Entrada ', anchor=W, font=('Verdana', '13', 'bold'),
+                              bg='#8d8d8d',
+                              fg='#FFF')
         label_inicial.pack(fill=X, padx=10, pady=5)
 
         frame_princ = Frame(jan)
@@ -1700,7 +1706,8 @@ class Castelo:
         Label(label_frame_dados, text='Hora:', fg=fg_entry, bg=bg_label_frame).grid(row=1, column=0, sticky=E)
         Label(label_frame_dados, text='Grupo:', fg=fg_entry, bg=bg_label_frame).grid(row=2, column=0, sticky=E, pady=3)
         Label(label_frame_dados, text='Sub Grupo:', fg=fg_entry, bg=bg_label_frame).grid(row=3, column=0, sticky=E)
-        Label(label_frame_dados, text='Id OS/Venda:', fg=fg_entry, bg=bg_label_frame).grid(row=4, column=0, sticky=E, pady=3)
+        Label(label_frame_dados, text='Id OS/Venda:', fg=fg_entry, bg=bg_label_frame).grid(row=4, column=0, sticky=E,
+                                                                                           pady=3)
         Label(label_frame_dados, text='Descrição:', fg=fg_entry, bg=bg_label_frame).grid(row=5, column=0, sticky=E)
 
         hora_atual = strftime('%H:%M:%S')
@@ -1727,9 +1734,11 @@ class Castelo:
 
         label_frame_receb = LabelFrame(frame_princ3, bg=bg_label_frame, text='Recebimento')
         label_frame_receb.pack(ipady=3, ipadx=45)
-        Label(label_frame_receb, text='Dinheiro:', fg=fg_entry2, bg=bg_label_frame).grid(row=0, column=0, sticky=E, pady=3)
+        Label(label_frame_receb, text='Dinheiro:', fg=fg_entry2, bg=bg_label_frame).grid(row=0, column=0, sticky=E,
+                                                                                         pady=3)
         Label(label_frame_receb, text='Cheque:', fg=fg_entry2, bg=bg_label_frame).grid(row=1, column=0, sticky=E)
-        Label(label_frame_receb, text='C.Débito:', fg=fg_entry2, bg=bg_label_frame).grid(row=2, column=0, sticky=E, pady=3)
+        Label(label_frame_receb, text='C.Débito:', fg=fg_entry2, bg=bg_label_frame).grid(row=2, column=0, sticky=E,
+                                                                                         pady=3)
         Label(label_frame_receb, text='C.Crédito:', fg=fg_entry2, bg=bg_label_frame).grid(row=3, column=0, sticky=E)
         Label(label_frame_receb, text='Pix:', fg=fg_entry2, bg=bg_label_frame).grid(row=4, column=0, sticky=E, pady=3)
         Label(label_frame_receb, text='Outros:', fg=fg_entry2, bg=bg_label_frame).grid(row=5, column=0, sticky=E)
@@ -1753,7 +1762,8 @@ class Castelo:
         label_frame_resum = LabelFrame(frame_vTotal, bg=bg_label_frame)
         label_frame_resum.pack(ipady=3, pady=00)
         Label(label_frame_resum, text='Grupo:', fg=fg_entry2, bg=bg_label_frame).grid(row=0, column=0, sticky=E)
-        Label(label_frame_resum, text='Sub Grupo:', fg=fg_entry2, bg=bg_label_frame).grid(row=1, column=0, sticky=E, pady=3)
+        Label(label_frame_resum, text='Sub Grupo:', fg=fg_entry2, bg=bg_label_frame).grid(row=1, column=0, sticky=E,
+                                                                                          pady=3)
         Label(label_frame_resum, text='Caixa Peça:', fg=fg_entry2, bg=bg_label_frame).grid(row=2, column=0, sticky=E)
         label_resum_grupo = Label(label_frame_resum, text='', bg=bg_label_frame, anchor=W)
         label_resum_grupo.grid(row=0, column=1, sticky=W, padx=10)
@@ -1793,12 +1803,12 @@ class Castelo:
         frame_buttons_add = Frame(frame_op)
         frame_buttons_add.pack(pady=0, fill=X)
         Button(frame_buttons_add, text='Salvar', width=10).pack(side=LEFT, ipady=3)
-        Button(frame_buttons_add, text='Fechar',  width=10).pack(side=LEFT, ipady=3, padx=20)
+        Button(frame_buttons_add, text='Fechar', width=10).pack(side=LEFT, ipady=3, padx=20)
 
-        if num == 2: #Saída
+        if num == 2:  # Saída
             label_inicial.config(text='Nova Saída')
 
-        elif num == 3: #Editar
+        elif num == 3:  # Editar
             label_inicial.config(text='Editar Registro')
 
         jan.transient(root2)
@@ -1808,10 +1818,7 @@ class Castelo:
     def addConta(self, num):
 
         bg_label_frame = '#A68F97'
-        fg_entry = '#f5dfb1'
-        fg_entry2 = '#a10031'
         bg_entry = '#f5dfb1'
-
 
         jan = Toplevel(bg=bg_label_frame)
 
@@ -1822,13 +1829,12 @@ class Castelo:
         y_cordinate = int((self.h / 2) - (500 / 2))
         jan.geometry("{}x{}+{}+{}".format(550, 400, x_cordinate, y_cordinate))
 
-
         frame_titulo = Frame(jan, bg='#4B4952')
         frame_titulo.pack(fill=X)
-        label_inicial = Label(frame_titulo, text="Nova Conta a Pagar ", anchor=W, font=('Verdana', '13', 'bold'), bg='#4B4952',
-              fg='#FFF')
+        label_inicial = Label(frame_titulo, text="Nova Conta a Pagar ", anchor=W, font=('Verdana', '13', 'bold'),
+                              bg='#4B4952',
+                              fg='#FFF')
         label_inicial.pack(fill=X, padx=10, pady=5)
-
 
         frame_princ1 = Frame(jan, bg=bg_label_frame)
         frame_princ1.pack(fill=BOTH, padx=10, pady=10)
@@ -1842,15 +1848,16 @@ class Castelo:
         sub_frame_conta3 = Frame(sub_frame_conta1, bg=bg_label_frame)
         sub_frame_conta3.grid(row=0, column=1, sticky=NW)
 
-
         Label(sub_frame_conta1, text='Cliente:', anchor=E, bg=bg_label_frame).grid(row=0, column=0, sticky=E)
         Label(sub_frame_conta1, text='Contato:', anchor=E, bg=bg_label_frame).grid(row=1, column=0, sticky=E, pady=10)
         Label(sub_frame_conta1, text='Discriminação:', anchor=E, bg=bg_label_frame).grid(row=2, column=0, sticky=E)
-        Label(sub_frame_conta1, text='Tipo Documento:', anchor=E, bg=bg_label_frame).grid(row=3, column=0, sticky=E, pady=10)
+        Label(sub_frame_conta1, text='Tipo Documento:', anchor=E, bg=bg_label_frame).grid(row=3, column=0, sticky=E,
+                                                                                          pady=10)
         Label(sub_frame_conta1, text='Numero Documento:', anchor=E, bg=bg_label_frame).grid(row=4, column=0, sticky=E)
         Label(sub_frame_conta1, text='Numero Os:', anchor=E, bg=bg_label_frame).grid(row=5, column=0, sticky=E, pady=10)
         Label(sub_frame_conta1, text='Data Vencimento:', anchor=E, bg=bg_label_frame).grid(row=6, column=0, sticky=E)
-        Label(sub_frame_conta1, text='Valor Documento:', anchor=E, bg=bg_label_frame).grid(row=7, column=0, sticky=E, pady=10)
+        Label(sub_frame_conta1, text='Valor Documento:', anchor=E, bg=bg_label_frame).grid(row=7, column=0, sticky=E,
+                                                                                           pady=10)
         Label(sub_frame_conta1, text='Operador:', anchor=E, bg=bg_label_frame).grid(row=8, column=0, sticky=E)
 
         entry_cliente_conta = Entry(sub_frame_conta3, width=48, bg=bg_entry)
@@ -1881,7 +1888,7 @@ class Castelo:
         button_confirm.pack(side=RIGHT, padx=20)
 
         if num == 2:
-            label_inicial.config(text='Nova Conta a Receber')
+            label_inicial.config(text='Nova Cobrança')
 
         elif num == 3:
             label_inicial.config(text='Editar Conta')
@@ -1891,6 +1898,284 @@ class Castelo:
         jan.focus_force()
         jan.grab_set()
 
+    def resumoFinanceiro(self, num):
+
+        bg_label_frame = '#e0e0e0'
+        fg_entry = '#f5dfb1'
+        fg_entry2 = '#a10031'
+        bg_entry = '#f5dfb1'
+        font1 = ('Verdana', '9', 'bold')
+        font2 = ('Verdana', '10', '')
+        jan = Toplevel()
+
+        lista_doc = []
+
+        # Centraliza a janela
+        x_cordinate = int((self.w / 2) - (800 / 2))
+        y_cordinate = int((self.h / 2) - (490 / 2))
+        jan.geometry("{}x{}+{}+{}".format(800, 490, x_cordinate, y_cordinate))
+
+        frame_princ = Frame(jan)
+        frame_princ.pack(fill=BOTH)
+
+        label_titulo = Label(frame_princ, text='Data')
+        label_titulo.pack(fill=Y, ipady=10)
+        frame_tree_resumo = Frame(frame_princ)
+        frame_tree_resumo.pack(fill=X)
+
+        scrollbar_fin_h = Scrollbar(frame_tree_resumo, orient=HORIZONTAL)  # Scrollbar da treeview horiz
+
+        tree_resumo_diario = ttk.Treeview(frame_tree_resumo,
+                                          columns=(
+                                              'codigo', 'data', 'hora', 'descricao', 'entrada', 'saida', 'entrada_cp',
+                                              'saida_cp', 'grupo', 'sub_grupo', 'sub_grupo2', 'dinheiro', 'cheque',
+                                              'cdebito', 'ccredito', 'pix', 'outros', 'id_venda', 'id_os'),
+                                          show='headings',
+                                          xscrollcommand=scrollbar_fin_h.set,
+                                          selectmode='browse',
+                                          height=7)  # TreeView listagem de produtos em estoque
+
+        tree_resumo_diario.column('codigo', width=50, minwidth=50, stretch=False, anchor=CENTER)
+        tree_resumo_diario.column('data', width=75, minwidth=50, stretch=False)
+        tree_resumo_diario.column('hora', width=75, minwidth=10, stretch=False, anchor=CENTER)
+        tree_resumo_diario.column('descricao', width=400, minwidth=50, stretch=False)
+        tree_resumo_diario.column('entrada', width=100, minwidth=50, stretch=False)
+        tree_resumo_diario.column('saida', width=100, minwidth=50, stretch=False, anchor=CENTER)
+        tree_resumo_diario.column('entrada_cp', width=100, minwidth=50, stretch=False)
+        tree_resumo_diario.column('saida_cp', width=100, minwidth=10, stretch=False)
+        tree_resumo_diario.column('grupo', width=150, minwidth=10, stretch=False)
+        tree_resumo_diario.column('sub_grupo', width=150, minwidth=50, stretch=False, anchor=CENTER)
+        tree_resumo_diario.column('sub_grupo2', width=150, minwidth=50, stretch=False)
+        tree_resumo_diario.column('dinheiro', width=100, minwidth=10, stretch=False)
+        tree_resumo_diario.column('cheque', width=100, minwidth=10, stretch=False)
+        tree_resumo_diario.column('cdebito', width=100, minwidth=50, stretch=False, anchor=CENTER)
+        tree_resumo_diario.column('ccredito', width=100, minwidth=50, stretch=False)
+        tree_resumo_diario.column('pix', width=100, minwidth=10, stretch=False)
+        tree_resumo_diario.column('outros', width=100, minwidth=10, stretch=False)
+        tree_resumo_diario.column('id_venda', width=50, minwidth=10, stretch=False)
+        tree_resumo_diario.column('id_os', width=50, minwidth=10, stretch=False)
+
+        tree_resumo_diario.heading('codigo', text='CÓDIGO')
+        tree_resumo_diario.heading('data', text='DATA')
+        tree_resumo_diario.heading('hora', text='HORA')
+        tree_resumo_diario.heading('descricao', text='DESCRIÇÃO')
+        tree_resumo_diario.heading('entrada', text='ENTRADA')
+        tree_resumo_diario.heading('saida', text='SAIDA')
+        tree_resumo_diario.heading('entrada_cp', text='ENTRADA C.P')
+        tree_resumo_diario.heading('saida_cp', text='SAÍDA C.P')
+        tree_resumo_diario.heading('grupo', text='GRUPO')
+        tree_resumo_diario.heading('sub_grupo', text='SUBGRUPO')
+        tree_resumo_diario.heading('sub_grupo2', text='SUBGRUPO2')
+        tree_resumo_diario.heading('dinheiro', text='DINHEIRO')
+        tree_resumo_diario.heading('cheque', text='CHEQUE')
+        tree_resumo_diario.heading('cdebito', text='C.DÉBITO')
+        tree_resumo_diario.heading('ccredito', text='C.CRÉDITO')
+        tree_resumo_diario.heading('pix', text='PIX')
+        tree_resumo_diario.heading('outros', text='OUTROS')
+        tree_resumo_diario.heading('id_venda', text='ID. VENDA')
+        tree_resumo_diario.heading('id_os', text='ID. OS')
+
+        tree_resumo_diario.pack()
+        scrollbar_fin_h.config(command=tree_resumo_diario.xview)
+        scrollbar_fin_h.pack(fill=X)
+
+        ttk.Separator(frame_princ, orient=HORIZONTAL).pack(fill=X, padx=15, pady=10)
+
+        frame_resum_valores = Frame(frame_princ)
+        frame_resum_valores.pack(fill=BOTH, padx=10)
+
+        LF_receb = LabelFrame(frame_resum_valores, text='Recebimentos:', fg=fg_entry2, font=font2, bg=bg_label_frame)
+        LF_receb.pack(side=LEFT, fill=X)
+        labelF_recebimentos = Frame(LF_receb, bg=bg_label_frame)
+        labelF_recebimentos.pack(fill=BOTH, padx=5, pady=5)
+
+        Label(labelF_recebimentos, text='Dinheiro:', fg=fg_entry2, font=font2, bg=bg_label_frame).grid(row=0, column=0,
+                                                                                                       stick=E)
+        ttk.Separator(labelF_recebimentos, orient=VERTICAL).grid(row=0, column=1, rowspan=12, stick=NS)
+        quant_din = Label(labelF_recebimentos, text='0', fg=fg_entry2, font=font1, bg=bg_label_frame)
+        quant_din.grid(row=0, column=2)
+        quant_din.config(width=4)
+        quant_din.grid_propagate(0)
+        ttk.Separator(labelF_recebimentos, orient=VERTICAL).grid(row=0, column=3, stick=NS, rowspan=12)
+        valor_din = Label(labelF_recebimentos, text='0,00', fg=fg_entry2, font=font1, bg=bg_label_frame, anchor=W)
+        valor_din.grid(row=0, column=4, padx=10, sticky=W)
+        valor_din.config(width=8)
+        valor_din.grid_propagate(0)
+
+        ttk.Separator(labelF_recebimentos, orient=HORIZONTAL).grid(row=1, column=0, columnspan=5, sticky=EW, padx=5)
+
+        Label(labelF_recebimentos, text='Cheque:', fg=fg_entry2, font=font2, bg=bg_label_frame).grid(row=2, column=0,
+                                                                                                     stick=E)
+        quant_cheque = Label(labelF_recebimentos, text='0', fg=fg_entry2, font=font1, bg=bg_label_frame)
+        quant_cheque.grid(row=2, column=2)
+        quant_cheque.config(width=4)
+        quant_cheque.grid_propagate(0)
+        valor_cheque = Label(labelF_recebimentos, text='0,00', fg=fg_entry2, font=font1, bg=bg_label_frame, anchor=W)
+        valor_cheque.grid(row=2, column=4, padx=10)
+        valor_cheque.config(width=8)
+        valor_cheque.grid_propagate(0)
+
+        ttk.Separator(labelF_recebimentos, orient=HORIZONTAL).grid(row=3, column=0, columnspan=5, sticky=EW, padx=5)
+
+        Label(labelF_recebimentos, text='Cartão Crédito:', fg=fg_entry2, font=font2, bg=bg_label_frame).grid(row=4,
+                                                                                                             column=0,
+                                                                                                             stick=E)
+        quant_ccredito = Label(labelF_recebimentos, text='0', fg=fg_entry2, font=font1, bg=bg_label_frame)
+        quant_ccredito.grid(row=4, column=2)
+        quant_ccredito.config(width=4)
+        quant_ccredito.grid_propagate(0)
+        valor_ccredito = Label(labelF_recebimentos, text='0,00', fg=fg_entry2, font=font1, bg=bg_label_frame, anchor=W)
+        valor_ccredito.grid(row=4, column=4, padx=10)
+        valor_ccredito.config(width=8)
+        valor_ccredito.grid_propagate(0)
+
+        ttk.Separator(labelF_recebimentos, orient=HORIZONTAL).grid(row=5, column=0, columnspan=5, sticky=EW, padx=5)
+
+        Label(labelF_recebimentos, text='Cartão Débito:', fg=fg_entry2, font=font2, bg=bg_label_frame).grid(row=6,
+                                                                                                            column=0,
+                                                                                                            stick=E)
+        quant_cdebito = Label(labelF_recebimentos, text='0', fg=fg_entry2, font=font1, bg=bg_label_frame)
+        quant_cdebito.grid(row=6, column=2)
+        quant_cdebito.config(width=4)
+        quant_cdebito.grid_propagate(0)
+        valor_cdebito = Label(labelF_recebimentos, text='0,00', fg=fg_entry2, font=font1, bg=bg_label_frame, anchor=W)
+        valor_cdebito.grid(row=6, column=4, padx=10)
+        valor_cdebito.config(width=8)
+        valor_cdebito.grid_propagate(0)
+
+        ttk.Separator(labelF_recebimentos, orient=HORIZONTAL).grid(row=7, column=0, columnspan=5, sticky=EW, padx=5)
+
+        Label(labelF_recebimentos, text='Pix:', fg=fg_entry2, font=font2, bg=bg_label_frame).grid(row=8, column=0,
+                                                                                                  stick=E)
+        quant_pix = Label(labelF_recebimentos, text='0', fg=fg_entry2, font=font1, bg=bg_label_frame)
+        quant_pix.grid(row=8, column=2)
+        quant_pix.config(width=4)
+        quant_pix.grid_propagate(0)
+        valor_pix = Label(labelF_recebimentos, text='0,00', fg=fg_entry2, font=font1, bg=bg_label_frame, anchor=W)
+        valor_pix.grid(row=8, column=4, padx=10)
+        valor_pix.config(width=8)
+        valor_pix.grid_propagate(0)
+
+        ttk.Separator(labelF_recebimentos, orient=HORIZONTAL).grid(row=9, column=0, columnspan=5, sticky=EW, padx=5)
+
+        Label(labelF_recebimentos, text='Outros:', fg=fg_entry2, font=font2, bg=bg_label_frame).grid(row=10, column=0,
+                                                                                                     stick=E)
+        quant_outros = Label(labelF_recebimentos, text='0', fg=fg_entry2, font=font1, bg=bg_label_frame)
+        quant_outros.grid(row=10, column=2)
+        quant_outros.config(width=4)
+        quant_outros.grid_propagate(0)
+        valor_outros = Label(labelF_recebimentos, text='0,00', fg=fg_entry2, font=font1, bg=bg_label_frame, anchor=W)
+        valor_outros.grid(row=10, column=4, padx=10)
+        valor_outros.config(width=8)
+        valor_outros.grid_propagate(0)
+
+        LF_resum_val = LabelFrame(frame_resum_valores, text='Resumo Valores:', fg=fg_entry2, font=font2,
+                                  bg=bg_label_frame)
+        LF_resum_val.pack(side=LEFT, fill=X, padx=10)
+        labelF_resum_val = Frame(LF_resum_val, bg=bg_label_frame)
+        labelF_resum_val.pack(fill=BOTH, padx=5, pady=5)
+
+        Label(labelF_resum_val, text='Entrada CN:', fg=fg_entry2, font=font2, bg=bg_label_frame).grid(row=0, column=0,
+                                                                                                      stick=E)
+        ttk.Separator(labelF_resum_val, orient=VERTICAL).grid(row=0, column=1, rowspan=7, stick=NS)
+        quant_entr_cn = Label(labelF_resum_val, text='0', fg=fg_entry2, font=font1, bg=bg_label_frame)
+        quant_entr_cn.grid(row=0, column=2, padx=10)
+        quant_entr_cn.config(width=4)
+        quant_entr_cn.grid_propagate(0)
+        ttk.Separator(labelF_resum_val, orient=VERTICAL).grid(row=0, column=3, stick=NS, rowspan=11)
+        valor_entr_cn = Label(labelF_resum_val, text='0,00', fg=fg_entry2, font=font1, bg=bg_label_frame, anchor=W)
+        valor_entr_cn.grid(row=0, column=4, padx=10)
+        valor_entr_cn.config(width=8)
+        valor_entr_cn.grid_propagate(0)
+
+        ttk.Separator(labelF_resum_val, orient=HORIZONTAL).grid(row=1, column=0, columnspan=5, sticky=EW, padx=5)
+
+        Label(labelF_resum_val, text='Saída CN:', fg=fg_entry2, font=font2, bg=bg_label_frame).grid(row=2, column=0,
+                                                                                                    stick=E)
+        quant_saida_cn = Label(labelF_resum_val, text='0', fg=fg_entry2, font=font1, bg=bg_label_frame)
+        quant_saida_cn.grid(row=2, column=2)
+        quant_saida_cn.config(width=4)
+        quant_saida_cn.grid_propagate(0)
+        valor_saida_cn = Label(labelF_resum_val, text='0,00', fg=fg_entry2, font=font1, bg=bg_label_frame, anchor=W)
+        valor_saida_cn.grid(row=2, column=4, padx=10)
+        valor_saida_cn.config(width=8)
+        valor_saida_cn.grid_propagate(0)
+
+        ttk.Separator(labelF_resum_val, orient=HORIZONTAL).grid(row=3, column=0, columnspan=5, sticky=EW, padx=5)
+
+        Label(labelF_resum_val, text='Entrada CP:', fg=fg_entry2, font=font2, bg=bg_label_frame).grid(row=4,
+                                                                                                      column=0,
+                                                                                                      stick=E)
+        quant_entr_cp = Label(labelF_resum_val, text='0', fg=fg_entry2, font=font1, bg=bg_label_frame)
+        quant_entr_cp.grid(row=4, column=2)
+        quant_entr_cp.config(width=4)
+        quant_entr_cp.grid_propagate(0)
+        valor_entr_cp = Label(labelF_resum_val, text='0,00', fg=fg_entry2, font=font1, bg=bg_label_frame, anchor=W)
+        valor_entr_cp.grid(row=4, column=4, padx=10)
+        valor_entr_cp.config(width=8)
+        valor_entr_cp.grid_propagate(0)
+
+        ttk.Separator(labelF_resum_val, orient=HORIZONTAL).grid(row=5, column=0, columnspan=5, sticky=EW, padx=5)
+
+        Label(labelF_resum_val, text='Saída CN:', fg=fg_entry2, font=font2, bg=bg_label_frame).grid(row=6,
+                                                                                                    column=0,
+                                                                                                    stick=E)
+        quant_saida_cp = Label(labelF_resum_val, text='0', fg=fg_entry2, font=font1, bg=bg_label_frame)
+        quant_saida_cp.grid(row=6, column=2)
+        quant_saida_cp.config(width=4)
+        quant_saida_cp.grid_propagate(0)
+        valor_saida_cp = Label(labelF_resum_val, text='0,00', fg=fg_entry2, font=font1, bg=bg_label_frame, anchor=W)
+        valor_saida_cp.grid(row=6, column=4, padx=10)
+        valor_saida_cp.config(width=8)
+        valor_saida_cp.grid_propagate(0)
+
+        ttk.Separator(labelF_resum_val, orient=HORIZONTAL).grid(row=7, column=0, columnspan=5, sticky=EW, padx=5)
+
+        Label(labelF_resum_val, text='Saldo Caixa:', fg=fg_entry2, font=font2, bg='#ffff80').grid(row=8, column=0,
+                                                                                                  stick=E,
+                                                                                                  columnspan=3,
+                                                                                                  padx=5)
+        valor_saldo_cn = Label(labelF_resum_val, text='0,00', fg='#c00033', font=font1, bg='#ffff80', anchor=W)
+        valor_saldo_cn.grid(row=8, column=4, padx=10)
+        valor_saldo_cn.config(width=8)
+        valor_saldo_cn.grid_propagate(0)
+
+        ttk.Separator(labelF_resum_val, orient=HORIZONTAL).grid(row=9, column=0, columnspan=5, sticky=EW, padx=5)
+
+        Label(labelF_resum_val, text='Saldo Caixa Peça:', fg=fg_entry2, font=font2, bg='#ffff80').grid(row=10, column=0,
+                                                                                                       stick=E,
+                                                                                                       columnspan=3,
+                                                                                                       padx=5)
+        valor_saldo_cp = Label(labelF_resum_val, text='0,00', fg='#c00033', font=font1, bg='#ffff80', anchor=W)
+        valor_saldo_cp.grid(row=10, column=4, padx=10)
+        valor_saldo_cp.config(width=8)
+        valor_saldo_cp.grid_propagate(0)
+
+        Label(frame_resum_valores, width=25, height=10, bg='yellow').pack(side=LEFT)
+
+        fr_buttons = Frame(frame_resum_valores)
+        fr_buttons.pack(side=LEFT, padx=10, fill=Y)
+        LF_buttons = LabelFrame(fr_buttons)
+        LF_buttons.pack(pady=10)
+
+        Button(LF_buttons, text='1', width=3).pack(padx=5, pady=5)
+        Button(LF_buttons, text='1', width=3).pack(padx=5, pady=5)
+
+        frame_buttons_fin = Frame(frame_princ)
+        frame_buttons_fin.pack(fill=BOTH, padx=10, pady=10)
+
+        Button(frame_buttons_fin, text='Fechar', width=10, command= jan.destroy).pack(side=RIGHT, padx=30, ipady=5, pady=10)
+
+        lf_mensagem = LabelFrame(frame_buttons_fin, text='Mensagem', bg=bg_label_frame)
+        lf_mensagem.pack(side=LEFT, ipadx=10)
+        img_mensagem = Label(lf_mensagem, bg='yellow', height=3, width=5)
+        img_mensagem.pack(side=LEFT, padx=10, pady=5)
+        mensagem_lb = Label(lf_mensagem, text='Não consta Nenhum Lançamento para esta Data!', fg='red', bg=bg_label_frame)
+        mensagem_lb.pack(side=LEFT)
+
+        jan.transient(root2)
+        jan.focus_force()
+        jan.grab_set()
 
     def alteraData(self, dias, data, num):
         if num == 1:
