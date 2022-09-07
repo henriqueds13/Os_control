@@ -671,3 +671,57 @@ def janelaEntradaCaixa(self, num):
     x_cordinate = int((self.w / 2) - (600 / 2))
     y_cordinate = int((self.h / 2) - (500 / 2))
     jan.geometry("{}x{}+{}+{}".format(550, 400, x_cordinate, y_cordinate))
+
+    def cadastroEstoque(self, op, jan):  # op == 1 entrada de estoque / op == 2 saida de estoque /
+        # op == 3 editar estoque
+
+        try:
+            while True:
+                self.lista_produto_est.remove(0)
+        except ValueError:
+            pass
+        try:
+            revendedor = self.revendedor_obj
+            obs1 = self.est_obs1.get()
+            obs2 = self.est_obs2.get()
+            obs3 = self.est_obs3.get()
+            nota = self.formataParaIteiro(self.est_nota.get())
+            frete = self.formataParaFloat(self.est_frete.get())
+            operador = self.id_operador
+            total = self.formataParaFloat(self.est_total.cget('text').split()[1])
+            produtos = self.lista_produto_est
+            data = datetime.now()
+            hora = datetime.now()
+
+            if op == 1 and revendedor is None:
+                messagebox.showinfo(title="ERRO", message="Defina um Fornecedor!")
+
+            else:
+                novo_estoque = estoque.Estoque(revendedor, obs1, obs2, obs3, nota, frete, op, operador, total, produtos,
+                                               data, hora)
+
+                repositorio = estoque_repositorio.EstoqueRepositorio()
+
+                if op == 3:
+
+                    estoque_selecionado = self.tree_est_reg.focus()
+                    dado_est = self.tree_est_reg.item(estoque_selecionado, 'values')
+                    repositorio.editar_estoque(dado_est[8], novo_estoque, sessao)
+                    self.popularEntradaEstoque()
+                    sessao.commit()
+                    jan.destroy()
+
+                else:
+                    repositorio.inserir_estoque(novo_estoque, sessao)
+
+                    sessao.commit()
+                    self.cadastroProdutosEstoque(op)
+                    self.revendedor_obj = None
+                    self.popularEntradaEstoque()
+                    jan.destroy()
+        except:
+            sessao.rollback()
+            raise
+        finally:
+            self.revendedor_obj = None
+            sessao.close()
