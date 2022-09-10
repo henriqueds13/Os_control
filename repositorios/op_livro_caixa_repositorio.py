@@ -9,10 +9,10 @@ class OperaçãoLivroCaixaRepositorio:
         nova_operação = OperaçãoLivroCaixa(data=novo_op.data, hora=novo_op.hora, tipo_operação=novo_op.tipoOp,
                                            historico=novo_op.historico, entrada=novo_op.entrada, saida=novo_op.saida,
                                            entrada_cp=novo_op.entradaCp, saida_cp=novo_op.saidaCp, grupo=novo_op.grupo,
-                                           sub_grupo=novo_op.subGrupo, sub_grupo2=novo_op.subGrupo2,
                                            dinheiro=novo_op.dinheiro, fin_venda=novo_op.venda,fin_os=novo_op.os,
                                            cheque=novo_op.cheque, cdebito=novo_op.cdebito, ccredito=novo_op.ccredito,
-                                           pix=novo_op.pix, outros=novo_op.outros, operador=novo_op.operador)
+                                           pix=novo_op.pix, outros=novo_op.outros, operador=novo_op.operador,
+                                           id_venda=novo_op.venda, id_os=novo_op.os)
         query_op.inserir_op(nova_operação, sessao)
 
     def listar_op(self, sessao):

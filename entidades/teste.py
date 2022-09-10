@@ -725,3 +725,106 @@ def janelaEntradaCaixa(self, num):
         finally:
             self.revendedor_obj = None
             sessao.close()
+
+        def concederAcesso7(*args):
+            repositorio_tec = tecnico_repositorio.TecnicoRepositorio()
+            if len(op_senha.get()) == 4:
+                for i in self.operadores_total:
+                    if int(op_senha.get()) == int(i[0]):
+                        acess_tec = repositorio_tec.listar_tecnico_senha(int(i[0]), sessao)
+                        if acess_tec.CON == 1:
+                            button_senha.configure(state=NORMAL)
+                            entry_locali.delete(0, END)
+                            entry_locali.configure(validate='none', show='')
+                            entry_locali.insert(0, i[1])
+                            entry_locali.configure(state=DISABLED)
+                            button_senha.focus()
+                            jan.bind('<Return>', aceitaOption)
+                            self.id_operador = int(acess_tec.id)
+                            return
+                        else:
+                            messagebox.showinfo(title="ERRO", message="Acesso Negado! Operador Sem Permissão "
+                                                                      "para esta Função")
+                            entry_locali.delete(0, END)
+                            return
+                entry_locali.delete(0, END)
+                messagebox.showinfo(title="ERRO", message="Operador Não Cadastrado!")
+
+  global op_senha
+        op_senha = StringVar()
+        op_senha.trace_add('write', concederAcesso7)
+        entry_locali = Entry(frame_senha_jan1, width=30, relief="sunken", borderwidth=2, textvariable=op_senha,
+                             show='*')
+
+self.tree_fin_caixa.heading('codigo', text='CÓDIGO')
+self.tree_fin_caixa.heading('data', text='DATA')
+self.tree_fin_caixa.heading('hora', text='HORA')
+self.tree_fin_caixa.heading('descricao', text='DESCRIÇÃO')
+self.tree_fin_caixa.heading('entrada', text='ENTRADA')
+self.tree_fin_caixa.heading('saida', text='SAIDA')
+self.tree_fin_caixa.heading('entrada_cp', text='ENTRADA C.P')
+self.tree_fin_caixa.heading('saida_cp', text='SAÍDA C.P')
+self.tree_fin_caixa.heading('grupo', text='GRUPO')
+self.tree_fin_caixa.heading('sub_grupo', text='SUBGRUPO')
+self.tree_fin_caixa.heading('sub_grupo2', text='SUBGRUPO2')
+self.tree_fin_caixa.heading('dinheiro', text='DINHEIRO')
+self.tree_fin_caixa.heading('cheque', text='CHEQUE')
+self.tree_fin_caixa.heading('cdebito', text='C.DÉBITO')
+self.tree_fin_caixa.heading('ccredito', text='C.CRÉDITO')
+self.tree_fin_caixa.heading('pix', text='PIX')
+self.tree_fin_caixa.heading('outros', text='OUTROS')
+self.tree_fin_caixa.heading('id_venda', text='ID. VENDA')
+self.tree_fin_caixa.heading('id_os', text='ID. OS')
+
+
+def popularProdutoEstoque(self):
+    self.tree_est_prod.delete(*self.tree_est_prod.get_children())
+    repositorio = produto_repositorio.ProdutoRepositorio()
+    repositorio_revendedor = revendedor_repositorio.RevendedorRepositorio()
+    oss = repositorio.listar_produtos(sessao)
+    for i in oss:
+        if self.count % 2 == 0:
+            if i.revendedor_id is not None:
+                revendedor_prod = repositorio_revendedor.listar_revendedor_id(i.revendedor_id, sessao)
+                revendedor_prod = revendedor_prod.Empresa
+            else:
+                revendedor_prod = i.revendedor_id
+            self.tree_est_prod.insert("", "end",
+                                      values=(
+                                          i.id_fabr, i.descricao, i.qtd, self.insereTotalConvertido(i.valor_venda),
+                                          i.categoria, i.localizacao, i.marca,
+                                          i.utilizado, revendedor_prod, i.id_prod), tags=('oddrow'))
+        else:
+            if i.revendedor_id is not None:
+                revendedor_prod = repositorio_revendedor.listar_revendedor_id(i.revendedor_id, sessao)
+                revendedor_prod = revendedor_prod.Empresa
+            else:
+                revendedor_prod = i.revendedor_id
+            self.tree_est_prod.insert("", "end",
+                                      values=(
+                                          i.id_fabr, i.descricao, i.qtd, self.insereTotalConvertido(i.valor_venda),
+                                          i.categoria, i.localizacao, i.marca,
+                                          i.utilizado, revendedor_prod, i.id_prod), tags=('evenrow'))
+        self.count += 1
+    self.count = 0
+    self.tree_est_prod.focus_set()
+    children = self.tree_est_prod.get_children()
+    if children:
+        self.tree_est_prod.focus(children[0])
+        self.tree_est_prod.selection_set(children[0])
+
+    background = '#D9D9D9')
+    self.tree_cliente.tag_configure('evenrow', background='#A6A6A6'
+
+    produto_selecionado = self.tree_est_prod.focus()
+    dado_prod = self.tree_est_prod.item(produto_selecionado, 'values')
+    produto_dados = produto_repositorio.ProdutoRepositorio().listar_produto_id(dado_prod[9], sessao)
+
+    def encontraIndexLista(lista, obj):  # Metodo para poder capturar valor dos combobox no BD
+        try:
+            ind = lista.index(obj)
+            return ind
+        except:
+            pass
+
+    option_categ.current(encontraIndexLista(lista_categ, produto_dados.categoria))

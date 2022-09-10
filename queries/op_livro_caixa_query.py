@@ -26,8 +26,6 @@ class OpLivroCaixaQuery():
         op.entrada_cp = operacao.entradaCp
         op.saida_cp = operacao.saidaCp
         op.grupo = operacao.grupo
-        op.sub_grupo = operacao.subGrupo
-        op.sub_grupo2 = operacao.subGrupo2
         op.dinheiro = operacao.dinheiro
         op.cheque = operacao.cheque
         op.cdebito = operacao.cdebito

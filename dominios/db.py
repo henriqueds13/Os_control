@@ -433,7 +433,6 @@ class OperaçãoLivroCaixa(Base):
     entrada_cp = Column(Float)
     saida_cp = Column(Float)
     grupo = Column(String(50))
-    sub_grupo = Column(String(50))
     cheque = Column(Float)
     ccredito = Column(Float)
     cdebito = Column(Float)

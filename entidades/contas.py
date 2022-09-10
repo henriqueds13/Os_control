@@ -1,4 +1,4 @@
-class Contas()
+class Contas():
     def __init__(self, cliente_fornecedor, contato, discriminação, tipo_doc, num_doc, num_os, os_venda, data_venc,
                  data_cadastro, valor_cn, valor_cp, cliente, revendedor, operador, parcela, tipo_operação):
         self.__cliente_fornecedor = cliente_fornecedor

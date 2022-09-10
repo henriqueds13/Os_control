@@ -1317,19 +1317,19 @@ class Castelo:
         self.frame_nome_jan_financeiro = Frame(self.frame_financeiro, relief='raised', borderwidth=1)
         self.frame_nome_jan_financeiro.pack(fill=X)
         self.sub_frame_financ1 = Frame(self.frame_financeiro, bg=color_est1)
-        self.sub_frame_financ1.pack(fill=X)
+        self.sub_frame_financ1.pack()
         self.sub_frame_financ3 = Frame(self.frame_financeiro, bg=color_est1)
         self.sub_frame_financ3.pack(fill=X)
         self.sub_frame_financ2 = Frame(self.frame_financeiro, bg=color_est1)
         self.sub_frame_financ2.pack(fill=X)
         self.frame_princ1 = Frame(self.sub_frame_financ1, bg=color_est1)
-        self.frame_princ1.grid(row=0, column=0, sticky=N)
+        self.frame_princ1.pack(side=LEFT)
         self.frame_princ2 = Frame(self.sub_frame_financ1, bg=color_est1)
-        self.frame_princ2.grid(row=0, column=1, sticky=N)
+        self.frame_princ2.pack(side=LEFT)
         self.frame_princ3 = Frame(self.sub_frame_financ2, bg=color_est1)
-        self.frame_princ3.grid(row=0, column=0, sticky=N)
+        self.frame_princ3.pack(side=LEFT)
         self.frame_princ4 = Frame(self.sub_frame_financ2, bg=color_est1)
-        self.frame_princ4.grid(row=0, column=1, sticky=N)
+        self.frame_princ4.pack(side=LEFT)
         Label(self.frame_nome_jan_financeiro, text="Financeiro").pack()
 
         listaSetores = []
@@ -1404,40 +1404,44 @@ class Castelo:
         button_est4.pack(side=LEFT)
         ttk.Separator(self.frame_buttons_prod_financeiro, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
 
+        ttk.Separator(self.frame_buttons_prod_financeiro, orient=VERTICAL).pack(side=RIGHT, fill=Y, pady=4)
+        button_est5 = Button(self.frame_buttons_prod_financeiro, text="Fechar Caixa", width=15, relief=FLAT,
+                             wraplength=50, bg=color_est2, command=lambda: [self.janelaEntradaCaixa(3)],
+                             font=('Verdana', '10', 'bold'), fg='red')
+        button_est5.pack(side=RIGHT)
+        ttk.Separator(self.frame_buttons_prod_financeiro, orient=VERTICAL).pack(side=RIGHT, fill=Y, pady=4)
+
+
+
         self.frame_tree_financeiro = Frame(self.frame_princ2, bg=color_est1)
-        self.frame_tree_financeiro.pack(fill=X)
+        self.frame_tree_financeiro.pack()
 
         self.scrollbar_fin_h = Scrollbar(self.frame_tree_financeiro, orient=HORIZONTAL)  # Scrollbar da treeview horiz
 
         self.tree_fin_caixa = ttk.Treeview(self.frame_tree_financeiro,
                                            columns=(
-                                               'codigo', 'data', 'hora', 'descricao', 'entrada', 'saida', 'entrada_cp',
-                                               'saida_cp', 'grupo', 'sub_grupo', 'sub_grupo2', 'dinheiro', 'cheque',
+                                               'codigo', 'data', 'hora', 'descricao', 'entrada', 'saida', 'grupo', 'dinheiro', 'cheque',
                                                'cdebito', 'ccredito', 'pix', 'outros', 'id_venda', 'id_os'),
                                            show='headings',
                                            xscrollcommand=self.scrollbar_fin_h.set,
                                            selectmode='browse',
                                            height=23)  # TreeView listagem de produtos em estoque
 
-        self.tree_fin_caixa.column('codigo', width=50, minwidth=50, stretch=False, anchor=CENTER)
-        self.tree_fin_caixa.column('data', width=75, minwidth=50, stretch=False)
-        self.tree_fin_caixa.column('hora', width=75, minwidth=10, stretch=False, anchor=CENTER)
+        self.tree_fin_caixa.column('codigo', width=75, minwidth=50, stretch=False, anchor=CENTER)
+        self.tree_fin_caixa.column('data', width=100, minwidth=50, stretch=False)
+        self.tree_fin_caixa.column('hora', width=100, minwidth=10, stretch=False, anchor=CENTER)
         self.tree_fin_caixa.column('descricao', width=400, minwidth=50, stretch=False)
         self.tree_fin_caixa.column('entrada', width=100, minwidth=50, stretch=False)
         self.tree_fin_caixa.column('saida', width=100, minwidth=50, stretch=False, anchor=CENTER)
-        self.tree_fin_caixa.column('entrada_cp', width=100, minwidth=50, stretch=False)
-        self.tree_fin_caixa.column('saida_cp', width=100, minwidth=10, stretch=False)
         self.tree_fin_caixa.column('grupo', width=150, minwidth=10, stretch=False)
-        self.tree_fin_caixa.column('sub_grupo', width=150, minwidth=50, stretch=False, anchor=CENTER)
-        self.tree_fin_caixa.column('sub_grupo2', width=150, minwidth=50, stretch=False)
         self.tree_fin_caixa.column('dinheiro', width=100, minwidth=10, stretch=False)
         self.tree_fin_caixa.column('cheque', width=100, minwidth=10, stretch=False)
         self.tree_fin_caixa.column('cdebito', width=100, minwidth=50, stretch=False, anchor=CENTER)
         self.tree_fin_caixa.column('ccredito', width=100, minwidth=50, stretch=False)
         self.tree_fin_caixa.column('pix', width=100, minwidth=10, stretch=False)
         self.tree_fin_caixa.column('outros', width=100, minwidth=10, stretch=False)
-        self.tree_fin_caixa.column('id_venda', width=50, minwidth=10, stretch=False)
-        self.tree_fin_caixa.column('id_os', width=50, minwidth=10, stretch=False)
+        self.tree_fin_caixa.column('id_venda', width=75, minwidth=10, stretch=False)
+        self.tree_fin_caixa.column('id_os', width=75, minwidth=10, stretch=False)
 
         self.tree_fin_caixa.heading('codigo', text='CÓDIGO')
         self.tree_fin_caixa.heading('data', text='DATA')
@@ -1445,11 +1449,7 @@ class Castelo:
         self.tree_fin_caixa.heading('descricao', text='DESCRIÇÃO')
         self.tree_fin_caixa.heading('entrada', text='ENTRADA')
         self.tree_fin_caixa.heading('saida', text='SAIDA')
-        self.tree_fin_caixa.heading('entrada_cp', text='ENTRADA C.P')
-        self.tree_fin_caixa.heading('saida_cp', text='SAÍDA C.P')
         self.tree_fin_caixa.heading('grupo', text='GRUPO')
-        self.tree_fin_caixa.heading('sub_grupo', text='SUBGRUPO')
-        self.tree_fin_caixa.heading('sub_grupo2', text='SUBGRUPO2')
         self.tree_fin_caixa.heading('dinheiro', text='DINHEIRO')
         self.tree_fin_caixa.heading('cheque', text='CHEQUE')
         self.tree_fin_caixa.heading('cdebito', text='C.DÉBITO')
@@ -1459,14 +1459,14 @@ class Castelo:
         self.tree_fin_caixa.heading('id_venda', text='ID. VENDA')
         self.tree_fin_caixa.heading('id_os', text='ID. OS')
 
-        self.tree_fin_caixa.pack(padx=5)
+        self.tree_fin_caixa.pack(padx=5, fill=X)
         self.scrollbar_fin_h.config(command=self.tree_fin_caixa.xview)
         self.scrollbar_fin_h.pack(fill=X, padx=5)
 
         self.popularProdutoEstoque()
 
-        self.tree_fin_caixa.tag_configure('evenrow', background='#828E8C')
-        self.tree_fin_caixa.tag_configure('oddrow', background='#C5D0C1')
+        self.tree_fin_caixa.tag_configure('evenrow', background='#D9D9D9')
+        self.tree_fin_caixa.tag_configure('oddrow', background='#A6A6A6')
 
         self.tree_fin_caixa.focus_set()
         children = self.tree_fin_caixa.get_children()
@@ -1574,10 +1574,9 @@ class Castelo:
         self.scrollbar_contas_h.config(command=self.tree_fin_contas.xview)
         self.scrollbar_contas_h.pack(fill=X, padx=5)
 
-        self.popularEntradaEstoque()
 
-        self.tree_fin_contas.tag_configure('evenrow', background='#828E8C')
-        self.tree_fin_contas.tag_configure('oddrow', background='#C5D0C1')
+        self.tree_fin_contas.tag_configure('evenrow', background='#D9D9D9')
+        self.tree_fin_contas.tag_configure('oddrow', background='#A6A6A6')
 
         self.tree_fin_contas.focus_set()
         children = self.tree_fin_contas.get_children()
@@ -1625,6 +1624,8 @@ class Castelo:
                              wraplength=50, bg=color_est2, command=self.excluirRegistroEstoque)
         button_est9.pack(side=LEFT, ipady=7)
 
+        self.popularRegistroFin()
+
         button_est1.bind('<Enter>', on_enter)
         button_est1.bind('<Leave>', on_leave)
         button_est2.bind('<Enter>', on_enter)
@@ -1665,6 +1666,43 @@ class Castelo:
 
         self.nome_frame = self.frame_cadastro_clientes
 
+    def popularRegistroFin(self):
+        self.tree_fin_caixa.delete(*self.tree_fin_caixa.get_children())
+        repositorio = op_livro_caixa_repositorio.OperaçãoLivroCaixaRepositorio()
+        registros = repositorio.listar_op(sessao)
+        for i in registros:
+            if self.count % 2 == 0:
+                self.tree_fin_caixa.insert('', 'end',
+                                           values=(i.id, i.data.strftime('%d/%m/%Y'), i.hora.strftime('%H:%M'), i.historico,
+                                                   self.insereTotalConvertido(i.entrada + i.entrada_cp),
+                                                   self.insereTotalConvertido(i.saida + i.saida_cp), i.grupo,
+                                                   self.insereTotalConvertido(i.dinheiro),
+                                                   self.insereTotalConvertido(i.cheque),
+                                                   self.insereTotalConvertido(i.cdebito),
+                                                   self.insereTotalConvertido(i.ccredito),
+                                                   self.insereTotalConvertido(i.pix),self.insereTotalConvertido(i.outros),
+                                                   i.id_venda, i.id_os), tags=('oddrow'))
+            else:
+                self.tree_fin_caixa.insert('', 'end',
+                                           values=(
+                                           i.id, i.data.strftime('%d/%m/%Y'), i.hora.strftime('%H:%M'), i.historico,
+                                           self.insereTotalConvertido(i.entrada + i.entrada_cp),
+                                           self.insereTotalConvertido(i.saida + i.saida_cp), i.grupo,
+                                           self.insereTotalConvertido(i.dinheiro),
+                                           self.insereTotalConvertido(i.cheque),
+                                           self.insereTotalConvertido(i.cdebito),
+                                           self.insereTotalConvertido(i.ccredito),
+                                           self.insereTotalConvertido(i.pix), self.insereTotalConvertido(i.outros),
+                                           i.id_venda, i.id_os), tags=('evenrow'))
+            self.count += 1
+        self.count = 0
+        self.tree_fin_caixa.focus_set()
+        children = self.tree_fin_caixa.get_children()
+        if children:
+            self.tree_fin_caixa.focus(children[0])
+            self.tree_fin_caixa.selection_set(children[0])
+
+
     def janelaEntradaCaixa(self, num):
 
         jan = Toplevel()
@@ -1693,6 +1731,37 @@ class Castelo:
                     i = i.rstrip('\n')
                     lista_grupo_saida.append(i)
 
+        osVar1 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar1.set(osVar1.get().upper())
+
+        osVar1.trace_add('write', to_uppercase)
+
+        def concederAcesso11(*args):
+            repositorio_tec = tecnico_repositorio.TecnicoRepositorio()
+            if len(op_senha_entr_fin.get()) == 4:
+                for i in self.operadores_total:
+                    if int(op_senha_entr_fin.get()) == int(i[0]):
+                        acess_tec = repositorio_tec.listar_tecnico_senha(int(i[0]), sessao)
+                        if acess_tec.CON == 1:
+                            button_salvar.configure(state=NORMAL)
+                            label_op_add.delete(0, END)
+                            label_op_add.configure(validate='none', show='')
+                            label_op_add.insert(0, i[1])
+                            label_op_add.configure(state=DISABLED)
+                            button_salvar.focus()
+                            self.id_operador = int(acess_tec.id)
+                            return
+                        else:
+                            messagebox.showinfo(title="ERRO", message="Acesso Negado! Operador Sem Permissão "
+                                                                      "para esta Função")
+                            label_op_add.delete(0, END)
+                            return
+                label_op_add.delete(0, END)
+                messagebox.showinfo(title="ERRO", message="Operador Não Cadastrado!")
+
+
         def calculaValorTotal():
 
             valores = [entry_receb_dinh.get(), entry_receb_cheque.get(), entry_receb_ccred.get(),
@@ -1702,10 +1771,14 @@ class Castelo:
             label_vTotal.config(text=self.insereTotalConvertido(valor_total))
 
         def addEntryFin(num):
+
+            label_resum_grupo.config(text=entry_dados_grupo.get())
+            calculaValorTotal()
+
             data = datetime.now()
             hora = datetime.now().strftime('%H:%M')
             grupo = entry_dados_grupo.get()
-            descrição = self.formataParaFloat(entry_dados_descr.get())
+            descrição = entry_dados_descr.get()
             dinheiro = self.formataParaFloat(entry_receb_dinh.get())
             cheque = self.formataParaFloat(entry_receb_cheque.get())
             ccredito = self.formataParaFloat(entry_receb_ccred.get())
@@ -1714,12 +1787,51 @@ class Castelo:
             outros = self.formataParaFloat(entry_receb_outros.get())
             caixa_peça = self.formataParaFloat(label_resum_CP.get())
             valor_total = self.formataParaFloat(label_vTotal.cget('text').split()[1])
-            operador = label_op_add.get()
+            valor_final = valor_total - caixa_peça
+            operador = self.id_operador
 
-            nova_entrada = op_livro_caixa.OpLivroCaixa(data, hora, num, descrição, )
+            if valor_total == 0.0:
+                messagebox.showinfo(title="ERRO", message="Valor Deve ser Maior que R$0,00!")
+                return
+            elif caixa_peça > valor_total:
+                messagebox.showinfo(title="ERRO", message="Valor do Caixa de Peça não pode ser maior que o valor Final!")
+                return
+            elif grupo == '':
+                messagebox.showinfo(title="ERRO", message="Escolha um Grupo!")
+                return
+            else:
+                if num == 1: #entrada
+                    res = messagebox.askyesno(None,
+                                              "Salvar a Nova Entrada?")
+                    if res:
+                        nova_entrada = op_livro_caixa.OpLivroCaixa(data, hora, num, descrição, valor_final, 0, caixa_peça, 0, grupo,
+                                                               cheque, ccredito, cdebito, pix, dinheiro, outros, operador, None,
+                                                               None)
 
-            repositorio_fin = op_livro_caixa_repositorio.OperaçãoLivroCaixaRepositorio()
+                        repositorio_fin = op_livro_caixa_repositorio.OperaçãoLivroCaixaRepositorio()
+                        repositorio_fin.inserir_op(nova_entrada, sessao)
+                    else:
+                        return
 
+                elif num == 2: #saída
+                    res = messagebox.askyesno(None,
+                                              "Salvar a Nova Saída?")
+                    if res:
+                        nova_entrada = op_livro_caixa.OpLivroCaixa(data, hora, num, descrição, 0, valor_final,
+                                                                   0, caixa_peça, grupo,
+                                                                   cheque, ccredito, cdebito, pix, dinheiro, outros,
+                                                                   operador, None,
+                                                                   None)
+
+                        repositorio_fin = op_livro_caixa_repositorio.OperaçãoLivroCaixaRepositorio()
+                        repositorio_fin.inserir_op(nova_entrada, sessao)
+                    else:
+                        return
+
+            sessao.commit()
+            self.mostrarMensagem("1", "Registro adicionado com Sucesso!")
+            self.popularRegistroFin()
+            jan.destroy()
 
 
 
@@ -1778,7 +1890,7 @@ class Castelo:
 
         entry_dados_os = Entry(label_frame_dados, width=15, bg=bg_entry, state=DISABLED)
         entry_dados_os.grid(row=3, column=1, sticky=W, padx=10)
-        entry_dados_descr = Entry(label_frame_dados, width=30, bg=bg_entry)
+        entry_dados_descr = Entry(label_frame_dados, width=30, bg=bg_entry, textvariable=osVar1)
         entry_dados_descr.grid(row=4, column=1, sticky=W, padx=10)
 
         label_frame_receb = LabelFrame(frame_princ3, bg=bg_label_frame, text='Meio de Pagamento')
@@ -1821,9 +1933,10 @@ class Castelo:
         Label(label_frame_resum, text='Grupo:', fg=fg_entry2, bg=bg_label_frame).grid(row=0, column=0, sticky=E)
         Label(label_frame_resum, text='Caixa Peça:', fg=fg_entry2, bg=bg_label_frame).grid(row=1, column=0, sticky=E)
 
-        label_resum_grupo = Label(label_frame_resum, text='', bg=bg_label_frame, anchor=W)
+        label_resum_grupo = Label(label_frame_resum, text='', bg=bg_label_frame, anchor=W,
+                                  font=('Verdana', '8', 'bold'), fg=fg_entry2)
         label_resum_grupo.grid(row=0, column=1, sticky=W, padx=10)
-        label_resum_grupo.configure(width=17)
+        label_resum_grupo.configure(width=15)
         label_resum_grupo.grid_propagate(0)
         label_resum_CP = Entry(label_frame_resum, width=20, bg=bg_entry, validate='all',
                                  validatecommand=(testa_float, '%P'))
@@ -1834,17 +1947,20 @@ class Castelo:
         label_frame_vTotal = LabelFrame(frame_vTotal, bg=bg_label_frame, text='Valor Total')
         label_frame_vTotal.pack(pady=0, fill=X)
 
-        label_vTotal = Label(label_frame_vTotal, text='R$0,00', font=('Verdana', '14', 'bold'), fg='#c50000',
+        label_vTotal = Label(label_frame_vTotal, text=self.insereTotalConvertido(0), font=('Verdana', '14', 'bold'), fg='#c50000',
                              bg=bg_label_frame)
         label_vTotal.pack(side=RIGHT, fill=X, padx=10)
 
         frame_op = Frame(frame_princ4)
         frame_op.pack(fill=BOTH, padx=10)
 
+        global op_senha_entr_fin
+        op_senha_entr_fin = StringVar()
+        op_senha_entr_fin.trace_add('write', concederAcesso11)
         label_frame_operador = LabelFrame(frame_op, bg=bg_label_frame, text='Operador')
         label_frame_operador.pack(pady=0, fill=X)
         label_op_add = Entry(label_frame_operador, width=25, bg=bg_entry, validate='all',
-                                 validatecommand=(testa_inteiro_op, '%P'), show='*')
+                                 validatecommand=(testa_inteiro_op, '%P'), show='*', textvariable=op_senha_entr_fin)
         label_op_add.pack(side=RIGHT, padx=10, pady=5)
 
         sub_frame_add = Frame(frame_op)
@@ -1857,14 +1973,47 @@ class Castelo:
 
         frame_buttons_add = Frame(frame_op)
         frame_buttons_add.pack(pady=0, fill=X)
-        Button(frame_buttons_add, text='Salvar', width=10).pack(side=LEFT, ipady=3)
-        Button(frame_buttons_add, text='Fechar', width=10).pack(side=LEFT, ipady=3, padx=20)
+        button_salvar = Button(frame_buttons_add, text='Salvar', width=10, command=lambda: [addEntryFin(num)],
+                               state=DISABLED)
+        button_salvar.pack(side=LEFT, ipady=3)
+        Button(frame_buttons_add, text='Fechar', width=10, command=jan.destroy).pack(side=LEFT, ipady=3, padx=20)
 
         if num == 2:  # Saída
             label_inicial.config(text='Nova Saída')
 
         elif num == 3:  # Editar
+
             label_inicial.config(text='Editar Registro')
+            repositorio = op_livro_caixa_repositorio.OperaçãoLivroCaixaRepositorio()
+            registro_selec = self.tree_fin_caixa.focus()
+            dados_reg = self.tree_fin_caixa.item(registro_selec,'values')
+            reg_dados = repositorio.listar_op_id(dados_reg[0], sessao)
+
+            entry_dados_grupo.set(dados_reg[6])
+            entry_dados_os.config(state=NORMAL)
+            if dados_reg[13] is None:
+                entry_dados_os.insert(0, dados_reg[14])
+            else:
+                entry_dados_os.insert(0, dados_reg[13])
+            entry_dados_os.config(state=DISABLED)
+            entry_dados_descr.insert(0, reg_dados.historico)
+            entry_receb_dinh.insert(0, self.insereNumConvertido(reg_dados.dinheiro))
+            entry_receb_cheque.insert(0, self.insereNumConvertido(reg_dados.cheque))
+            entry_receb_ccred.insert(0, self.insereNumConvertido(reg_dados.ccredito))
+            entry_receb_cdeb.insert(0, self.insereNumConvertido(reg_dados.cdebito))
+            entry_receb_pix.insert(0, self.insereNumConvertido(reg_dados.pix))
+            entry_receb_outros.insert(0, self.insereNumConvertido(reg_dados.outros))
+            label_resum_grupo.config(text=dados_reg[6])
+            if reg_dados.tipo_operação == 1:
+                label_resum_CP.insert(0, self.insereNumConvertido(reg_dados.entrada_cp))
+                label_vTotal.config(text=self.insereTotalConvertido(reg_dados.entrada + reg_dados.entrada_cp))
+            else:
+                label_resum_CP.insert(0, self.insereNumConvertido(reg_dados.saida_cp))
+                label_vTotal.config(text=self.insereTotalConvertido(reg_dados.saida + reg_dados.saida_cp))
+
+
+
+
 
 
 

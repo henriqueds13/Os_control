@@ -1,6 +1,6 @@
 class OpLivroCaixa():
-    def __init__(self, data, hora, tipo_op, historico, entrada, saida, entrada_cp, saida_cp, grupo, sub_grupo,
-                 sub_grupo2, cheque, ccredito, cdebito, pix, dinheiro, outros, operador, venda, os):
+    def __init__(self, data, hora, tipo_op, historico, entrada, saida, entrada_cp, saida_cp, grupo,
+                 cheque, ccredito, cdebito, pix, dinheiro, outros, operador, venda, os):
         self.__data = data
         self.__hora = hora
         self.__tipo_op = tipo_op
@@ -10,8 +10,6 @@ class OpLivroCaixa():
         self.__entrada_cp = entrada_cp
         self.__saida_cp = saida_cp
         self.__grupo = grupo
-        self.__sub_grupo = sub_grupo
-        self.__sub_grupo2 = sub_grupo2
         self.__dinheiro = dinheiro
         self.__cheque = cheque
         self.__cdebito = cdebito
@@ -58,13 +56,6 @@ class OpLivroCaixa():
     def grupo(self):
         return self.__grupo
 
-    @property
-    def subGrupo(self):
-        return self.__sub_grupo
-
-    @property
-    def subGrupo2(self):
-        return self.__sub_grupo2
 
     @property
     def dinheiro(self):
@@ -138,13 +129,6 @@ class OpLivroCaixa():
     def grupo(self, grup):
         self.__grupo = grup
 
-    @subGrupo.setter
-    def subGrupo(self, sub):
-        self.__sub_grupo = sub
-
-    @subGrupo2.setter
-    def subGrupo2(self, sub):
-        self.__sub_grupo2 = sub
 
     @dinheiro.setter
     def dinheiro(self, pag):
