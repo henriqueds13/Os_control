@@ -1800,7 +1800,7 @@ class Castelo:
                 messagebox.showinfo(title="ERRO", message="Escolha um Grupo!")
                 return
             else:
-                if num == 1: #entrada
+                if num == 1: #Entrada
                     res = messagebox.askyesno(None,
                                               "Salvar a Nova Entrada?")
                     if res:
@@ -1813,9 +1813,8 @@ class Castelo:
                     else:
                         return
 
-                elif num == 2: #saída
-                    res = messagebox.askyesno(None,
-                                              "Salvar a Nova Saída?")
+                elif num == 2: #Saída
+                    res = messagebox.askyesno(None, "Salvar a Nova Saída?")
                     if res:
                         nova_entrada = op_livro_caixa.OpLivroCaixa(data, hora, num, descrição, 0, valor_final,
                                                                    0, caixa_peça, grupo,
@@ -1827,11 +1826,29 @@ class Castelo:
                         repositorio_fin.inserir_op(nova_entrada, sessao)
                     else:
                         return
+                else: #Editar
+                    res = messagebox.askyesno(None, "Salvar Alterações?")
+                    if res:
+                        if reg_dados.tipo_operação == 1:
+                            nova_entrada = op_livro_caixa.OpLivroCaixa(data, hora, num, descrição, valor_final, 0, caixa_peça, 0, grupo,
+                                                               cheque, ccredito, cdebito, pix, dinheiro, outros, operador, None,
+                                                               None)
+                        elif reg_dados.tipo_operação == 2:
+                            nova_entrada = op_livro_caixa.OpLivroCaixa(data, hora, num, descrição, 0, valor_final,
+                                                                       0, caixa_peça, grupo,
+                                                                       cheque, ccredito, cdebito, pix, dinheiro, outros,
+                                                                       operador, None,
+                                                                       None)
+                        repositorio.editar_op(dados_reg[0], nova_entrada, sessao)
 
             sessao.commit()
             self.mostrarMensagem("1", "Registro adicionado com Sucesso!")
             self.popularRegistroFin()
             jan.destroy()
+
+        def editRegistro():
+            repositorio_reg = op_livro_caixa_repositorio.OperaçãoLivroCaixaRepositorio()
+
 
 
 
