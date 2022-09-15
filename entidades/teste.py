@@ -828,3 +828,29 @@ def popularProdutoEstoque(self):
             pass
 
     option_categ.current(encontraIndexLista(lista_categ, produto_dados.categoria))
+
+ global op_senha_entr_fin
+        op_senha_entr_fin = StringVar()
+        op_senha_entr_fin.trace_add('write', concederAcesso11)
+        label_frame_operador = LabelFrame(frame_op, bg=bg_label_frame, text='Operador')
+        label_frame_operador.pack(pady=0, fill=X)
+        label_op_add = Entry(label_frame_operador, width=25, bg=bg_entry, validate='all',
+                                 validatecommand=(testa_inteiro_op, '%P'), show='*', textvariable=op_senha_entr_fin
+
+self.tree_fin_contas.heading('vencimento', text='VENCIMENTO')
+self.tree_fin_contas.heading('tipo', text='TIPO')
+self.tree_fin_contas.heading('cliente_forn', text='CLIENTE')
+self.tree_fin_contas.heading('discriminacao', text='DISCRIMINAÇÃO')
+self.tree_fin_contas.heading('contato', text='CONTATO')
+self.tree_fin_contas.heading('tipo_doc', text='TIPO DOCUMENTO')
+self.tree_fin_contas.heading('parcela', text='PARCELA')
+self.tree_fin_contas.heading('valor_cn', text='VALOR')
+self.tree_fin_contas.heading('valor_cp', text='VALOR_CP')
+self.tree_fin_contas.heading('data_pag', text='DATA PAG.')
+self.tree_fin_contas.heading('operador', text='OPERADOR')
+self.tree_fin_contas.heading('cadastro', text='CADASTRO')
+self.tree_fin_contas.heading('num_doc', text='NUM. DOCUMENTO')
+self.tree_fin_contas.heading('venda/os', text='VENDA/OS')
+self.tree_fin_contas.heading('id', text='ID')
+
+self.retornaFaltaDias()

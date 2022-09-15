@@ -1,21 +1,17 @@
 class Contas():
-    def __init__(self, cliente_fornecedor, contato, discriminação, tipo_doc, num_doc, num_os, os_venda, data_venc,
-                 data_cadastro, valor_cn, valor_cp, cliente, revendedor, operador, parcela, tipo_operação):
+    def __init__(self, cliente_fornecedor, contato, discriminação, tipo_doc, num_doc, num_os, data_venc,
+                 data_cadastro, valor_cn, valor_cp, operador, tipo_operação):
         self.__cliente_fornecedor = cliente_fornecedor
         self.__contato = contato
         self.__discriminição = discriminação
         self.__tipo_doc = tipo_doc
         self.__num_doc = num_doc
         self.__num_os = num_os
-        self.__os_venda = os_venda
         self.__data_vend = data_venc
         self.__data_cadastro = data_cadastro
         self.__valor_cn = valor_cn
         self.__valor_cp = valor_cp
-        self.__cliente = cliente
-        self.__revendedor = revendedor
         self.__operador = operador
-        self.__parcela = parcela
         self.__tipo_operação = tipo_operação
 
 
@@ -40,12 +36,12 @@ class Contas():
         return self.__num_doc
 
     @property
-    def numOs(self):
-        return self.__num_os
+    def numNf(self):
+        return self.__num_nf
 
     @property
-    def osVenda(self):
-        return self.__os_venda
+    def numOs(self):
+        return self.__num_os
 
     @property
     def dataVenda(self):
@@ -103,13 +99,13 @@ class Contas():
     def numDoc(self, entr):
         self.__num_doc = entr
 
+    @numNf.setter
+    def numNf(self, entr):
+        self.__num_nf = entr
+
     @numOs.setter
     def numOs(self, said):
         self.__num_os = said
-
-    @osVenda.setter
-    def osVenda(self, entrada):
-        self.__os_venda = entrada
 
     @dataVenda.setter
     def dataVenda(self, saida):
@@ -127,21 +123,9 @@ class Contas():
     def valorCp(self, sub):
         self.__valor_cp = sub
 
-    @cliente.setter
-    def cliente(self, pag):
-        self.__cliente = pag
-
-    @revendedor.setter
-    def revendedor(self, pag):
-        self.__revendedor = pag
-
     @operador.setter
     def operador(self, pag):
         self.__operador = pag
-
-    @parcela.setter
-    def parcela(self, pag):
-        self.__parcela = pag
 
     @tipoOp.setter
     def tipoOp(self, pag):

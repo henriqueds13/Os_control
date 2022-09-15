@@ -26,9 +26,7 @@ class ContasQuery:
         op.tipo_doc = operacao.tipoDoc
         op.num_doc = operacao.numDoc
         op.num_os = operacao.numOs
-        op.os_venda = operacao.osVenda
         op.data_venc = operacao.dataVenda
         op.valor_cn = operacao.valorCn
         op.valor_cp = operacao.valorCp
-        op.conta_cliente = operacao.cliente
-        op.conta_revendedor = operacao.revendedor
+

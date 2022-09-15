@@ -73,7 +73,6 @@ class Cliente(Base):
 
     oss = relationship('OS', back_populates='cliente', cascade='delete')
     oss_saida = relationship('OSSaida', back_populates='cliente_saida', cascade='delete')
-    cliente_conta = relationship('Contas', back_populates='conta_cliente')
 
 
 class OS(Base):
@@ -419,7 +418,6 @@ class Revendedor(Base):
 
     revend_prod = relationship('Produto', back_populates='prod_revend')
     revend_est = relationship('Estoque', back_populates='est_revend', cascade='delete')
-    revendedor_conta = relationship('Contas', back_populates='conta_revendedor')
 
 class OperaçãoLivroCaixa(Base):
     __tablename__ = 'operação_livro_caixa'
@@ -478,17 +476,11 @@ class Contas(Base):
     tipo_doc = Column(String(30))
     num_doc = Column(Integer)
     num_os = Column(Integer)
-    os_venda = Column(Integer)
     data_venc = Column(Date)
-    data_pag = Column(Date)
     data_cadastro = Column(Date)
     valor_cn = Column(Integer)
     valor_cp = Column(Integer)
-    conta_cliente = relationship('Cliente', back_populates='cliente_conta')
-    conta_revendedor = relationship('Revendedor', back_populates='revendedor_conta')
     operador = Column(Integer, nullable=False)
-    parcela = Column(String(20))
-    tipo_operação = Column(Integer, nullable=False)  # 1=Entrada, 2=Saida
     conta_paga = Column(Integer)  # 1=Não Paga,   2=Paga
 
  #concederAcessoSistema()

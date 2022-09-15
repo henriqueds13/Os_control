@@ -2,19 +2,18 @@ from dominios.db import Contas
 from queries import contas_query
 
 
-class OperaçãoLivroCaixaRepositorio:
+class ContasRepositorio:
 
     def inserir_op(self, novo_op, sessao):
         query_op = contas_query.ContasQuery()
         nova_operação = Contas(cliente_fornecedor=novo_op.clienteFornecedor, contato=novo_op.contato,
                                discriminação=novo_op.discriminação,
-                               tipo_doc=novo_op.tipoDoc, num_doc=novo_op.numDoc, num_os=novo_op.numOs,
-                               os_venda=novo_op.osVenda, data_venc=novo_op.dataVenda,
+                               tipo_doc=novo_op.tipoDoc, num_doc=novo_op.numDoc,
+                               num_os=novo_op.numOs,
+                               data_venc=novo_op.dataVenda,
                                data_cadastro=novo_op.dataCadastro,
                                valor_cn=novo_op.valorCn, valor_cp=novo_op.valorCp,
-                               conta_cliente=novo_op.cliente, conta_revendedor=novo_op.revendedor,
-                               operador=novo_op.operador,
-                               parcela=novo_op.parcela, tipo_operação=novo_op.tipoOp)
+                               operador=novo_op.operador, conta_paga=novo_op.tipoOp)
         query_op.inserir_op(nova_operação, sessao)
 
     def listar_op(self, sessao):
