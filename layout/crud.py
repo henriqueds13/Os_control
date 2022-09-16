@@ -101,7 +101,7 @@ class Castelo:
         self.data_atual = datetime.now()
         self.date = date.today()
         self.dias = ('Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado', 'Domingo')
-
+        self.id_caixa_atual = 1
         def on_enter(e):
             e.widget['relief'] = 'raised'
 
@@ -1295,6 +1295,15 @@ class Castelo:
         button_vend6.bind('<Leave>', on_leave)
 
         # Financeiro-----------------------------------------------------------------------------------------------------
+        self.repositorio_caixa = livro_caixa_repositorio.LivroCaixaRepositorio()
+        if len(self.repositorio_caixa.listar_op(sessao)) == 0:
+            novo_caixa = livro_caixa.LivroCaixa(datetime.now(), None, 0, 0, 0, 0, 0, 0, 0, 0, self.id_operador,
+                                                0, 0, 0, 0)
+            self.repositorio_caixa.inserir_op(novo_caixa, sessao)
+            sessao.commit()
+
+        self.valor_caixa_normal = 0
+        self.valor_caixa_peca = 0
 
         osVarFin1 = StringVar(master)
 
@@ -1346,7 +1355,7 @@ class Castelo:
         frame_saldo_caixa.pack(pady=20, fill=X)
         Label(frame_saldo_caixa, text='Saldo:', anchor=W, bg=color_est1, font=('Verdana', '13'), fg='#0CF25D').pack(
             fill=X)
-        self.label_valor_total = Label(frame_saldo_caixa, text='R$200,00', bg=color_est1,
+        self.label_valor_total = Label(frame_saldo_caixa, text=self.insereTotalConvertido(self.valor_caixa_normal), bg=color_est1,
                                        font=('Verdana', '13', 'bold'),
                                        fg='#0CF25D')
         self.label_valor_total.pack(fill=X)
@@ -1357,7 +1366,7 @@ class Castelo:
         frame_valor_cp.pack(fill=X, ipady=10)
         Label(frame_valor_cp, text='Caixa de Peça:', anchor=W, bg=color_est1, font=('Verdana', '13'),
               fg='#72F2EB').grid(row=0, column=0, sticky=W)
-        self.label_valor_cp = Label(frame_valor_cp, text='R$3000,00', bg=color_est1, font=('Verdana', '13', 'bold'),
+        self.label_valor_cp = Label(frame_valor_cp, text=self.insereTotalConvertido(self.valor_caixa_peca), bg=color_est1, font=('Verdana', '13', 'bold'),
                                     fg='#72F2EB')
         self.label_valor_cp.grid(row=1, column=0, columnspan=2)
         self.label_valor_cp.configure(width=12)
@@ -1405,7 +1414,7 @@ class Castelo:
 
         ttk.Separator(self.frame_buttons_prod_financeiro, orient=VERTICAL).pack(side=RIGHT, fill=Y, pady=4)
         button_est5 = Button(self.frame_buttons_prod_financeiro, text="Fechar Caixa", width=15, relief=FLAT,
-                             wraplength=50, bg=color_est2, command=lambda: [self.janelaEntradaCaixa(3)],
+                             wraplength=50, bg=color_est2, command=self.janelaFecharCaixaFinanceiro,
                              font=('Verdana', '10', 'bold'), fg='red')
         button_est5.pack(side=RIGHT)
         ttk.Separator(self.frame_buttons_prod_financeiro, orient=VERTICAL).pack(side=RIGHT, fill=Y, pady=4)
@@ -1460,8 +1469,6 @@ class Castelo:
         self.tree_fin_caixa.pack(padx=5, fill=X)
         self.scrollbar_fin_h.config(command=self.tree_fin_caixa.xview)
         self.scrollbar_fin_h.pack(fill=X, padx=5)
-
-        self.popularProdutoEstoque()
 
         self.tree_fin_caixa.tag_configure('evenrow', background='#D9D9D9')
         self.tree_fin_caixa.tag_configure('oddrow', background='#A6A6A6')
@@ -1693,6 +1700,9 @@ class Castelo:
                                                self.insereTotalConvertido(i.pix), self.insereTotalConvertido(i.outros),
                                                i.id_venda, i.id_os), tags=('evenrow'))
             self.count += 1
+
+        self.label_valor_total = self.insereTotalConvertido(self.valor_caixa_normal)
+        self.label_valor_cp = self.insereTotalConvertido(self.valor_caixa_peca)
         self.count = 0
         self.tree_fin_caixa.focus_set()
         children = self.tree_fin_caixa.get_children()
@@ -1743,6 +1753,326 @@ class Castelo:
         if children:
             self.tree_fin_contas.focus(children[0])
             self.tree_fin_contas.selection_set(children[0])
+
+    def janelaFecharCaixaFinanceiro(self):
+        jan = Toplevel()
+
+        bg_label_frame = '#e0e0e0'
+        fg_entry2 = '#a10031'
+        font1 = ('Verdana', '9', 'bold')
+        font2 = ('Verdana', '10', '')
+        repositorio_caixa = livro_caixa_repositorio.LivroCaixaRepositorio()
+
+        testa_inteiro_op = jan.register(self.testaEntradaNumOperador)
+
+
+        def concederAcesso13(*args):
+            repositorio_tec = tecnico_repositorio.TecnicoRepositorio()
+            if len(op_senha_caixa_fech.get()) == 4:
+                for i in self.operadores_total:
+                    if int(op_senha_caixa_fech.get()) == int(i[0]):
+                        acess_tec = repositorio_tec.listar_tecnico_senha(int(i[0]), sessao)
+                        if acess_tec.CON == 1:
+                            button_salvar.configure(state=NORMAL)
+                            entry_op.delete(0, END)
+                            entry_op.configure(validate='none', show='')
+                            entry_op.insert(0, i[1])
+                            entry_op.configure(state=DISABLED)
+                            button_salvar.focus()
+                            self.id_operador = int(acess_tec.id)
+                            return
+                        else:
+                            messagebox.showinfo(title="ERRO", message="Acesso Negado! Operador Sem Permissão "
+                                                                      "para esta Função")
+                            entry_op.delete(0, END)
+                            return
+                entry_op.delete(0, END)
+                messagebox.showinfo(title="ERRO", message="Operador Não Cadastrado!")
+
+        def novoCaixa():
+
+            res = messagebox.askyesno(None,
+                                      "Deseja Realmente Fechar o Caixa?")
+            if res:
+                if len(repositorio_caixa.listar_op(sessao)) > 1:
+                    saldo_cp = self.valor_caixa_peca
+                    data = datetime.now()
+
+                    repositorio_caixa.fechar_op(self.id_caixa_atual, data, sessao)
+                    novo_caixa = livro_caixa.LivroCaixa(datetime.now(), None, 0, saldo_cp, 0, 0, 0, 0, 0, 0, self.id_operador,
+                                                        datetime.now().strftime(), 0, 0, 0, 0)
+
+                self.id_caixa_atual = repositorio_caixa.listar_op(sessao)[-1].id
+
+                sessao.commit()
+                self.mostrarMensagem("1", "Caixa Fechado Com Sucesso!")
+                jan.destroy()
+            else:
+                return
+
+
+        # Centraliza a janela
+        x_cordinate = int((self.w / 2) - (800 / 2))
+        y_cordinate = int((self.h / 2) - (490 / 2))
+        jan.geometry("{}x{}+{}+{}".format(800, 300, x_cordinate, y_cordinate))
+
+        frame_princ = Frame(jan)
+        frame_princ.pack(fill=BOTH)
+
+
+        label_titulo = Label(frame_princ, text='FECHAMENTO DE CAIXA', font=('Verdana', '12', 'bold'), fg='#FFF',
+                             bg='#8d8d8d')
+        label_titulo.pack(fill=BOTH, ipady=10)
+        frame_tree_resumo = Frame(frame_princ)
+        frame_tree_resumo.pack(fill=X)
+
+        frame_resum_valores = Frame(frame_princ)
+        frame_resum_valores.pack(fill=BOTH, padx=10)
+
+        LF_receb = LabelFrame(frame_resum_valores, text='Recebimentos:', fg=fg_entry2, font=font2, bg=bg_label_frame)
+        LF_receb.pack(side=LEFT, fill=X)
+        labelF_recebimentos = Frame(LF_receb, bg=bg_label_frame)
+        labelF_recebimentos.pack(fill=BOTH, padx=5, pady=5)
+
+        Label(labelF_recebimentos, text='Dinheiro:', fg=fg_entry2, font=font2, bg=bg_label_frame).grid(row=0, column=0,
+                                                                                                       stick=E)
+        ttk.Separator(labelF_recebimentos, orient=VERTICAL).grid(row=0, column=1, rowspan=12, stick=NS)
+        quant_din = Label(labelF_recebimentos, text='0', fg=fg_entry2, font=font1, bg=bg_label_frame)
+        quant_din.grid(row=0, column=2)
+        quant_din.config(width=4)
+        quant_din.grid_propagate(0)
+        ttk.Separator(labelF_recebimentos, orient=VERTICAL).grid(row=0, column=3, stick=NS, rowspan=12)
+        valor_din = Label(labelF_recebimentos, text='0,00', fg=fg_entry2, font=font1, bg=bg_label_frame, anchor=W)
+        valor_din.grid(row=0, column=4, padx=10, sticky=W)
+        valor_din.config(width=8)
+        valor_din.grid_propagate(0)
+
+        ttk.Separator(labelF_recebimentos, orient=HORIZONTAL).grid(row=1, column=0, columnspan=5, sticky=EW, padx=5)
+
+        Label(labelF_recebimentos, text='Cheque:', fg=fg_entry2, font=font2, bg=bg_label_frame).grid(row=2, column=0,
+                                                                                                     stick=E)
+        quant_cheque = Label(labelF_recebimentos, text='0', fg=fg_entry2, font=font1, bg=bg_label_frame)
+        quant_cheque.grid(row=2, column=2)
+        quant_cheque.config(width=4)
+        quant_cheque.grid_propagate(0)
+        valor_cheque = Label(labelF_recebimentos, text='0,00', fg=fg_entry2, font=font1, bg=bg_label_frame, anchor=W)
+        valor_cheque.grid(row=2, column=4, padx=10)
+        valor_cheque.config(width=8)
+        valor_cheque.grid_propagate(0)
+
+        ttk.Separator(labelF_recebimentos, orient=HORIZONTAL).grid(row=3, column=0, columnspan=5, sticky=EW, padx=5)
+
+        Label(labelF_recebimentos, text='Cartão Crédito:', fg=fg_entry2, font=font2, bg=bg_label_frame).grid(row=4,
+                                                                                                             column=0,
+                                                                                                             stick=E)
+        quant_ccredito = Label(labelF_recebimentos, text='0', fg=fg_entry2, font=font1, bg=bg_label_frame)
+        quant_ccredito.grid(row=4, column=2)
+        quant_ccredito.config(width=4)
+        quant_ccredito.grid_propagate(0)
+        valor_ccredito = Label(labelF_recebimentos, text='0,00', fg=fg_entry2, font=font1, bg=bg_label_frame, anchor=W)
+        valor_ccredito.grid(row=4, column=4, padx=10)
+        valor_ccredito.config(width=8)
+        valor_ccredito.grid_propagate(0)
+
+        ttk.Separator(labelF_recebimentos, orient=HORIZONTAL).grid(row=5, column=0, columnspan=5, sticky=EW, padx=5)
+
+        Label(labelF_recebimentos, text='Cartão Débito:', fg=fg_entry2, font=font2, bg=bg_label_frame).grid(row=6,
+                                                                                                            column=0,
+                                                                                                            stick=E)
+        quant_cdebito = Label(labelF_recebimentos, text='0', fg=fg_entry2, font=font1, bg=bg_label_frame)
+        quant_cdebito.grid(row=6, column=2)
+        quant_cdebito.config(width=4)
+        quant_cdebito.grid_propagate(0)
+        valor_cdebito = Label(labelF_recebimentos, text='0,00', fg=fg_entry2, font=font1, bg=bg_label_frame, anchor=W)
+        valor_cdebito.grid(row=6, column=4, padx=10)
+        valor_cdebito.config(width=8)
+        valor_cdebito.grid_propagate(0)
+
+        ttk.Separator(labelF_recebimentos, orient=HORIZONTAL).grid(row=7, column=0, columnspan=5, sticky=EW, padx=5)
+
+        Label(labelF_recebimentos, text='Pix:', fg=fg_entry2, font=font2, bg=bg_label_frame).grid(row=8, column=0,
+                                                                                                  stick=E)
+        quant_pix = Label(labelF_recebimentos, text='0', fg=fg_entry2, font=font1, bg=bg_label_frame)
+        quant_pix.grid(row=8, column=2)
+        quant_pix.config(width=4)
+        quant_pix.grid_propagate(0)
+        valor_pix = Label(labelF_recebimentos, text='0,00', fg=fg_entry2, font=font1, bg=bg_label_frame, anchor=W)
+        valor_pix.grid(row=8, column=4, padx=10)
+        valor_pix.config(width=8)
+        valor_pix.grid_propagate(0)
+
+        ttk.Separator(labelF_recebimentos, orient=HORIZONTAL).grid(row=9, column=0, columnspan=5, sticky=EW, padx=5)
+
+        Label(labelF_recebimentos, text='Outros:', fg=fg_entry2, font=font2, bg=bg_label_frame).grid(row=10, column=0,
+                                                                                                     stick=E)
+        quant_outros = Label(labelF_recebimentos, text='0', fg=fg_entry2, font=font1, bg=bg_label_frame)
+        quant_outros.grid(row=10, column=2)
+        quant_outros.config(width=4)
+        quant_outros.grid_propagate(0)
+        valor_outros = Label(labelF_recebimentos, text='0,00', fg=fg_entry2, font=font1, bg=bg_label_frame, anchor=W)
+        valor_outros.grid(row=10, column=4, padx=10)
+        valor_outros.config(width=8)
+        valor_outros.grid_propagate(0)
+
+        LF_resum_val = LabelFrame(frame_resum_valores, text='Resumo Valores:', fg=fg_entry2, font=font2,
+                                  bg=bg_label_frame)
+        LF_resum_val.pack(side=LEFT, fill=X, padx=10)
+        labelF_resum_val = Frame(LF_resum_val, bg=bg_label_frame)
+        labelF_resum_val.pack(fill=BOTH, padx=5, pady=5)
+
+        Label(labelF_resum_val, text='Entrada CN:', fg=fg_entry2, font=font2, bg=bg_label_frame).grid(row=0, column=0,
+                                                                                                      stick=E)
+        ttk.Separator(labelF_resum_val, orient=VERTICAL).grid(row=0, column=1, rowspan=7, stick=NS)
+        quant_entr_cn = Label(labelF_resum_val, text='0', fg=fg_entry2, font=font1, bg=bg_label_frame)
+        quant_entr_cn.grid(row=0, column=2, padx=10)
+        quant_entr_cn.config(width=4)
+        quant_entr_cn.grid_propagate(0)
+        ttk.Separator(labelF_resum_val, orient=VERTICAL).grid(row=0, column=3, stick=NS, rowspan=11)
+        valor_entr_cn = Label(labelF_resum_val, text='0,00', fg=fg_entry2, font=font1, bg=bg_label_frame, anchor=W)
+        valor_entr_cn.grid(row=0, column=4, padx=10)
+        valor_entr_cn.config(width=8)
+        valor_entr_cn.grid_propagate(0)
+
+        ttk.Separator(labelF_resum_val, orient=HORIZONTAL).grid(row=1, column=0, columnspan=5, sticky=EW, padx=5)
+
+        Label(labelF_resum_val, text='Saída CN:', fg=fg_entry2, font=font2, bg=bg_label_frame).grid(row=2, column=0,
+                                                                                                    stick=E)
+        quant_saida_cn = Label(labelF_resum_val, text='0', fg=fg_entry2, font=font1, bg=bg_label_frame)
+        quant_saida_cn.grid(row=2, column=2)
+        quant_saida_cn.config(width=4)
+        quant_saida_cn.grid_propagate(0)
+        valor_saida_cn = Label(labelF_resum_val, text='0,00', fg=fg_entry2, font=font1, bg=bg_label_frame, anchor=W)
+        valor_saida_cn.grid(row=2, column=4, padx=10)
+        valor_saida_cn.config(width=8)
+        valor_saida_cn.grid_propagate(0)
+
+        ttk.Separator(labelF_resum_val, orient=HORIZONTAL).grid(row=3, column=0, columnspan=5, sticky=EW, padx=5)
+
+        Label(labelF_resum_val, text='Entrada CP:', fg=fg_entry2, font=font2, bg=bg_label_frame).grid(row=4,
+                                                                                                      column=0,
+                                                                                                      stick=E)
+        quant_entr_cp = Label(labelF_resum_val, text='0', fg=fg_entry2, font=font1, bg=bg_label_frame)
+        quant_entr_cp.grid(row=4, column=2)
+        quant_entr_cp.config(width=4)
+        quant_entr_cp.grid_propagate(0)
+        valor_entr_cp = Label(labelF_resum_val, text='0,00', fg=fg_entry2, font=font1, bg=bg_label_frame, anchor=W)
+        valor_entr_cp.grid(row=4, column=4, padx=10)
+        valor_entr_cp.config(width=8)
+        valor_entr_cp.grid_propagate(0)
+
+        ttk.Separator(labelF_resum_val, orient=HORIZONTAL).grid(row=5, column=0, columnspan=5, sticky=EW, padx=5)
+
+        Label(labelF_resum_val, text='Saída CN:', fg=fg_entry2, font=font2, bg=bg_label_frame).grid(row=6,
+                                                                                                    column=0,
+                                                                                                    stick=E)
+        quant_saida_cp = Label(labelF_resum_val, text='0', fg=fg_entry2, font=font1, bg=bg_label_frame)
+        quant_saida_cp.grid(row=6, column=2)
+        quant_saida_cp.config(width=4)
+        quant_saida_cp.grid_propagate(0)
+        valor_saida_cp = Label(labelF_resum_val, text='0,00', fg=fg_entry2, font=font1, bg=bg_label_frame, anchor=W)
+        valor_saida_cp.grid(row=6, column=4, padx=10)
+        valor_saida_cp.config(width=8)
+        valor_saida_cp.grid_propagate(0)
+
+        ttk.Separator(labelF_resum_val, orient=HORIZONTAL).grid(row=7, column=0, columnspan=5, sticky=EW, padx=5)
+
+        Label(labelF_resum_val, text='Saldo Caixa:', fg=fg_entry2, font=font2, bg='#ffff80').grid(row=8, column=0,
+                                                                                                  stick=E,
+                                                                                                  columnspan=3,
+                                                                                                  padx=5)
+        valor_saldo_cn = Label(labelF_resum_val, text='0,00', fg='#c00033', font=font1, bg='#ffff80', anchor=W)
+        valor_saldo_cn.grid(row=8, column=4, padx=10)
+        valor_saldo_cn.config(width=8)
+        valor_saldo_cn.grid_propagate(0)
+
+        ttk.Separator(labelF_resum_val, orient=HORIZONTAL).grid(row=9, column=0, columnspan=5, sticky=EW, padx=5)
+
+        Label(labelF_resum_val, text='Saldo Caixa Peça:', fg=fg_entry2, font=font2, bg='#ffff80').grid(row=10, column=0,
+                                                                                                       stick=E,
+                                                                                                       columnspan=3,
+                                                                                                       padx=5)
+        valor_saldo_cp = Label(labelF_resum_val, text='0,00', fg='#c00033', font=font1, bg='#ffff80', anchor=W)
+        valor_saldo_cp.grid(row=10, column=4, padx=10)
+        valor_saldo_cp.config(width=8)
+        valor_saldo_cp.grid_propagate(0)
+
+        Label(frame_resum_valores, width=25, height=10, bg='yellow').pack(side=LEFT)
+
+        fr_buttons = Frame(frame_resum_valores)
+        fr_buttons.pack(side=LEFT, padx=10, fill=Y)
+        LF_buttons = LabelFrame(fr_buttons)
+        LF_buttons.pack(pady=10)
+
+        Button(LF_buttons, text='1', width=3).pack(padx=5, pady=5)
+        Button(LF_buttons, text='1', width=3).pack(padx=5, pady=5)
+
+        frame_buttons_fin = Frame(frame_princ)
+        frame_buttons_fin.pack(fill=BOTH, padx=10, pady=10)
+
+        Button(frame_buttons_fin, text='Cancelar', width=12, command=jan.destroy).pack(side=RIGHT, padx=20, ipady=5,
+                                                                                     pady=10)
+        button_salvar = Button(frame_buttons_fin, text='Fechar Caixa', width=12, state=DISABLED, command=novoCaixa)
+        button_salvar.pack(side=RIGHT, padx=0, ipady=5,
+                                                                                     pady=10)
+        lf_mensagem = LabelFrame(frame_buttons_fin, text='Mensagem', bg=bg_label_frame)
+        lf_mensagem.pack(side=LEFT, ipadx=10)
+        img_mensagem = Label(lf_mensagem, bg='yellow', height=3, width=5)
+        img_mensagem.pack(side=LEFT, padx=10, pady=5)
+        mensagem_lb = Label(lf_mensagem, text='Essa Ação Não poderá ser Desfeita!', fg='red',
+                            bg=bg_label_frame)
+        mensagem_lb.pack(side=LEFT)
+
+        LFrame_op = LabelFrame(frame_buttons_fin, text=' Operador')
+        LFrame_op.pack(side=LEFT, padx=30)
+        global op_senha_caixa_fech
+        op_senha_caixa_fech = StringVar()
+        op_senha_caixa_fech.trace_add('write', concederAcesso13)
+        entry_op = Entry(LFrame_op, show='*', width=25, validate='all',
+                                 validatecommand=(testa_inteiro_op, '%P'), textvariable=op_senha_caixa_fech)
+        entry_op.pack(fill=X, padx=10, pady=10)
+
+        jan.transient(root2)
+        jan.focus_force()
+        jan.grab_set()
+
+
+    def atualizaCaixa(self, obj, num):
+        caixa_atual = self.repositorio_caixa.listar_op_id(self.id_caixa_atual, sessao)
+        if num == 1:
+
+            saldo_cn = caixa_atual.saldo_cn + (obj.entrada - obj.entradaCp)
+            saldo_cp = caixa_atual.saldo_cp + obj.entradaCp
+            dinheiro = caixa_atual.dinheiro + obj.dinheiro
+            cheque = caixa_atual.cheque + obj.cheque
+            cdebito = caixa_atual.cdebito + obj.cdebito
+            ccredito = caixa_atual.ccredito + obj.ccredito
+            pix = caixa_atual.pix + obj.pix
+            outros = caixa_atual.outros + obj.outros
+            entrada = caixa_atual.entrada + obj.entrada
+            entrada_cp = caixa_atual.entrada_cp + obj.entradaCp
+
+
+            nova_entrada = livro_caixa.LivroCaixa(None, None, saldo_cn, saldo_cp, cheque, ccredito, cdebito, pix,
+                                                  dinheiro, outros, 1, entrada, 0, entrada_cp, 0)
+
+
+        elif num == 2:
+
+            saldo_cn = caixa_atual.saldo_cn - (obj.saida - obj.saidaCp)
+            saldo_cp = caixa_atual.saldo_cp - obj.saidaCp
+            saida = caixa_atual.saida - obj.saida
+            saida_cp = caixa_atual.saida_cp - obj.saidaCp
+
+            nova_entrada = livro_caixa.LivroCaixa(None, None, saldo_cn, saldo_cp, 0, 0, 0, 0,
+                                                  0, 0, 1, 0, saida, 0, saida_cp)
+
+        self.repositorio_caixa.editar_op(self.id_caixa_atual, nova_entrada, num, sessao)
+        self.valor_caixa_normal = caixa_atual.saldo_cn
+        self.valor_caixa_peca = caixa_atual.saldo_cp
+
+        sessao.commit()
+
+
 
     def janelaEntradaCaixa(self, num):
 
@@ -1883,6 +2213,7 @@ class Castelo:
                                                                        None)
                         repositorio.editar_op(dados_reg[0], nova_entrada, sessao)
 
+            self.atualizaCaixa(nova_entrada, num)
             sessao.commit()
             self.mostrarMensagem("1", "Registro adicionado com Sucesso!")
             self.popularRegistroFin()
@@ -2140,6 +2471,8 @@ class Castelo:
             if res:
                 conta = repositorio_conta.listar_op_id(dado_conta[12], sessao)
                 repositorio_conta.remover_op(conta.id, sessao)
+            else:
+                return
 
 
             sessao.commit()

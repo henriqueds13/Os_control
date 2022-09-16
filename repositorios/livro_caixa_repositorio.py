@@ -8,7 +8,7 @@ class LivroCaixaRepositorio():
         query_op = livro_caixa_query.LivroCaixaQuery()
         nova_operação = LivroCaixa(data_abertura=novo_op.dataAbertura, data_fechamento=novo_op.dataFechamento,
                                    saldo_cn=novo_op.saldoCn,
-                                   saldo_cp=novo_op.saldoCp, mes=novo_op.mes, ano=novo_op.ano,
+                                   saldo_cp=novo_op.saldoCp,
                                    dinheiro=novo_op.dinheiro,
                                    cheque=novo_op.cheque, cdebito=novo_op.cdebito, ccredito=novo_op.ccredito,
                                    pix=novo_op.pix, outros=novo_op.outros, operador=novo_op.operador,
@@ -29,3 +29,11 @@ class LivroCaixaRepositorio():
     def remover_op(self, op_id, sessao):
         query_op = livro_caixa_query.LivroCaixaQuery()
         query_op.remover_op(op_id, sessao)
+
+    def editar_op(self, op_id, operacao, num, sessao):
+        query_op = livro_caixa_query.LivroCaixaQuery()
+        query_op.editar_op(op_id, operacao, num, sessao)
+
+    def fechar_op(self, op_id, data, sessao):
+        query_op = livro_caixa_query.LivroCaixaQuery()
+        query_op.fechar_op(op_id, data, sessao)

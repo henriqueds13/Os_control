@@ -461,8 +461,6 @@ class LivroCaixa(Base):
     pix = Column(Float)
     dinheiro = Column(Float)
     outros = Column(Float)
-    mes = Column(String(15))
-    ano = Column(Integer)
     operador = Column(Integer, nullable=False)
 
 class Contas(Base):
