@@ -1,6 +1,6 @@
 class OpLivroCaixa():
     def __init__(self, data, hora, tipo_op, historico, entrada, saida, entrada_cp, saida_cp, grupo,
-                 cheque, ccredito, cdebito, pix, dinheiro, outros, operador, venda, os):
+                 cheque, ccredito, cdebito, pix, dinheiro, outros, operador, os, mes_caixa):
         self.__data = data
         self.__hora = hora
         self.__tipo_op = tipo_op
@@ -17,8 +17,8 @@ class OpLivroCaixa():
         self.__pix = pix
         self.__outros = outros
         self.__operador = operador
-        self.__venda = venda
         self.__os = os
+        self.__mes_caixa = mes_caixa
 
     @property
     def data(self):
@@ -86,12 +86,13 @@ class OpLivroCaixa():
         return self.__operador
 
     @property
-    def venda(self):
-        return self.__venda
-
-    @property
     def os(self):
         return self.__os
+
+
+    @property
+    def mesCaixa(self):
+        return self.__mes_caixa
 
     @data.setter
     def data(self, dat):
@@ -158,9 +159,9 @@ class OpLivroCaixa():
     def operador(self, op):
         self.__operador = op
 
-    @venda.setter
-    def venda(self, vend):
-        self.__venda = vend
+    @mesCaixa.setter
+    def mesCaixa(self, vend):
+        self.__mes_caixa = vend
 
     @os.setter
     def os(self, oss):

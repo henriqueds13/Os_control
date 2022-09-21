@@ -182,7 +182,7 @@ class OS(Base):
 
     produtos = relationship('Produto', secondary='produto_os', back_populates='os_prod')
 
-    os_fin = relationship('OperaçãoLivroCaixa', back_populates='fin_os')
+
 
 
 class OSSaida(Base):
@@ -332,7 +332,7 @@ class OsVenda(Base):
     operador = Column(Integer)
 
     venda_produto = relationship('ProdutoVenda', back_populates='prod_venda', cascade='delete')
-    venda_fin = relationship('OperaçãoLivroCaixa', back_populates='fin_venda')
+
 
 
 class Produto(Base):
@@ -438,11 +438,10 @@ class OperaçãoLivroCaixa(Base):
     dinheiro = Column(Float)
     outros = Column(Float)
     operador = Column(Integer, nullable=False)
-    id_venda = Column(Integer, ForeignKey('os_venda.id_venda'))
-    id_os = Column(Integer, ForeignKey('ordem_de_servico.id'))
+    id_os = Column(Integer)
+    mes_caixa = Column(String(10))
 
-    fin_venda = relationship('OsVenda', back_populates='venda_fin')
-    fin_os = relationship('OS', back_populates='os_fin')
+
 
 class LivroCaixa(Base):
     __tablename__ = 'livro_caixa'
@@ -462,6 +461,7 @@ class LivroCaixa(Base):
     dinheiro = Column(Float)
     outros = Column(Float)
     operador = Column(Integer, nullable=False)
+    mes_caixa = Column(String(10))
 
 class Contas(Base):
     __tablename__ = 'contas'
@@ -476,10 +476,13 @@ class Contas(Base):
     num_os = Column(Integer)
     data_venc = Column(Date)
     data_cadastro = Column(Date)
-    valor_cn = Column(Integer)
-    valor_cp = Column(Integer)
+    valor_cn = Column(Float)
+    valor_cp = Column(Float)
     operador = Column(Integer, nullable=False)
     conta_paga = Column(Integer)  # 1=Não Paga,   2=Paga
 
  #concederAcessoSistema()
 Base.metadata.create_all(engine)
+
+
+

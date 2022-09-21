@@ -10,6 +10,10 @@ class OpLivroCaixaQuery():
         op = sessao.query(OperaçãoLivroCaixa).all()
         return op
 
+    def listar_op_mes(self, mes, sessao):
+        op = sessao.query(OperaçãoLivroCaixa).filter(OperaçãoLivroCaixa.mes_caixa == mes).all()
+        return op
+
     def listar_op_id(self, op_id, sessao):
         op = sessao.query(OperaçãoLivroCaixa).filter(OperaçãoLivroCaixa.id == op_id).first()
         return op

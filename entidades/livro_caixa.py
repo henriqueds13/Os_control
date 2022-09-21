@@ -1,6 +1,6 @@
 class LivroCaixa():
     def __init__(self, data_abertura, data_fechamento, saldo_cn, saldo_cp, cheque, ccredito, cdebito, pix, dinheiro,
-                 outros, operador, entrada, saida, entrada_cp, saida_cp):
+                 outros, operador, entrada, saida, entrada_cp, saida_cp, mes_caixa):
         self.__data_abertura = data_abertura
         self.__data_fechamento = data_fechamento
         self.__saldo_cn = saldo_cn
@@ -16,6 +16,7 @@ class LivroCaixa():
         self.__saida = saida
         self.__entrada_cp = entrada_cp
         self.__saida_cp = saida_cp
+        self.__mes_caixa = mes_caixa
 
     @property
     def dataAbertura(self):
@@ -77,6 +78,10 @@ class LivroCaixa():
     def saidaCp(self):
         return self.__saida_cp
 
+    @property
+    def mesCaixa(self):
+        return self.__mes_caixa
+
     @dataAbertura.setter
     def dataAbertura(self, data):
         self.__data_abertura = data
@@ -136,3 +141,7 @@ class LivroCaixa():
     @saidaCp.setter
     def saidaCp(self, saida):
         self.__saida_cp = saida
+
+    @mesCaixa.setter
+    def mesCaixa(self, saida):
+        self.__mes_caixa = saida

@@ -13,7 +13,7 @@ class LivroCaixaRepositorio():
                                    cheque=novo_op.cheque, cdebito=novo_op.cdebito, ccredito=novo_op.ccredito,
                                    pix=novo_op.pix, outros=novo_op.outros, operador=novo_op.operador,
                                    entrada=novo_op.entrada, saida=novo_op.saida,
-                                   entrada_cp=novo_op.entradaCp, saida_cp=novo_op.saidaCp)
+                                   entrada_cp=novo_op.entradaCp, saida_cp=novo_op.saidaCp, mes_caixa=novo_op.mesCaixa)
         query_op.inserir_op(nova_operação, sessao)
 
     def listar_op(self, sessao):

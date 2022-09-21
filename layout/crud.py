@@ -1299,13 +1299,14 @@ class Castelo:
 
         if len(self.repositorio_caixa.listar_op(sessao)) == 0:
             novo_caixa = livro_caixa.LivroCaixa(datetime.now(), None, 0, 0, 0, 0, 0, 0, 0, 0, self.id_operador,
-                                                0, 0, 0, 0)
+                                                0, 0, 0, 0, datetime.now().strftime('%m/%Y'))
             self.repositorio_caixa.inserir_op(novo_caixa, sessao)
             sessao.commit()
 
         self.id_caixa_atual = self.repositorio_caixa.listar_op(sessao)[-1].id
         self.caixa_atual = self.repositorio_caixa.listar_op_id(self.id_caixa_atual, sessao)
         self.valor_caixa_normal = self.caixa_atual.saldo_cn
+        self.mes_atual = self.repositorio_caixa.listar_op(sessao)[-1].mes_caixa
         self.valor_caixa_peca = self.caixa_atual.saldo_cp
 
         osVarFin1 = StringVar(master)
@@ -1358,7 +1359,7 @@ class Castelo:
         frame_saldo_caixa.pack(pady=20, fill=X)
         Label(frame_saldo_caixa, text='Saldo:', anchor=W, bg=color_est1, font=('Verdana', '13'), fg='#0CF25D').pack(
             fill=X)
-        self.label_valor_total = Label(frame_saldo_caixa, text=self.insereTotalConvertido(self.valor_caixa_normal), bg=color_est1,
+        self.label_valor_total = Label(frame_saldo_caixa, text=self.somaValorCn(), bg=color_est1,
                                        font=('Verdana', '13', 'bold'),
                                        fg='#0CF25D')
         self.label_valor_total.pack(fill=X)
@@ -1369,7 +1370,7 @@ class Castelo:
         frame_valor_cp.pack(fill=X, ipady=10)
         Label(frame_valor_cp, text='Caixa de Peça:', anchor=W, bg=color_est1, font=('Verdana', '13'),
               fg='#72F2EB').grid(row=0, column=0, sticky=W)
-        self.label_valor_cp = Label(frame_valor_cp, text=self.insereTotalConvertido(self.valor_caixa_peca), bg=color_est1, font=('Verdana', '13', 'bold'),
+        self.label_valor_cp = Label(frame_valor_cp, text=self.somaValorCp(), bg=color_est1, font=('Verdana', '13', 'bold'),
                                     fg='#72F2EB')
         self.label_valor_cp.grid(row=1, column=0, columnspan=2)
         self.label_valor_cp.configure(width=12)
@@ -1431,7 +1432,7 @@ class Castelo:
                                            columns=(
                                                'codigo', 'data', 'hora', 'descricao', 'entrada', 'saida', 'grupo',
                                                'dinheiro', 'cheque',
-                                               'cdebito', 'ccredito', 'pix', 'outros', 'id_venda', 'id_os'),
+                                               'cdebito', 'ccredito', 'pix', 'outros','id_os', 'mes_caixa'),
                                            show='headings',
                                            xscrollcommand=self.scrollbar_fin_h.set,
                                            selectmode='browse',
@@ -1450,8 +1451,8 @@ class Castelo:
         self.tree_fin_caixa.column('ccredito', width=100, minwidth=50, stretch=False)
         self.tree_fin_caixa.column('pix', width=100, minwidth=10, stretch=False)
         self.tree_fin_caixa.column('outros', width=100, minwidth=10, stretch=False)
-        self.tree_fin_caixa.column('id_venda', width=75, minwidth=10, stretch=False)
         self.tree_fin_caixa.column('id_os', width=75, minwidth=10, stretch=False)
+        self.tree_fin_caixa.column('mes_caixa', width=75, minwidth=10, stretch=False)
 
         self.tree_fin_caixa.heading('codigo', text='CÓDIGO')
         self.tree_fin_caixa.heading('data', text='DATA')
@@ -1466,8 +1467,8 @@ class Castelo:
         self.tree_fin_caixa.heading('ccredito', text='C.CRÉDITO')
         self.tree_fin_caixa.heading('pix', text='PIX')
         self.tree_fin_caixa.heading('outros', text='OUTROS')
-        self.tree_fin_caixa.heading('id_venda', text='ID. VENDA')
-        self.tree_fin_caixa.heading('id_os', text='ID. OS')
+        self.tree_fin_caixa.heading('id_os', text='ID. VENDA')
+        self.tree_fin_caixa.heading('mes_caixa', text='CAIXA')
 
         self.tree_fin_caixa.pack(padx=5, fill=X)
         self.scrollbar_fin_h.config(command=self.tree_fin_caixa.xview)
@@ -1490,7 +1491,7 @@ class Castelo:
         frame_conta_caixa.pack(pady=5, fill=X, padx=5)
         Label(frame_conta_caixa, text='A Pagar:', anchor=W, bg=color_est1, fg='#FFFFFF').pack(
             fill=X)
-        self.label_conta_pagar = Label(frame_conta_caixa, text='R$200,00', bg=color_est1,
+        self.label_conta_pagar = Label(frame_conta_caixa, text=self.somaValorConta(2), bg=color_est1,
                                        font=('Verdana', '10', 'bold'),
                                        fg='#DEEFE7')
         self.label_conta_pagar.pack(fill=X)
@@ -1501,7 +1502,7 @@ class Castelo:
         frame_conta_caixa1.pack(pady=5, fill=X, padx=5)
         Label(frame_conta_caixa1, text='A Receber:', anchor=W, bg=color_est1, fg='#FFFFFF').pack(
             fill=X)
-        self.label_conta_receber = Label(frame_conta_caixa1, text='R$200,00', bg=color_est1,
+        self.label_conta_receber = Label(frame_conta_caixa1, text=self.somaValorConta(1), bg=color_est1,
                                          font=('Verdana', '10', 'bold'),
                                          fg='#DEEFE7')
         self.label_conta_receber.pack(fill=X)
@@ -1510,9 +1511,9 @@ class Castelo:
 
         frame_conta_caixa2 = Frame(self.frame_barra_lateral2)
         frame_conta_caixa2.pack(pady=5, fill=X, padx=5)
-        Label(frame_conta_caixa2, text='A Pagar [Vencidas]:', anchor=W, bg=color_est1, fg='#FFFFFF').pack(
+        Label(frame_conta_caixa2, text='A Pagar [CP]:', anchor=W, bg=color_est1, fg='#FFFFFF').pack(
             fill=X)
-        self.label_conta_pvenc = Label(frame_conta_caixa2, text='R$200,00', bg=color_est1,
+        self.label_conta_pvenc = Label(frame_conta_caixa2, text=self.somaValorContaCp(2), bg=color_est1,
                                        font=('Verdana', '10', 'bold'),
                                        fg='#DEEFE7')
         self.label_conta_pvenc.pack(fill=X)
@@ -1521,9 +1522,9 @@ class Castelo:
 
         frame_conta_caixa3 = Frame(self.frame_barra_lateral2)
         frame_conta_caixa3.pack(pady=5, fill=X, padx=5)
-        Label(frame_conta_caixa3, text='A Receber [Vencidas]:', anchor=W, bg=color_est1, fg='#FFFFFF').pack(
+        Label(frame_conta_caixa3, text='A Receber [CP]:', anchor=W, bg=color_est1, fg='#FFFFFF').pack(
             fill=X)
-        self.label_conta_rvencidas = Label(frame_conta_caixa3, text='R$200,00', bg=color_est1,
+        self.label_conta_rvencidas = Label(frame_conta_caixa3, text=self.somaValorContaCp(1), bg=color_est1,
                                            font=('Verdana', '10', 'bold'),
                                            fg='#DEEFE7')
         self.label_conta_rvencidas.pack(fill=X)
@@ -1619,7 +1620,7 @@ class Castelo:
         button_est6.pack(side=LEFT)
         ttk.Separator(self.frame_buttons_fin_contas, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
         button_est7 = Button(self.frame_buttons_fin_contas, text="Excluir Conta", width=15, relief=FLAT,
-                             wraplength=50, bg=color_est2)
+                             wraplength=50, bg=color_est2, command=self.janelaPedeSenhaConta)
         button_est7.pack(side=LEFT)
         ttk.Separator(self.frame_buttons_fin_contas, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
         button_est8 = Button(self.frame_buttons_fin_contas, text="Filtrar Contas", width=15, relief=FLAT,
@@ -1675,7 +1676,7 @@ class Castelo:
     def popularRegistroFin(self):
         self.tree_fin_caixa.delete(*self.tree_fin_caixa.get_children())
         repositorio = op_livro_caixa_repositorio.OperaçãoLivroCaixaRepositorio()
-        registros = repositorio.listar_op(sessao)
+        registros = repositorio.listar_op_mes(self.mes_atual, sessao)
 
         for i in registros:
             if self.count % 2 == 0:
@@ -1689,7 +1690,7 @@ class Castelo:
                                                self.insereTotalConvertido(i.cdebito),
                                                self.insereTotalConvertido(i.ccredito),
                                                self.insereTotalConvertido(i.pix), self.insereTotalConvertido(i.outros),
-                                               i.id_venda, i.id_os), tags=('oddrow'))
+                                               i.id_os, i.mes_caixa), tags=('oddrow'))
             else:
                 self.tree_fin_caixa.insert('', 'end',
                                            values=(
@@ -1701,11 +1702,11 @@ class Castelo:
                                                self.insereTotalConvertido(i.cdebito),
                                                self.insereTotalConvertido(i.ccredito),
                                                self.insereTotalConvertido(i.pix), self.insereTotalConvertido(i.outros),
-                                               i.id_venda, i.id_os), tags=('evenrow'))
+                                               i.id_os, i.mes_caixa), tags=('evenrow'))
             self.count += 1
 
-        self.label_valor_total.config(text=self.insereTotalConvertido(self.valor_caixa_normal))
-        self.label_valor_cp.config(text=self.insereTotalConvertido(self.valor_caixa_peca))
+        self.label_valor_total.config(text=self.somaValorCn())
+        self.label_valor_cp.config(text=self.somaValorCp())
         self.count = 0
         self.tree_fin_caixa.focus_set()
         children = self.tree_fin_caixa.get_children()
@@ -1721,7 +1722,7 @@ class Castelo:
 
         for i in registros:
 
-            if i.conta_paga == 1:
+            if i.conta_paga == 2:
                 tipo_conta = 'CONTA'
             else:
                 tipo_conta = 'COBRANÇA'
@@ -1750,6 +1751,11 @@ class Castelo:
                                                 i.num_os,
                                                 i.id), tags=('evenrow'))
             self.count += 1
+
+        self.label_conta_pagar.config(text=self.somaValorConta(2))
+        self.label_conta_receber.config(text=self.somaValorConta(1))
+        self.label_conta_pvenc.config(text=self.somaValorContaCp(2))
+        self.label_conta_rvencidas.config(text=self.somaValorContaCp(1))
         self.count = 0
         self.tree_fin_contas.focus_set()
         children = self.tree_fin_contas.get_children()
@@ -1800,17 +1806,21 @@ class Castelo:
                 if len(repositorio_caixa.listar_op(sessao)) > 0:
                     saldo_cp = self.valor_caixa_peca
                     data = datetime.now()
-
-                    repositorio_caixa.fechar_op(self.id_caixa_atual, data, sessao)
-                    novo_caixa = livro_caixa.LivroCaixa(datetime.now(), None, 0, saldo_cp, 0, 0, 0, 0, 0, 0, self.id_operador,
-                                                        0, 0, 0, 0)
-                    repositorio_caixa.inserir_op(novo_caixa, sessao)
+                    mes_caixa = self.alteraDataFin(15, data)
+                    if caixa_atual.mes_caixa == mes_caixa:
+                        messagebox.showinfo(title="ERRO", message="O Caixa só pode ser Fechado na Última semana do Mês!")
+                        return
+                    else:
+                        repositorio_caixa.fechar_op(self.id_caixa_atual, data, sessao)
+                        novo_caixa = livro_caixa.LivroCaixa(datetime.now(), None, 0, saldo_cp, 0, 0, 0, 0, 0, 0, self.id_operador,
+                                                            0, 0, 0, 0, mes_caixa)
+                        repositorio_caixa.inserir_op(novo_caixa, sessao)
 
                 self.id_caixa_atual = repositorio_caixa.listar_op(sessao)[-1].id
 
-                self.valor_caixa_normal = 0
-                self.popularRegistroFin()
                 sessao.commit()
+                self.mes_atual = mes_caixa
+                self.popularRegistroFin()
                 self.mostrarMensagem("1", "Caixa Fechado Com Sucesso!")
                 jan.destroy()
             else:
@@ -1969,7 +1979,7 @@ class Castelo:
 
         ttk.Separator(labelF_resum_val, orient=HORIZONTAL).grid(row=5, column=0, columnspan=5, sticky=EW, padx=5)
 
-        Label(labelF_resum_val, text='Saída CN:', fg=fg_entry2, font=font2, bg=bg_label_frame).grid(row=6,
+        Label(labelF_resum_val, text='Saída CP:', fg=fg_entry2, font=font2, bg=bg_label_frame).grid(row=6,
                                                                                                     column=0,
                                                                                                     stick=E)
         quant_saida_cp = Label(labelF_resum_val, text='0', fg=fg_entry2, font=font1, bg=bg_label_frame)
@@ -2047,7 +2057,7 @@ class Castelo:
         caixa_atual = self.repositorio_caixa.listar_op_id(self.id_caixa_atual, sessao)
         if num == 1:
 
-            saldo_cn = caixa_atual.saldo_cn + (obj.entrada)
+            saldo_cn = caixa_atual.saldo_cn + obj.entrada
             saldo_cp = caixa_atual.saldo_cp + obj.entradaCp
             dinheiro = caixa_atual.dinheiro + obj.dinheiro
             cheque = caixa_atual.cheque + obj.cheque
@@ -2060,7 +2070,7 @@ class Castelo:
 
 
             nova_entrada = livro_caixa.LivroCaixa(None, None, saldo_cn, saldo_cp, cheque, ccredito, cdebito, pix,
-                                                  dinheiro, outros, 1, entrada, 0, entrada_cp, 0)
+                                                  dinheiro, outros, 1, entrada, 0, entrada_cp, 0, '')
 
 
         elif num == 2:
@@ -2071,15 +2081,16 @@ class Castelo:
             saida_cp = caixa_atual.saida_cp + obj.saidaCp
 
             nova_entrada = livro_caixa.LivroCaixa(None, None, saldo_cn, saldo_cp, 0, 0, 0, 0,
-                                                  0, 0, 1, 0, saida, 0, saida_cp)
+                                                  0, 0, 1, 0, saida, 0, saida_cp, '')
 
         self.repositorio_caixa.editar_op(self.id_caixa_atual, nova_entrada, num, sessao)
-        self.valor_caixa_normal = caixa_atual.saldo_cn
         self.valor_caixa_peca = caixa_atual.saldo_cp
 
         sessao.commit()
 
-
+    def alteraDataFin(self, dias, data):
+        nova_data = data + timedelta(dias)
+        return nova_data.strftime('%m/%Y')
 
     def janelaEntradaCaixa(self, num):
 
@@ -2163,6 +2174,7 @@ class Castelo:
             valor_total = self.formataParaFloat(label_vTotal.cget('text').split()[1])
             valor_final = valor_total - caixa_peça
             operador = self.id_operador
+            mes_caixa = self.mes_atual
 
             if valor_total == 0.0:
                 messagebox.showinfo(title="ERRO", message="Valor Deve ser Maior que R$0,00!")
@@ -2182,8 +2194,8 @@ class Castelo:
                         nova_entrada = op_livro_caixa.OpLivroCaixa(data, hora, num, descrição, valor_final, 0,
                                                                    caixa_peça, 0, grupo,
                                                                    cheque, ccredito, cdebito, pix, dinheiro, outros,
-                                                                   operador, None,
-                                                                   None)
+                                                                   operador, 0,
+                                                                   mes_caixa)
 
                         repositorio_fin = op_livro_caixa_repositorio.OperaçãoLivroCaixaRepositorio()
                         repositorio_fin.inserir_op(nova_entrada, sessao)
@@ -2196,8 +2208,8 @@ class Castelo:
                         nova_entrada = op_livro_caixa.OpLivroCaixa(data, hora, num, descrição, 0, valor_final,
                                                                    0, caixa_peça, grupo,
                                                                    cheque, ccredito, cdebito, pix, dinheiro, outros,
-                                                                   operador, None,
-                                                                   None)
+                                                                   operador, 0,
+                                                                   mes_caixa)
 
                         repositorio_fin = op_livro_caixa_repositorio.OperaçãoLivroCaixaRepositorio()
                         repositorio_fin.inserir_op(nova_entrada, sessao)
@@ -2407,6 +2419,144 @@ class Castelo:
         jan.focus_force()
         jan.grab_set()
 
+    def janelaPedeSenhaConta(self):
+        jan = Toplevel()
+
+        # Centraliza a janela
+        x_cordinate = int((self.w / 2) - (340 / 2))
+        y_cordinate = int((self.h / 2) - (130 / 2))
+        jan.geometry("{}x{}+{}+{}".format(330, 110, x_cordinate, y_cordinate))
+
+        def concederAcesso14(*args):
+            repositorio_tec = tecnico_repositorio.TecnicoRepositorio()
+            if len(op_senha_conta.get()) == 4:
+                for i in self.operadores_total:
+                    if int(op_senha_conta.get()) == int(i[0]):
+                        acess_tec = repositorio_tec.listar_tecnico_senha(int(i[0]), sessao)
+                        if acess_tec.FIN == 1:
+                            button_senha.configure(state=NORMAL)
+                            entry_locali.delete(0, END)
+                            entry_locali.configure(validate='none', show='')
+                            entry_locali.insert(0, i[1])
+                            entry_locali.configure(state=DISABLED)
+                            button_senha.focus()
+                            self.id_operador = int(acess_tec.id)
+                            return
+                        else:
+                            messagebox.showinfo(title="ERRO", message="Acesso Negado! Operador Sem Permissão "
+                                                                      "para esta Função")
+                            entry_locali.delete(0, END)
+                            return
+                entry_locali.delete(0, END)
+                messagebox.showinfo(title="ERRO", message="Operador Não Cadastrado!")
+
+        testa_inteiro_op = jan.register(self.testaEntradaNumOperador)
+
+        frame_senha_jan = Frame(jan)
+        frame_senha_jan.grid(row=0, column=0, padx=10, pady=10)
+
+        frame_senha_jan1 = Frame(frame_senha_jan)
+        frame_senha_jan1.grid(row=0, column=0)
+        frame_senha_jan2 = Frame(frame_senha_jan)
+        frame_senha_jan2.grid(row=0, column=1, sticky=S, padx=10, ipady=10)
+
+        global op_senha_conta
+        op_senha_conta = StringVar()
+        op_senha_conta.trace_add('write', concederAcesso14)
+        entry_locali = Entry(frame_senha_jan1, width=30, relief="sunken", borderwidth=2, textvariable=op_senha_conta,
+                             show='*', validate='all', validatecommand=(testa_inteiro_op, '%P') )
+        entry_locali.grid(row=0, column=0, padx=10)
+        entry_locali.focus()
+        labelframe_local = Frame(frame_senha_jan1, bg="blue", height=60, width=80)
+        labelframe_local.grid(row=1, column=0, pady=10)
+
+        button_senha = Button(frame_senha_jan2, text="Dar Saída", width=8, wraplength=70, state=DISABLED,
+                              underline=0, font=('Verdana', '9', 'bold'),
+                              command=lambda: [self.saidaConta(), jan.destroy()])
+        button_senha.grid(row=0, column=0, padx=5, ipady=5, pady=10)
+        Button(frame_senha_jan2, text="Cancelar", wraplength=70, width=8,
+               underline=0, font=('Verdana', '9', 'bold'), command=jan.destroy).grid(row=1, column=0, padx=5, ipady=5)
+
+        jan.transient(root2)
+        jan.focus_force()
+        jan.grab_set()
+
+    def somaValorConta(self, opt):
+        repositorio = contas_repositorio.ContasRepositorio()
+        contas = repositorio.listar_op(sessao)
+        total_valor_conta = 0
+        for i in contas:
+            if i.conta_paga == opt:
+                total_valor_conta += i.valor_cn
+        return self.insereTotalConvertido(total_valor_conta)
+
+    def somaValorContaCp(self, opt):
+        repositorio = contas_repositorio.ContasRepositorio()
+        contas = repositorio.listar_op(sessao)
+        total_valor_conta = 0
+        for i in contas:
+            if i.conta_paga == opt:
+                total_valor_conta += i.valor_cp
+        return self.insereTotalConvertido(total_valor_conta)
+
+    def somaValorCn(self):
+        repositorio = op_livro_caixa_repositorio.OperaçãoLivroCaixaRepositorio()
+        contas = repositorio.listar_op_mes(self.mes_atual, sessao)
+        total_valor_conta = 0
+        for i in contas:
+            if i.tipo_operação == 1:
+                total_valor_conta += i.entrada
+            else:
+                total_valor_conta -= i.saida
+        return self.insereTotalConvertido(total_valor_conta)
+
+    def somaValorCp(self):
+        repositorio = op_livro_caixa_repositorio.OperaçãoLivroCaixaRepositorio()
+        contas = repositorio.listar_op(sessao)
+        total_valor_conta = 0
+        for i in contas:
+            if i.tipo_operação == 1:
+                total_valor_conta += i.entrada_cp
+            else:
+                total_valor_conta -= i.saida_cp
+        return self.insereTotalConvertido(total_valor_conta)
+
+
+
+    def saidaConta(self):
+        repositorio_conta = contas_repositorio.ContasRepositorio()
+        res = messagebox.askyesno(None, "Deseja dar Saída nesta conta?")
+        if res:
+            conta_selecionada = self.tree_fin_contas.focus()
+            dado_conta = self.tree_fin_contas.item(conta_selecionada, 'values')
+            conta = repositorio_conta.listar_op_id(dado_conta[12], sessao)
+            if conta.conta_paga == 1:
+                nova_entrada = op_livro_caixa.OpLivroCaixa(datetime.now(), datetime.now().strftime('%H:%M'),
+                                                           conta.conta_paga, conta.discriminação,
+                                                           conta.valor_cn - conta.valor_cp,
+                                                           0, conta.valor_cp, 0, dado_conta[1], 0, 0, 0, 0, 0,
+                                                           conta.valor_cn,
+                                                           self.id_operador, None, self.mes_atual)
+            else:
+                nova_entrada = op_livro_caixa.OpLivroCaixa(datetime.now(), datetime.now().strftime('%H:%M'),
+                                                           conta.conta_paga, conta.discriminação, 0,
+                                                           conta.valor_cn - conta.valor_cp, 0, conta.valor_cp,
+                                                           dado_conta[1], 0, 0, 0, 0,
+                                                           0, 0,
+                                                           self.id_operador, None, self.mes_atual)
+
+            op_livro = op_livro_caixa_repositorio.OperaçãoLivroCaixaRepositorio()
+            op_livro.inserir_op(nova_entrada, sessao)
+            self.atualizaCaixa(nova_entrada, conta.conta_paga)
+            repositorio_conta.remover_op(conta.id, sessao)
+        else:
+            return
+
+        sessao.commit()
+        self.mostrarMensagem("1", "Baixa Realizada com Sucesso!")
+        self.popularContasFin()
+        self.popularRegistroFin()
+
     def janelaConta(self, num):
 
         bg_label_frame = '#A68F97'
@@ -2414,15 +2564,15 @@ class Castelo:
 
         repositorio_conta = contas_repositorio.ContasRepositorio()
 
+
         def concederAcesso12(*args):
             repositorio_tec = tecnico_repositorio.TecnicoRepositorio()
             if len(op_senha_contas.get()) == 4:
                 for i in self.operadores_total:
                     if int(op_senha_contas.get()) == int(i[0]):
                         acess_tec = repositorio_tec.listar_tecnico_senha(int(i[0]), sessao)
-                        if acess_tec.CON == 1:
+                        if acess_tec.FIN == 1:
                             button_confirm.configure(state=NORMAL)
-                            button_saida.configure(state=NORMAL)
                             entry_oper_conta.delete(0, END)
                             entry_oper_conta.configure(validate='none', show='')
                             entry_oper_conta.insert(0, i[1])
@@ -2444,8 +2594,8 @@ class Castelo:
             contato = entry_contato_conta.get()
             discriminicao = entry_disc_conta.get()
             tipo_doc = entry_tipodoc_conta.get()
-            numero_doc = entry_numDoc_conta.get()
-            numero_os = entry_numOs_conta.get()
+            numero_doc = self.self.formataParaIteiro(entry_numDoc_conta.get())
+            numero_os = self.self.formataParaIteiro(entry_numOs_conta.get())
             data_vend = datetime.strptime(entry_venc_conta.get(), '%d/%m/%Y')
             valor_conta = self.formataParaFloat(entry_valor_conta.get())
             valor_cp = self.formataParaFloat(entry_valor_cp.get())
@@ -2472,40 +2622,6 @@ class Castelo:
             self.popularContasFin()
             jan.destroy()
 
-        def saidaConta():
-
-            res = messagebox.askyesno(None, "Deseja dar Saída nesta conta?")
-            if res:
-                conta = repositorio_conta.listar_op_id(dado_conta[12], sessao)
-                if conta.conta_paga == 2:
-                    nova_entrada = op_livro_caixa.OpLivroCaixa(datetime.now(), datetime.now().strftime('%H:%M'),
-                                                               conta.conta_paga, conta.discriminação,
-                                                               conta.valor_cn-conta.valor_cp,
-                                                               0, conta.valor_cp, 0, 'CONTAS', 0, 0, 0, 0, 0,
-                                                               conta.valor_cn,
-                                                               self.id_operador, None, None)
-                else:
-                    nova_entrada = op_livro_caixa.OpLivroCaixa(datetime.now(), datetime.now().strftime('%H:%M'),
-                                                               conta.conta_paga, conta.discriminação, 0,
-                                                               conta.valor_cn - conta.valor_cp, 0, conta.valor_cp,
-                                                               'CONTAS', 0, 0, 0, 0,
-                                                               0, 0,
-                                                               self.id_operador, None, None)
-
-                op_livro = op_livro_caixa_repositorio.OperaçãoLivroCaixaRepositorio()
-                op_livro.inserir_op(nova_entrada, sessao)
-                self.atualizaCaixa(nova_entrada, conta.conta_paga)
-                repositorio_conta.remover_op(conta.id, sessao)
-            else:
-                return
-
-
-            sessao.commit()
-            self.mostrarMensagem("1", "Baixa Realizada com Sucesso!")
-            self.popularContasFin()
-            self.popularRegistroFin()
-            jan.destroy()
-
         jan = Toplevel(bg=bg_label_frame)
 
         lista_doc = []
@@ -2515,6 +2631,32 @@ class Castelo:
                 if i != "\n":
                     i = i.rstrip('\n')
                     lista_doc.append(i)
+
+        osVar1 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar1.set(osVar1.get().upper())
+
+        osVar1.trace_add('write', to_uppercase)
+
+        osVar2 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar2.set(osVar2.get().upper())
+
+        osVar2.trace_add('write', to_uppercase)
+
+        osVar3 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar3.set(osVar3.get().upper())
+
+        osVar3.trace_add('write', to_uppercase)
+
+
+        testa_float = jan.register(self.testaEntradaFloat)
+        testa_inteiro_op = jan.register(self.testaEntradaNumOperador)
+        testa_inteiro = jan.register(self.testaEntradaInteiro3)
 
         # Centraliza a janela
         x_cordinate = int((self.w / 2) - (600 / 2))
@@ -2555,29 +2697,34 @@ class Castelo:
         Label(sub_frame_conta1, text='Valor Caixa Peça:', anchor=E, bg=bg_label_frame).grid(row=8, column=0, sticky=E)
         Label(sub_frame_conta1, text='Operador:', anchor=E, bg=bg_label_frame).grid(row=9, column=0, sticky=E, pady=10)
 
-        entry_cliente_conta = Entry(sub_frame_conta3, width=48, bg=bg_entry)
+        entry_cliente_conta = Entry(sub_frame_conta3, width=48, bg=bg_entry, textvariable=osVar1)
         entry_cliente_conta.pack(side=LEFT, padx=10)
-        entry_contato_conta = Entry(sub_frame_conta1, width=20, bg=bg_entry)
+        entry_contato_conta = Entry(sub_frame_conta1, width=20, bg=bg_entry, textvariable=osVar2)
         entry_contato_conta.grid(row=1, column=1, sticky=W, padx=10)
-        entry_disc_conta = Entry(sub_frame_conta1, width=35, bg=bg_entry)
+        entry_disc_conta = Entry(sub_frame_conta1, width=35, bg=bg_entry, textvariable=osVar3)
         entry_disc_conta.grid(row=2, column=1, sticky=W, padx=10)
         entry_tipodoc_conta = ttk.Combobox(sub_frame_conta1, values=lista_doc, state="readonly", width=20)
         entry_tipodoc_conta.grid(row=3, column=1, sticky=W, padx=10)
-        entry_numDoc_conta = Entry(sub_frame_conta1, width=18, bg=bg_entry)
+        entry_numDoc_conta = Entry(sub_frame_conta1, width=18, bg=bg_entry, validate='all',
+                                   validatecommand=(testa_inteiro, '%P'))
         entry_numDoc_conta.grid(row=4, column=1, sticky=W, padx=10)
-        entry_numOs_conta = Entry(sub_frame_conta1, width=18, bg=bg_entry)
+        entry_numOs_conta = Entry(sub_frame_conta1, width=18, bg=bg_entry, validate='all',
+                                  validatecommand=(testa_inteiro, '%P'))
         entry_numOs_conta.grid(row=5, column=1, sticky=W, padx=10)
         entry_venc_conta = Entry(sub_frame_conta2, width=15, bg=bg_entry)
         entry_venc_conta.pack(side=LEFT, padx=10)
         Button(sub_frame_conta2, text='1', width=3).pack(side=LEFT)
-        entry_valor_conta = Entry(sub_frame_conta1, width=15, bg=bg_entry)
+        entry_valor_conta = Entry(sub_frame_conta1, width=15, bg=bg_entry, validate='all',
+                                  validatecommand=(testa_float, '%P'))
         entry_valor_conta.grid(row=7, column=1, sticky=W, padx=10)
-        entry_valor_cp = Entry(sub_frame_conta1, width=15, bg=bg_entry)
+        entry_valor_cp = Entry(sub_frame_conta1, width=15, bg=bg_entry, validate='all',
+                               validatecommand=(testa_float, '%P'))
         entry_valor_cp.grid(row=8, column=1, sticky=W, padx=10)
         global op_senha_contas
         op_senha_contas = StringVar()
         op_senha_contas.trace_add('write', concederAcesso12)
-        entry_oper_conta = Entry(sub_frame_conta1, width=23, bg=bg_entry, textvariable=op_senha_contas, show='*')
+        entry_oper_conta = Entry(sub_frame_conta1, width=23, bg=bg_entry, textvariable=op_senha_contas, show='*',
+                                 validate='all', validatecommand=(testa_inteiro_op, '%P'))
         entry_oper_conta.grid(row=9, column=1, sticky=W, padx=10)
 
         Button(sub_frame_conta3, text='C', width=3).pack(side=LEFT)
@@ -2610,9 +2757,7 @@ class Castelo:
             entry_valor_conta.insert(0, self.insereNumConvertido(conta_dados.valor_cn))
             entry_valor_cp.insert(0, self.insereNumConvertido(conta_dados.valor_cp))
             button_confirm.config(command=lambda: [addConta(3)])
-            button_saida = Button(frame_princ2, text='Dar Baixa', wraplength=55, width=13, state=DISABLED,
-                                  command=saidaConta, height=2)
-            button_saida.pack(side=LEFT, padx=20)
+
 
             button_confirm.config(text='Confirmar Alterações')
         jan.transient(root2)
@@ -5293,6 +5438,12 @@ class Castelo:
 
     def testaEntradaInteiro2(self, valor):
         if valor.isdigit() and len(valor) < 7 or valor == '':
+            return True
+        else:
+            return False
+
+    def testaEntradaInteiro3(self, valor):
+        if valor.isdigit() and len(valor) < 15 or valor == '':
             return True
         else:
             return False
