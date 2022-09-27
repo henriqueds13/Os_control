@@ -13,6 +13,14 @@ class LivroCaixaQuery():
         op = sessao.query(LivroCaixa).filter(LivroCaixa.id == op_id).first()
         return op
 
+    def listar_op_mes(self, mes, sessao):
+        op = sessao.query(LivroCaixa).filter(LivroCaixa.mes_caixa == mes).all()
+        return op
+
+    def listar_op_ano(self, ano, sessao):
+        op = sessao.query(LivroCaixa).filter(LivroCaixa.mes_caixa.like(f'%{ano}')).all()
+        return op
+
     def remover_op(self, op_id, sessao):
         op = self.listar_op_id(op_id, sessao)
         sessao.delete(op)
@@ -30,6 +38,12 @@ class LivroCaixaQuery():
             op.outros = operacao.outros
             op.entrada = operacao.entrada
             op.entrada_cp = operacao.entradaCp
+            op.quant_dinheiro += operacao.quantDinheiro
+            op.quant_cheque += operacao.quantCheque
+            op.quant_cdebito += operacao.quantCDebito
+            op.quant_ccredito += operacao.quantCCredito
+            op.quant_pix += operacao.quantPix
+            op.quant_outros += operacao.quantOutros
 
         elif num == 2:
             op.saldo_cn = operacao.saldoCn

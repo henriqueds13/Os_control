@@ -25,6 +25,11 @@ class OperaçãoLivroCaixaRepositorio:
         op = query_op.listar_op_mes(mes,sessao)
         return op
 
+    def listar_op_ano(self, ano, sessao):
+        query_op = op_livro_caixa_query.OpLivroCaixaQuery()
+        op = query_op.listar_op_mes(ano, sessao)
+        return op
+
     def listar_op_id(self, op_id, sessao):
         query_op = op_livro_caixa_query.OpLivroCaixaQuery()
         op = query_op.listar_op_id(op_id, sessao)

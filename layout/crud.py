@@ -98,7 +98,7 @@ class Castelo:
         self.revendedor_obj = None
         self.lista_revendedor = ["CCM DO BRASIL", "INTERBRASIL"]
         self.count = 0
-        self.id_operador = 0
+        self.id_operador = 1
         self.data_atual = datetime.now()
         self.date = date.today()
         self.dias = ('Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado', 'Domingo')
@@ -1300,7 +1300,7 @@ class Castelo:
 
         if len(self.repositorio_caixa.listar_op(sessao)) == 0:
             novo_caixa = livro_caixa.LivroCaixa(datetime.now(), None, 0, 0, 0, 0, 0, 0, 0, 0, self.id_operador,
-                                                0, 0, 0, 0, datetime.now().strftime('%m/%Y'))
+                                                0, 0, 0, 0, datetime.now().strftime('%m/%Y'), 0, 0, 0, 0, 0, 0)
             self.repositorio_caixa.inserir_op(novo_caixa, sessao)
             sessao.commit()
 
@@ -1801,6 +1801,7 @@ class Castelo:
 
         def novoCaixa():
 
+
             res = messagebox.askyesno(None,
                                       "Deseja Realmente Fechar o Caixa?")
             if res:
@@ -1816,7 +1817,8 @@ class Castelo:
                         repositorio_caixa.fechar_op(self.id_caixa_atual, data, sessao)
                         novo_caixa = livro_caixa.LivroCaixa(datetime.now(), None, 0, saldo_cp, 0, 0, 0, 0, 0, 0,
                                                             self.id_operador,
-                                                            0, 0, 0, 0, mes_caixa)
+                                                            0, 0, 0, 0, mes_caixa, 0, 0,
+                                                            0, 0, 0, 0)
                         repositorio_caixa.inserir_op(novo_caixa, sessao)
 
                 self.id_caixa_atual = repositorio_caixa.listar_op(sessao)[-1].id
@@ -1855,7 +1857,7 @@ class Castelo:
         Label(labelF_recebimentos, text='Dinheiro:', fg=fg_entry2, font=font2, bg=bg_label_frame).grid(row=0, column=0,
                                                                                                        stick=E)
         ttk.Separator(labelF_recebimentos, orient=VERTICAL).grid(row=0, column=1, rowspan=12, stick=NS)
-        quant_din = Label(labelF_recebimentos, text='0', fg=fg_entry2, font=font1, bg=bg_label_frame)
+        quant_din = Label(labelF_recebimentos, text=caixa_atual.quant_dinheiro, fg=fg_entry2, font=font1, bg=bg_label_frame)
         quant_din.grid(row=0, column=2)
         quant_din.config(width=4)
         quant_din.grid_propagate(0)
@@ -1870,7 +1872,7 @@ class Castelo:
 
         Label(labelF_recebimentos, text='Cheque:', fg=fg_entry2, font=font2, bg=bg_label_frame).grid(row=2, column=0,
                                                                                                      stick=E)
-        quant_cheque = Label(labelF_recebimentos, text='0', fg=fg_entry2, font=font1, bg=bg_label_frame)
+        quant_cheque = Label(labelF_recebimentos, text=caixa_atual.quant_cheque, fg=fg_entry2, font=font1, bg=bg_label_frame)
         quant_cheque.grid(row=2, column=2)
         quant_cheque.config(width=4)
         quant_cheque.grid_propagate(0)
@@ -1885,7 +1887,7 @@ class Castelo:
         Label(labelF_recebimentos, text='Cartão Crédito:', fg=fg_entry2, font=font2, bg=bg_label_frame).grid(row=4,
                                                                                                              column=0,
                                                                                                              stick=E)
-        quant_ccredito = Label(labelF_recebimentos, text='0', fg=fg_entry2, font=font1, bg=bg_label_frame)
+        quant_ccredito = Label(labelF_recebimentos, text=caixa_atual.quant_ccredito, fg=fg_entry2, font=font1, bg=bg_label_frame)
         quant_ccredito.grid(row=4, column=2)
         quant_ccredito.config(width=4)
         quant_ccredito.grid_propagate(0)
@@ -1900,7 +1902,7 @@ class Castelo:
         Label(labelF_recebimentos, text='Cartão Débito:', fg=fg_entry2, font=font2, bg=bg_label_frame).grid(row=6,
                                                                                                             column=0,
                                                                                                             stick=E)
-        quant_cdebito = Label(labelF_recebimentos, text='0', fg=fg_entry2, font=font1, bg=bg_label_frame)
+        quant_cdebito = Label(labelF_recebimentos, text=caixa_atual.quant_cdebito, fg=fg_entry2, font=font1, bg=bg_label_frame)
         quant_cdebito.grid(row=6, column=2)
         quant_cdebito.config(width=4)
         quant_cdebito.grid_propagate(0)
@@ -1914,7 +1916,7 @@ class Castelo:
 
         Label(labelF_recebimentos, text='Pix:', fg=fg_entry2, font=font2, bg=bg_label_frame).grid(row=8, column=0,
                                                                                                   stick=E)
-        quant_pix = Label(labelF_recebimentos, text='0', fg=fg_entry2, font=font1, bg=bg_label_frame)
+        quant_pix = Label(labelF_recebimentos, text=caixa_atual.quant_pix, fg=fg_entry2, font=font1, bg=bg_label_frame)
         quant_pix.grid(row=8, column=2)
         quant_pix.config(width=4)
         quant_pix.grid_propagate(0)
@@ -1928,7 +1930,7 @@ class Castelo:
 
         Label(labelF_recebimentos, text='Outros:', fg=fg_entry2, font=font2, bg=bg_label_frame).grid(row=10, column=0,
                                                                                                      stick=E)
-        quant_outros = Label(labelF_recebimentos, text='0', fg=fg_entry2, font=font1, bg=bg_label_frame)
+        quant_outros = Label(labelF_recebimentos, text=caixa_atual.quant_outros, fg=fg_entry2, font=font1, bg=bg_label_frame)
         quant_outros.grid(row=10, column=2)
         quant_outros.config(width=4)
         quant_outros.grid_propagate(0)
@@ -1947,7 +1949,7 @@ class Castelo:
         Label(labelF_resum_val, text='Entrada CN:', fg=fg_entry2, font=font2, bg=bg_label_frame).grid(row=0, column=0,
                                                                                                       stick=E)
         ttk.Separator(labelF_resum_val, orient=VERTICAL).grid(row=0, column=1, rowspan=7, stick=NS)
-        quant_entr_cn = Label(labelF_resum_val, text='0', fg=fg_entry2, font=font1, bg=bg_label_frame)
+        quant_entr_cn = Label(labelF_resum_val, text='-', fg=fg_entry2, font=font1, bg=bg_label_frame)
         quant_entr_cn.grid(row=0, column=2, padx=10)
         quant_entr_cn.config(width=4)
         quant_entr_cn.grid_propagate(0)
@@ -1962,7 +1964,7 @@ class Castelo:
 
         Label(labelF_resum_val, text='Saída CN:', fg=fg_entry2, font=font2, bg=bg_label_frame).grid(row=2, column=0,
                                                                                                     stick=E)
-        quant_saida_cn = Label(labelF_resum_val, text='0', fg=fg_entry2, font=font1, bg=bg_label_frame)
+        quant_saida_cn = Label(labelF_resum_val, text='-', fg=fg_entry2, font=font1, bg=bg_label_frame)
         quant_saida_cn.grid(row=2, column=2)
         quant_saida_cn.config(width=4)
         quant_saida_cn.grid_propagate(0)
@@ -1977,7 +1979,7 @@ class Castelo:
         Label(labelF_resum_val, text='Entrada CP:', fg=fg_entry2, font=font2, bg=bg_label_frame).grid(row=4,
                                                                                                       column=0,
                                                                                                       stick=E)
-        quant_entr_cp = Label(labelF_resum_val, text='0', fg=fg_entry2, font=font1, bg=bg_label_frame)
+        quant_entr_cp = Label(labelF_resum_val, text='-', fg=fg_entry2, font=font1, bg=bg_label_frame)
         quant_entr_cp.grid(row=4, column=2)
         quant_entr_cp.config(width=4)
         quant_entr_cp.grid_propagate(0)
@@ -1992,7 +1994,7 @@ class Castelo:
         Label(labelF_resum_val, text='Saída CP:', fg=fg_entry2, font=font2, bg=bg_label_frame).grid(row=6,
                                                                                                     column=0,
                                                                                                     stick=E)
-        quant_saida_cp = Label(labelF_resum_val, text='0', fg=fg_entry2, font=font1, bg=bg_label_frame)
+        quant_saida_cp = Label(labelF_resum_val, text='-', fg=fg_entry2, font=font1, bg=bg_label_frame)
         quant_saida_cp.grid(row=6, column=2)
         quant_saida_cp.config(width=4)
         quant_saida_cp.grid_propagate(0)
@@ -2079,9 +2081,17 @@ class Castelo:
             outros = caixa_atual.outros + obj.outros
             entrada = caixa_atual.entrada + obj.entrada
             entrada_cp = caixa_atual.entrada_cp + obj.entradaCp
+            quantid_din = self.soma_quant_resum(obj.dinheiro)
+            quantid_cheque = self.soma_quant_resum(obj.cheque)
+            quantid_cdeb = self.soma_quant_resum(obj.cdebito)
+            quantid_ccred = self.soma_quant_resum(obj.ccredito)
+            quantid_pix = self.soma_quant_resum(obj.pix)
+            quantid_outros = self.soma_quant_resum(obj.outros)
 
             nova_entrada = livro_caixa.LivroCaixa(None, None, saldo_cn, saldo_cp, cheque, ccredito, cdebito, pix,
-                                                  dinheiro, outros, 1, entrada, 0, entrada_cp, 0, '')
+                                                  dinheiro, outros, 1, entrada, 0, entrada_cp, 0, '', quantid_din,
+                                                  quantid_cheque, quantid_cdeb, quantid_ccred, quantid_pix,
+                                                  quantid_outros)
 
 
         elif num == 2:
@@ -2092,7 +2102,7 @@ class Castelo:
             saida_cp = caixa_atual.saida_cp + obj.saidaCp
 
             nova_entrada = livro_caixa.LivroCaixa(None, None, saldo_cn, saldo_cp, 0, 0, 0, 0,
-                                                  0, 0, 1, 0, saida, 0, saida_cp, '')
+                                                  0, 0, 1, 0, saida, 0, saida_cp, '', 0, 0, 0, 0, 0, 0)
 
         self.repositorio_caixa.editar_op(self.id_caixa_atual, nova_entrada, num, sessao)
         self.valor_caixa_peca = caixa_atual.saldo_cp
@@ -2773,6 +2783,12 @@ class Castelo:
         data = cal.selection_get()
         return data
 
+    def soma_quant_resum(self, valor):
+        if valor == 0:
+            return 0
+        else:
+            return 1
+
     def resumoFinanceiro(self, num):
 
         bg_label_frame = '#e0e0e0'
@@ -2790,9 +2806,52 @@ class Castelo:
             tree_resumo_diario.delete(*tree_resumo_diario.get_children())
             repositorio = op_livro_caixa_repositorio.OperaçãoLivroCaixaRepositorio()
             registros = repositorio.listar_op(sessao)
+            valores_din = 0
+            valores_cheque = 0
+            valores_cdeb = 0
+            valores_ccred = 0
+            valores_pix = 0
+            valores_outros = 0
+            quantid_din = 0
+            quantid_cheque = 0
+            quantid_cdeb = 0
+            quantid_ccred = 0
+            quantid_pix = 0
+            quantid_outros = 0
+            entrada_cn = 0
+            entrada_cp = 0
+            saida_cn = 0
+            saida_cp = 0
+            quantid_entr_cn = 0
+            quantid_saida_cn = 0
+            quantid_entr_cp = 0
+            quantid_saida_cp = 0
 
             for i in registros:
                 if i.data.strftime('%d/%m/%Y') == data.strftime('%d/%m/%Y'):
+                    if i.tipo_operação == 1:
+                        valores_din += i.dinheiro
+                        valores_cheque += i.cheque
+                        valores_cdeb += i.cdebito
+                        valores_ccred += i.ccredito
+                        valores_pix += i.pix
+                        valores_outros += i.outros
+                        quantid_din += self.soma_quant_resum(i.dinheiro)
+                        quantid_cheque += self.soma_quant_resum(i.cheque)
+                        quantid_cdeb += self.soma_quant_resum(i.cdebito)
+                        quantid_ccred += self.soma_quant_resum(i.ccredito)
+                        quantid_pix += self.soma_quant_resum(i.pix)
+                        quantid_outros += self.soma_quant_resum(i.outros)
+                        entrada_cn += i.entrada
+                        entrada_cp += i.entrada_cp
+                        quantid_entr_cn += self.soma_quant_resum(i.entrada)
+                        quantid_entr_cp += self.soma_quant_resum(i.entrada_cp)
+                    else:
+                        saida_cn += i.saida
+                        saida_cp += i.saida_cp
+                        quantid_saida_cp += self.soma_quant_resum(i.saida_cp)
+                        quantid_saida_cn += self.soma_quant_resum(i.saida)
+
                     if self.count % 2 == 0:
                         tree_resumo_diario.insert('', 'end',
                                                   values=(
@@ -2824,30 +2883,51 @@ class Castelo:
                 self.count += 1
 
             label_titulo.config(text=f'{self.dias[data.weekday()]}, {data.strftime("%d de %B de %Y")}')
-            # self.label_conta_receber.config(text=self.somaValorConta(1))
-            # self.label_conta_pvenc.config(text=self.somaValorContaCp(2))
-            # self.label_conta_rvencidas.config(text=self.somaValorContaCp(1))
+            valor_din.config(text=self.insereTotalConvertido(valores_din))
+            valor_cheque.config(text=self.insereTotalConvertido(valores_cheque))
+            valor_cdebito.config(text=self.insereTotalConvertido(valores_cdeb))
+            valor_ccredito.config(text=self.insereTotalConvertido(valores_ccred))
+            valor_pix.config(text=self.insereTotalConvertido(valores_pix))
+            valor_outros.config(text=self.insereTotalConvertido(valores_outros))
+            quant_din.config(text=quantid_din)
+            quant_cheque.config(text=quantid_cheque)
+            quant_cdebito.config(text=quantid_cdeb)
+            quant_ccredito.config(text=quantid_ccred)
+            quant_pix.config(text=quantid_pix)
+            quant_outros.config(text=quantid_outros)
+            valor_entr_cn.config(text=self.insereTotalConvertido(entrada_cn))
+            valor_saida_cn.config(text=self.insereTotalConvertido(saida_cn))
+            valor_entr_cp.config(text=self.insereTotalConvertido(entrada_cp))
+            valor_saida_cp.config(text=self.insereTotalConvertido(saida_cp))
+            valor_saldo_cp.config(text=self.insereTotalConvertido(entrada_cp - saida_cp))
+            valor_saldo_cn.config(text=self.insereTotalConvertido(entrada_cn - saida_cn))
+            quant_entr_cn.config(text=quantid_entr_cn)
+            quant_entr_cp.config(text=quantid_entr_cp)
+            quant_saida_cn.config(text=quantid_saida_cn)
+            quant_saida_cp.config(text=quantid_saida_cp)
             self.count = 0
             tree_resumo_diario.focus_set()
             children = tree_resumo_diario.get_children()
             if children:
-                mensagem_lb.config(text='')
+                mensagem_lb.config(fg='#e0e0e0')
+                img_mensagem.config(bg='#e0e0e0')
                 tree_resumo_diario.focus(children[0])
                 tree_resumo_diario.selection_set(children[0])
             else:
-                mensagem_lb.config(text='Não consta Nenhum Lançamento para esta Data!')
+                mensagem_lb.config(fg='red')
+                img_mensagem.config(bg='yellow')
 
         jan = Toplevel()
 
         # Centraliza a janela
         x_cordinate = int((self.w / 2) - (850 / 2))
         y_cordinate = int((self.h / 2) - (520 / 2))
-        jan.geometry("{}x{}+{}+{}".format(880, 520, x_cordinate, y_cordinate))
+        jan.geometry("{}x{}+{}+{}".format(850, 520, x_cordinate, y_cordinate))
 
         frame_princ = Frame(jan)
         frame_princ.pack(fill=BOTH)
 
-        label_titulo = Label(frame_princ, text='Data')
+        label_titulo = Label(frame_princ, text='Data', font=('Verdana', '11', 'bold'), fg='#a10031')
         label_titulo.pack(fill=Y, ipady=10)
         frame_tree_resumo = Frame(frame_princ)
         frame_tree_resumo.pack(fill=X)
@@ -2896,9 +2976,9 @@ class Castelo:
         tree_resumo_diario.heading('id_os', text='ID. OS')
         tree_resumo_diario.heading('mes_caixa', text='CAIXA')
 
-        tree_resumo_diario.pack()
+        tree_resumo_diario.pack(padx=10)
         scrollbar_fin_h.config(command=tree_resumo_diario.xview)
-        scrollbar_fin_h.pack(fill=X)
+        scrollbar_fin_h.pack(fill=X, padx=10)
 
 
         ttk.Separator(frame_princ, orient=HORIZONTAL).pack(fill=X, padx=15, pady=10)
@@ -2921,7 +3001,7 @@ class Castelo:
         ttk.Separator(labelF_recebimentos, orient=VERTICAL).grid(row=0, column=3, stick=NS, rowspan=12)
         valor_din = Label(labelF_recebimentos, text='0,00', fg=fg_entry2, font=font1, bg=bg_label_frame, anchor=W)
         valor_din.grid(row=0, column=4, padx=10, sticky=W)
-        valor_din.config(width=8)
+        valor_din.config(width=12)
         valor_din.grid_propagate(0)
 
         ttk.Separator(labelF_recebimentos, orient=HORIZONTAL).grid(row=1, column=0, columnspan=5, sticky=EW, padx=5)
@@ -2934,7 +3014,7 @@ class Castelo:
         quant_cheque.grid_propagate(0)
         valor_cheque = Label(labelF_recebimentos, text='0,00', fg=fg_entry2, font=font1, bg=bg_label_frame, anchor=W)
         valor_cheque.grid(row=2, column=4, padx=10)
-        valor_cheque.config(width=8)
+        valor_cheque.config(width=12)
         valor_cheque.grid_propagate(0)
 
         ttk.Separator(labelF_recebimentos, orient=HORIZONTAL).grid(row=3, column=0, columnspan=5, sticky=EW, padx=5)
@@ -2948,7 +3028,7 @@ class Castelo:
         quant_ccredito.grid_propagate(0)
         valor_ccredito = Label(labelF_recebimentos, text='0,00', fg=fg_entry2, font=font1, bg=bg_label_frame, anchor=W)
         valor_ccredito.grid(row=4, column=4, padx=10)
-        valor_ccredito.config(width=8)
+        valor_ccredito.config(width=12)
         valor_ccredito.grid_propagate(0)
 
         ttk.Separator(labelF_recebimentos, orient=HORIZONTAL).grid(row=5, column=0, columnspan=5, sticky=EW, padx=5)
@@ -2962,7 +3042,7 @@ class Castelo:
         quant_cdebito.grid_propagate(0)
         valor_cdebito = Label(labelF_recebimentos, text='0,00', fg=fg_entry2, font=font1, bg=bg_label_frame, anchor=W)
         valor_cdebito.grid(row=6, column=4, padx=10)
-        valor_cdebito.config(width=8)
+        valor_cdebito.config(width=12)
         valor_cdebito.grid_propagate(0)
 
         ttk.Separator(labelF_recebimentos, orient=HORIZONTAL).grid(row=7, column=0, columnspan=5, sticky=EW, padx=5)
@@ -2975,7 +3055,7 @@ class Castelo:
         quant_pix.grid_propagate(0)
         valor_pix = Label(labelF_recebimentos, text='0,00', fg=fg_entry2, font=font1, bg=bg_label_frame, anchor=W)
         valor_pix.grid(row=8, column=4, padx=10)
-        valor_pix.config(width=8)
+        valor_pix.config(width=12)
         valor_pix.grid_propagate(0)
 
         ttk.Separator(labelF_recebimentos, orient=HORIZONTAL).grid(row=9, column=0, columnspan=5, sticky=EW, padx=5)
@@ -2988,7 +3068,7 @@ class Castelo:
         quant_outros.grid_propagate(0)
         valor_outros = Label(labelF_recebimentos, text='0,00', fg=fg_entry2, font=font1, bg=bg_label_frame, anchor=W)
         valor_outros.grid(row=10, column=4, padx=10)
-        valor_outros.config(width=8)
+        valor_outros.config(width=12)
         valor_outros.grid_propagate(0)
 
         LF_resum_val = LabelFrame(frame_resum_valores, text='Resumo Valores:', fg=fg_entry2, font=font2,
@@ -3007,7 +3087,7 @@ class Castelo:
         ttk.Separator(labelF_resum_val, orient=VERTICAL).grid(row=0, column=3, stick=NS, rowspan=11)
         valor_entr_cn = Label(labelF_resum_val, text='0,00', fg=fg_entry2, font=font1, bg=bg_label_frame, anchor=W)
         valor_entr_cn.grid(row=0, column=4, padx=10)
-        valor_entr_cn.config(width=8)
+        valor_entr_cn.config(width=12)
         valor_entr_cn.grid_propagate(0)
 
         ttk.Separator(labelF_resum_val, orient=HORIZONTAL).grid(row=1, column=0, columnspan=5, sticky=EW, padx=5)
@@ -3020,7 +3100,7 @@ class Castelo:
         quant_saida_cn.grid_propagate(0)
         valor_saida_cn = Label(labelF_resum_val, text='0,00', fg=fg_entry2, font=font1, bg=bg_label_frame, anchor=W)
         valor_saida_cn.grid(row=2, column=4, padx=10)
-        valor_saida_cn.config(width=8)
+        valor_saida_cn.config(width=12)
         valor_saida_cn.grid_propagate(0)
 
         ttk.Separator(labelF_resum_val, orient=HORIZONTAL).grid(row=3, column=0, columnspan=5, sticky=EW, padx=5)
@@ -3034,7 +3114,7 @@ class Castelo:
         quant_entr_cp.grid_propagate(0)
         valor_entr_cp = Label(labelF_resum_val, text='0,00', fg=fg_entry2, font=font1, bg=bg_label_frame, anchor=W)
         valor_entr_cp.grid(row=4, column=4, padx=10)
-        valor_entr_cp.config(width=8)
+        valor_entr_cp.config(width=12)
         valor_entr_cp.grid_propagate(0)
 
         ttk.Separator(labelF_resum_val, orient=HORIZONTAL).grid(row=5, column=0, columnspan=5, sticky=EW, padx=5)
@@ -3048,7 +3128,7 @@ class Castelo:
         quant_saida_cp.grid_propagate(0)
         valor_saida_cp = Label(labelF_resum_val, text='0,00', fg=fg_entry2, font=font1, bg=bg_label_frame, anchor=W)
         valor_saida_cp.grid(row=6, column=4, padx=10)
-        valor_saida_cp.config(width=8)
+        valor_saida_cp.config(width=12)
         valor_saida_cp.grid_propagate(0)
 
         ttk.Separator(labelF_resum_val, orient=HORIZONTAL).grid(row=7, column=0, columnspan=5, sticky=EW, padx=5)
@@ -3057,9 +3137,9 @@ class Castelo:
                                                                                                   stick=E,
                                                                                                   columnspan=3,
                                                                                                   padx=5)
-        valor_saldo_cn = Label(labelF_resum_val, text='0,00', fg='#c00033', font=font1, bg='#ffff80', anchor=W)
+        valor_saldo_cn = Label(labelF_resum_val, text='R$0,00', fg='#c00033', font=font1, bg='#ffff80', anchor=W)
         valor_saldo_cn.grid(row=8, column=4, padx=10)
-        valor_saldo_cn.config(width=8)
+        valor_saldo_cn.config(width=12)
         valor_saldo_cn.grid_propagate(0)
 
         ttk.Separator(labelF_resum_val, orient=HORIZONTAL).grid(row=9, column=0, columnspan=5, sticky=EW, padx=5)
@@ -3068,9 +3148,9 @@ class Castelo:
                                                                                                        stick=E,
                                                                                                        columnspan=3,
                                                                                                        padx=5)
-        valor_saldo_cp = Label(labelF_resum_val, text='0,00', fg='#c00033', font=font1, bg='#ffff80', anchor=W)
+        valor_saldo_cp = Label(labelF_resum_val, text='R$0,00', fg='#c00033', font=font1, bg='#ffff80', anchor=W)
         valor_saldo_cp.grid(row=10, column=4, padx=10)
-        valor_saldo_cp.config(width=8)
+        valor_saldo_cp.config(width=12)
         valor_saldo_cp.grid_propagate(0)
 
         lCalendar = Label(frame_resum_valores, width=25, height=10, bg='yellow')
@@ -3078,17 +3158,12 @@ class Castelo:
         cal_resum_day = Calendar(lCalendar, selectmode='day', showweeknumbers=FALSE, showothermonthdays=FALSE)
         cal_resum_day.pack()
 
-        fr_buttons = Frame(frame_resum_valores)
-        fr_buttons.pack(side=LEFT, padx=10, fill=Y)
-        LF_buttons = LabelFrame(fr_buttons)
-        LF_buttons.pack(pady=10)
-
-        Button(LF_buttons, text='!', width=5, command=lambda: [pegaData(cal_resum_day)]).pack(padx=5, pady=5,
-                                                                                                    ipady=5)
-        Button(LF_buttons, text='1', width=5).pack(padx=5, pady=5, ipady=5)
-
         frame_buttons_fin = Frame(frame_princ)
         frame_buttons_fin.pack(fill=BOTH, padx=10, pady=10)
+
+        Button(frame_buttons_fin, text='!', width=9, command=lambda: [pegaData(cal_resum_day)]).pack(side=RIGHT,padx=5,
+                                                                                                      pady=5,
+                                                                                                      ipady=5)
 
         Button(frame_buttons_fin, text='Fechar', width=10, command=jan.destroy).pack(side=RIGHT, padx=30, ipady=5,
                                                                                      pady=10)
@@ -3097,7 +3172,7 @@ class Castelo:
         lf_mensagem.pack(side=LEFT, ipadx=10)
         img_mensagem = Label(lf_mensagem, bg='yellow', height=3, width=5)
         img_mensagem.pack(side=LEFT, padx=10, pady=5)
-        mensagem_lb = Label(lf_mensagem, text='', fg='red',
+        mensagem_lb = Label(lf_mensagem, text='Não consta Nenhum Lançamento para esta Data!', fg='red',
                             bg=bg_label_frame)
         mensagem_lb.pack(side=LEFT)
 
@@ -3114,6 +3189,124 @@ class Castelo:
         fg_entry2 = '#a10031'
         font1 = ('Verdana', '9', 'bold')
         font2 = ('Verdana', '10', '')
+
+
+        def popularResAnual(ano):
+
+            tree_resumo_diario.delete(*tree_resumo_diario.get_children())
+            repositorio = livro_caixa_repositorio.LivroCaixaRepositorio()
+            registros = repositorio.listar_op_ano(ano, sessao)
+            valores_din = 0
+            valores_cheque = 0
+            valores_cdeb = 0
+            valores_ccred = 0
+            valores_pix = 0
+            valores_outros = 0
+            quantid_din = 0
+            quantid_cheque = 0
+            quantid_cdeb = 0
+            quantid_ccred = 0
+            quantid_pix = 0
+            quantid_outros = 0
+            entrada_cn = 0
+            entrada_cp = 0
+            saida_cn = 0
+            saida_cp = 0
+            saldo_cp = 0
+            saldo_cn = 0
+
+            for i in registros:
+                valores_din += i.dinheiro
+                valores_cheque += i.cheque
+                valores_cdeb += i.cdebito
+                valores_ccred += i.ccredito
+                valores_pix += i.pix
+                valores_outros += i.outros
+                quantid_din += i.quant_dinheiro
+                quantid_cheque += i.quant_cheque
+                quantid_cdeb += i.quant_cdebito
+                quantid_ccred += i.quant_ccredito
+                quantid_pix += i.quant_pix
+                quantid_outros += i.quant_outros
+                entrada_cn += i.entrada
+                entrada_cp += i.entrada_cp
+                saida_cn += i.saida
+                saida_cp += i.saida_cp
+                saldo_cp += i.saldo_cp
+                saldo_cn += i.saldo_cn
+                mes_atual = datetime.strptime(i.mes_caixa, '%m/%Y')
+                mes = mes_atual.strftime('%B')
+                data_fechamento = i.data_fechamento
+                if data_fechamento is None:
+                    data_fechamento = '-'
+                else:
+                    data_fechamento = i.data_fechamento.strftime('%d/%m/%Y')
+
+                if self.count % 2 == 0:
+                    tree_resumo_diario.insert('', 'end',
+                                              values=(
+                                                  mes, i.data_abertura.strftime('%d/%m/%Y'),
+                                                  data_fechamento,
+                                                  self.insereTotalConvertido(i.saldo_cn),
+                                                  self.insereTotalConvertido(i.saldo_cp),
+                                                  self.insereTotalConvertido(i.dinheiro),
+                                                  self.insereTotalConvertido(i.cheque),
+                                                  self.insereTotalConvertido(i.cdebito),
+                                                  self.insereTotalConvertido(i.ccredito),
+                                                  self.insereTotalConvertido(i.pix),
+                                                  self.insereTotalConvertido(i.outros),
+                                                  self.retornaOperadorNome(i.operador),
+                                                  mes_atual.strftime('%Y')), tags=('oddrow'))
+                else:
+                    tree_resumo_diario.insert('', 'end',
+                                              values=(
+                                                  mes, i.data_abertura.strftime('%d/%m/%Y'),
+                                                  data_fechamento,
+                                                  self.insereTotalConvertido(i.saldo_cn),
+                                                  self.insereTotalConvertido(i.saldo_cp),
+                                                  self.insereTotalConvertido(i.dinheiro),
+                                                  self.insereTotalConvertido(i.cheque),
+                                                  self.insereTotalConvertido(i.cdebito),
+                                                  self.insereTotalConvertido(i.ccredito),
+                                                  self.insereTotalConvertido(i.pix),
+                                                  self.insereTotalConvertido(i.outros),
+                                                  self.retornaOperadorNome(i.operador),
+                                                  mes_atual.strftime('%Y')), tags=('evenrow'))
+                self.count += 1
+
+            label_titulo.config(text=datetime.now().strftime('%Y'))
+            valor_din.config(text=self.insereTotalConvertido(valores_din))
+            valor_cheque.config(text=self.insereTotalConvertido(valores_cheque))
+            valor_cdebito.config(text=self.insereTotalConvertido(valores_cdeb))
+            valor_ccredito.config(text=self.insereTotalConvertido(valores_ccred))
+            valor_pix.config(text=self.insereTotalConvertido(valores_pix))
+            valor_outros.config(text=self.insereTotalConvertido(valores_outros))
+            quant_din.config(text=quantid_din)
+            quant_cheque.config(text=quantid_cheque)
+            quant_cdebito.config(text=quantid_cdeb)
+            quant_ccredito.config(text=quantid_ccred)
+            quant_pix.config(text=quantid_pix)
+            quant_outros.config(text=quantid_outros)
+            valor_entr_cn.config(text=self.insereTotalConvertido(entrada_cn))
+            valor_saida_cn.config(text=self.insereTotalConvertido(saida_cn))
+            valor_entr_cp.config(text=self.insereTotalConvertido(entrada_cp))
+            valor_saida_cp.config(text=self.insereTotalConvertido(saida_cp))
+            valor_saldo_cp.config(text=self.insereTotalConvertido(saldo_cp))
+            valor_saldo_cn.config(text=self.insereTotalConvertido(saldo_cn))
+
+            self.count = 0
+            tree_resumo_diario.focus_set()
+            children = tree_resumo_diario.get_children()
+            if children:
+                mensagem_lb.config(fg='#e0e0e0')
+                img_mensagem.config(bg='#e0e0e0')
+                tree_resumo_diario.focus(children[0])
+                tree_resumo_diario.selection_set(children[0])
+            else:
+                mensagem_lb.config(fg='red')
+                img_mensagem.config(bg='yellow')
+
+
         jan = Toplevel()
 
         # Centraliza a janela
@@ -3374,6 +3567,7 @@ class Castelo:
         mensagem_lb = Label(lf_mensagem, text='Não consta Nenhum Lançamento para esta Data!', fg='red',
                             bg=bg_label_frame)
         mensagem_lb.pack(side=LEFT)
+        popularResAnual(2022)
 
         jan.transient(root2)
         jan.focus_force()

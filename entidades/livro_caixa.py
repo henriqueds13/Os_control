@@ -1,6 +1,7 @@
 class LivroCaixa():
     def __init__(self, data_abertura, data_fechamento, saldo_cn, saldo_cp, cheque, ccredito, cdebito, pix, dinheiro,
-                 outros, operador, entrada, saida, entrada_cp, saida_cp, mes_caixa):
+                 outros, operador, entrada, saida, entrada_cp, saida_cp, mes_caixa, quant_dinheiro, quant_cheque,
+                 quant_cdebito, quant_ccredito, quant_pix, quant_outros):
         self.__data_abertura = data_abertura
         self.__data_fechamento = data_fechamento
         self.__saldo_cn = saldo_cn
@@ -17,6 +18,12 @@ class LivroCaixa():
         self.__entrada_cp = entrada_cp
         self.__saida_cp = saida_cp
         self.__mes_caixa = mes_caixa
+        self.__quant_dinheiro = quant_dinheiro
+        self.__quant_cheque = quant_cheque
+        self.__quant_cdebito = quant_cdebito
+        self.__quant_ccredito = quant_ccredito
+        self.__quant_pix = quant_pix
+        self.__quant_outros = quant_outros
 
     @property
     def dataAbertura(self):
@@ -82,6 +89,30 @@ class LivroCaixa():
     def mesCaixa(self):
         return self.__mes_caixa
 
+    @property
+    def quantDinheiro(self):
+        return self.__quant_dinheiro
+
+    @property
+    def quantCheque(self):
+        return self.__quant_cheque
+
+    @property
+    def quantCDebito(self):
+        return self.__quant_cdebito
+
+    @property
+    def quantCCredito(self):
+        return self.__quant_ccredito
+
+    @property
+    def quantPix(self):
+        return self.__quant_pix
+
+    @property
+    def quantOutros(self):
+        return self.__quant_outros
+
     @dataAbertura.setter
     def dataAbertura(self, data):
         self.__data_abertura = data
@@ -145,3 +176,27 @@ class LivroCaixa():
     @mesCaixa.setter
     def mesCaixa(self, saida):
         self.__mes_caixa = saida
+
+    @quantDinheiro.setter
+    def quantDinheiro(self, saida):
+        self.__quant_dinheiro = saida
+
+    @quantCheque.setter
+    def quantCheque(self, saida):
+        self.__quant_cheque = saida
+
+    @quantCDebito.setter
+    def quantCDebito(self, saida):
+        self.__quant_cdebito = saida
+
+    @quantCCredito.setter
+    def quantCCredito(self, saida):
+        self.__quant_ccredito = saida
+
+    @quantPix.setter
+    def quantPix(self, saida):
+        self.__quant_pix = saida
+
+    @quantOutros.setter
+    def quantOutros(self, saida):
+        self.__quant_outros = saida

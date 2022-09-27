@@ -18,6 +18,11 @@ class OpLivroCaixaQuery():
         op = sessao.query(OperaçãoLivroCaixa).filter(OperaçãoLivroCaixa.id == op_id).first()
         return op
 
+    def listar_op_ano(self, ano, sessao):
+        op = sessao.query(OperaçãoLivroCaixa).filter(OperaçãoLivroCaixa.mes_caixa.like(f'%{ano}')).all()
+        return op
+
+
     def remover_op(self, op_id, sessao):
         op = self.listar_op_id(op_id, sessao)
         sessao.delete(op)
