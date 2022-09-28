@@ -56,3 +56,5 @@ def aceitaOption(e):
         tree_resumo_diario.heading('outros', text='OUTROS')
         tree_resumo_diario.heading('operador', text='OPERADOR')
         tree_resumo_diario.heading('ano', text='ANO')
+
+self.os_aparelho = ttk.Combobox(frame_dadosapare_os1, values=lista_aparelhos, state="readonly")

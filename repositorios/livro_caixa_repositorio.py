@@ -32,7 +32,7 @@ class LivroCaixaRepositorio():
 
     def listar_op_mes(self, mes, sessao):
         query_op = livro_caixa_query.LivroCaixaQuery()
-        op = query_op.listar_op_id(mes, sessao)
+        op = query_op.listar_op_mes(mes, sessao)
         return op
 
     def listar_op_ano(self, ano, sessao):

@@ -14,7 +14,7 @@ class LivroCaixaQuery():
         return op
 
     def listar_op_mes(self, mes, sessao):
-        op = sessao.query(LivroCaixa).filter(LivroCaixa.mes_caixa == mes).all()
+        op = sessao.query(LivroCaixa).filter(LivroCaixa.mes_caixa == mes).first()
         return op
 
     def listar_op_ano(self, ano, sessao):
