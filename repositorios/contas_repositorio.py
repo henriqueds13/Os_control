@@ -33,3 +33,8 @@ class ContasRepositorio:
     def editar_op(self, op_id, operacao, sessao):
         query_op = contas_query.ContasQuery()
         query_op.editar_op(op_id, operacao, sessao)
+
+    def listar_op_nome(self, conta_nome, sessao):
+        query_op = contas_query.ContasQuery()
+        conta = query_op.listar_op_nome(conta_nome, sessao)
+        return conta

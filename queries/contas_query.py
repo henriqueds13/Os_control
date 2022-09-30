@@ -30,3 +30,7 @@ class ContasQuery:
         op.valor_cn = operacao.valorCn
         op.valor_cp = operacao.valorCp
 
+    def listar_op_nome(self, conta_nome, sessao):
+        conta = sessao.query(Contas).filter(Contas.cliente_fornecedor.like(f'{conta_nome}%')).all()
+        return conta
+
