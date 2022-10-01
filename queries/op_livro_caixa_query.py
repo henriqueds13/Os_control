@@ -14,6 +14,12 @@ class OpLivroCaixaQuery():
         op = sessao.query(OperaçãoLivroCaixa).filter(OperaçãoLivroCaixa.mes_caixa == mes).all()
         return op
 
+    def listar_op_grupo(self, grupo, data, op, sessao):
+        op = sessao.query(OperaçãoLivroCaixa).filter(OperaçãoLivroCaixa.grupo == grupo,
+                                                     OperaçãoLivroCaixa.data == data,
+                                                     OperaçãoLivroCaixa.tipo_operação == op).all()
+        return op
+
     def listar_op_id(self, op_id, sessao):
         op = sessao.query(OperaçãoLivroCaixa).filter(OperaçãoLivroCaixa.id == op_id).first()
         return op

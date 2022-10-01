@@ -3104,6 +3104,7 @@ class Castelo:
         font1 = ('Verdana', '9', 'bold')
         font2 = ('Verdana', '10', '')
 
+
         def pegaData(cal):
             data = self.grab_date(cal)
             popularResDiario(data)
@@ -3483,6 +3484,11 @@ class Castelo:
                             bg=bg_label_frame)
         mensagem_lb.pack(side=LEFT)
 
+        lf_filtro = LabelFrame(frame_buttons_fin)
+        lf_filtro.pack(side=LEFT, padx=10)
+        Button(lf_filtro, text='Filtro', fg='red', width=11,
+               command=lambda: [self.janfiltroResumo(cal_resum_day.selection_get(), tree_resumo_diario)]).pack(side=LEFT, padx=20, pady=13)
+
         popularResDiario(datetime.now())
 
         def abreFinBind(event):
@@ -3490,6 +3496,119 @@ class Castelo:
 
         tree_resumo_diario.bind('<Double-1>', abreFinBind)
 
+        jan.transient(root2)
+        jan.focus_force()
+        jan.grab_set()
+
+    def janfiltroResumo(self, data, tree):
+
+        jan = Toplevel()
+
+        # Centraliza a janela
+        x_cordinate = int((self.w / 2) - (650 / 2))
+        y_cordinate = int((self.h / 2) - (220 / 2))
+        jan.geometry("{}x{}+{}+{}".format(650, 220, x_cordinate, y_cordinate))
+
+        list_entrada = []
+        list_saida = []
+
+        with open('entrada.txt', 'r', encoding='utf8') as entrada_txt:
+            for i in entrada_txt:
+                if i != "\n":
+                    i = i.rstrip('\n')
+                    list_entrada.append(i)
+
+        with open('saida.txt', 'r', encoding='utf8') as saida_txt:
+            for i in saida_txt:
+                if i != "\n":
+                    i = i.rstrip('\n')
+                    list_saida.append(i)
+
+        def filtrarResumo(valor, data, tree, op):
+            tree.delete(*tree.get_children())
+            repositorio = op_livro_caixa_repositorio.OperaçãoLivroCaixaRepositorio()
+            registros = repositorio.listar_op_grupo(valor, data, op, sessao)
+            for i in registros:
+                    if self.count % 2 == 0:
+                        tree.insert('', 'end',
+                                                  values=(
+                                                      i.id, i.data.strftime('%d/%m/%Y'), i.hora.strftime('%H:%M'),
+                                                      i.historico,
+                                                      self.insereTotalConvertido(i.entrada + i.entrada_cp),
+                                                      self.insereTotalConvertido(i.saida + i.saida_cp), i.grupo,
+                                                      self.insereTotalConvertido(i.dinheiro),
+                                                      self.insereTotalConvertido(i.cheque),
+                                                      self.insereTotalConvertido(i.cdebito),
+                                                      self.insereTotalConvertido(i.ccredito),
+                                                      self.insereTotalConvertido(i.pix),
+                                                      self.insereTotalConvertido(i.outros),
+                                                      i.id_os, i.mes_caixa), tags=('oddrow'))
+                    else:
+                        tree.insert('', 'end',
+                                                  values=(
+                                                      i.id, i.data.strftime('%d/%m/%Y'), i.hora.strftime('%H:%M'),
+                                                      i.historico,
+                                                      self.insereTotalConvertido(i.entrada + i.entrada_cp),
+                                                      self.insereTotalConvertido(i.saida + i.saida_cp), i.grupo,
+                                                      self.insereTotalConvertido(i.dinheiro),
+                                                      self.insereTotalConvertido(i.cheque),
+                                                      self.insereTotalConvertido(i.cdebito),
+                                                      self.insereTotalConvertido(i.ccredito),
+                                                      self.insereTotalConvertido(i.pix),
+                                                      self.insereTotalConvertido(i.outros),
+                                                      i.id_os, i.mes_caixa), tags=('evenrow'))
+                    self.count += 1
+
+
+        def popularListBoxDep():
+            text_entrada.delete(0, END)
+            text_saida.delete(0, END)
+            for i in list_entrada:
+                if i != '\n':
+                    i = i.rstrip('\n')
+                    text_entrada.insert(END, i)
+            for i in list_saida:
+                if i != '\n':
+                    i = i.rstrip('\n')
+                    text_saida.insert(END, i)
+
+
+        frame_princ_config_grupo = Frame(jan)
+        frame_princ_config_grupo.pack(fill=BOTH)
+
+        frame_config_grupo = Frame(frame_princ_config_grupo)
+        frame_config_grupo.pack(fill=BOTH, padx=10, pady=0, ipadx=10)
+
+        labelF_departamento = LabelFrame(frame_config_grupo, text='Entrada')
+        labelF_departamento.grid(row=0, column=1, padx=5, sticky=NW, ipady=5, pady=5)
+        labelF_marca_est = LabelFrame(frame_config_grupo, text='Saida')
+        labelF_marca_est.grid(row=0, column=0, ipady=5, padx=15, pady=5)
+
+        frame_img = Label(frame_config_grupo)
+        frame_img.grid(row=0, column=2)
+        Label(frame_img, height=9, width=15, bg='yellow').pack(fill=BOTH, pady=10, padx=5)
+        Button(frame_img, text='Fechar', width=10, command=jan.destroy).pack(pady=5)
+
+        text_entrada = Listbox(labelF_departamento, height=7, width=35)
+        text_entrada.grid(row=0, column=0, padx=5, pady=5)
+        subframe_departamento = Frame(labelF_departamento)
+        subframe_departamento.grid(row=1, column=0, sticky=NW)
+
+        button_conf_departamento = Button(subframe_departamento, text='Filtrar ', width=8, wraplength=50,
+                                          command=lambda: [filtrarResumo(text_entrada.get(ACTIVE), data, tree, 1)])
+        button_conf_departamento.pack(side=LEFT, padx=5, pady=5)
+
+        text_saida = Listbox(labelF_marca_est, height=7, width=35)
+        text_saida.grid(row=0, column=0, padx=5, pady=5)
+
+        subframe_marca_est = Frame(labelF_marca_est)
+        subframe_marca_est.grid(row=1, column=0, sticky=NW)
+
+        button_conf_marca_est = Button(subframe_marca_est, text='Filtrar', width=8, wraplength=50,
+                                       command=lambda: [filtrarResumo(text_saida.get(ACTIVE), data, tree, 2)])
+        button_conf_marca_est.pack(side=LEFT, padx=5, pady=5)
+
+        popularListBoxDep()
         jan.transient(root2)
         jan.focus_force()
         jan.grab_set()
@@ -4389,14 +4508,18 @@ class Castelo:
 
         frame_config_grupo = Frame(frame_princ_config_grupo)
         frame_config_grupo.pack(fill=BOTH, padx=10, pady=0, ipadx=10)
-        frame_config_grupo1 = Frame(frame_princ_config_grupo)
-        frame_config_grupo1.pack(fill=BOTH, padx=10, pady=0, ipady=10, ipadx=10, side=LEFT)
 
 
         labelF_departamento = LabelFrame(frame_config_grupo, text='Entrada')
         labelF_departamento.grid(row=0, column=1, padx=5, sticky=NW, ipady=5, pady=5)
         labelF_marca_est = LabelFrame(frame_config_grupo, text='Saida')
         labelF_marca_est.grid(row=0, column=0, ipady=5, padx=15, pady=5)
+
+        frame_img = Label(frame_config_grupo)
+        frame_img.grid(row=0, column=2)
+        Label(frame_img, height=9, width=15, bg='yellow').pack(fill=BOTH, pady=10, padx=5)
+        Button(frame_img, text='Fechar', width=10, command=jan.destroy).pack(pady=5)
+
 
         text_entrada = Listbox(labelF_departamento, height=7, width=35)
         text_entrada.grid(row=0, column=0, padx=5, pady=5)
@@ -4437,26 +4560,28 @@ class Castelo:
                     text_saida.insert(END, i)
 
         def excluiDadosDep(num):
-            if num == 1:
-                dados_conf = str(text_entrada.get(ACTIVE))
-                list_entrada.remove(dados_conf)
-                with open('entrada.txt', 'w', encoding='utf8') as entrada_txt:
-                    entrada_txt.truncate(0)
-                    for i in list_entrada:
-                        if i != '\n':
-                            i = i.rstrip('\n')
-                            entrada_txt.write(f'{i}\n')
-            elif num == 2:
-                dados_conf = str(text_saida.get(ACTIVE))
-                list_saida.remove(dados_conf)
-                with open('saida.txt', 'w', encoding='utf8') as saida_txt:
-                    saida_txt.truncate(0)
-                    for i in list_saida:
-                        if i != '\n':
-                            i = i.rstrip('\n')
-                            saida_txt.write(f'{i}\n')
-
-            popularListBoxDep()
+            res = messagebox.askyesno(None, 'Deseja Realmente Excluir o Grupo?')
+            if res:
+                if num == 1:
+                    dados_conf = str(text_entrada.get(ACTIVE))
+                    list_entrada.remove(dados_conf)
+                    with open('entrada.txt', 'w', encoding='utf8') as entrada_txt:
+                        entrada_txt.truncate(0)
+                        for i in list_entrada:
+                            if i != '\n':
+                                i = i.rstrip('\n')
+                                entrada_txt.write(f'{i}\n')
+                elif num == 2:
+                    dados_conf = str(text_saida.get(ACTIVE))
+                    list_saida.remove(dados_conf)
+                    with open('saida.txt', 'w', encoding='utf8') as saida_txt:
+                        saida_txt.truncate(0)
+                        for i in list_saida:
+                            if i != '\n':
+                                i = i.rstrip('\n')
+                                saida_txt.write(f'{i}\n')
+                self.mostrarMensagem("1", "Grupo Excluído com Sucesso!")
+                popularListBoxDep()
 
         def janelaInsereDadosDep(num):
             jan = Toplevel()

@@ -206,3 +206,30 @@ def janelaInsereDadosDep(num):
 
 
 popularListBoxDep()
+
+list_entrada = []
+list_saida = []
+
+with open('entrada.txt', 'r', encoding='utf8') as entrada_txt:
+    for i in entrada_txt:
+        if i != "\n":
+            i = i.rstrip('\n')
+            list_entrada.append(i)
+
+with open('saida.txt', 'r', encoding='utf8') as saida_txt:
+    for i in saida_txt:
+        if i != "\n":
+            i = i.rstrip('\n')
+            list_saida.append(i)
+
+        def popularListBoxDep():
+            text_entrada.delete(0, END)
+            text_saida.delete(0, END)
+            for i in list_entrada:
+                if i != '\n':
+                    i = i.rstrip('\n')
+                    text_entrada.insert(END, i)
+            for i in list_saida:
+                if i != '\n':
+                    i = i.rstrip('\n')
+                    text_saida.insert(END, i)
