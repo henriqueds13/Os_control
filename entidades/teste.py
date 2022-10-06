@@ -233,3 +233,242 @@ with open('saida.txt', 'r', encoding='utf8') as saida_txt:
                 if i != '\n':
                     i = i.rstrip('\n')
                     text_saida.insert(END, i)
+
+ def popularResDiario(data):
+
+            tree_resumo_diario.delete(*tree_resumo_diario.get_children())
+            repositorio = op_livro_caixa_repositorio.OperaçãoLivroCaixaRepositorio()
+            registros = repositorio.listar_op(sessao)
+            valores_din = 0
+            valores_cheque = 0
+            valores_cdeb = 0
+            valores_ccred = 0
+            valores_pix = 0
+            valores_outros = 0
+            quantid_din = 0
+            quantid_cheque = 0
+            quantid_cdeb = 0
+            quantid_ccred = 0
+            quantid_pix = 0
+            quantid_outros = 0
+            entrada_cn = 0
+            entrada_cp = 0
+            saida_cn = 0
+            saida_cp = 0
+            quantid_entr_cn = 0
+            quantid_saida_cn = 0
+            quantid_entr_cp = 0
+            quantid_saida_cp = 0
+
+            for i in registros:
+                if i.data.strftime('%d/%m/%Y') == data.strftime('%d/%m/%Y'):
+                    if i.tipo_operação == 1:
+                        valores_din += i.dinheiro
+                        valores_cheque += i.cheque
+                        valores_cdeb += i.cdebito
+                        valores_ccred += i.ccredito
+                        valores_pix += i.pix
+                        valores_outros += i.outros
+                        quantid_din += self.soma_quant_resum(i.dinheiro)
+                        quantid_cheque += self.soma_quant_resum(i.cheque)
+                        quantid_cdeb += self.soma_quant_resum(i.cdebito)
+                        quantid_ccred += self.soma_quant_resum(i.ccredito)
+                        quantid_pix += self.soma_quant_resum(i.pix)
+                        quantid_outros += self.soma_quant_resum(i.outros)
+                        entrada_cn += i.entrada
+                        entrada_cp += i.entrada_cp
+                        quantid_entr_cn += self.soma_quant_resum(i.entrada)
+                        quantid_entr_cp += self.soma_quant_resum(i.entrada_cp)
+                    else:
+                        saida_cn += i.saida
+                        saida_cp += i.saida_cp
+                        quantid_saida_cp += self.soma_quant_resum(i.saida_cp)
+                        quantid_saida_cn += self.soma_quant_resum(i.saida)
+
+                    if self.count % 2 == 0:
+                        tree_resumo_diario.insert('', 'end',
+                                                  values=(
+                                                      i.id, i.data.strftime('%d/%m/%Y'), i.hora.strftime('%H:%M'),
+                                                      i.historico,
+                                                      self.insereTotalConvertido(i.entrada + i.entrada_cp),
+                                                      self.insereTotalConvertido(i.saida + i.saida_cp), i.grupo,
+                                                      self.insereTotalConvertido(i.dinheiro),
+                                                      self.insereTotalConvertido(i.cheque),
+                                                      self.insereTotalConvertido(i.cdebito),
+                                                      self.insereTotalConvertido(i.ccredito),
+                                                      self.insereTotalConvertido(i.pix),
+                                                      self.insereTotalConvertido(i.outros),
+                                                      i.id_os, i.mes_caixa), tags=('oddrow'))
+                    else:
+                        tree_resumo_diario.insert('', 'end',
+                                                  values=(
+                                                      i.id, i.data.strftime('%d/%m/%Y'), i.hora.strftime('%H:%M'),
+                                                      i.historico,
+                                                      self.insereTotalConvertido(i.entrada + i.entrada_cp),
+                                                      self.insereTotalConvertido(i.saida + i.saida_cp), i.grupo,
+                                                      self.insereTotalConvertido(i.dinheiro),
+                                                      self.insereTotalConvertido(i.cheque),
+                                                      self.insereTotalConvertido(i.cdebito),
+                                                      self.insereTotalConvertido(i.ccredito),
+                                                      self.insereTotalConvertido(i.pix),
+                                                      self.insereTotalConvertido(i.outros),
+                                                      i.id_os, i.mes_caixa), tags=('evenrow'))
+                self.count += 1
+
+            label_titulo.config(text=f'{self.dias[data.weekday()]}, {data.strftime("%d de %B de %Y")}')
+            valor_din.config(text=self.insereTotalConvertido(valores_din))
+            valor_cheque.config(text=self.insereTotalConvertido(valores_cheque))
+            valor_cdebito.config(text=self.insereTotalConvertido(valores_cdeb))
+            valor_ccredito.config(text=self.insereTotalConvertido(valores_ccred))
+            valor_pix.config(text=self.insereTotalConvertido(valores_pix))
+            valor_outros.config(text=self.insereTotalConvertido(valores_outros))
+            quant_din.config(text=quantid_din)
+            quant_cheque.config(text=quantid_cheque)
+            quant_cdebito.config(text=quantid_cdeb)
+            quant_ccredito.config(text=quantid_ccred)
+            quant_pix.config(text=quantid_pix)
+            quant_outros.config(text=quantid_outros)
+            valor_entr_cn.config(text=self.insereTotalConvertido(entrada_cn))
+            valor_saida_cn.config(text=self.insereTotalConvertido(saida_cn))
+            valor_entr_cp.config(text=self.insereTotalConvertido(entrada_cp))
+            valor_saida_cp.config(text=self.insereTotalConvertido(saida_cp))
+            valor_saldo_cp.config(text=self.insereTotalConvertido(entrada_cp - saida_cp))
+            valor_saldo_cn.config(text=self.insereTotalConvertido(entrada_cn - saida_cn))
+            quant_entr_cn.config(text=quantid_entr_cn)
+            quant_entr_cp.config(text=quantid_entr_cp)
+            quant_saida_cn.config(text=quantid_saida_cn)
+            quant_saida_cp.config(text=quantid_saida_cp)
+            self.count = 0
+            tree_resumo_diario.focus_set()
+            children = tree_resumo_diario.get_children()
+
+            text_entrada.get(ACTIVE)
+
+
+
+
+
+tree_resumo_diario.delete(*tree_resumo_diario.get_children())
+op_repositorio = op_livro_caixa_repositorio.OperaçãoLivroCaixaRepositorio()
+repositorio = livro_caixa_repositorio.LivroCaixaRepositorio()
+registro = repositorio.listar_op_mes(mes, sessao)
+registros = op_repositorio.listar_op_mes(mes, sessao)
+
+valores_din = 0
+valores_cheque = 0
+valores_cdeb = 0
+valores_ccred = 0
+valores_pix = 0
+valores_outros = 0
+quantid_din = 0
+quantid_cheque = 0
+quantid_cdeb = 0
+quantid_ccred = 0
+quantid_pix = 0
+quantid_outros = 0
+entrada_cn = 0
+entrada_cp = 0
+saida_cn = 0
+saida_cp = 0
+saldo_cn = 0
+saldo_cp = 0
+quantid_entr_cn = 0
+quantid_saida_cn = 0
+quantid_entr_cp = 0
+quantid_saida_cp = 0
+
+if len(registros) > 0:
+    for i in registros:
+        if i.tipo_operação == 1:
+            quantid_entr_cn += self.soma_quant_resum(i.entrada)
+            quantid_entr_cp += self.soma_quant_resum(i.entrada_cp)
+        else:
+            quantid_saida_cp += self.soma_quant_resum(i.saida_cp)
+            quantid_saida_cn += self.soma_quant_resum(i.saida)
+
+        if registro is not None:
+            valores_din = registro.dinheiro
+            valores_cheque = registro.cheque
+            valores_cdeb = registro.cdebito
+            valores_ccred = registro.ccredito
+            valores_pix = registro.pix
+            valores_outros = registro.outros
+            quantid_din = registro.quant_dinheiro
+            quantid_cheque = registro.quant_cheque
+            quantid_cdeb = registro.quant_cdebito
+            quantid_ccred = registro.quant_ccredito
+            quantid_pix = registro.quant_pix
+            quantid_outros = registro.quant_outros
+            entrada_cn = registro.entrada
+            entrada_cp = registro.entrada_cp
+            saida_cn = registro.saida
+            saida_cp = registro.saida_cp
+            saldo_cn = registro.saldo_cn
+            saldo_cp = registro.saldo_cp
+
+        if self.count % 2 == 0:
+            tree_resumo_diario.insert('', 'end',
+                                      values=(
+                                          i.id, i.data.strftime('%d/%m/%Y'), i.hora.strftime('%H:%M'),
+                                          i.historico,
+                                          self.insereTotalConvertido(i.entrada + i.entrada_cp),
+                                          self.insereTotalConvertido(i.saida + i.saida_cp), i.grupo,
+                                          self.insereTotalConvertido(i.dinheiro),
+                                          self.insereTotalConvertido(i.cheque),
+                                          self.insereTotalConvertido(i.cdebito),
+                                          self.insereTotalConvertido(i.ccredito),
+                                          self.insereTotalConvertido(i.pix),
+                                          self.insereTotalConvertido(i.outros),
+                                          i.id_os, i.mes_caixa), tags=('oddrow'))
+        else:
+            tree_resumo_diario.insert('', 'end',
+                                      values=(
+                                          i.id, i.data.strftime('%d/%m/%Y'), i.hora.strftime('%H:%M'),
+                                          i.historico,
+                                          self.insereTotalConvertido(i.entrada + i.entrada_cp),
+                                          self.insereTotalConvertido(i.saida + i.saida_cp), i.grupo,
+                                          self.insereTotalConvertido(i.dinheiro),
+                                          self.insereTotalConvertido(i.cheque),
+                                          self.insereTotalConvertido(i.cdebito),
+                                          self.insereTotalConvertido(i.ccredito),
+                                          self.insereTotalConvertido(i.pix),
+                                          self.insereTotalConvertido(i.outros),
+                                          i.id_os, i.mes_caixa), tags=('evenrow'))
+        self.count += 1
+
+dataTime = datetime.strptime(mes, '%m/%Y')
+valor_din.config(text=self.insereTotalConvertido(valores_din))
+valor_cheque.config(text=self.insereTotalConvertido(valores_cheque))
+valor_cdebito.config(text=self.insereTotalConvertido(valores_cdeb))
+valor_ccredito.config(text=self.insereTotalConvertido(valores_ccred))
+valor_pix.config(text=self.insereTotalConvertido(valores_pix))
+valor_outros.config(text=self.insereTotalConvertido(valores_outros))
+quant_din.config(text=quantid_din)
+quant_cheque.config(text=quantid_cheque)
+quant_cdebito.config(text=quantid_cdeb)
+quant_ccredito.config(text=quantid_ccred)
+quant_pix.config(text=quantid_pix)
+quant_outros.config(text=quantid_outros)
+valor_entr_cn.config(text=self.insereTotalConvertido(entrada_cn))
+valor_saida_cn.config(text=self.insereTotalConvertido(saida_cn))
+valor_entr_cp.config(text=self.insereTotalConvertido(entrada_cp))
+valor_saida_cp.config(text=self.insereTotalConvertido(saida_cp))
+valor_saldo_cp.config(text=self.insereTotalConvertido(saldo_cp))
+valor_saldo_cn.config(text=self.insereTotalConvertido(saldo_cn))
+quant_entr_cn.config(text=quantid_entr_cn)
+quant_entr_cp.config(text=quantid_entr_cp)
+quant_saida_cn.config(text=quantid_saida_cn)
+quant_saida_cp.config(text=quantid_saida_cp)
+label_titulo.config(text=dataTime.strftime('%B/%Y'))
+
+self.count = 0
+tree_resumo_diario.focus_set()
+children = tree_resumo_diario.get_children()
+if children:
+    mensagem_lb.config(fg='#e0e0e0')
+    img_mensagem.config(bg='#e0e0e0')
+    tree_resumo_diario.focus(children[0])
+    tree_resumo_diario.selection_set(children[0])
+else:
+    mensagem_lb.config(fg='red')
+    img_mensagem.config(bg='yellow')

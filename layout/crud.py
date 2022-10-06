@@ -3225,6 +3225,196 @@ class Castelo:
                 mensagem_lb.config(fg='red')
                 img_mensagem.config(bg='yellow')
 
+        def janfiltroResumo(data, tree):
+
+            jan = Toplevel()
+
+            # Centraliza a janela
+            x_cordinate = int((self.w / 2) - (650 / 2))
+            y_cordinate = int((self.h / 2) - (220 / 2))
+            jan.geometry("{}x{}+{}+{}".format(650, 220, x_cordinate, y_cordinate))
+
+            list_entrada = []
+            list_saida = []
+
+            with open('entrada.txt', 'r', encoding='utf8') as entrada_txt:
+                for i in entrada_txt:
+                    if i != "\n":
+                        i = i.rstrip('\n')
+                        list_entrada.append(i)
+
+            with open('saida.txt', 'r', encoding='utf8') as saida_txt:
+                for i in saida_txt:
+                    if i != "\n":
+                        i = i.rstrip('\n')
+                        list_saida.append(i)
+
+            def filtrarResumo(valor, data, tree, op):
+                tree.delete(*tree.get_children())
+                repositorio = op_livro_caixa_repositorio.OperaçãoLivroCaixaRepositorio()
+                registros = repositorio.listar_op_grupo(valor, data, op, sessao)
+
+                valores_din = 0
+                valores_cheque = 0
+                valores_cdeb = 0
+                valores_ccred = 0
+                valores_pix = 0
+                valores_outros = 0
+                quantid_din = 0
+                quantid_cheque = 0
+                quantid_cdeb = 0
+                quantid_ccred = 0
+                quantid_pix = 0
+                quantid_outros = 0
+                entrada_cn = 0
+                entrada_cp = 0
+                saida_cn = 0
+                saida_cp = 0
+                quantid_entr_cn = 0
+                quantid_saida_cn = 0
+                quantid_entr_cp = 0
+                quantid_saida_cp = 0
+
+                for i in registros:
+                    if i.tipo_operação == 1:
+                        valores_din += i.dinheiro
+                        valores_cheque += i.cheque
+                        valores_cdeb += i.cdebito
+                        valores_ccred += i.ccredito
+                        valores_pix += i.pix
+                        valores_outros += i.outros
+                        quantid_din += self.soma_quant_resum(i.dinheiro)
+                        quantid_cheque += self.soma_quant_resum(i.cheque)
+                        quantid_cdeb += self.soma_quant_resum(i.cdebito)
+                        quantid_ccred += self.soma_quant_resum(i.ccredito)
+                        quantid_pix += self.soma_quant_resum(i.pix)
+                        quantid_outros += self.soma_quant_resum(i.outros)
+                        entrada_cn += i.entrada
+                        entrada_cp += i.entrada_cp
+                        quantid_entr_cn += self.soma_quant_resum(i.entrada)
+                        quantid_entr_cp += self.soma_quant_resum(i.entrada_cp)
+                    else:
+                        saida_cn += i.saida
+                        saida_cp += i.saida_cp
+                        quantid_saida_cp += self.soma_quant_resum(i.saida_cp)
+                        quantid_saida_cn += self.soma_quant_resum(i.saida)
+
+                    if self.count % 2 == 0:
+                        tree.insert('', 'end',
+                                    values=(
+                                        i.id, i.data.strftime('%d/%m/%Y'), i.hora.strftime('%H:%M'),
+                                        i.historico,
+                                        self.insereTotalConvertido(i.entrada + i.entrada_cp),
+                                        self.insereTotalConvertido(i.saida + i.saida_cp), i.grupo,
+                                        self.insereTotalConvertido(i.dinheiro),
+                                        self.insereTotalConvertido(i.cheque),
+                                        self.insereTotalConvertido(i.cdebito),
+                                        self.insereTotalConvertido(i.ccredito),
+                                        self.insereTotalConvertido(i.pix),
+                                        self.insereTotalConvertido(i.outros),
+                                        i.id_os, i.mes_caixa), tags=('oddrow'))
+                    else:
+                        tree.insert('', 'end',
+                                    values=(
+                                        i.id, i.data.strftime('%d/%m/%Y'), i.hora.strftime('%H:%M'),
+                                        i.historico,
+                                        self.insereTotalConvertido(i.entrada + i.entrada_cp),
+                                        self.insereTotalConvertido(i.saida + i.saida_cp), i.grupo,
+                                        self.insereTotalConvertido(i.dinheiro),
+                                        self.insereTotalConvertido(i.cheque),
+                                        self.insereTotalConvertido(i.cdebito),
+                                        self.insereTotalConvertido(i.ccredito),
+                                        self.insereTotalConvertido(i.pix),
+                                        self.insereTotalConvertido(i.outros),
+                                        i.id_os, i.mes_caixa), tags=('evenrow'))
+                    self.count += 1
+
+                valor_din.config(text=self.insereTotalConvertido(valores_din))
+                valor_cheque.config(text=self.insereTotalConvertido(valores_cheque))
+                valor_cdebito.config(text=self.insereTotalConvertido(valores_cdeb))
+                valor_ccredito.config(text=self.insereTotalConvertido(valores_ccred))
+                valor_pix.config(text=self.insereTotalConvertido(valores_pix))
+                valor_outros.config(text=self.insereTotalConvertido(valores_outros))
+                quant_din.config(text=quantid_din)
+                quant_cheque.config(text=quantid_cheque)
+                quant_cdebito.config(text=quantid_cdeb)
+                quant_ccredito.config(text=quantid_ccred)
+                quant_pix.config(text=quantid_pix)
+                quant_outros.config(text=quantid_outros)
+                valor_entr_cn.config(text=self.insereTotalConvertido(entrada_cn))
+                valor_saida_cn.config(text=self.insereTotalConvertido(saida_cn))
+                valor_entr_cp.config(text=self.insereTotalConvertido(entrada_cp))
+                valor_saida_cp.config(text=self.insereTotalConvertido(saida_cp))
+                valor_saldo_cp.config(text=self.insereTotalConvertido(entrada_cp - saida_cp))
+                valor_saldo_cn.config(text=self.insereTotalConvertido(entrada_cn - saida_cn))
+                quant_entr_cn.config(text=quantid_entr_cn)
+                quant_entr_cp.config(text=quantid_entr_cp)
+                quant_saida_cn.config(text=quantid_saida_cn)
+                quant_saida_cp.config(text=quantid_saida_cp)
+                self.count = 0
+                tree_resumo_diario.focus_set()
+                children = tree_resumo_diario.get_children()
+                if children:
+                    mensagem_lb.config(fg='#e0e0e0')
+                    img_mensagem.config(bg='#e0e0e0')
+                    tree_resumo_diario.focus(children[0])
+                    tree_resumo_diario.selection_set(children[0])
+                else:
+                    mensagem_lb.config(fg='red')
+                    img_mensagem.config(bg='yellow')
+
+            def popularListBoxDep():
+                text_entrada.delete(0, END)
+                text_saida.delete(0, END)
+                for i in list_entrada:
+                    if i != '\n':
+                        i = i.rstrip('\n')
+                        text_entrada.insert(END, i)
+                for i in list_saida:
+                    if i != '\n':
+                        i = i.rstrip('\n')
+                        text_saida.insert(END, i)
+
+            frame_princ_config_grupo = Frame(jan)
+            frame_princ_config_grupo.pack(fill=BOTH)
+
+            frame_config_grupo = Frame(frame_princ_config_grupo)
+            frame_config_grupo.pack(fill=BOTH, padx=10, pady=0, ipadx=10)
+
+            labelF_departamento = LabelFrame(frame_config_grupo, text='Entrada')
+            labelF_departamento.grid(row=0, column=1, padx=5, sticky=NW, ipady=5, pady=5)
+            labelF_marca_est = LabelFrame(frame_config_grupo, text='Saida')
+            labelF_marca_est.grid(row=0, column=0, ipady=5, padx=15, pady=5)
+
+            frame_img = Label(frame_config_grupo)
+            frame_img.grid(row=0, column=2)
+            Label(frame_img, height=9, width=15, bg='yellow').pack(fill=BOTH, pady=10, padx=5)
+            Button(frame_img, text='Fechar', width=10, command=jan.destroy).pack(pady=5)
+
+            text_entrada = Listbox(labelF_departamento, height=7, width=35)
+            text_entrada.grid(row=0, column=0, padx=5, pady=5)
+            subframe_departamento = Frame(labelF_departamento)
+            subframe_departamento.grid(row=1, column=0, sticky=NW)
+
+            button_conf_departamento = Button(subframe_departamento, text='Filtrar ', width=8, wraplength=50,
+                                              command=lambda: [filtrarResumo(text_entrada.get(ACTIVE), data, tree, 1)])
+            button_conf_departamento.pack(side=LEFT, padx=5, pady=5)
+
+            text_saida = Listbox(labelF_marca_est, height=7, width=35)
+            text_saida.grid(row=0, column=0, padx=5, pady=5)
+
+            subframe_marca_est = Frame(labelF_marca_est)
+            subframe_marca_est.grid(row=1, column=0, sticky=NW)
+
+            button_conf_marca_est = Button(subframe_marca_est, text='Filtrar', width=8, wraplength=50,
+                                           command=lambda: [filtrarResumo(text_saida.get(ACTIVE), data, tree, 2)])
+            button_conf_marca_est.pack(side=LEFT, padx=5, pady=5)
+
+            popularListBoxDep()
+            jan.transient(root2)
+            jan.focus_force()
+            jan.grab_set()
+
         jan = Toplevel()
 
         # Centraliza a janela
@@ -3487,7 +3677,7 @@ class Castelo:
         lf_filtro = LabelFrame(frame_buttons_fin)
         lf_filtro.pack(side=LEFT, padx=10)
         Button(lf_filtro, text='Filtro', fg='red', width=11,
-               command=lambda: [self.janfiltroResumo(cal_resum_day.selection_get(), tree_resumo_diario)]).pack(side=LEFT, padx=20, pady=13)
+               command=lambda: [janfiltroResumo(cal_resum_day.selection_get(), tree_resumo_diario)]).pack(side=LEFT, padx=20, pady=13)
 
         popularResDiario(datetime.now())
 
@@ -3496,119 +3686,6 @@ class Castelo:
 
         tree_resumo_diario.bind('<Double-1>', abreFinBind)
 
-        jan.transient(root2)
-        jan.focus_force()
-        jan.grab_set()
-
-    def janfiltroResumo(self, data, tree):
-
-        jan = Toplevel()
-
-        # Centraliza a janela
-        x_cordinate = int((self.w / 2) - (650 / 2))
-        y_cordinate = int((self.h / 2) - (220 / 2))
-        jan.geometry("{}x{}+{}+{}".format(650, 220, x_cordinate, y_cordinate))
-
-        list_entrada = []
-        list_saida = []
-
-        with open('entrada.txt', 'r', encoding='utf8') as entrada_txt:
-            for i in entrada_txt:
-                if i != "\n":
-                    i = i.rstrip('\n')
-                    list_entrada.append(i)
-
-        with open('saida.txt', 'r', encoding='utf8') as saida_txt:
-            for i in saida_txt:
-                if i != "\n":
-                    i = i.rstrip('\n')
-                    list_saida.append(i)
-
-        def filtrarResumo(valor, data, tree, op):
-            tree.delete(*tree.get_children())
-            repositorio = op_livro_caixa_repositorio.OperaçãoLivroCaixaRepositorio()
-            registros = repositorio.listar_op_grupo(valor, data, op, sessao)
-            for i in registros:
-                    if self.count % 2 == 0:
-                        tree.insert('', 'end',
-                                                  values=(
-                                                      i.id, i.data.strftime('%d/%m/%Y'), i.hora.strftime('%H:%M'),
-                                                      i.historico,
-                                                      self.insereTotalConvertido(i.entrada + i.entrada_cp),
-                                                      self.insereTotalConvertido(i.saida + i.saida_cp), i.grupo,
-                                                      self.insereTotalConvertido(i.dinheiro),
-                                                      self.insereTotalConvertido(i.cheque),
-                                                      self.insereTotalConvertido(i.cdebito),
-                                                      self.insereTotalConvertido(i.ccredito),
-                                                      self.insereTotalConvertido(i.pix),
-                                                      self.insereTotalConvertido(i.outros),
-                                                      i.id_os, i.mes_caixa), tags=('oddrow'))
-                    else:
-                        tree.insert('', 'end',
-                                                  values=(
-                                                      i.id, i.data.strftime('%d/%m/%Y'), i.hora.strftime('%H:%M'),
-                                                      i.historico,
-                                                      self.insereTotalConvertido(i.entrada + i.entrada_cp),
-                                                      self.insereTotalConvertido(i.saida + i.saida_cp), i.grupo,
-                                                      self.insereTotalConvertido(i.dinheiro),
-                                                      self.insereTotalConvertido(i.cheque),
-                                                      self.insereTotalConvertido(i.cdebito),
-                                                      self.insereTotalConvertido(i.ccredito),
-                                                      self.insereTotalConvertido(i.pix),
-                                                      self.insereTotalConvertido(i.outros),
-                                                      i.id_os, i.mes_caixa), tags=('evenrow'))
-                    self.count += 1
-
-
-        def popularListBoxDep():
-            text_entrada.delete(0, END)
-            text_saida.delete(0, END)
-            for i in list_entrada:
-                if i != '\n':
-                    i = i.rstrip('\n')
-                    text_entrada.insert(END, i)
-            for i in list_saida:
-                if i != '\n':
-                    i = i.rstrip('\n')
-                    text_saida.insert(END, i)
-
-
-        frame_princ_config_grupo = Frame(jan)
-        frame_princ_config_grupo.pack(fill=BOTH)
-
-        frame_config_grupo = Frame(frame_princ_config_grupo)
-        frame_config_grupo.pack(fill=BOTH, padx=10, pady=0, ipadx=10)
-
-        labelF_departamento = LabelFrame(frame_config_grupo, text='Entrada')
-        labelF_departamento.grid(row=0, column=1, padx=5, sticky=NW, ipady=5, pady=5)
-        labelF_marca_est = LabelFrame(frame_config_grupo, text='Saida')
-        labelF_marca_est.grid(row=0, column=0, ipady=5, padx=15, pady=5)
-
-        frame_img = Label(frame_config_grupo)
-        frame_img.grid(row=0, column=2)
-        Label(frame_img, height=9, width=15, bg='yellow').pack(fill=BOTH, pady=10, padx=5)
-        Button(frame_img, text='Fechar', width=10, command=jan.destroy).pack(pady=5)
-
-        text_entrada = Listbox(labelF_departamento, height=7, width=35)
-        text_entrada.grid(row=0, column=0, padx=5, pady=5)
-        subframe_departamento = Frame(labelF_departamento)
-        subframe_departamento.grid(row=1, column=0, sticky=NW)
-
-        button_conf_departamento = Button(subframe_departamento, text='Filtrar ', width=8, wraplength=50,
-                                          command=lambda: [filtrarResumo(text_entrada.get(ACTIVE), data, tree, 1)])
-        button_conf_departamento.pack(side=LEFT, padx=5, pady=5)
-
-        text_saida = Listbox(labelF_marca_est, height=7, width=35)
-        text_saida.grid(row=0, column=0, padx=5, pady=5)
-
-        subframe_marca_est = Frame(labelF_marca_est)
-        subframe_marca_est.grid(row=1, column=0, sticky=NW)
-
-        button_conf_marca_est = Button(subframe_marca_est, text='Filtrar', width=8, wraplength=50,
-                                       command=lambda: [filtrarResumo(text_saida.get(ACTIVE), data, tree, 2)])
-        button_conf_marca_est.pack(side=LEFT, padx=5, pady=5)
-
-        popularListBoxDep()
         jan.transient(root2)
         jan.focus_force()
         jan.grab_set()
@@ -3632,6 +3709,7 @@ class Castelo:
             repositorio = livro_caixa_repositorio.LivroCaixaRepositorio()
             registro = repositorio.listar_op_mes(mes, sessao)
             registros = op_repositorio.listar_op_mes(mes, sessao)
+
             valores_din = 0
             valores_cheque = 0
             valores_cdeb = 0
@@ -3750,6 +3828,210 @@ class Castelo:
             else:
                 mensagem_lb.config(fg='red')
                 img_mensagem.config(bg='yellow')
+
+        def janfiltroResumo(data, tree):
+
+            jan = Toplevel()
+
+            # Centraliza a janela
+            x_cordinate = int((self.w / 2) - (650 / 2))
+            y_cordinate = int((self.h / 2) - (220 / 2))
+            jan.geometry("{}x{}+{}+{}".format(650, 220, x_cordinate, y_cordinate))
+
+            list_entrada = []
+            list_saida = []
+
+            with open('entrada.txt', 'r', encoding='utf8') as entrada_txt:
+                for i in entrada_txt:
+                    if i != "\n":
+                        i = i.rstrip('\n')
+                        list_entrada.append(i)
+
+            with open('saida.txt', 'r', encoding='utf8') as saida_txt:
+                for i in saida_txt:
+                    if i != "\n":
+                        i = i.rstrip('\n')
+                        list_saida.append(i)
+
+            def filtrarResumo(valor, data, tree, op):
+                tree.delete(*tree.get_children())
+                repositorio = op_livro_caixa_repositorio.OperaçãoLivroCaixaRepositorio()
+                registros = repositorio.listar_op_grupo_mes(valor, data, op, sessao)
+
+                valores_din = 0
+                valores_cheque = 0
+                valores_cdeb = 0
+                valores_ccred = 0
+                valores_pix = 0
+                valores_outros = 0
+                quantid_din = 0
+                quantid_cheque = 0
+                quantid_cdeb = 0
+                quantid_ccred = 0
+                quantid_pix = 0
+                quantid_outros = 0
+                entrada_cn = 0
+                entrada_cp = 0
+                saida_cn = 0
+                saida_cp = 0
+                quantid_entr_cn = 0
+                quantid_saida_cn = 0
+                quantid_entr_cp = 0
+                quantid_saida_cp = 0
+
+                for i in registros:
+                    if i.tipo_operação == 1:
+                        valores_din += i.dinheiro
+                        valores_cheque += i.cheque
+                        valores_cdeb += i.cdebito
+                        valores_ccred += i.ccredito
+                        valores_pix += i.pix
+                        valores_outros += i.outros
+                        quantid_din += self.soma_quant_resum(i.dinheiro)
+                        quantid_cheque += self.soma_quant_resum(i.cheque)
+                        quantid_cdeb += self.soma_quant_resum(i.cdebito)
+                        quantid_ccred += self.soma_quant_resum(i.ccredito)
+                        quantid_pix += self.soma_quant_resum(i.pix)
+                        quantid_outros += self.soma_quant_resum(i.outros)
+                        entrada_cn += i.entrada
+                        entrada_cp += i.entrada_cp
+                        quantid_entr_cn += self.soma_quant_resum(i.entrada)
+                        quantid_entr_cp += self.soma_quant_resum(i.entrada_cp)
+                    else:
+                        valores_din += i.dinheiro
+                        valores_cheque += i.cheque
+                        valores_cdeb += i.cdebito
+                        valores_ccred += i.ccredito
+                        valores_pix += i.pix
+                        valores_outros += i.outros
+                        saida_cn += i.saida
+                        saida_cp += i.saida_cp
+                        quantid_din += self.soma_quant_resum(i.dinheiro)
+                        quantid_cheque += self.soma_quant_resum(i.cheque)
+                        quantid_cdeb += self.soma_quant_resum(i.cdebito)
+                        quantid_ccred += self.soma_quant_resum(i.ccredito)
+                        quantid_pix += self.soma_quant_resum(i.pix)
+                        quantid_outros += self.soma_quant_resum(i.outros)
+                        quantid_saida_cp += self.soma_quant_resum(i.saida_cp)
+                        quantid_saida_cn += self.soma_quant_resum(i.saida)
+
+                    if self.count % 2 == 0:
+                        tree.insert('', 'end',
+                                    values=(
+                                        i.id, i.data.strftime('%d/%m/%Y'), i.hora.strftime('%H:%M'),
+                                        i.historico,
+                                        self.insereTotalConvertido(i.entrada + i.entrada_cp),
+                                        self.insereTotalConvertido(i.saida + i.saida_cp), i.grupo,
+                                        self.insereTotalConvertido(i.dinheiro),
+                                        self.insereTotalConvertido(i.cheque),
+                                        self.insereTotalConvertido(i.cdebito),
+                                        self.insereTotalConvertido(i.ccredito),
+                                        self.insereTotalConvertido(i.pix),
+                                        self.insereTotalConvertido(i.outros),
+                                        i.id_os, i.mes_caixa), tags=('oddrow'))
+                    else:
+                        tree.insert('', 'end',
+                                    values=(
+                                        i.id, i.data.strftime('%d/%m/%Y'), i.hora.strftime('%H:%M'),
+                                        i.historico,
+                                        self.insereTotalConvertido(i.entrada + i.entrada_cp),
+                                        self.insereTotalConvertido(i.saida + i.saida_cp), i.grupo,
+                                        self.insereTotalConvertido(i.dinheiro),
+                                        self.insereTotalConvertido(i.cheque),
+                                        self.insereTotalConvertido(i.cdebito),
+                                        self.insereTotalConvertido(i.ccredito),
+                                        self.insereTotalConvertido(i.pix),
+                                        self.insereTotalConvertido(i.outros),
+                                        i.id_os, i.mes_caixa), tags=('evenrow'))
+                    self.count += 1
+
+                valor_din.config(text=self.insereTotalConvertido(valores_din))
+                valor_cheque.config(text=self.insereTotalConvertido(valores_cheque))
+                valor_cdebito.config(text=self.insereTotalConvertido(valores_cdeb))
+                valor_ccredito.config(text=self.insereTotalConvertido(valores_ccred))
+                valor_pix.config(text=self.insereTotalConvertido(valores_pix))
+                valor_outros.config(text=self.insereTotalConvertido(valores_outros))
+                quant_din.config(text=quantid_din)
+                quant_cheque.config(text=quantid_cheque)
+                quant_cdebito.config(text=quantid_cdeb)
+                quant_ccredito.config(text=quantid_ccred)
+                quant_pix.config(text=quantid_pix)
+                quant_outros.config(text=quantid_outros)
+                valor_entr_cn.config(text=self.insereTotalConvertido(entrada_cn))
+                valor_saida_cn.config(text=self.insereTotalConvertido(saida_cn))
+                valor_entr_cp.config(text=self.insereTotalConvertido(entrada_cp))
+                valor_saida_cp.config(text=self.insereTotalConvertido(saida_cp))
+                valor_saldo_cp.config(text=self.insereTotalConvertido(entrada_cp - saida_cp))
+                valor_saldo_cn.config(text=self.insereTotalConvertido(entrada_cn - saida_cn))
+                quant_entr_cn.config(text=quantid_entr_cn)
+                quant_entr_cp.config(text=quantid_entr_cp)
+                quant_saida_cn.config(text=quantid_saida_cn)
+                quant_saida_cp.config(text=quantid_saida_cp)
+                self.count = 0
+                tree.focus_set()
+                children = tree.get_children()
+                if children:
+                    mensagem_lb.config(fg='#e0e0e0')
+                    img_mensagem.config(bg='#e0e0e0')
+                    tree.focus(children[0])
+                    tree.selection_set(children[0])
+                else:
+                    mensagem_lb.config(fg='red')
+                    img_mensagem.config(bg='yellow')
+
+            def popularListBoxDep():
+                text_entrada.delete(0, END)
+                text_saida.delete(0, END)
+                for i in list_entrada:
+                    if i != '\n':
+                        i = i.rstrip('\n')
+                        text_entrada.insert(END, i)
+                for i in list_saida:
+                    if i != '\n':
+                        i = i.rstrip('\n')
+                        text_saida.insert(END, i)
+
+            frame_princ_config_grupo = Frame(jan)
+            frame_princ_config_grupo.pack(fill=BOTH)
+
+            frame_config_grupo = Frame(frame_princ_config_grupo)
+            frame_config_grupo.pack(fill=BOTH, padx=10, pady=0, ipadx=10)
+
+            labelF_departamento = LabelFrame(frame_config_grupo, text='Entrada')
+            labelF_departamento.grid(row=0, column=1, padx=5, sticky=NW, ipady=5, pady=5)
+            labelF_marca_est = LabelFrame(frame_config_grupo, text='Saida')
+            labelF_marca_est.grid(row=0, column=0, ipady=5, padx=15, pady=5)
+
+            frame_img = Label(frame_config_grupo)
+            frame_img.grid(row=0, column=2)
+            Label(frame_img, height=9, width=15, bg='yellow').pack(fill=BOTH, pady=10, padx=5)
+            Button(frame_img, text='Fechar', width=10, command=jan.destroy).pack(pady=5)
+
+            text_entrada = Listbox(labelF_departamento, height=7, width=35)
+            text_entrada.grid(row=0, column=0, padx=5, pady=5)
+            subframe_departamento = Frame(labelF_departamento)
+            subframe_departamento.grid(row=1, column=0, sticky=NW)
+
+            button_conf_departamento = Button(subframe_departamento, text='Filtrar ', width=8, wraplength=50,
+                                              command=lambda: [filtrarResumo(text_entrada.get(ACTIVE), data, tree, 1)])
+            button_conf_departamento.pack(side=LEFT, padx=5, pady=5)
+
+            text_saida = Listbox(labelF_marca_est, height=7, width=35)
+            text_saida.grid(row=0, column=0, padx=5, pady=5)
+
+            subframe_marca_est = Frame(labelF_marca_est)
+            subframe_marca_est.grid(row=1, column=0, sticky=NW)
+
+            button_conf_marca_est = Button(subframe_marca_est, text='Filtrar', width=8, wraplength=50,
+                                           command=lambda: [filtrarResumo(text_saida.get(ACTIVE), data, tree, 2)])
+            button_conf_marca_est.pack(side=LEFT, padx=5, pady=5)
+
+            popularListBoxDep()
+            jan.transient(root2)
+            jan.focus_force()
+            jan.grab_set()
+
+
 
         def retornaMes(mes):
             if mes == 'janeiro':
@@ -3990,7 +4272,7 @@ class Castelo:
 
         ttk.Separator(labelF_resum_val, orient=HORIZONTAL).grid(row=5, column=0, columnspan=5, sticky=EW, padx=5)
 
-        Label(labelF_resum_val, text='Saída CN:', fg=fg_entry2, font=font2, bg=bg_label_frame).grid(row=6,
+        Label(labelF_resum_val, text='Saída CP:', fg=fg_entry2, font=font2, bg=bg_label_frame).grid(row=6,
                                                                                                     column=0,
                                                                                                     stick=E)
         quant_saida_cp = Label(labelF_resum_val, text='0', fg=fg_entry2, font=font1, bg=bg_label_frame)
@@ -4056,6 +4338,12 @@ class Castelo:
         mensagem_lb = Label(lf_mensagem, text='Não consta Nenhum Lançamento para esta Data!', fg='red',
                             bg=bg_label_frame)
         mensagem_lb.pack(side=LEFT)
+
+        lf_filtro = LabelFrame(frame_buttons_fin)
+        lf_filtro.pack(side=LEFT, padx=10)
+        Button(lf_filtro, text='Filtro', fg='red', width=11,
+               command=lambda: [janfiltroResumo(f'{retornaMes(entry_mes.get())}/{str(self.ano_resum)}', tree_resumo_diario)]).pack(side=LEFT, padx=20, pady=13)
+
         popularResmensal(datetime.now().strftime('%m/%Y'))
 
         def abreFinBind(event):
@@ -4399,7 +4687,7 @@ class Castelo:
 
         ttk.Separator(labelF_resum_val, orient=HORIZONTAL).grid(row=5, column=0, columnspan=5, sticky=EW, padx=5)
 
-        Label(labelF_resum_val, text='Saída CN:', fg=fg_entry2, font=font2, bg=bg_label_frame).grid(row=6,
+        Label(labelF_resum_val, text='Saída CP:', fg=fg_entry2, font=font2, bg=bg_label_frame).grid(row=6,
                                                                                                     column=0,
                                                                                                     stick=E)
         quant_saida_cp = Label(labelF_resum_val, text='-', fg=fg_entry2, font=font1, bg=bg_label_frame)
