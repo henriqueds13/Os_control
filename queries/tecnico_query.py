@@ -28,7 +28,7 @@ class TecnicoQuery():
             tecnic.FIN = tecnico.FIN
 
     def listar_tecnico_nome(self, nome_tecnico, sessao):
-        tecnico = sessao.query(Tecnico).filter(Tecnico.nome == nome_tecnico).all()
+        tecnico = sessao.query(Tecnico).filter(Tecnico.nome == nome_tecnico).first()
         return tecnico
 
     def listar_tecnico_senha(self, nome_senha, sessao):
