@@ -19,7 +19,8 @@ class ProdutoVendaRepositorio():
             estoque = None
 
         produtos = ProdutoVenda(id_fabr=produtos.id_fabr, descricao=produtos.descricao, qtd=produtos.qtd,
-                                valor_un=produtos.valor_unit, prod_estoque=estoque, prod_venda=venda)
+                                valor_un=produtos.valor_unit, prod_estoque=estoque, prod_venda=venda,
+                                valor_cp=produtos.valor_cp)
         query_produtos_venda.inserir_produtos_venda(produtos, sessao)
 
     def listar_produtos_venda_id_estoque(self, id_estoque, sessao):

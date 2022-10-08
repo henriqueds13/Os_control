@@ -22,3 +22,11 @@ if pag_outros == 0:
     self.atualizaCaixa(novo_fin, 1)
 
 =self.alteraData(int(self.orc_dias.get()), datetime.now(), 1)
+
+self.venda_entry_outros
+
+(os_atual_db.nome, '', f'CONSERTO OS: {self.num_os}', 'BOLETO', 0,
+                                               self.num_os,
+                                               data, datetime.now(),
+                                               os_atual_db.total, os_atual_db.caixa_peca_total,
+                                               self.retornaOperadorId(self.orc_operador.get()), 1)

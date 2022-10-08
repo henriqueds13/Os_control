@@ -390,6 +390,7 @@ class ProdutoVenda(Base):
     descricao = Column(String(50))
     qtd = Column(Integer)
     valor_un = Column(Float)
+    valor_cp = Column(Float)
     id_estoque = Column(Integer, ForeignKey('estoque.id'))
     id_venda = Column(Integer, ForeignKey('os_venda.id_venda'))
 

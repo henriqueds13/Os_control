@@ -5019,8 +5019,6 @@ class Castelo:
         elif (tipoMsg == "3"):
             messagebox.showerror(None, mesage=msg)
 
-    def semComando(self):
-        print()
 
     def abrirJanelaCliente(self):
 
@@ -8474,7 +8472,7 @@ class Castelo:
                 repositorio_saida.nova_os(os_atual_db.cliente_id, os_objeto, sessao)
                 if os_atual_db.outros == 0:
                     novo_fin = op_livro_caixa.OpLivroCaixa(datetime.now(), hora_saida, 1, f'Conserto OS: {self.num_os}',
-                                                           os_atual_db.total, 0,
+                                                           os_atual_db.total - os_atual_db.caixa_peca_total, 0,
                                                            os_atual_db.caixa_peca_total, 0, 'CONSERTO',
                                                            os_atual_db.cheque, os_atual_db.ccredito,
                                                            os_atual_db.cdebito, os_atual_db.pix, os_atual_db.dinheiro,
@@ -10857,7 +10855,7 @@ class Castelo:
         def addProdutoestoque(id_prod, qtd):
             produto = repositorio.listar_produto_id_fabr(id_prod, sessao)
             if id_prod != '' and qtd != 0:
-                self.lista_produto_venda.append([id_prod, qtd])
+                self.lista_produto_venda.append([id_prod, qtd, produto.caixa_peca])
                 popularEntradaProdutoVenda(self.venda_cod_item.get())
                 self.venda_cod_item.config(state=NORMAL)
                 self.venda_cod_item.delete(0, END)
@@ -11214,10 +11212,12 @@ class Castelo:
                     desconto = self.formataParaFloat(self.venda_desconto.get())
                     operador = self.id_operador
                     total = self.formataParaFloat(self.venda_label_total.cget('text').split()[1])
+                    data = datetime.now()
+                    hora = data.strftime('%H:%M')
 
                     nova_venda = os_venda.OsVenda(cliente, operador, obs1, obs2, obs3, dinheiro, cheque, cdebito,
                                                   ccredito,
-                                                  pix, outros, desconto, sub_total, None, None, total)
+                                                  pix, outros, desconto, sub_total, data, hora, total)
 
                     repositorio = os_venda_repositorio.OsVendaRepositorio()
 
@@ -11231,6 +11231,35 @@ class Castelo:
                         jan.destroy()
 
                     else:
+                        caixa_peça = 0
+                        for i in self.lista_produto_venda:  # soma valor caixa de peça
+                            caixa_peça += i[2]
+
+                        if len(repositorio.listar_vendas(sessao)) == 0:
+                            id_venda = 1
+                        else:
+                            id_venda = repositorio.listar_vendas(sessao)[-1].id_venda + 1 #Pega id da venda que sera feita agora
+
+                        if outros == 0:
+                            repositorio_fin = op_livro_caixa_repositorio.OperaçãoLivroCaixaRepositorio()
+                            nova_entrada = op_livro_caixa.OpLivroCaixa(data, hora, 1, f'Venda OS: {id_venda}',
+                                                                       total - caixa_peça, 0,
+                                                                       caixa_peça, 0, 'VENDA',
+                                                                       cheque, ccredito, cdebito, pix, dinheiro, outros,
+                                                                       operador, id_venda,
+                                                                       self.mes_atual)
+                            repositorio_fin.inserir_op(nova_entrada, sessao)
+                            self.atualizaCaixa(nova_entrada, 1)
+                            self.popularRegistroFin()
+
+                        else:
+                            data_venc = datetime.strptime(self.alteraData(30, datetime.now(), 1), '%d/%m/%Y')
+                            repositorio_conta = contas_repositorio.ContasRepositorio()
+                            nova_conta = contas.Contas(cliente, '', f'Venda OS: {id_venda}', 'BOLETO', 0, id_venda,
+                                                       data_venc, data, total - caixa_peça, caixa_peça, operador, 1)
+                            repositorio_conta.inserir_op(nova_conta, sessao)
+                            self.popularContasFin()
+
                         repositorio.inserir_venda(nova_venda, sessao)
 
                         sessao.commit()
@@ -11258,9 +11287,11 @@ class Castelo:
                 qtd_atual = i[1]
                 descricao = produto_atual.descricao
                 valor_un = produto_atual.valor_venda
+                valor_cp = produto_atual.caixa_peca
+
 
                 nova_lista_produtos = produto_venda.ProdutoVenda(id_fabr, descricao, qtd_atual, valor_un, 0,
-                                                                 ultima_venda)
+                                                                 ultima_venda, valor_cp)
 
                 repositoriio_produtos_venda.inserir_produtos_venda(nova_lista_produtos, sessao)
 
