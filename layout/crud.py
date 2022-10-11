@@ -6,7 +6,9 @@ from time import strftime
 from tkinter import *
 from tkinter import ttk, messagebox, font
 from tkcalendar import *
-from matplotlib import *
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 from sqlalchemy.util import NoneType
 
@@ -4365,6 +4367,196 @@ class Castelo:
         font1 = ('Verdana', '9', 'bold')
         font2 = ('Verdana', '10', '')
         self.ano_resum = int(datetime.now().strftime('%Y'))
+        lista_opt = ['CAIXA NORMAL', 'CAIXA PEÇA', 'CONSERTO', 'VENDA', 'ALUGUEL']
+
+        def retornaMes(mes):
+            if mes == 'janeiro':
+                return 1
+            elif mes == 'fevereiro':
+                return 2
+            elif mes == 'março':
+                return 3
+            elif mes == 'abril':
+                return 4
+            elif mes == 'maio':
+                return 5
+            elif mes == 'junho':
+                return 6
+            elif mes == 'julho':
+                return 7
+            elif mes == 'agosto':
+                return 8
+            elif mes == 'setembro':
+                return 9
+            elif mes == 'outubro':
+                return 10
+            elif mes == 'novembro':
+                return 11
+            elif mes == 'dezembro':
+                return 12
+
+        def janelaGraficosResum(ano, filtro):
+
+            jan = Toplevel()
+
+            lista_opt = ['ENTRADA', 'SAIDA', 'CONSERTO', 'VENDA', 'ALUGUEL']
+            # Centraliza a janela
+            x_cordinate = int((self.w / 2) - (800 / 2))
+            y_cordinate = int((self.h / 2) - (800 / 2))
+            jan.geometry("{}x{}+{}+{}".format(900, 800, x_cordinate, y_cordinate))
+
+            repositorio_livroCaixa = livro_caixa_repositorio.LivroCaixaRepositorio()
+            repositorio_op_caixa = op_livro_caixa_repositorio.OperaçãoLivroCaixaRepositorio()
+
+            figura = plt.Figure(figsize=(15, 6), dpi=60)
+            ax = figura.add_subplot(111)
+
+            canva = FigureCanvasTkAgg(figura, jan)
+            canva.get_tk_widget().pack()
+
+            fruits = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro',
+                      'Outubro', 'Novembro', 'Dezembro']
+            cn_entrada = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+            figura1 = plt.Figure(figsize=(15, 6), dpi=60)
+            ax1 = figura1.add_subplot(111)
+
+            canva1 = FigureCanvasTkAgg(figura1, jan)
+            canva1.get_tk_widget().pack()
+
+            cp_entrada = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+            if filtro == 'CAIXA NORMAL':
+
+                meses = repositorio_livroCaixa.listar_op_ano(ano, sessao)
+                if len(meses) > 0:
+                    for i in meses:
+                        mes_atual = datetime.strptime(i.mes_caixa, '%m/%Y')
+                        mes = retornaMes(mes_atual.strftime('%B'))
+                        cn_entrada[mes - 1] = i.entrada
+                        cp_entrada[mes - 1] = i.saida
+                ax.bar(fruits, cn_entrada)
+
+                ax.set_ylabel('Dinheiro R$')
+                ax.set_title(f'Entrada Caixa Normal ({ano})')
+
+                color1 = ['tab:green']
+                color2 = ['tab:red']
+                ax1.bar(fruits, cp_entrada)
+
+                ax1.set_ylabel('Dinheiro R$')
+                ax1.set_title(f'Saída Caixa Normal ({ano})')
+
+            elif filtro == 'CAIXA PEÇA':
+
+                meses = repositorio_livroCaixa.listar_op_ano(ano, sessao)
+                if len(meses) > 0:
+                    for i in meses:
+                        mes_atual = datetime.strptime(i.mes_caixa, '%m/%Y')
+                        mes = retornaMes(mes_atual.strftime('%B'))
+                        cn_entrada[mes - 1] = i.entrada_cp
+                        cp_entrada[mes - 1] = i.saida_cp
+
+                ax.bar(fruits, cn_entrada)
+
+                ax.set_ylabel('Dinheiro R$')
+                ax.set_title(f'Entrada Caixa de Peça ({ano})')
+
+                ax1.bar(fruits, cp_entrada)
+
+                color1 =['tab:blue']
+                color2 = ['tab:red']
+
+                ax1.set_ylabel('Dinheiro R$')
+                ax1.set_title(f'Saída Caixa de Peça ({ano})')
+
+            elif filtro == 'CONSERTO':
+                for i in range(1,12):
+                    soma_valor_cn = 0
+                    soma_valor_cp = 0
+                    data = f'{i}/{ano}'
+                    registros = repositorio_op_caixa.listar_op_grupo_mes(filtro, data, 1, sessao)
+                    if len(registros) > 0:
+                        for j in registros:
+                            soma_valor_cn += j.entrada
+                            soma_valor_cp += j.entrada_cp
+                        cn_entrada[i - 1] = soma_valor_cn
+                        cp_entrada[i - 1] = soma_valor_cp
+                ax.bar(fruits, cn_entrada)
+
+                ax.set_ylabel('Dinheiro R$')
+                ax.set_title(f'Entrada Caixa Normal Conserto ({ano})')
+
+                ax1.bar(fruits, cp_entrada)
+
+                color1 = ['tab:green']
+                color2 = ['tab:blue']
+
+                ax1.set_ylabel('Dinheiro R$')
+                ax1.set_title(f'Entrada Caixa de Peça Conserto ({ano})')
+
+            elif filtro == 'VENDA':
+                for i in range(1,12):
+                    soma_valor_cn = 0
+                    soma_valor_cp = 0
+                    data = f'{i}/{ano}'
+                    registros = repositorio_op_caixa.listar_op_grupo_mes(filtro, data, 1, sessao)
+                    if len(registros) > 0:
+                        for j in registros:
+                            soma_valor_cn += j.entrada
+                            soma_valor_cp += j.entrada_cp
+                        cn_entrada[i - 1] = soma_valor_cn
+                        cp_entrada[i - 1] = soma_valor_cp
+                ax.bar(fruits, cn_entrada)
+
+                ax.set_ylabel('Dinheiro R$')
+                ax.set_title(f'Entrada Caixa Normal Venda ({ano})')
+
+                ax1.bar(fruits, cp_entrada)
+
+                color1 = ['tab:green']
+                color2 = ['tab:blue']
+
+                ax1.set_ylabel('Dinheiro R$')
+                ax1.set_title(f'Entrada Caixa de Peça Venda ({ano})')
+
+            elif filtro == 'ALUGUEL':
+                for i in range(1,12):
+                    soma_valor_cn = 0
+                    soma_valor_cp = 0
+                    data = f'{i}/{ano}'
+                    registros = repositorio_op_caixa.listar_op_grupo_mes(filtro, data, 1, sessao)
+                    if len(registros) > 0:
+                        for j in registros:
+                            soma_valor_cn += j.entrada
+                            soma_valor_cp += j.entrada_cp
+                        cn_entrada[i - 1] = soma_valor_cn
+                        cp_entrada[i - 1] = soma_valor_cp
+                ax.bar(fruits, cn_entrada)
+
+                ax.set_ylabel('Dinheiro R$')
+                ax.set_title(f'Entrada Caixa Normal Aluguel ({ano})')
+
+                ax1.bar(fruits, cp_entrada)
+
+                color1 = ['tab:green']
+                color2 = ['tab:blue']
+
+                ax1.set_ylabel('Dinheiro R$')
+                ax1.set_title(f'Entrada Caixa de Peça Aluguel ({ano})')
+
+            ax.bar_label(ax.bar(fruits, cn_entrada, color=color1), padding=3)
+            ax1.bar_label(ax1.bar(fruits, cp_entrada, color=color2), padding=3)
+
+            frame_options = Frame(jan)
+            frame_options.pack(fill=BOTH)
+
+            Button(frame_options, text='Fechar', width=10,
+                   command=jan.destroy).pack(side=RIGHT, ipady=3, padx=80, pady=20)
+
+            jan.transient(root2)
+            jan.focus_force()
+            jan.grab_set()
 
         def popularResAnual(ano):
 
@@ -4730,8 +4922,16 @@ class Castelo:
 
         Button(frame_buttons_fin, text='Fechar', width=12, command=jan.destroy).pack(side=RIGHT, padx=10, ipady=5,
                                                                                      pady=10)
-        Button(frame_buttons_fin, text='Resumo Anual', width=12).pack(side=RIGHT, ipady=5,
+        Button(frame_buttons_fin, text='FILTRAR', width=12,
+               command=lambda: [janelaGraficosResum(self.ano_resum, tk_filter.get())]).pack(side=RIGHT, ipady=5,
                                                                       pady=10, padx=25)
+
+        lf_opt = LabelFrame(frame_buttons_fin, text='Filtro', fg='red')
+        lf_opt.pack(side=RIGHT, padx=15, pady=1)
+        tk_filter = ttk.Combobox(lf_opt, values=lista_opt, width=18, state="readonly")
+        tk_filter.pack(padx=10, pady=2)
+        tk_filter.set('CAIXA NORMAL')
+
 
         lf_mensagem = LabelFrame(frame_buttons_fin, text='Mensagem', bg=bg_label_frame)
         lf_mensagem.pack(side=LEFT, ipadx=10)

@@ -30,3 +30,32 @@ self.venda_entry_outros
                                                data, datetime.now(),
                                                os_atual_db.total, os_atual_db.caixa_peca_total,
                                                self.retornaOperadorId(self.orc_operador.get()), 1)
+
+f'{retornaMes(entry_mes.get())}/{str(self.ano_resum)}'
+
+
+def retornaMes(mes):
+    if mes == 'janeiro':
+        return '01'
+    elif mes == 'fevereiro':
+        return '02'
+    elif mes == 'março':
+        return '03'
+    elif mes == 'abril':
+        return '04'
+    elif mes == 'maio':
+        return '05'
+    elif mes == 'junho':
+        return '06'
+    elif mes == 'julho':
+        return '07'
+    elif mes == 'agosto':
+        return '08'
+    elif mes == 'setembro':
+        return '09'
+    elif mes == 'outubro':
+        return '10'
+    elif mes == 'novembro':
+        return '11'
+    elif mes == 'dezembro':
+        return '12'
