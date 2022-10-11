@@ -59,3 +59,46 @@ def retornaMes(mes):
         return '11'
     elif mes == 'dezembro':
         return '12'
+
+
+figura = plt.Figure(figsize=(15, 6), dpi=60)
+ax = figura.add_subplot(111)
+
+canva = FigureCanvasTkAgg(figura, jan)
+canva.get_tk_widget().pack()
+
+fruits = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro',
+          'Outubro', 'Novembro', 'Dezembro']
+cn_entrada = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+figura1 = plt.Figure(figsize=(15, 6), dpi=60)
+ax1 = figura1.add_subplot(111)
+
+canva1 = FigureCanvasTkAgg(figura1, jan)
+canva1.get_tk_widget().pack()
+
+cp_entrada = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+if filtro == 'CAIXA NORMAL':
+
+    meses = repositorio_livroCaixa.listar_op_ano(ano, sessao)
+    if len(meses) > 0:
+        for i in meses:
+            mes_atual = datetime.strptime(i.mes_caixa, '%m/%Y')
+            mes = retornaMes(mes_atual.strftime('%B'))
+            cn_entrada[mes - 1] = i.entrada
+            cp_entrada[mes - 1] = i.saida
+    ax.bar(fruits, cn_entrada)
+
+    ax.set_ylabel('Dinheiro R$')
+    ax.set_title(f'Entrada Caixa Normal ({ano})')
+
+    color1 = ['tab:green']
+    color2 = ['tab:red']
+    ax1.bar(fruits, cp_entrada)
+
+    ax1.set_ylabel('Dinheiro R$')
+    ax1.set_title(f'Saída Caixa Normal ({ano})')
+
+    ax.bar_label(ax.bar(fruits, cn_entrada, color=color1), padding=3)
+    ax1.bar_label(ax1.bar(fruits, cp_entrada, color=color2), padding=3)

@@ -4367,7 +4367,7 @@ class Castelo:
         font1 = ('Verdana', '9', 'bold')
         font2 = ('Verdana', '10', '')
         self.ano_resum = int(datetime.now().strftime('%Y'))
-        lista_opt = ['CAIXA NORMAL', 'CAIXA PEÇA', 'CONSERTO', 'VENDA', 'ALUGUEL']
+        lista_opt = ['CAIXA NORMAL', 'CAIXA PEÇA', 'CONSERTO', 'VENDA', 'ALUGUEL', 'ANUAL']
 
         def retornaMes(mes):
             if mes == 'janeiro':
@@ -4416,6 +4416,10 @@ class Castelo:
 
             fruits = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro',
                       'Outubro', 'Novembro', 'Dezembro']
+
+            fruits1 = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro',
+                      'Outubro', 'Novembro', 'Dezembro']
+
             cn_entrada = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
             figura1 = plt.Figure(figsize=(15, 6), dpi=60)
@@ -4545,8 +4549,57 @@ class Castelo:
                 ax1.set_ylabel('Dinheiro R$')
                 ax1.set_title(f'Entrada Caixa de Peça Aluguel ({ano})')
 
+            elif filtro == 'ANUAL':
+
+                fruits = (str(self.ano_resum - 21), str(self.ano_resum - 20), str(self.ano_resum - 19),
+                          str(self.ano_resum - 18), str(self.ano_resum - 17),
+                          str(self.ano_resum - 16), str(self.ano_resum - 15), str(self.ano_resum - 14),
+                          str(self.ano_resum - 13),
+                          str(self.ano_resum - 12), str(self.ano_resum - 11))
+
+                fruits1 = (str(self.ano_resum - 10), str(self.ano_resum - 9), str(self.ano_resum - 8),
+                           str(self.ano_resum - 7),
+                          str(self.ano_resum - 6), str(self.ano_resum - 5), str(self.ano_resum - 4),
+                           str(self.ano_resum - 3),
+                          str(self.ano_resum - 2), str(self.ano_resum - 1), str(self.ano_resum))
+
+                cn_entrada = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                cp_entrada = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+                val = 0
+                for i in fruits:
+                    soma_tot = 0
+                    reg_anual = repositorio_livroCaixa.listar_op_ano(i, sessao)
+                    if len(reg_anual) > 0:
+                        for j in reg_anual:
+                            soma_tot += j.saldo_cn + j.entrada_cp
+                        cn_entrada[val] = soma_tot
+                    val += 1
+
+                val = 0
+                for i in fruits1:
+                    soma_tot = 0
+                    reg_anual = repositorio_livroCaixa.listar_op_ano(i, sessao)
+                    if len(reg_anual) > 0:
+                        for j in reg_anual:
+                            soma_tot += j.saldo_cn + j.entrada_cp
+                        cp_entrada[val] = soma_tot
+                    val += 1
+
+                ax.bar(fruits, cn_entrada)
+                ax.set_ylabel('Dinheiro R$')
+                ax.set_title('Valor Total Anual')
+
+                color1 = ['tab:orange']
+                color2 = ['tab:orange']
+
+                ax1.bar(fruits1, cp_entrada)
+                ax1.set_ylabel('Dinheiro R$')
+                ax1.set_title(f'Entrada Caixa de Peça Aluguel ({ano})')
+
+
             ax.bar_label(ax.bar(fruits, cn_entrada, color=color1), padding=3)
-            ax1.bar_label(ax1.bar(fruits, cp_entrada, color=color2), padding=3)
+            ax1.bar_label(ax1.bar(fruits1, cp_entrada, color=color2), padding=3)
 
             frame_options = Frame(jan)
             frame_options.pack(fill=BOTH)
@@ -4915,7 +4968,38 @@ class Castelo:
         valor_saldo_cp.config(width=12)
         valor_saldo_cp.grid_propagate(0)
 
-        Label(frame_resum_valores, width=25, height=10, bg='yellow').pack(side=LEFT)
+        graf_anual = Frame(frame_resum_valores, width=25, height=10, bg='yellow')
+        graf_anual.pack(side=LEFT)
+
+        figura = plt.Figure(figsize=(6, 3), dpi=55)
+        ax = figura.add_subplot(111)
+
+        canva = FigureCanvasTkAgg(figura, graf_anual)
+        canva.get_tk_widget().pack()
+
+
+        people = (self.ano_resum - 3, self.ano_resum - 2, self.ano_resum - 1, self.ano_resum)
+
+        performance = [0, 0, 0, 0]
+
+
+        repositorio_livro_caixa = livro_caixa_repositorio.LivroCaixaRepositorio()
+        val = 0
+        for i in people:
+            soma_tot = 0
+            reg_anual = repositorio_livro_caixa.listar_op_ano(i, sessao)
+            if len(reg_anual) > 0:
+                for j in reg_anual:
+                    soma_tot += j.saldo_cn + j.entrada_cp
+                performance[val] = soma_tot
+            val += 1
+
+        ax.bar(people, performance)
+        ax.set_ylabel('Dinheiro R$')
+        ax.set_title('Valor Total Anual')
+
+        ax.bar_label(ax.bar(people, performance, color=['tab:green']), padding=0)
+
 
         frame_buttons_fin = Frame(frame_princ)
         frame_buttons_fin.pack(fill=BOTH, padx=10, pady=10)
@@ -4941,6 +5025,7 @@ class Castelo:
                             bg=bg_label_frame)
         mensagem_lb.pack(side=LEFT)
         popularResAnual(2022)
+
 
         jan.transient(root2)
         jan.focus_force()
