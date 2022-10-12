@@ -102,3 +102,10 @@ if filtro == 'CAIXA NORMAL':
 
     ax.bar_label(ax.bar(fruits, cn_entrada, color=color1), padding=3)
     ax1.bar_label(ax1.bar(fruits, cp_entrada, color=color2), padding=3)
+
+    def alteraData(self, dias, data, num):
+        if num == 1:
+            nova_data = data + timedelta(dias)
+        return nova_data.strftime('%d/%m/%Y')
+
+janelaConta

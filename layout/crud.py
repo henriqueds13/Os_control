@@ -1559,9 +1559,9 @@ class Castelo:
 
         self.tree_fin_contas.column('vencimento', width=100, minwidth=50, stretch=False, anchor=CENTER)
         self.tree_fin_contas.column('tipo', width=100, minwidth=100, stretch=False, anchor=CENTER)
-        self.tree_fin_contas.column('cliente_forn', width=400, minwidth=50, stretch=False)
+        self.tree_fin_contas.column('cliente_forn', width=350, minwidth=50, stretch=False)
         self.tree_fin_contas.column('contato', width=150, minwidth=100, stretch=False, anchor=CENTER)
-        self.tree_fin_contas.column('discriminacao', width=150, minwidth=100, stretch=False)
+        self.tree_fin_contas.column('discriminacao', width=250, minwidth=100, stretch=False)
         self.tree_fin_contas.column('tipo_doc', width=120, minwidth=50, stretch=False)
         self.tree_fin_contas.column('valor_cn', width=100, minwidth=10, stretch=False)
         self.tree_fin_contas.column('valor_cp', width=100, minwidth=50, stretch=False, anchor=CENTER)
@@ -1618,25 +1618,22 @@ class Castelo:
         self.frame_buttons_fin_contas = Frame(self.subframe_fin_contas2, bg=color_est2, relief='raised', borderwidth=1)
         self.frame_buttons_fin_contas.pack(pady=10, side=LEFT, ipadx=1, fill=X, padx=20)
         button_est5 = Button(self.frame_buttons_fin_contas, text=" Nova Conta", width=15, relief=FLAT,
-                             wraplength=50, bg=color_est2, command=lambda: [self.janelaConta(2)])
+                             wraplength=50, bg=color_est2, command=lambda: [self.janelaConta(2, '')])
         button_est5.pack(side=LEFT)
         ttk.Separator(self.frame_buttons_fin_contas, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
         button_est5s = Button(self.frame_buttons_fin_contas, text=" Nova Cobrança", width=15, relief=FLAT,
-                              wraplength=55, bg=color_est2, command=lambda: [self.janelaConta(1)])
+                              wraplength=55, bg=color_est2, command=lambda: [self.janelaConta(1, '')])
         button_est5s.pack(side=LEFT)
         ttk.Separator(self.frame_buttons_fin_contas, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
         button_est6 = Button(self.frame_buttons_fin_contas, text="Alterar Conta", width=15, relief=FLAT,
-                             wraplength=50, bg=color_est2, command=lambda: [self.janelaConta(3)])
+                             wraplength=50, bg=color_est2, command=lambda: [self.janelaConta(3, '')])
         button_est6.pack(side=LEFT)
         ttk.Separator(self.frame_buttons_fin_contas, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
         button_est7 = Button(self.frame_buttons_fin_contas, text="Dar Baixa", width=15, relief=FLAT,
                              wraplength=40, bg=color_est2, command=self.janelaPedeSenhaConta)
         button_est7.pack(side=LEFT)
         ttk.Separator(self.frame_buttons_fin_contas, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
-        button_est8 = Button(self.frame_buttons_fin_contas, text="Filtrar Contas", width=15, relief=FLAT,
-                             wraplength=50, bg=color_est2, command=self.excluirRegistroEstoque)
-        button_est8.pack(side=LEFT)
-        ttk.Separator(self.frame_buttons_fin_contas, orient=VERTICAL).pack(side=LEFT, fill=Y, pady=4)
+
         button_est9 = Button(self.frame_buttons_fin_contas, text="Fechar", width=15, relief=FLAT,
                              wraplength=50, bg=color_est2, command=self.excluirRegistroEstoque)
         button_est9.pack(side=LEFT, ipady=7)
@@ -1659,8 +1656,6 @@ class Castelo:
         button_est6.bind('<Leave>', on_leave)
         button_est7.bind('<Enter>', on_enter)
         button_est7.bind('<Leave>', on_leave)
-        button_est8.bind('<Enter>', on_enter)
-        button_est8.bind('<Leave>', on_leave)
         button_est9.bind('<Enter>', on_enter)
         button_est9.bind('<Leave>', on_leave)
         button_fech.bind('<Enter>', on_enter)
@@ -1670,7 +1665,7 @@ class Castelo:
             self.janelaEntradaCaixa(3)
 
         def abreContaBind(event):
-            self.janelaConta(3)
+            self.janelaConta(3, '')
 
         def populaContaNome(event):
             self.popularContasFinNome()
@@ -2626,7 +2621,7 @@ class Castelo:
         self.popularContasFin()
         self.popularRegistroFin()
 
-    def janelaConta(self, num):
+    def janelaConta(self, num, obj):
 
         bg_label_frame = '#A68F97'
         bg_entry = '#f5dfb1'
@@ -2688,12 +2683,20 @@ class Castelo:
                     if num != 3:
                         repositorio_conta.inserir_op(nova_conta, sessao)
                         self.mostrarMensagem("1", "Registro adicionado com Sucesso!")
+                        sessao.commit()
+                        self.popularContasFin()
+                        res1 = messagebox.askyesno(None, "Criar nova Conta com mesmos Dados?")
+                        if res1:
+                            entry_venc_conta.set_date(self.alteraData(30, data_vend, 1))
+                            pass
+                        else:
+                            jan.destroy()
                     else:
                         repositorio_conta.editar_op(dado_conta[12], nova_conta, sessao)
                         self.mostrarMensagem("1", "Registro Editado com Sucesso!")
-                    sessao.commit()
-                    self.popularContasFin()
-                    jan.destroy()
+                        sessao.commit()
+                        self.popularContasFin()
+                        jan.destroy()
 
             except ValueError:
                 messagebox.showinfo(title="ERRO", message="Formato de data Invalido!")
@@ -2839,6 +2842,13 @@ class Castelo:
             button_confirm.config(command=lambda: [addConta(3)])
 
             button_confirm.config(text='Confirmar Alterações')
+        elif num == 4:
+            ultimo_est = estoque_repositorio.EstoqueRepositorio().listar_estoques(sessao)[-1]
+            revend = revendedor_repositorio.RevendedorRepositorio().listar_revendedor_id(ultimo_est.revendedor_id, sessao)
+            self.entry_cliente_conta.insert(0, revend.Empresa)
+            entry_disc_conta.insert(0, f'Entrada de Estoque nota n°: {obj.nota}')
+            entry_tipodoc_conta.set('BOLETO')
+            entry_numDoc_conta.insert(0, obj.nota)
         jan.transient(root2)
         jan.focus_force()
         jan.grab_set()
@@ -10876,28 +10886,39 @@ class Castelo:
                 messagebox.showinfo(title="ERRO", message="Defina um Fornecedor!")
 
             else:
-                novo_estoque = estoque.Estoque(revendedor, obs1, obs2, obs3, nota, frete, op, operador, total, produtos,
-                                               data, hora)
+                res = messagebox.askyesno(None, "Confirma Entrada de Estoque?")
+                if res:
+                    novo_estoque = estoque.Estoque(revendedor, obs1, obs2, obs3, nota, frete, op, operador, total, produtos,
+                                                   data, hora)
 
-                repositorio = estoque_repositorio.EstoqueRepositorio()
+                    repositorio = estoque_repositorio.EstoqueRepositorio()
 
-                if op == 3:
+                    if op == 3:
 
-                    estoque_selecionado = self.tree_est_reg.focus()
-                    dado_est = self.tree_est_reg.item(estoque_selecionado, 'values')
-                    repositorio.editar_estoque(dado_est[8], novo_estoque, sessao)
-                    self.popularEntradaEstoque()
-                    sessao.commit()
-                    jan.destroy()
+                        estoque_selecionado = self.tree_est_reg.focus()
+                        dado_est = self.tree_est_reg.item(estoque_selecionado, 'values')
+                        repositorio.editar_estoque(dado_est[8], novo_estoque, sessao)
+                        self.popularEntradaEstoque()
+                        sessao.commit()
+                        jan.destroy()
 
+                    else:
+                        repositorio.inserir_estoque(novo_estoque, sessao)
+
+                        sessao.commit()
+                        self.cadastroProdutosEstoque(op)
+                        self.popularEntradaEstoque()
+                        print('Sucesso')
+                        res1 = messagebox.askyesno(None, "Estoque Inserido com Sucesso! Deseja Criar Conta para esta Entrada?")
+                        if res1:
+                            jan.destroy()
+                            self.janelaConta(4, novo_estoque)
+                        else:
+                            jan.destroy()
+                        self.revendedor_obj = None
                 else:
-                    repositorio.inserir_estoque(novo_estoque, sessao)
+                    pass
 
-                    sessao.commit()
-                    self.cadastroProdutosEstoque(op)
-                    self.revendedor_obj = None
-                    self.popularEntradaEstoque()
-                    jan.destroy()
         except:
             sessao.rollback()
             raise
@@ -10918,9 +10939,10 @@ class Castelo:
                 qtd_atual = i[1]
                 descricao = produto_atual.descricao
                 valor_un = produto_atual.valor_venda
+                valor_cp = produto_atual.caixa_peca
 
                 nova_lista_produtos = produto_venda.ProdutoVenda(id_fabr, descricao, qtd_atual, valor_un,
-                                                                 ultimo_estoque, 0)
+                                                                 ultimo_estoque, 0, valor_cp)
 
                 repositoriio_produtos_venda.inserir_produtos_venda(nova_lista_produtos, sessao)
 
