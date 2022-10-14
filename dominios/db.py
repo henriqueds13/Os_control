@@ -488,7 +488,21 @@ class Contas(Base):
     operador = Column(Integer, nullable=False)
     conta_paga = Column(Integer)  # 1=Não Paga,   2=Paga
 
- #concederAcessoSistema()
+    conta_event = relationship('Calevents', back_populates='envent_conta', cascade='delete')
+
+class Calevents(Base):
+    __tablename__ = 'calenvets'
+    id = Column(Integer, primary_key=True)
+    data = Column(Date)
+    descrição = Column(String(100))
+    id_conta = Column(Integer, ForeignKey('contas.id'))
+    envent_conta = relationship('Contas', back_populates='conta_event')
+
+
+
+
+
+
 Base.metadata.create_all(engine)
 
 

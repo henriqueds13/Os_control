@@ -13,11 +13,11 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from sqlalchemy.util import NoneType
 
 from entidades import cliente, os, os_saida, produto, revendedor, estoque, produto_venda, os_venda, empresa, tecnico, \
-    livro_caixa, op_livro_caixa, contas
+    livro_caixa, op_livro_caixa, contas, calevent
 from fabricas import fabrica_conexao
 from repositorios import cliente_repositorio, os_repositorio, os_saida_repositorio, produto_repositorio, \
     revendedor_repositorio, estoque_repositorio, produto_venda_repositorio, os_venda_repositorio, tecnico_repositorio, \
-    empresa_repositorio, livro_caixa_repositorio, contas_repositorio, op_livro_caixa_repositorio
+    empresa_repositorio, livro_caixa_repositorio, contas_repositorio, op_livro_caixa_repositorio, calevent_repositorio
 
 # coding: utf8
 locale.setlocale(locale.LC_ALL, '')
@@ -268,7 +268,7 @@ class Castelo:
         barraDeMenus.add_cascade(label='Aparelhos', menu=menuAparelhos)
 
         menuUtilitarios = Menu(barraDeMenus, tearoff=0)
-        menuUtilitarios.add_command(label='Calendário', command='')
+        menuUtilitarios.add_command(label='Calendário', command=self.janCalendario)
         menuUtilitarios.add_command(label='Calculadora', command='')
         menuUtilitarios.add_separator()
         menuUtilitarios.add_command(label='Backup', command='')
@@ -2670,6 +2670,7 @@ class Castelo:
                 valor_cp = self.formataParaFloat(entry_valor_cp.get())
                 data_cad = datetime.now()
                 operador = self.id_operador
+                tp_doc=''
 
                 if valor_cp > valor_conta:
                     messagebox.showinfo(title="ERRO",
@@ -2678,6 +2679,11 @@ class Castelo:
 
                 res = messagebox.askyesno(None, "Salvar Novo Registro?")
                 if res:
+                    if num == 1:
+                        tp_doc = 'Cobrança'
+                    elif num == 2:
+                        tp_doc = 'Conta'
+                    event_repositorio = calevent_repositorio.CaleventRepositorio()
                     nova_conta = contas.Contas(cliente, contato, discriminicao, tipo_doc, numero_doc, numero_os,
                                                data_vend, data_cad, valor_conta, valor_cp, operador, num)
                     if num != 3:
@@ -2685,6 +2691,12 @@ class Castelo:
                         self.mostrarMensagem("1", "Registro adicionado com Sucesso!")
                         sessao.commit()
                         self.popularContasFin()
+                        ulti_conta = repositorio_conta.listar_op(sessao)[-1]
+                        novo_evento = calevent.Calevent(data_vend,
+                                                        f'{tp_doc} de {cliente} no Valor de {self.insereTotalConvertido(valor_conta)}',
+                                                        ulti_conta)
+                        event_repositorio.inserir_event(novo_evento, sessao)
+                        sessao.commit()
                         res1 = messagebox.askyesno(None, "Criar nova Conta com mesmos Dados?")
                         if res1:
                             entry_venc_conta.set_date(self.alteraData(30, data_vend, 1))
@@ -14027,6 +14039,40 @@ class Castelo:
                         return
             self.os_operador.delete(0, END)
             messagebox.showinfo(title="ERRO", message="Operador Não Cadastrado!")
+
+    def janCalendario(self):
+
+
+        def mostraEvent():
+            event_repositorio = calevent_repositorio.CaleventRepositorio()
+            eventos = event_repositorio.listar_events(sessao)
+            if len(eventos) > 0:
+                for i in eventos:
+                    calendar_geral.calevent_create(date=i.data, text=i.descrição, tags='CONTA')
+
+        jan = Toplevel()
+        jan.update_idletasks()
+
+        # Centraliza a janela
+        x_cordinate = int((self.w / 2) - (630 / 2))
+        y_cordinate = int((self.h / 2) - (460 / 2))
+        jan.geometry("{}x{}+{}+{}".format(500, 330, x_cordinate, y_cordinate))
+
+        label_cal = Label(jan)
+        label_cal.pack(fill=BOTH, expand=TRUE)
+
+
+        calendar_geral = Calendar(label_cal, selectmode='none', showweeknumbers=FALSE, showothermonthdays=FALSE,
+                                  firstweekday='sunday', tooltipforeground='yellow',
+                                  tooltipdelay=1, tooltipalpha=0.9 )
+        calendar_geral.pack(fill=BOTH, expand=TRUE, padx=10)
+
+        calendar_geral.tag_config('CONTA', background='red', foreground='yellow')
+
+        mostraEvent()
+        jan.transient(root2)
+        jan.focus_force()
+        jan.grab_set()
 
     @staticmethod
     def __callback():

@@ -109,3 +109,12 @@ if filtro == 'CAIXA NORMAL':
         return nova_data.strftime('%d/%m/%Y')
 
 janelaConta
+
+lCalendar = Label(frame_resum_valores, width=25, height=10, bg='yellow')
+lCalendar.pack(side=LEFT)
+cal_resum_day = Calendar(lCalendar, selectmode='day', showweeknumbers=FALSE, showothermonthdays=FALSE,
+                         firstweekday='sunday')
+
+
+def pegaData(cal):
+    data = self.grab_date(cal)
