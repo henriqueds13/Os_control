@@ -499,10 +499,6 @@ class Calevents(Base):
     envent_conta = relationship('Contas', back_populates='conta_event')
 
 
-
-
-
-
 Base.metadata.create_all(engine)
 
 

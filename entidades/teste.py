@@ -118,3 +118,73 @@ cal_resum_day = Calendar(lCalendar, selectmode='day', showweeknumbers=FALSE, sho
 
 def pegaData(cal):
     data = self.grab_date(cal)
+
+    scrollbar_reg_h = Scrollbar(ftree_mao_obra, orient=VERTICAL)
+    yscrollcommand = scrollbar_reg_h.set
+    scrollbar_reg_h.config(command=treeview_mao_obra.yview)
+    scrollbar_reg_h.pack(fill=Y, side=LEFT)
+
+
+ def janelaLocalizarOs(self):
+        jan = Toplevel()
+
+        # Centraliza a janela
+        x_cordinate = int((self.w / 2) - (400 / 2))
+        y_cordinate = int((self.h / 2) - (150 / 2))
+        jan.geometry("{}x{}+{}+{}".format(400, 150, x_cordinate, y_cordinate))
+
+        global radio_loc_text
+        radio_loc_text = IntVar()
+        radio_loc_text.set("1")
+        frame_localizar_jan1 = Frame(jan)
+        frame_localizar_jan1.pack(padx=10, fill=X)
+        labelframe_local = LabelFrame(frame_localizar_jan1, text="Opção de Busca", fg="blue")
+        labelframe_local.pack(side=LEFT, pady=10)
+        radio_os_locali = Radiobutton(labelframe_local, text="Ordem de Serviço", value="1", variable=radio_loc_text)
+        radio_os_locali.grid(row=0, column=0, padx=5, sticky=W)
+        radio_nserie_locali = Radiobutton(labelframe_local, text="Número de Série", value="2",
+                                          variable=radio_loc_text)
+        radio_nserie_locali.grid(row=1, column=0, padx=5, sticky=W)
+
+        frame_localizar_jan2 = Frame(jan)
+        frame_localizar_jan2.pack(pady=10, fill=X)
+        entry_locali = Entry(frame_localizar_jan2, width=30, relief="sunken", borderwidth=2)
+        entry_locali.pack(side=LEFT, padx=10)
+        localButton = Button(frame_localizar_jan2, text="Iniciar Pesquisa", width=10, wraplength=70,
+                             underline=0, font=('Verdana', '9', 'bold'), height=2,
+                             command=lambda: [popularPesquisaLocalizaOS(radio_loc_text.get(), jan)])
+        localButton.pack(side=LEFT, padx=5)
+        Button(frame_localizar_jan2, text="Fechar", width=10, wraplength=70,
+               underline=0, font=('Verdana', '9', 'bold'), height=2, command=jan.destroy).pack(side=LEFT, padx=5)
+
+        jan.transient(root2)
+        jan.focus_force()
+        jan.grab_set()
+
+ self.check_pesq_avan_estoq = Checkbutton(self.frame_pesq_estoq, text="Busca Avançada", bg=color_est1,
+                                                 variable=self.variable_int_produto,
+                                                 onvalue=1, offvalue=0)
+        self.check_pesq_avan_estoq.grid(row=1, column=4, padx=10)
+self.variable_int_produto = IntVar()
+
+datetime.strptime(entry_venc_conta.get(), '%d/%m/%Y')
+
+revendedor_selecionado = self.treeview_busca_fornecedor.focus()
+revend_dados = self.treeview_busca_fornecedor.item(revendedor_selecionado, 'values')
+repositorio = revendedor_repositorio.RevendedorRepositorio()
+
+osVar1 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar1.set(osVar1.get().upper())
+
+        osVar1.trace_add('write', to_uppercase)
+
+self.est_fornec = Entry(subframe_fornecedor, width=150, textvariable=osVar1, bg=bg_entry)
+
+
+except ValueError:
+messagebox.showinfo(title="ERRO", message="Formato de data Invalido!")
+sessao.rollback()
+finally:
+sessao.close()

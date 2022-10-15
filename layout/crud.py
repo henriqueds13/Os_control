@@ -270,6 +270,7 @@ class Castelo:
         menuUtilitarios = Menu(barraDeMenus, tearoff=0)
         menuUtilitarios.add_command(label='Calendário', command=self.janCalendario)
         menuUtilitarios.add_command(label='Calculadora', command='')
+        menuUtilitarios.add_command(label='Lembretes', command=self.janLembretes)
         menuUtilitarios.add_separator()
         menuUtilitarios.add_command(label='Backup', command='')
         barraDeMenus.add_cascade(label='Utilitarios', menu=menuUtilitarios)
@@ -2686,6 +2687,9 @@ class Castelo:
                     event_repositorio = calevent_repositorio.CaleventRepositorio()
                     nova_conta = contas.Contas(cliente, contato, discriminicao, tipo_doc, numero_doc, numero_os,
                                                data_vend, data_cad, valor_conta, valor_cp, operador, num)
+                    novo_evento = calevent.Calevent(data_vend,
+                                                    f'{tp_doc} de {cliente} no Valor de {self.insereTotalConvertido(valor_conta)}',
+                                                    '')
                     if num != 3:
                         repositorio_conta.inserir_op(nova_conta, sessao)
                         self.mostrarMensagem("1", "Registro adicionado com Sucesso!")
@@ -2705,6 +2709,8 @@ class Castelo:
                             jan.destroy()
                     else:
                         repositorio_conta.editar_op(dado_conta[12], nova_conta, sessao)
+                        event_repositorio = calevent_repositorio.CaleventRepositorio()
+                        event_repositorio.editar_event(dado_conta[12], novo_evento, sessao)
                         self.mostrarMensagem("1", "Registro Editado com Sucesso!")
                         sessao.commit()
                         self.popularContasFin()
@@ -14042,13 +14048,16 @@ class Castelo:
 
     def janCalendario(self):
 
-
         def mostraEvent():
             event_repositorio = calevent_repositorio.CaleventRepositorio()
             eventos = event_repositorio.listar_events(sessao)
             if len(eventos) > 0:
                 for i in eventos:
-                    calendar_geral.calevent_create(date=i.data, text=i.descrição, tags='CONTA')
+                    if i.data is not None:
+                        if i.id_conta is not None:
+                            calendar_geral.calevent_create(date=i.data, text=i.descrição, tags='CONTA')
+                        else:
+                            calendar_geral.calevent_create(date=i.data, text=i.descrição, tags='LEMBRETE')
 
         jan = Toplevel()
         jan.update_idletasks()
@@ -14065,11 +14074,200 @@ class Castelo:
         calendar_geral = Calendar(label_cal, selectmode='none', showweeknumbers=FALSE, showothermonthdays=FALSE,
                                   firstweekday='sunday', tooltipforeground='yellow',
                                   tooltipdelay=1, tooltipalpha=0.9 )
-        calendar_geral.pack(fill=BOTH, expand=TRUE, padx=10)
+        calendar_geral.pack(fill=BOTH, expand=TRUE, padx=10, pady=10)
 
         calendar_geral.tag_config('CONTA', background='red', foreground='yellow')
+        calendar_geral.tag_config('LEMBRETE', background='orange', foreground='white')
 
         mostraEvent()
+        jan.transient(root2)
+        jan.focus_force()
+        jan.grab_set()
+
+    def janLembretes(self):
+
+        self.data_venc_lembr = datetime.now()
+
+        def janAddLembrete():
+            self.data_venc_lembr = datetime.now()
+            def habilitaData(state):
+                if state == 1:
+                    data_lembr.config(state=NORMAL)
+                    data_lembr.set_date( self.data_venc_lembr)
+
+                else:
+                    self.data_venc_lembr = data_lembr.get_date()
+                    data_lembr.config(state=DISABLED)
+
+            def addEvento(data_opt):
+
+                res = messagebox.askyesno(None,
+                                          "Deseja Adicionar Lembrete?")
+                if res:
+                    try:
+                        repositorio = calevent_repositorio.CaleventRepositorio()
+                        if data_opt == 0:
+                            data = None
+                        else:
+                            data = data_lembr.get_date()
+                        descrição = entry_locali.get()
+
+                        novo_op = calevent.Calevent(data, descrição, None)
+                        repositorio.inserir_event(novo_op, sessao)
+                        sessao.commit()
+                        self.mostrarMensagem('1', 'Lembrete Adicionado com sucesso!')
+                        popularLembr()
+                        jan.destroy()
+                        sessao.close()
+
+                    except ValueError:
+                        messagebox.showinfo(title="ERRO", message="Formato de data Invalido!")
+                        sessao.rollback()
+                    finally:
+                        sessao.close()
+                else:
+                    pass
+
+            jan = Toplevel()
+
+            osVar1 = StringVar(jan)
+
+            def to_uppercase(*args):
+                osVar1.set(osVar1.get().upper())
+
+            osVar1.trace_add('write', to_uppercase)
+
+            # Centraliza a janela
+            x_cordinate = int((self.w / 2) - (400 / 2))
+            y_cordinate = int((self.h / 2) - (160 / 2))
+            jan.geometry("{}x{}+{}+{}".format(400, 160, x_cordinate, y_cordinate))
+
+            radio_loc_text = IntVar()
+
+
+            frame_localizar_jan2 = Frame(jan)
+            frame_localizar_jan2.pack(pady=10, fill=BOTH)
+            labelframe_local = LabelFrame(frame_localizar_jan2, text="Descrição", fg="blue")
+            labelframe_local.pack(padx=10, fill=X)
+            entry_locali = Entry(labelframe_local, relief="sunken", borderwidth=2, textvariable=osVar1)
+            entry_locali.pack(padx=10, fill=X, pady=10)
+
+            frame_localizar_jan1 = Frame(jan)
+            frame_localizar_jan1.pack(fill=X)
+
+            frame_localizar_jan3 = Frame(frame_localizar_jan1)
+            frame_localizar_jan3.pack(side=LEFT, fill=BOTH)
+
+            check_pesq_avan_estoq = Checkbutton(frame_localizar_jan3, text="Adicionar Data",
+                                                variable=radio_loc_text,
+                                                onvalue=1, offvalue=0,
+                                                command=lambda: [habilitaData(radio_loc_text.get())])
+            check_pesq_avan_estoq.pack(pady=10)
+            data_lembr = DateEntry(frame_localizar_jan3, width=15, bg='#f5dfb1', firstweekday='sunday',
+                                     showweeknumbers=FALSE, showothermonthdays=FALSE, state=DISABLED)
+            data_lembr.pack(padx=10)
+
+
+            frame_localizar_jan4 = Frame(frame_localizar_jan1)
+            frame_localizar_jan4.pack(side=RIGHT, fill=BOTH, anchor=E)
+
+            subframe_localizar_jan4 = Frame(frame_localizar_jan4)
+            subframe_localizar_jan4.pack(side=BOTTOM, fill=X, anchor=E)
+
+            Button(subframe_localizar_jan4, text="Cancelar", width=10, wraplength=70,
+                   underline=0, font=('Verdana', '9', 'bold'), height=2,
+                   command=jan.destroy).pack(padx=10, side=RIGHT)
+
+            localButton = Button(subframe_localizar_jan4, text="Adicionar", width=10, wraplength=70,
+                                 underline=0, font=('Verdana', '9', 'bold'), height=2,
+                                 command=lambda: [addEvento(radio_loc_text.get())])
+            localButton.pack(padx=10, side=RIGHT)
+
+            jan.transient(root2)
+            jan.focus_force()
+            jan.grab_set()
+
+        def excluirLembr():
+            event_selecionada = tree_lembr.focus()
+            event_dados = tree_lembr.item(event_selecionada, 'values')
+            if len(event_dados) > 0:
+                res = messagebox.askyesno(None, "Deseja Realmente Deletar o Lembrete?")
+                if res:
+                    repositorio = calevent_repositorio.CaleventRepositorio()
+                    repositorio.remover_event(event_dados[2], sessao)
+                    sessao.commit()
+                    self.mostrarMensagem('1', 'Lembrete Deletado com sucesso!')
+                    popularLembr()
+                else:
+                    pass
+            else:
+                pass
+
+        def popularLembr():
+            tree_lembr.delete(*tree_lembr.get_children())
+            repositorio = calevent_repositorio.CaleventRepositorio()
+            events = repositorio.listar_events(sessao)
+            for i in events:
+                if i.id_conta is None:
+                    data = i.data
+                    if i.data is not None:
+                        data = i.data.strftime('%d/%m/%Y')
+                    tree_lembr.insert("", "end", values=(data, i.descrição, i.id))
+
+            tree_lembr.focus_set()
+            children = tree_lembr.get_children()
+            if children:
+                tree_lembr.focus(children[0])
+                tree_lembr.selection_set(children[0])
+
+        jan = Toplevel()
+        jan.update_idletasks()
+
+        # Centraliza a janela
+        x_cordinate = int((self.w / 2) - (650 / 2))
+        y_cordinate = int((self.h / 2) - (350 / 2))
+        jan.geometry("{}x{}+{}+{}".format(650, 350, x_cordinate, y_cordinate))
+
+        frame_lembrete = Frame(jan)
+        frame_lembrete.pack(fill=BOTH, padx=10, pady=10)
+
+        scrollbar_lembr_h = Scrollbar(frame_lembrete, orient=HORIZONTAL)
+        scrollbar_lembr_v = Scrollbar(frame_lembrete, orient=VERTICAL)
+        tree_lembr = ttk.Treeview(frame_lembrete,
+                                    columns=('data', 'descrição', 'id'),
+                                    show='headings',
+                                    selectmode='browse',
+                                    yscrollcommand=scrollbar_lembr_v.set,
+                                    xscrollcommand=scrollbar_lembr_h.set,
+                                    height=12)
+
+
+        tree_lembr.column('data', width=100, minwidth=10, stretch=False)
+        tree_lembr.column('descrição', width=510, minwidth=10, stretch=False)
+        tree_lembr.column('id', width=0, stretch=False)
+
+
+        tree_lembr.heading('data', text='DATA')
+        tree_lembr.heading('descrição', text='DESCRIÇÃO')
+        tree_lembr.heading('id', text='')
+
+        scrollbar_lembr_v.config(command=tree_lembr.yview)
+        scrollbar_lembr_v.pack(fill=Y, side=RIGHT)
+        scrollbar_lembr_h.config(command=tree_lembr.xview)
+        tree_lembr.pack(fill=BOTH)
+        scrollbar_lembr_h.pack(fill=X)
+
+        label_buttons = Label(jan)
+        label_buttons.pack(fill=BOTH)
+
+        Button(label_buttons, text='Adicionar Lembrete', width=10, wraplength=60,
+               command=janAddLembrete).pack(side=LEFT, padx=10)
+        Button(label_buttons, text='Excluir Lembrete', width=10, wraplength=50,
+               command=excluirLembr).pack(side=LEFT, padx=10)
+        Button(label_buttons, text='Fechar', width=10, height=2, command=jan.destroy).pack(side=RIGHT, padx=10)
+
+        popularLembr()
+
         jan.transient(root2)
         jan.focus_force()
         jan.grab_set()

@@ -18,6 +18,16 @@ class CaleventsQuery():
         op = sessao.query(Calevents).filter(Calevents.id == event_id).first()
         return op
 
+    def listar_event_id_conta(self, event_id, sessao):
+        op = sessao.query(Calevents).filter(Calevents.id_conta == event_id).first()
+        return op
+
     def listar_event_data(self, data, sessao):
         op = sessao.query(Calevents).filter(Calevents.data == data).all()
         return op
+
+    def editar_event(self, event_id, novo_op, sessao):
+        event = self.listar_event_id_conta(event_id, sessao)
+        event.data = novo_op.data
+        event.descrição = novo_op.descrição
+

@@ -21,6 +21,11 @@ class CaleventRepositorio:
         op = query_op.listar_event_id(op_id, sessao)
         return op
 
+    def listar_event_id_conta(self, op_id, sessao):
+        query_op = calevent_query.CaleventsQuery()
+        op = query_op.listar_event_id_conta(op_id, sessao)
+        return op
+
     def listar_event_data(self, data, sessao):
         query_op = calevent_query.CaleventsQuery()
         op = query_op.listar_event_data(data, sessao)
@@ -29,3 +34,7 @@ class CaleventRepositorio:
     def remover_event(self, op_id, sessao):
         query_op = calevent_query.CaleventsQuery()
         query_op.remover_event(op_id, sessao)
+
+    def editar_event(self, op_id, novo_op, sessao):
+        query_op = calevent_query.CaleventsQuery()
+        query_op.editar_event(op_id, novo_op, sessao)
