@@ -269,7 +269,7 @@ class Castelo:
 
         menuUtilitarios = Menu(barraDeMenus, tearoff=0)
         menuUtilitarios.add_command(label='Calendário', command=self.janCalendario)
-        menuUtilitarios.add_command(label='Calculadora', command='')
+        menuUtilitarios.add_command(label='Calculadora', command=self.abreCalculadora)
         menuUtilitarios.add_command(label='Lembretes', command=self.janLembretes)
         menuUtilitarios.add_separator()
         menuUtilitarios.add_command(label='Backup', command='')
@@ -1390,23 +1390,21 @@ class Castelo:
         button_resum_diario = Button(frame_buttons_caixa, text='Diário', width=9,
                                      command=lambda: [self.resumoFinanceiro(1)])
         button_resum_diario.pack(pady=10)
-        button_resum_diario = Button(frame_buttons_caixa, text='Mensal', width=9,
+        button_resum_mensal = Button(frame_buttons_caixa, text='Mensal', width=9,
                                      command=lambda: [self.resumoFinanceiroMensal()])
-        button_resum_diario.pack(padx=10)
-        button_resum_diario = Button(frame_buttons_caixa, text='Anual', width=9,
+        button_resum_mensal.pack(padx=10)
+        button_resum_anual = Button(frame_buttons_caixa, text='Anual', width=9,
                                      command=lambda: [self.resumoFinanceiroAnual(1)])
-        button_resum_diario.pack(pady=10)
+        button_resum_anual.pack(pady=10)
         frame_ferramentas_caixa = LabelFrame(self.frame_barra_lateral1)
         frame_ferramentas_caixa.pack(pady=10)
-        button_resum_diario = Button(frame_ferramentas_caixa, text='1', width=4)
-        button_resum_diario.pack(padx=8, side=LEFT, ipady=3)
-        button_resum_diario = Button(frame_ferramentas_caixa, text='2', width=4)
-        button_resum_diario.pack(pady=10, side=LEFT, ipady=3)
-        button_resum_diario = Button(frame_ferramentas_caixa, text='3', width=4, command=self.janelaConfigGrupoFin)
-        button_resum_diario.pack(padx=8, side=LEFT, ipady=3)
+        button_resum_calend = Button(frame_ferramentas_caixa, text='1', width=4, command=self.abreCalend)
+        button_resum_calend.pack(padx=8, side=LEFT, ipady=3)
+        button_resum_calculadora = Button(frame_ferramentas_caixa, text='2', width=4, command=self.abreCalculadora)
+        button_resum_calculadora.pack(pady=10, side=LEFT, ipady=3)
+        button_resum_config = Button(frame_ferramentas_caixa, text='3', width=4, command=self.janelaConfigGrupoFin)
+        button_resum_config.pack(padx=8, side=LEFT, ipady=3)
 
-        button_resum_diario = Button(self.frame_barra_lateral1, text='Fechar Caixa', width=13, height=2)
-        button_resum_diario.pack(pady=10)
 
         self.frame_buttons_prod_financeiro = Frame(self.frame_princ2, bg=color_est2, borderwidth=1, relief='raised')
         self.frame_buttons_prod_financeiro.pack(fill=X, pady=3, padx=5)
@@ -2688,7 +2686,7 @@ class Castelo:
                     nova_conta = contas.Contas(cliente, contato, discriminicao, tipo_doc, numero_doc, numero_os,
                                                data_vend, data_cad, valor_conta, valor_cp, operador, num)
                     novo_evento = calevent.Calevent(data_vend,
-                                                    f'{tp_doc} de {cliente} no Valor de {self.insereTotalConvertido(valor_conta)}',
+                                                    f'{dado_conta[1]} de {cliente} no Valor de {self.insereTotalConvertido(valor_conta)}',
                                                     '')
                     if num != 3:
                         repositorio_conta.inserir_op(nova_conta, sessao)
@@ -14209,7 +14207,7 @@ class Castelo:
             events = repositorio.listar_events(sessao)
             for i in events:
                 if i.id_conta is None:
-                    data = i.data
+                    data = '---'
                     if i.data is not None:
                         data = i.data.strftime('%d/%m/%Y')
                     tree_lembr.insert("", "end", values=(data, i.descrição, i.id))
@@ -14267,6 +14265,326 @@ class Castelo:
         Button(label_buttons, text='Fechar', width=10, height=2, command=jan.destroy).pack(side=RIGHT, padx=10)
 
         popularLembr()
+
+        jan.transient(root2)
+        jan.focus_force()
+        jan.grab_set()
+
+    def abreCalend(self):
+
+        jan = Toplevel()
+
+        # Centraliza a janela
+        x_cordinate = int((self.w / 2) - (400 / 2))
+        y_cordinate = int((self.h / 2) - (160 / 2))
+        jan.geometry("{}x{}+{}+{}".format(250, 190, x_cordinate, y_cordinate))
+
+        calendar_geral = Calendar(jan, selectmode='none', showweeknumbers=FALSE, showothermonthdays=FALSE,
+                                  firstweekday='sunday', tooltipforeground='yellow')
+        calendar_geral.pack(fill=BOTH, expand=TRUE, padx=10, pady=10)
+
+        jan.transient(root2)
+        jan.focus_force()
+        jan.grab_set()
+
+    def abreCalculadora(self):
+
+        bg_janela = '#666666'
+        bg_visor = '#5b5a5a'
+        bg_buttons = '#4d4d4d'
+        larg_button = 6
+        tam_button = 2
+        font_buttons = ('Verdana', '10', 'bold')
+        fg_buttons = 'white'
+        self.cal_valor1 = '0'
+        self.cal_valor2 = '0'
+        self.operação = ''
+        self.op_num = 0
+
+        jan = Toplevel(bg=bg_janela)
+        jan.title('Calculadora')
+
+        # Centraliza a janela
+        x_cordinate = int((self.w / 2) - (280 / 2))
+        y_cordinate = int((self.h / 2) - (290 / 2))
+        jan.geometry("{}x{}+{}+{}".format(280, 320, x_cordinate, y_cordinate))
+
+        def formataString(valor):
+            valor_novo = str(valor).replace('.', ',')
+            if valor_novo[-1] == '0':
+                valor_novo = valor_novo[:-2]
+            return valor_novo
+
+        def formataFloat(valor):
+
+            if valor.find(',') != -1:
+                valor = valor.replace(',', '.')
+            return float(valor)
+
+        def defineOperação(val):
+            if self.cal_valor2 != '0':
+                resultado(self.operação)
+            self.operação = val
+            self.op_num = 1
+
+        def resultado(op):
+            ValorFloat1 = formataFloat(self.cal_valor1)
+            ValorFloat2 = formataFloat(self.cal_valor2)
+            if op == '+':
+                ValorFloat1 += ValorFloat2
+
+            elif op == '-':
+                ValorFloat1 -= ValorFloat2
+
+            elif op == '*':
+                ValorFloat1 *= ValorFloat2
+
+            elif op == '/':
+                if ValorFloat2 == 0:
+                    pass
+                else:
+                    ValorFloat1 /= ValorFloat2
+
+            self.cal_valor1 = formataString(ValorFloat1)
+            tela_resul.config(text=self.cal_valor1)
+            self.cal_valor2 = '0'
+
+        def porcent():
+            ValorFloat1 = formataFloat(self.cal_valor1)
+            ValorFloat2 = ValorFloat1/100
+            self.cal_valor1 = formataString(ValorFloat2)
+            tela_resul.config(text=self.cal_valor1)
+
+
+        def testaFloat():
+            if self.op_num == 0:
+                if self.cal_valor1.find(',') == -1:
+                    return True
+                else:
+                    return False
+            else:
+                if self.cal_valor2.find(',') == -1:
+                    return True
+                else:
+                    return False
+
+        def limpar():
+            self.cal_valor1 = '0'
+            self.cal_valor2 = '0'
+            tela_resul.config(text=self.cal_valor1)
+            self.operação = ''
+            self.op_num = 0
+
+        def digitaNumero(val):
+            if self.op_num == 0:
+                if len(self.cal_valor1) < 27:
+                    if self.cal_valor1 != '0':
+                        if testaFloat() is False:
+                            if val == ',':
+                                pass
+                            else:
+                                self.cal_valor1 = self.cal_valor1 + val
+                                tela_resul.config(text=self.cal_valor1)
+                        else:
+                            self.cal_valor1 = self.cal_valor1 + val
+                            tela_resul.config(text=self.cal_valor1)
+                    else:
+                        self.cal_valor1 = val
+                        tela_resul.config(text=self.cal_valor1)
+            else:
+                if len(self.cal_valor2) < 27:
+                    if self.cal_valor2 != '0':
+                        if testaFloat() is False:
+                            if val == ',':
+                                pass
+                            else:
+                                self.cal_valor2 = self.cal_valor2 + val
+                                tela_resul.config(text=self.cal_valor2)
+                        else:
+                            self.cal_valor2 = self.cal_valor2 + val
+                            tela_resul.config(text=self.cal_valor2)
+                    else:
+                        self.cal_valor2 = val
+                        tela_resul.config(text=self.cal_valor2)
+
+        def digitaDel():
+            if self.op_num == 0:
+                if self.cal_valor1 != '0':
+                    if len(self.cal_valor1) > 1:
+                        self.cal_valor1 = self.cal_valor1[:-1]
+                        if self.cal_valor1 == '-':
+                            self.cal_valor1 = '0'
+                    else:
+                        self.cal_valor1 = '0'
+                    tela_resul.config(text=self.cal_valor1)
+            else:
+                if self.cal_valor2 != '0':
+                    if len(self.cal_valor2) > 1:
+                        self.cal_valor2 = self.cal_valor2[:-1]
+                        if self.cal_valor2 == '-':
+                            self.cal_valor2 = '0'
+                    else:
+                        self.cal_valor2 = '0'
+                    tela_resul.config(text=self.cal_valor2)
+
+        def trocaSinal():
+            if self.op_num == 0:
+                if self.cal_valor1 != '0':
+                    if self.cal_valor1[0] != '-':
+                        self.cal_valor1 = '-' + self.cal_valor1
+                    else:
+                        self.cal_valor1 = self.cal_valor1[1:]
+                    tela_resul.config(text=self.cal_valor1)
+            else:
+                if self.cal_valor1 != '0':
+                    if self.cal_valor2[0] != '-':
+                        self.cal_valor2 = '-' + self.cal_valor2
+                    else:
+                        self.cal_valor2 = self.cal_valor2[1:]
+                    tela_resul.config(text=self.cal_valor2)
+
+
+
+        frame_princ = Frame(jan, bg=bg_janela)
+        frame_princ.pack(padx=10, pady=10, fill=BOTH)
+
+        tela_resul = Label(frame_princ, text=0, relief=FLAT, bg=bg_visor, height=2, fg='white', anchor=E,
+                           font=('', '11', 'bold'))
+        tela_resul.pack(fill=X, expand=TRUE, pady=5)
+
+        frame_buttons = Frame(frame_princ, bg=bg_janela)
+        frame_buttons.pack(fill=BOTH, pady=10)
+
+        button_c = Button(frame_buttons, text='C', width=larg_button, height=tam_button, relief=FLAT, bg=bg_janela,
+                          font=font_buttons, fg=fg_buttons, command=limpar)
+        button_c.grid(row=0, column=0)
+        button_sp = Button(frame_buttons, text='-/+', width=larg_button, height=tam_button, relief=FLAT, bg=bg_janela,
+                           font=font_buttons, fg=fg_buttons, command=trocaSinal)
+        button_sp.grid(row=0, column=2)
+        button_del = Button(frame_buttons, text='del', width=larg_button, height=tam_button, relief=FLAT, bg=bg_janela,
+                          font=font_buttons, fg=fg_buttons, command=digitaDel)
+        button_del.grid(row=0, column=1)
+        button_div = Button(frame_buttons, text='/', width=larg_button, height=tam_button, relief=FLAT, bg=bg_janela,
+                            font=font_buttons, fg=fg_buttons, command=lambda: [defineOperação('/')])
+        button_div.grid(row=0, column=3)
+        button_mult = Button(frame_buttons, text='x', width=larg_button, height=tam_button, relief=FLAT, bg=bg_janela,
+                             font=font_buttons, fg=fg_buttons, command=lambda: [defineOperação('*')])
+        button_mult.grid(row=1, column=3)
+        button_sub = Button(frame_buttons, text='-', width=larg_button, height=tam_button, relief=FLAT, bg=bg_janela,
+                            font=font_buttons, fg=fg_buttons, command=lambda: [defineOperação('-')])
+        button_sub.grid(row=2, column=3)
+        button_soma = Button(frame_buttons, text='+', width=larg_button, height=tam_button, relief=FLAT, bg=bg_janela,
+                             font=font_buttons, fg=fg_buttons, command=lambda: [defineOperação('+')])
+        button_soma.grid(row=3, column=3)
+        button_virg = Button(frame_buttons, text=',', width=larg_button, height=tam_button, relief=FLAT, bg=bg_janela,
+                             font=font_buttons, fg=fg_buttons, command=lambda: [digitaNumero(',')])
+        button_virg.grid(row=4, column=0)
+
+        button_9 = Button(frame_buttons, text='9', width=larg_button, height=tam_button, relief=FLAT, bg=bg_buttons,
+                          font=font_buttons, fg=fg_buttons, command=lambda: [digitaNumero('9')])
+        button_9.grid(row=1, column=2)
+        button_8 = Button(frame_buttons, text='8', width=larg_button, height=tam_button, relief=FLAT, bg=bg_buttons,
+                          font=font_buttons, fg=fg_buttons, command=lambda: [digitaNumero('8')])
+        button_8.grid(row=1, column=1)
+        button_7 = Button(frame_buttons, text='7', width=larg_button, height=tam_button, relief=FLAT, bg=bg_buttons,
+                          font=font_buttons, fg=fg_buttons, command=lambda: [digitaNumero('7')])
+        button_7.grid(row=1, column=0)
+        button_6 = Button(frame_buttons, text='6', width=larg_button, height=tam_button, relief=FLAT, bg=bg_buttons,
+                          font=font_buttons, fg=fg_buttons, command=lambda: [digitaNumero('6')])
+        button_6.grid(row=2, column=2)
+        button_5 = Button(frame_buttons, text='5', width=larg_button, height=tam_button, relief=FLAT, bg=bg_buttons,
+                          font=font_buttons, fg=fg_buttons, command=lambda: [digitaNumero('5')])
+        button_5.grid(row=2, column=1)
+        button_4 = Button(frame_buttons, text='4', width=larg_button, height=tam_button, relief=FLAT, bg=bg_buttons,
+                          font=font_buttons, fg=fg_buttons, command=lambda: [digitaNumero('4')])
+        button_4.grid(row=2, column=0)
+        button_3 = Button(frame_buttons, text='3', width=larg_button, height=tam_button, relief=FLAT, bg=bg_buttons,
+                          font=font_buttons, fg=fg_buttons, command=lambda: [digitaNumero('3')])
+        button_3.grid(row=3, column=2)
+        button_2 = Button(frame_buttons, text='2', width=larg_button, height=tam_button, relief=FLAT, bg=bg_buttons,
+                          font=font_buttons, fg=fg_buttons, command=lambda: [digitaNumero('2')])
+        button_2.grid(row=3, column=1)
+        button_1 = Button(frame_buttons, text='1', width=larg_button, height=tam_button, relief=FLAT, bg=bg_buttons,
+                          font=font_buttons, fg=fg_buttons, command=lambda: [digitaNumero('1')])
+        button_1.grid(row=3, column=0)
+        button_porcent = Button(frame_buttons, text='%', width=larg_button, height=tam_button, relief=FLAT, bg=bg_janela,
+                            font=font_buttons, fg=fg_buttons, command=porcent)
+        button_porcent.grid(row=4, column=3)
+        button_0 = Button(frame_buttons, text='0', width=larg_button, height=tam_button, relief=FLAT, bg=bg_buttons,
+                          font=font_buttons, fg=fg_buttons, command=lambda: [digitaNumero('0')])
+        button_0.grid(row=4, column=1)
+        button_igual = Button(frame_buttons, text='=', width=larg_button, height=tam_button, relief=FLAT, bg='#ff9980',
+                              font=font_buttons, fg=fg_buttons, command=lambda: [resultado(self.operação)])
+        button_igual.grid(row=4, column=2)
+
+        def on_enter(e):
+            e.widget['relief'] = 'raised'
+
+        def on_leave(e):
+            e.widget['relief'] = 'flat'
+
+        def apertaTecla(e):
+
+            if e.keysym.isdigit():
+                digitaNumero(e.keysym)
+            elif e.char == '/':
+                defineOperação('/')
+            elif e.char == '*':
+                defineOperação('*')
+            elif e.char == '-':
+                defineOperação('-')
+            elif e.char == '+':
+                defineOperação('+')
+            elif e.char == '\r':
+                resultado(self.operação)
+            elif e.char == ',':
+                digitaNumero(',')
+            elif e.char == '\x08':
+                digitaDel()
+
+        button_c.bind('<Enter>', on_enter)
+        button_c.bind('<Leave>', on_leave)
+        button_del.bind('<Enter>', on_enter)
+        button_del.bind('<Leave>', on_leave)
+        button_div.bind('<Enter>', on_enter)
+        button_div.bind('<Leave>', on_leave)
+        button_mult.bind('<Enter>', on_enter)
+        button_mult.bind('<Leave>', on_leave)
+        button_sub.bind('<Enter>', on_enter)
+        button_sub.bind('<Leave>', on_leave)
+        button_soma.bind('<Enter>', on_enter)
+        button_soma.bind('<Leave>', on_leave)
+        button_virg.bind('<Enter>', on_enter)
+        button_virg.bind('<Leave>', on_leave)
+        button_9.bind('<Enter>', on_enter)
+        button_9.bind('<Leave>', on_leave)
+        button_8.bind('<Enter>', on_enter)
+        button_8.bind('<Leave>', on_leave)
+        button_7.bind('<Enter>', on_enter)
+        button_7.bind('<Leave>', on_leave)
+        button_6.bind('<Enter>', on_enter)
+        button_6.bind('<Leave>', on_leave)
+        button_5.bind('<Enter>', on_enter)
+        button_5.bind('<Leave>', on_leave)
+        button_4.bind('<Enter>', on_enter)
+        button_4.bind('<Leave>', on_leave)
+        button_3.bind('<Enter>', on_enter)
+        button_3.bind('<Leave>', on_leave)
+        button_2.bind('<Enter>', on_enter)
+        button_2.bind('<Leave>', on_leave)
+        button_1.bind('<Enter>', on_enter)
+        button_1.bind('<Leave>', on_leave)
+        button_0.bind('<Enter>', on_enter)
+        button_0.bind('<Leave>', on_leave)
+        button_igual.bind('<Enter>', on_enter)
+        button_igual.bind('<Leave>', on_leave)
+        button_porcent.bind('<Enter>', on_enter)
+        button_porcent.bind('<Leave>', on_leave)
+        button_sp.bind('<Enter>', on_enter)
+        button_sp.bind('<Leave>', on_leave)
+
+        jan.bind('<Key>', apertaTecla)
+
 
         jan.transient(root2)
         jan.focus_force()
