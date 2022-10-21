@@ -67,3 +67,10 @@ def testaEntradaInteiro3(self, valor):
          valor1 = locale.atof(valor)
          valor_separado = locale.currency(valor1).split()
          return valor_separado[1]
+
+self.abreCalculadora
+with open('mao_de_obra.txt', 'rb') as mao_obra_txt:
+    list_mao_obra = pickle.load(mao_obra_txt)
+
+
+list_mao_obra = []

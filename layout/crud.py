@@ -528,6 +528,8 @@ class Castelo:
         # ------------------------------- Janela Orçamento----------------------------------------------
 
         color_orc2 = "#90CBFB"
+        font_dados_alug = ('Verdana', '10', 'bold')
+        font_dados_alug2 = ('Verdana', '10')
         self.frame_orcamentos = Frame(self.frame_princ, bg="#90CBFB")
         self.subframe_orc1 = Frame(self.frame_orcamentos, bg="#110066")
         self.subframe_orc1.pack(fill=X)
@@ -546,49 +548,60 @@ class Castelo:
         self.widget_orc2.pack(side=RIGHT)
         self.frame1_orc = Frame(self.subframe_orc2, bg=color_orc2)
         self.frame1_orc.pack(fill=X)
-        self.labelframe_dadoscli = LabelFrame(self.frame1_orc, text="Dados do Cliente", bg=color_orc2)
-        self.labelframe_dadoscli.pack(side=LEFT, ipadx=10, ipady=5, padx=10)
+        self.labelframe_dadoscli = LabelFrame(self.frame1_orc, text="Alugueis Ativos", bg=color_orc2)
+        self.labelframe_dadoscli.pack(side=LEFT, ipadx=10, padx=10)
+        self.sf_alugueis_ativos = Frame(self.labelframe_dadoscli, bg=color_orc2)
+        self.sf_alugueis_ativos.pack(fill=X)
+        self.labelframe_orc_pesquisa = LabelFrame(self.sf_alugueis_ativos, bg=color_orc2,
+                                                  text="Digite um nome para pesquisar")
+        self.labelframe_orc_pesquisa.pack(pady=5, side=LEFT, padx=10)
+        self.entry_orc = Entry(self.labelframe_orc_pesquisa, width=35)
+        self.entry_orc.grid(padx=10)
+        Button(self.labelframe_orc_pesquisa, text="1", width=5).grid(row=0, column=1, ipady=2, padx=5, pady=5)
+
+        self.frame_num_alug = LabelFrame(self.sf_alugueis_ativos, text='Núm de Alugueis', bg=color_orc2)
+        self.frame_num_alug.pack(side=RIGHT, padx=10)
+        self.label_num_alug = Label(self.frame_num_alug, text=2, fg='blue', font='bold', bg=color_orc2)
+        self.label_num_alug.pack()
+
+
         self.scrll_orc = Scrollbar(self.labelframe_dadoscli, orient=HORIZONTAL)
         self.tree_orc = ttk.Treeview(self.labelframe_dadoscli,
-                                     columns=('os', 'entrada', 'cliente'),
+                                     columns=('id', 'saida', 'devolução', 'cliente',  'maquina'),
                                      show='headings',
                                      xscrollcommand=self.scrll_orc,
                                      selectmode='browse',
                                      height=6)
-        self.tree_orc.column('os', width=70, minwidth=80, stretch=False)
-        self.tree_orc.column('entrada', width=100, minwidth=70, stretch=False)
-        self.tree_orc.column('cliente', width=300, minwidth=80, stretch=False)
-        self.tree_orc.heading('os', text='OS')
-        self.tree_orc.heading('entrada', text='ENTRADA')
+        self.tree_orc.column('id', width=0, stretch=False)
+        self.tree_orc.column('saida', width=100, minwidth=70, stretch=False)
+        self.tree_orc.column('devolução', width=0, minwidth=70, stretch=False)
+        self.tree_orc.column('cliente', width=350, minwidth=80, stretch=False)
+        self.tree_orc.column('maquina', width=300, minwidth=80, stretch=False)
+        self.tree_orc.heading('id', text='ID')
+        self.tree_orc.heading('saida', text='SAIDA')
+        self.tree_orc.heading('devolução', text='DEVOLUÇÃO')
         self.tree_orc.heading('cliente', text='CLIENTE')
+        self.tree_orc.heading('maquina', text='EQUIPAMENTO')
 
         self.scrll_orc.config(command=self.tree_orc.xview)
-        self.scrll_orc.pack(fill=X, padx=10, side=BOTTOM)
-        self.tree_orc.pack(side=BOTTOM)
+        self.tree_orc.pack()
+        self.scrll_orc.pack(fill=X, padx=10)
 
         self.tree_orc.tag_configure('oddrow', background='#ffffe1')
         self.tree_orc.tag_configure('evenrow', background='#F2EDDC')
 
-        self.introframe_orc_material = Frame(self.frame1_orc, bg=color_orc2)
-        self.introframe_orc_material.pack(side=LEFT, padx=10)
-        self.labelframe_orc_coment = LabelFrame(self.introframe_orc_material, text="Comentários", bg=color_orc2)
-        self.labelframe_orc_coment.pack()
-        Entry(self.labelframe_orc_coment, width=65).pack(padx=5, pady=5)
-        Entry(self.labelframe_orc_coment, width=65).pack()
-        Entry(self.labelframe_orc_coment, width=65).pack(pady=5)
-        Entry(self.labelframe_orc_coment, width=65).pack()
-        Entry(self.labelframe_orc_coment, width=65).pack(pady=5)
+        self.sf_alugueis_buttons = Frame(self.labelframe_dadoscli, bg=color_orc2)
+        self.sf_alugueis_buttons.pack(fill=X, padx=10, pady=10)
+        Button(self.sf_alugueis_buttons, text="Novo Aluguel", width=10).pack(side=LEFT, ipadx=5, ipady=5)
+        Button(self.sf_alugueis_buttons, text="Editar", width=10).pack(side=LEFT, ipadx=5, ipady=5, padx=10)
+        Button(self.sf_alugueis_buttons, text="Dar Baixa", width=10).pack(side=LEFT, pady=5, ipadx=5, ipady=5)
 
-        self.introframe_orc_material2 = Frame(self.introframe_orc_material, bg=color_orc2)
-        self.introframe_orc_material2.pack(fill=X)
-        self.labelframe_validade = LabelFrame(self.introframe_orc_material2, bg=color_orc2, text="Validade")
-        self.labelframe_validade.pack(side=LEFT, ipadx=20)
-        Entry(self.labelframe_validade, width=3, justify=CENTER).pack(side=LEFT, padx=5, pady=5)
-        Label(self.labelframe_validade, bg=color_orc2, text="Dias").pack(side=LEFT, padx=10)
+
+        Button(self.sf_alugueis_buttons, text="Fechar", width=10).pack(side=RIGHT, pady=5, ipadx=5, ipady=5, padx=10)
 
         self.frame2_orc = Frame(self.subframe_orc2, bg=color_orc2)
         self.frame2_orc.pack(fill=X)
-        self.labelframe_material = LabelFrame(self.frame2_orc, bg=color_orc2, text="Material Utilizado")
+        self.labelframe_material = LabelFrame(self.frame2_orc, bg=color_orc2, text="Acessórios")
         self.labelframe_material.pack(padx=10, side=LEFT, ipady=5)
         self.subframe_material1 = Frame(self.labelframe_material, bg=color_orc2)
         self.subframe_material1.pack(pady=10)
@@ -688,36 +701,54 @@ class Castelo:
         Label(self.subframe_material3, bg=color_orc2, text="Total do Serviço").pack(side=RIGHT, padx=25)
 
         self.frame3_orc = Frame(self.frame2_orc, bg=color_orc2)
-        self.frame3_orc.pack(side=LEFT, padx=10)
-        self.frame4_orc = Frame(self.frame3_orc, bg=color_orc2)
-        self.frame4_orc.pack(fill=X)
-        self.labelframe_orc_dadosap = LabelFrame(self.frame4_orc, text="Dados do Aparelho", bg=color_orc2)
-        self.labelframe_orc_dadosap.pack(side=LEFT)
-        Label(self.labelframe_orc_dadosap, text='Aparelho', bg=color_orc2).grid(column=0, row=0, sticky=W)
-        Label(self.labelframe_orc_dadosap, text='Marca', bg=color_orc2).grid(column=0, row=1, sticky=W)
-        Label(self.labelframe_orc_dadosap, text='Modelo', bg=color_orc2).grid(column=0, row=2, sticky=W)
-        Label(self.labelframe_orc_dadosap, text='Defeito', bg=color_orc2).grid(column=0, row=3, sticky=W)
-        Label(self.labelframe_orc_dadosap, text='Lavadora Alta Pressão', bg=color_orc2, fg="red").grid(column=1, row=0,
+        self.frame3_orc.pack(side=LEFT, padx=10, fill=BOTH)
+        self.labelframe_orc_dadosap = LabelFrame(self.frame3_orc, text="Dados do Aluguel", bg=color_orc2)
+        self.labelframe_orc_dadosap.pack( )
+        self.sub_dados_alug = Frame(self.labelframe_orc_dadosap, bg=color_orc2)
+        self.sub_dados_alug.pack(fill=BOTH, padx=10, pady=10)
+
+        Label(self.sub_dados_alug, text='Cliente:', bg=color_orc2, font=font_dados_alug).grid(column=0, row=0,
+                                                                                                       sticky=W)
+        Label(self.sub_dados_alug, text='Telefone:', bg=color_orc2, font=font_dados_alug).grid(column=0, row=1,
+                                                                                                    sticky=W)
+        Label(self.sub_dados_alug, text='Aparelho:', bg=color_orc2, font=font_dados_alug).grid(column=0, row=2, sticky=W)
+        Label(self.sub_dados_alug, text='Marca:', bg=color_orc2, font=font_dados_alug).grid(column=0, row=3, sticky=W)
+        Label(self.sub_dados_alug, text='Modelo:', bg=color_orc2, font=font_dados_alug).grid(column=0, row=4, sticky=W)
+        Label(self.sub_dados_alug, text='N/Serie:', bg=color_orc2, font=font_dados_alug).grid(column=0, row=5, sticky=W)
+        Label(self.sub_dados_alug, text='Dias Loc.:', bg=color_orc2, font=font_dados_alug).grid(column=0, row=6, sticky=W)
+        Label(self.sub_dados_alug, text='Saída:', bg=color_orc2, font=font_dados_alug).grid(column=0, row=7, sticky=W)
+        Label(self.sub_dados_alug, text='Devolução:', bg=color_orc2, font=font_dados_alug).grid(column=0, row=8, sticky=W)
+        Label(self.sub_dados_alug, text='Pago:', bg=color_orc2, font=font_dados_alug).grid(column=0, row=9, sticky=W)
+        Label(self.sub_dados_alug, text='Lavadora Alta Pressão', bg=color_orc2, fg="red", font=font_dados_alug2).grid(column=1, row=2,
                                                                                                        sticky=W,
                                                                                                        padx=10)
-        Label(self.labelframe_orc_dadosap, text='Karcher', bg=color_orc2, fg="red").grid(column=1, row=1, sticky=W,
+        Label(self.sub_dados_alug, text='Karcher', bg=color_orc2, fg="red", font=font_dados_alug2).grid(column=1, row=3, sticky=W,
                                                                                          padx=10)
-        Label(self.labelframe_orc_dadosap, text='K330', bg=color_orc2, fg="red").grid(column=1, row=2, sticky=W,
+        Label(self.sub_dados_alug, text='K330', bg=color_orc2, fg="red", font=font_dados_alug2).grid(column=1, row=4, sticky=W,
                                                                                       padx=10)
-        Label(self.labelframe_orc_dadosap, text='Sem Pressão', bg=color_orc2, fg="red").grid(column=1, row=3, sticky=W,
+        Label(self.sub_dados_alug, text='Sem Pressão', bg=color_orc2, fg="red", font=font_dados_alug2).grid(column=1, row=5, sticky=W,
                                                                                              padx=10)
 
-        self.labelframe_orc_pesquisa = LabelFrame(self.frame3_orc, bg=color_orc2, text="Digite um nome para pesquisar")
-        self.labelframe_orc_pesquisa.pack(pady=10)
-        self.entry_orc = Entry(self.labelframe_orc_pesquisa, width=35)
-        self.entry_orc.grid(padx=10)
-        Button(self.labelframe_orc_pesquisa, text="1", width=5).grid(row=0, column=1, ipady=7, padx=5, pady=5)
-
-        self.frame5_orc = Frame(self.frame3_orc, bg=color_orc2)
+        self.frame5_orc = Frame(self.subframe_orc2, bg=color_orc2)
         self.frame5_orc.pack(fill=X)
-        Button(self.frame5_orc, text="Fechar", width=8).pack(side=RIGHT, ipadx=5, ipady=5)
-        Button(self.frame5_orc, text="Imprimir", width=8).pack(side=RIGHT, padx=10, pady=5, ipadx=5, ipady=5)
-        Button(self.frame5_orc, text="Localizar", width=8).pack(side=RIGHT, ipadx=5, ipady=5)
+
+        self.introframe_orc_material = Frame(self.frame5_orc, bg=color_orc2)
+        self.introframe_orc_material.pack(side=LEFT, padx=10)
+        self.labelframe_orc_coment = LabelFrame(self.introframe_orc_material, text="Comentários", bg=color_orc2)
+        self.labelframe_orc_coment.pack()
+        Entry(self.labelframe_orc_coment, width=65).pack(padx=5, pady=5)
+        Entry(self.labelframe_orc_coment, width=65).pack()
+        Entry(self.labelframe_orc_coment, width=65).pack(pady=5)
+        Entry(self.labelframe_orc_coment, width=65).pack()
+        Entry(self.labelframe_orc_coment, width=65).pack(pady=5)
+
+
+        self.introframe_orc_material2 = Frame(self.introframe_orc_material, bg=color_orc2)
+        self.introframe_orc_material2.pack(fill=X)
+        self.labelframe_validade = LabelFrame(self.introframe_orc_material2, bg=color_orc2, text="Validade")
+        self.labelframe_validade.pack(side=LEFT, ipadx=20)
+        Entry(self.labelframe_validade, width=3, justify=CENTER).pack(side=LEFT, padx=5, pady=5)
+        Label(self.labelframe_validade, bg=color_orc2, text="Dias").pack(side=LEFT, padx=10)
 
         # ------------------------------- Janela Aparelhos em Manutenção------------------------------------------------
         osVar = StringVar(master)
@@ -1398,7 +1429,7 @@ class Castelo:
         button_resum_anual.pack(pady=10)
         frame_ferramentas_caixa = LabelFrame(self.frame_barra_lateral1)
         frame_ferramentas_caixa.pack(pady=10)
-        button_resum_calend = Button(frame_ferramentas_caixa, text='1', width=4, command=self.abreCalend)
+        button_resum_calend = Button(frame_ferramentas_caixa, text='1', width=4, command=self.janCalendario)
         button_resum_calend.pack(padx=8, side=LEFT, ipady=3)
         button_resum_calculadora = Button(frame_ferramentas_caixa, text='2', width=4, command=self.abreCalculadora)
         button_resum_calculadora.pack(pady=10, side=LEFT, ipady=3)
@@ -7874,6 +7905,70 @@ class Castelo:
                 self.orc_operador.delete(0, END)
                 messagebox.showinfo(title="ERRO", message="Operador Não Cadastrado!")
 
+        def tabelaMaoObra():
+
+            jan = Toplevel(bg='#000')
+            jan.title('Calculadora')
+
+            # Centraliza a janela
+            x_cordinate = int((self.w / 2) - (770 / 2))
+            y_cordinate = int((self.h / 2) - (340 / 2))
+            jan.geometry("{}x{}+{}+{}".format(370, 200, x_cordinate, y_cordinate))
+
+            list_mao_obra = []
+
+            with open('mao_de_obra.txt', 'rb') as mao_obra_txt:
+                list_mao_obra = pickle.load(mao_obra_txt)
+
+            def popularMaoObra():
+                treeview_mao_obra.delete(*treeview_mao_obra.get_children())
+                for i in list_mao_obra:
+                    treeview_mao_obra.insert("", "end", values=(i[0], self.insereTotalConvertido(i[1]), i[2]))
+
+            def InsereMaoObra():
+                mao_obra_selecionada = treeview_mao_obra.focus()
+                dado_mao_obra = treeview_mao_obra.item(mao_obra_selecionada, "values")
+                self.orc_entry_mao_obra_material.delete(0, END)
+                self.orc_entry_mao_obra_material.insert(0, dado_mao_obra[1][3:])
+                jan.destroy()
+
+            ftree_mao_obra = Frame(jan, height=5, width=40)
+            ftree_mao_obra.pack(fill=BOTH, pady=5, padx=5)
+            scrollbar_reg_h = Scrollbar(ftree_mao_obra, orient=VERTICAL)
+            treeview_mao_obra = ttk.Treeview(ftree_mao_obra,
+                                             columns=('descricao', 'valor', 'id'),
+                                             show='tree',
+                                             selectmode='browse',
+                                             height=7,
+                                             yscrollcommand=scrollbar_reg_h.set)
+            treeview_mao_obra.column('#0', width=0, stretch=NO)
+            treeview_mao_obra.column('descricao', width=250, minwidth=100, stretch=False, anchor=W)
+            treeview_mao_obra.column('valor', width=90, minwidth=25, stretch=False)
+            treeview_mao_obra.column('id', width=0, stretch=NO)
+            treeview_mao_obra.pack(side=LEFT)
+            scrollbar_reg_h.config(command=treeview_mao_obra.yview)
+            scrollbar_reg_h.pack(fill=Y, side=LEFT)
+
+            frame_buttons = Frame(jan, bg='#000')
+            frame_buttons.pack(fill=BOTH, pady=5, padx=5)
+
+
+
+            Button(frame_buttons, text='Fechar', width=8, command=jan.destroy).pack(side=RIGHT, padx=10)
+            Button(frame_buttons, text='Aceitar', width=8, command=InsereMaoObra).pack(side=RIGHT)
+
+            popularMaoObra()
+
+            treeview_mao_obra.focus_set()
+            children = treeview_mao_obra.get_children()
+            if children:
+                treeview_mao_obra.focus(children[0])
+                treeview_mao_obra.selection_set(children[0])
+
+            jan.transient(root2)
+            jan.focus_force()
+            jan.grab_set()
+
         dados_orc = os_repositorio.Os_repositorio().listar_os_id(self.num_os, sessao)
         frame_princ_os1 = Frame(jan1)
         frame_princ_os1.pack(fill=Y, side=LEFT)
@@ -8159,16 +8254,17 @@ class Castelo:
         introframe_material.pack(side=LEFT)
         labelframe_buttons_material = LabelFrame(introframe_material)
         labelframe_buttons_material.pack(padx=8, pady=5, side=LEFT)
-        Button(labelframe_buttons_material, text="1", width=5).grid(row=0, column=0, ipady=7, padx=5, pady=5)
-        Button(labelframe_buttons_material, text="2", width=5).grid(row=0, column=1, ipady=7, padx=5, pady=5)
-        Button(labelframe_buttons_material, text="3", width=5).grid(row=0, column=2, ipady=7, padx=5, pady=5)
+        Button(labelframe_buttons_material, text="1", width=5,
+               command=lambda: [self.janelaBuscaProduto(14)]).grid(row=0, column=0, ipady=7, padx=5, pady=5)
+        Button(labelframe_buttons_material, text="2", width=5, command=tabelaMaoObra).grid(row=0, column=1, ipady=7, padx=5, pady=5)
+        Button(labelframe_buttons_material, text="3", width=5, command=self.abreCalculadora).grid(row=0, column=2, ipady=7, padx=5, pady=5)
         Button(labelframe_buttons_material, text="Calcular", width=10,
                command=self.insereNumAoClicar).grid(row=0, column=4, ipady=7, padx=15)
         introframe_material2 = Frame(subframe_material2)
         introframe_material2.pack(side=RIGHT, fill=Y, padx=5)
         introframe_material3 = Frame(introframe_material2)
         introframe_material3.pack()
-        self.orc_entry_mao_obra_material = Entry(introframe_material3, width=15, bg=color_entry1)
+        self.orc_entry_mao_obra_material = Entry(introframe_material3, width=15, bg=color_entry1, justify=CENTER)
         self.orc_entry_mao_obra_material.insert(0, self.insereNumConvertido(dados_orc.valor_mao_obra))
         self.orc_entry_mao_obra_material.pack(side=RIGHT)
         Label(introframe_material3, text="Mão de Obra(+)").pack(side=RIGHT, padx=10)
@@ -11783,11 +11879,12 @@ class Castelo:
                                             variable=variable_int_produto,
                                             onvalue=1, offvalue=0)
         check_pesq_avan_estoq.grid(row=1, column=2, sticky=W, padx=5)
-        Button(subframe2, text='Selecionar', command=lambda: [self.elegeProduto(opt), jan.destroy()]).grid(row=0,
-                                                                                                           column=2,
-                                                                                                           ipadx=10,
-                                                                                                           ipady=5)
+        button_selec = Button(subframe2, text='Selecionar', command=lambda: [self.elegeProduto(opt), jan.destroy()])
+        button_selec.grid(row=0, column=2, ipadx=10, ipady=5)
         Button(subframe2, text='Fechar', command=jan.destroy).grid(row=0, column=1, ipadx=20, ipady=5, padx=15)
+
+        if opt == 14:
+            button_selec.config(state=DISABLED)
 
         def popularProdutoEstoquePesqId():
             self.treeview_busca_produto.delete(*self.treeview_busca_produto.get_children())
@@ -14270,23 +14367,6 @@ class Castelo:
         jan.focus_force()
         jan.grab_set()
 
-    def abreCalend(self):
-
-        jan = Toplevel()
-
-        # Centraliza a janela
-        x_cordinate = int((self.w / 2) - (400 / 2))
-        y_cordinate = int((self.h / 2) - (160 / 2))
-        jan.geometry("{}x{}+{}+{}".format(250, 190, x_cordinate, y_cordinate))
-
-        calendar_geral = Calendar(jan, selectmode='none', showweeknumbers=FALSE, showothermonthdays=FALSE,
-                                  firstweekday='sunday', tooltipforeground='yellow')
-        calendar_geral.pack(fill=BOTH, expand=TRUE, padx=10, pady=10)
-
-        jan.transient(root2)
-        jan.focus_force()
-        jan.grab_set()
-
     def abreCalculadora(self):
 
         bg_janela = '#666666'
@@ -14589,6 +14669,7 @@ class Castelo:
         jan.transient(root2)
         jan.focus_force()
         jan.grab_set()
+
 
     @staticmethod
     def __callback():
