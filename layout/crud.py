@@ -536,16 +536,10 @@ class Castelo:
         self.subframe_orc2 = Frame(self.frame_orcamentos, bg=color_orc2)
         self.subframe_orc2.pack(fill=BOTH)
 
-        self.widget_orc1 = Label(self.subframe_orc1, text="Orçamento", fg="white", bg="#110066",
+        self.widget_orc1 = Label(self.subframe_orc1, text="Aluguel", fg="white", bg="#110066",
                                  font=('Verdana', '12', 'bold'))
         self.widget_orc1.pack(side=LEFT, padx=20, pady=10)
-        self.label_os_orc = Label(self.subframe_orc1, bg=color_orc2, text=1, relief=SUNKEN, bd=3,
-                                  font=('verdana', '12', 'bold'), fg="#FFFCE6")
-        self.label_os_orc.config(highlightbackground="black")
-        self.label_os_orc.pack(side=RIGHT, padx=20, ipadx=30)
-        self.widget_orc2 = Label(self.subframe_orc1, text="Ordem De Serviço:", fg="white", bg="#110066",
-                                 font=('Verdana', '12', 'bold'))
-        self.widget_orc2.pack(side=RIGHT)
+
         self.frame1_orc = Frame(self.subframe_orc2, bg=color_orc2)
         self.frame1_orc.pack(fill=X)
         self.labelframe_dadoscli = LabelFrame(self.frame1_orc, text="Alugueis Ativos", bg=color_orc2)
@@ -571,12 +565,12 @@ class Castelo:
                                      show='headings',
                                      xscrollcommand=self.scrll_orc,
                                      selectmode='browse',
-                                     height=6)
+                                     height=5)
         self.tree_orc.column('id', width=0, stretch=False)
-        self.tree_orc.column('saida', width=100, minwidth=70, stretch=False)
+        self.tree_orc.column('saida', width=120, minwidth=70, stretch=False)
         self.tree_orc.column('devolução', width=0, minwidth=70, stretch=False)
         self.tree_orc.column('cliente', width=350, minwidth=80, stretch=False)
-        self.tree_orc.column('maquina', width=300, minwidth=80, stretch=False)
+        self.tree_orc.column('maquina', width=360, minwidth=80, stretch=False)
         self.tree_orc.heading('id', text='ID')
         self.tree_orc.heading('saida', text='SAIDA')
         self.tree_orc.heading('devolução', text='DEVOLUÇÃO')
@@ -601,23 +595,23 @@ class Castelo:
 
         self.frame2_orc = Frame(self.subframe_orc2, bg=color_orc2)
         self.frame2_orc.pack(fill=X)
-        self.labelframe_material = LabelFrame(self.frame2_orc, bg=color_orc2, text="Acessórios")
+        self.labelframe_material = LabelFrame(self.frame2_orc, bg=color_orc2, text="Resumo")
         self.labelframe_material.pack(padx=10, side=LEFT, ipady=5)
         self.subframe_material1 = Frame(self.labelframe_material, bg=color_orc2)
         self.subframe_material1.pack(pady=10)
-        self.quant_entry1 = Entry(self.subframe_material1, width=5, relief=RIDGE)
+        self.quant_entry1 = Label(self.subframe_material1, width=3, text='Qtd.', bg=color_orc2)
         self.quant_entry1.grid(padx=5)
-        self.id_entry1 = Entry(self.subframe_material1, width=5, relief=RIDGE)
+        self.id_entry1 = Label(self.subframe_material1, width=3, text='CP', bg=color_orc2)
         self.id_entry1.grid(row=0, column=1)
-        self.descr_entry1 = Entry(self.subframe_material1, width=50, relief=RIDGE)
+        self.descr_entry1 = Label(self.subframe_material1, width=40, text='Descrição', bg=color_orc2, anchor=W)
         self.descr_entry1.grid(row=0, column=2, padx=5)
-        self.val_uni_entry1 = Entry(self.subframe_material1, width=10, relief=RIDGE)
+        self.val_uni_entry1 = Label(self.subframe_material1, width=5, text='V.Unit.', bg=color_orc2)
         self.val_uni_entry1.grid(row=0, column=3)
-        self.val_total_entry1 = Entry(self.subframe_material1, width=10, relief=RIDGE)
+        self.val_total_entry1 = Label(self.subframe_material1, width=5, text='V.Total', bg=color_orc2)
         self.val_total_entry1.grid(row=0, column=4, padx=5)
         self.quant_entry2 = Entry(self.subframe_material1, width=5, relief=RIDGE)
         self.quant_entry2.grid(row=1, column=0, padx=5)
-        self.id_entry2 = Entry(self.subframe_material1, width=5, relief=RIDGE)
+        self.id_entry2 = Entry(self.subframe_material1, width=10, relief=RIDGE)
         self.id_entry2.grid(row=1, column=1)
         self.descr_entry2 = Entry(self.subframe_material1, width=50, relief=RIDGE)
         self.descr_entry2.grid(row=1, column=2, padx=5)
@@ -627,7 +621,7 @@ class Castelo:
         self.val_total_entry2.grid(row=1, column=4, padx=5)
         self.quant_entry3 = Entry(self.subframe_material1, width=5, relief=RIDGE)
         self.quant_entry3.grid(row=2, column=0, padx=5)
-        self.id_entry3 = Entry(self.subframe_material1, width=5, relief=RIDGE)
+        self.id_entry3 = Entry(self.subframe_material1, width=10, relief=RIDGE)
         self.id_entry3.grid(row=2, column=1)
         self.descr_entry3 = Entry(self.subframe_material1, width=50, relief=RIDGE)
         self.descr_entry3.grid(row=2, column=2, padx=5)
@@ -637,7 +631,7 @@ class Castelo:
         self.val_total_entry3.grid(row=2, column=4, padx=5)
         self.quant_entry4 = Entry(self.subframe_material1, width=5, relief=RIDGE)
         self.quant_entry4.grid(row=3, column=0, padx=5)
-        self.id_entry4 = Entry(self.subframe_material1, width=5, relief=RIDGE)
+        self.id_entry4 = Entry(self.subframe_material1, width=10, relief=RIDGE)
         self.id_entry4.grid(row=3, column=1)
         self.descr_entry4 = Entry(self.subframe_material1, width=50, relief=RIDGE)
         self.descr_entry4.grid(row=3, column=2, padx=5)
@@ -647,7 +641,7 @@ class Castelo:
         self.val_total_entry4.grid(row=3, column=4, padx=5)
         self.quant_entry5 = Entry(self.subframe_material1, width=5, relief=RIDGE)
         self.quant_entry5.grid(row=4, column=0, padx=5)
-        self.id_entry5 = Entry(self.subframe_material1, width=5, relief=RIDGE)
+        self.id_entry5 = Entry(self.subframe_material1, width=10, relief=RIDGE)
         self.id_entry5.grid(row=4, column=1)
         self.descr_entry5 = Entry(self.subframe_material1, width=50, relief=RIDGE)
         self.descr_entry5.grid(row=4, column=2, padx=5)
@@ -657,7 +651,7 @@ class Castelo:
         self.val_total_entry5.grid(row=4, column=4, padx=5)
         self.quant_entry6 = Entry(self.subframe_material1, width=5, relief=RIDGE)
         self.quant_entry6.grid(row=5, column=0, padx=5)
-        self.id_entry6 = Entry(self.subframe_material1, width=5, relief=RIDGE)
+        self.id_entry6 = Entry(self.subframe_material1, width=10, relief=RIDGE)
         self.id_entry6.grid(row=5, column=1)
         self.descr_entry6 = Entry(self.subframe_material1, width=50, relief=RIDGE)
         self.descr_entry6.grid(row=5, column=2, padx=5)
@@ -667,7 +661,7 @@ class Castelo:
         self.val_total_entry6.grid(row=5, column=4, padx=5)
         self.quant_entry7 = Entry(self.subframe_material1, width=5, relief=RIDGE)
         self.quant_entry7.grid(row=6, column=0, padx=5)
-        self.id_entry7 = Entry(self.subframe_material1, width=5, relief=RIDGE)
+        self.id_entry7 = Entry(self.subframe_material1, width=10, relief=RIDGE)
         self.id_entry7.grid(row=6, column=1)
         self.descr_entry7 = Entry(self.subframe_material1, width=50, relief=RIDGE)
         self.descr_entry7.grid(row=6, column=2, padx=5)
@@ -680,20 +674,19 @@ class Castelo:
         self.subframe_material2.pack(fill=X)
         self.introframe_material = Frame(self.subframe_material2, bg=color_orc2)
         self.introframe_material.pack(side=LEFT)
-        self.labelframe_buttons_material = LabelFrame(self.introframe_material, bg=color_orc2)
-        self.labelframe_buttons_material.pack(padx=15, pady=10, side=LEFT)
-        Button(self.labelframe_buttons_material, text="1", width=5).grid(row=0, column=0, ipady=7, padx=5, pady=5)
-        Button(self.labelframe_buttons_material, text="2", width=5).grid(row=0, column=1, ipady=7, padx=5, pady=5)
-        Button(self.labelframe_buttons_material, text="3", width=5).grid(row=0, column=2, ipady=7, padx=5, pady=5)
-        Button(self.labelframe_buttons_material, text="Calcular", width=10).grid(row=0, column=4, ipady=7, padx=15)
+
         self.introframe_material2 = Frame(self.subframe_material2, bg=color_orc2)
         self.introframe_material2.pack(side=RIGHT, fill=Y, padx=5)
-        self.introframe_material3 = Frame(self.introframe_material2, bg=color_orc2)
-        self.introframe_material3.pack()
-        self.entry_mao_obra_material = Entry(self.introframe_material3, width=15)
-        self.entry_mao_obra_material.pack(side=RIGHT)
-        Label(self.introframe_material3, bg=color_orc2, text="Mão de Obra(+)").pack(side=RIGHT)
 
+        self.entry_mao_obra_material = Entry(self.introframe_material2, width=15)
+        self.entry_mao_obra_material.grid(row=0, column=1)
+        Label(self.introframe_material2, bg=color_orc2, text="Caixa Peça").grid(row=0, column=0)
+
+        self.entry_form_pag = Entry(self.introframe_material2, width=15)
+        self.entry_form_pag.grid(row=1, column=1, pady=5)
+        Label(self.introframe_material2, bg=color_orc2, text="Forma de Pag.").grid(row=1, column=0)
+
+        Label(self.introframe_material2, bg=color_orc2).grid(row=2, column=0)
         self.subframe_material3 = Frame(self.labelframe_material, bg=color_orc2)
         self.subframe_material3.pack(fill=X, padx=5)
         self.entry_total_material = Entry(self.subframe_material3, width=20, fg="red")
@@ -701,24 +694,25 @@ class Castelo:
         Label(self.subframe_material3, bg=color_orc2, text="Total do Serviço").pack(side=RIGHT, padx=25)
 
         self.frame3_orc = Frame(self.frame2_orc, bg=color_orc2)
-        self.frame3_orc.pack(side=LEFT, padx=10, fill=BOTH)
+        self.frame3_orc.pack(side=LEFT, fill=BOTH)
         self.labelframe_orc_dadosap = LabelFrame(self.frame3_orc, text="Dados do Aluguel", bg=color_orc2)
         self.labelframe_orc_dadosap.pack( )
         self.sub_dados_alug = Frame(self.labelframe_orc_dadosap, bg=color_orc2)
         self.sub_dados_alug.pack(fill=BOTH, padx=10, pady=10)
 
-        Label(self.sub_dados_alug, text='Cliente:', bg=color_orc2, font=font_dados_alug).grid(column=0, row=0,
+        Label(self.sub_dados_alug, text='ID:', bg=color_orc2, font=font_dados_alug).grid(column=0, row=0, sticky=W)
+        Label(self.sub_dados_alug, text='Cliente:', bg=color_orc2, font=font_dados_alug).grid(column=0, row=1,
                                                                                                        sticky=W)
-        Label(self.sub_dados_alug, text='Telefone:', bg=color_orc2, font=font_dados_alug).grid(column=0, row=1,
+        Label(self.sub_dados_alug, text='Telefone:', bg=color_orc2, font=font_dados_alug).grid(column=0, row=2,
                                                                                                     sticky=W)
-        Label(self.sub_dados_alug, text='Aparelho:', bg=color_orc2, font=font_dados_alug).grid(column=0, row=2, sticky=W)
-        Label(self.sub_dados_alug, text='Marca:', bg=color_orc2, font=font_dados_alug).grid(column=0, row=3, sticky=W)
-        Label(self.sub_dados_alug, text='Modelo:', bg=color_orc2, font=font_dados_alug).grid(column=0, row=4, sticky=W)
-        Label(self.sub_dados_alug, text='N/Serie:', bg=color_orc2, font=font_dados_alug).grid(column=0, row=5, sticky=W)
-        Label(self.sub_dados_alug, text='Dias Loc.:', bg=color_orc2, font=font_dados_alug).grid(column=0, row=6, sticky=W)
-        Label(self.sub_dados_alug, text='Saída:', bg=color_orc2, font=font_dados_alug).grid(column=0, row=7, sticky=W)
-        Label(self.sub_dados_alug, text='Devolução:', bg=color_orc2, font=font_dados_alug).grid(column=0, row=8, sticky=W)
-        Label(self.sub_dados_alug, text='Pago:', bg=color_orc2, font=font_dados_alug).grid(column=0, row=9, sticky=W)
+        Label(self.sub_dados_alug, text='Aparelho:', bg=color_orc2, font=font_dados_alug).grid(column=0, row=3, sticky=W)
+        Label(self.sub_dados_alug, text='Marca:', bg=color_orc2, font=font_dados_alug).grid(column=0, row=4, sticky=W)
+        Label(self.sub_dados_alug, text='Modelo:', bg=color_orc2, font=font_dados_alug).grid(column=0, row=5, sticky=W)
+        Label(self.sub_dados_alug, text='N/Serie:', bg=color_orc2, font=font_dados_alug).grid(column=0, row=6, sticky=W)
+        Label(self.sub_dados_alug, text='Dias Loc.:', bg=color_orc2, font=font_dados_alug).grid(column=0, row=7, sticky=W)
+        Label(self.sub_dados_alug, text='Saída:', bg=color_orc2, font=font_dados_alug).grid(column=0, row=8, sticky=W)
+        Label(self.sub_dados_alug, text='Devolução:', bg=color_orc2, font=font_dados_alug).grid(column=0, row=9, sticky=W)
+        Label(self.sub_dados_alug, text='Pago:', bg=color_orc2, font=font_dados_alug).grid(column=0, row=10, sticky=W)
         Label(self.sub_dados_alug, text='Lavadora Alta Pressão', bg=color_orc2, fg="red", font=font_dados_alug2).grid(column=1, row=2,
                                                                                                        sticky=W,
                                                                                                        padx=10)
@@ -730,25 +724,55 @@ class Castelo:
                                                                                              padx=10)
 
         self.frame5_orc = Frame(self.subframe_orc2, bg=color_orc2)
-        self.frame5_orc.pack(fill=X)
+        self.frame5_orc.pack(fill=BOTH)
 
         self.introframe_orc_material = Frame(self.frame5_orc, bg=color_orc2)
-        self.introframe_orc_material.pack(side=LEFT, padx=10)
+        self.introframe_orc_material.pack(side=LEFT, padx=10, fill=BOTH)
         self.labelframe_orc_coment = LabelFrame(self.introframe_orc_material, text="Comentários", bg=color_orc2)
         self.labelframe_orc_coment.pack()
-        Entry(self.labelframe_orc_coment, width=65).pack(padx=5, pady=5)
-        Entry(self.labelframe_orc_coment, width=65).pack()
-        Entry(self.labelframe_orc_coment, width=65).pack(pady=5)
-        Entry(self.labelframe_orc_coment, width=65).pack()
-        Entry(self.labelframe_orc_coment, width=65).pack(pady=5)
+        Entry(self.labelframe_orc_coment, width=140).pack(padx=5, pady=5)
+        Entry(self.labelframe_orc_coment, width=140).pack()
+        Entry(self.labelframe_orc_coment, width=140).pack(pady=5)
 
+        self.frame6_orc = Frame(self.subframe_orc2, bg=color_orc2)
+        self.frame6_orc.pack(fill=BOTH)
 
-        self.introframe_orc_material2 = Frame(self.introframe_orc_material, bg=color_orc2)
-        self.introframe_orc_material2.pack(fill=X)
-        self.labelframe_validade = LabelFrame(self.introframe_orc_material2, bg=color_orc2, text="Validade")
-        self.labelframe_validade.pack(side=LEFT, ipadx=20)
-        Entry(self.labelframe_validade, width=3, justify=CENTER).pack(side=LEFT, padx=5, pady=5)
-        Label(self.labelframe_validade, bg=color_orc2, text="Dias").pack(side=LEFT, padx=10)
+        self.labelframe_maq_disp = LabelFrame(self.frame6_orc, text="Máquinas Disponíveis para Aluguel", bg=color_orc2)
+        self.labelframe_maq_disp.pack(side=LEFT, pady=10, padx=10)
+        self.mini_fram = Frame(self.labelframe_maq_disp, bg=color_orc2)
+        self.mini_fram.pack(fill=BOTH, pady=5, padx=5, side=LEFT)
+
+        self.mini_fram2 = Frame(self.labelframe_maq_disp, bg=color_orc2)
+        self.mini_fram2.pack(fill=BOTH, pady=5, padx=5, side=LEFT)
+
+        self.scrll_maq_disp = Scrollbar(self.mini_fram, orient=HORIZONTAL)
+        self.tree_maq_disp = ttk.Treeview(self.mini_fram,
+                                     columns=('id', 'maquina', 'marca', 'ident', 'valor'),
+                                     show='headings',
+                                     xscrollcommand=self.scrll_orc,
+                                     selectmode='browse',
+                                     height=4)
+        self.tree_maq_disp.column('id', width=0, stretch=False)
+        self.tree_maq_disp.column('maquina', width=200, minwidth=70, stretch=False)
+        self.tree_maq_disp.column('marca', width=350, minwidth=70, stretch=False)
+        self.tree_maq_disp.column('ident', width=75, minwidth=80, stretch=False)
+        self.tree_maq_disp.column('valor', width=125, minwidth=80, stretch=False)
+        self.tree_maq_disp.heading('id', text='ID')
+        self.tree_maq_disp.heading('maquina', text='MÁQUINA')
+        self.tree_maq_disp.heading('marca', text='MARCA')
+        self.tree_maq_disp.heading('ident', text='ID')
+        self.tree_maq_disp.heading('valor', text='VALOR ALUG.')
+
+        self.scrll_maq_disp.config(command=self.tree_maq_disp.xview)
+        self.tree_maq_disp.pack()
+        self.scrll_maq_disp.pack(fill=X)
+
+        self.tree_maq_disp.tag_configure('oddrow', background='#ffffe1')
+        self.tree_maq_disp.tag_configure('evenrow', background='#F2EDDC')
+
+        Button(self.mini_fram2, text='Adicionar', width=10).pack()
+        Button(self.mini_fram2, text='Remover', width=10).pack(pady=10)
+        Button(self.mini_fram2, text='Editar', width=10).pack()
 
         # ------------------------------- Janela Aparelhos em Manutenção------------------------------------------------
         osVar = StringVar(master)
