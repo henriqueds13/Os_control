@@ -586,7 +586,7 @@ class Castelo:
 
         self.sf_alugueis_buttons = Frame(self.labelframe_dadoscli, bg=color_orc2)
         self.sf_alugueis_buttons.pack(fill=X, padx=10, pady=10)
-        Button(self.sf_alugueis_buttons, text="Novo Aluguel", width=10).pack(side=LEFT, ipadx=5, ipady=5)
+        Button(self.sf_alugueis_buttons, text="Novo Aluguel", width=10, command=self.janelaNovoAluguel).pack(side=LEFT, ipadx=5, ipady=5)
         Button(self.sf_alugueis_buttons, text="Editar", width=10).pack(side=LEFT, ipadx=5, ipady=5, padx=10)
         Button(self.sf_alugueis_buttons, text="Dar Baixa", width=10).pack(side=LEFT, pady=5, ipadx=5, ipady=5)
 
@@ -14688,6 +14688,545 @@ class Castelo:
         button_sp.bind('<Leave>', on_leave)
 
         jan.bind('<Key>', apertaTecla)
+
+
+        jan.transient(root2)
+        jan.focus_force()
+        jan.grab_set()
+
+    def janelaNovoAluguel(self):
+
+        bg_tela = '#015958'
+        bg_entry = '#C5D7D9'
+
+        color_entry1 = '#ffffe1'
+        color_entry2 = '#ffff80'
+
+        jan = Toplevel(bg=bg_tela)
+
+        # Centraliza a janela
+        x_cordinate = int((self.w / 2) - (1030 / 2))
+        y_cordinate = int((self.h / 2) - (625 / 2))
+        jan.geometry("{}x{}+{}+{}".format(1030, 625, x_cordinate, y_cordinate))
+
+        self.lista_produto_venda = []
+        self.venda_valor_total_add = 0
+
+        # --------------------------------------------------------------------------------------
+
+        osVar1 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar1.set(osVar1.get().upper())
+
+        osVar1.trace_add('write', to_uppercase)
+
+        osVar2 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar2.set(osVar2.get().upper())
+
+        osVar2.trace_add('write', to_uppercase)
+
+        osVar3 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar3.set(osVar3.get().upper())
+
+        osVar3.trace_add('write', to_uppercase)
+
+        osVar4 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar4.set(osVar4.get().upper())
+
+        osVar4.trace_add('write', to_uppercase)
+
+        osVar5 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar5.set(osVar5.get().upper())
+
+        osVar5.trace_add('write', to_uppercase)
+
+        osVar6 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar6.set(osVar6.get().upper())
+
+        osVar6.trace_add('write', to_uppercase)
+
+        osVar7 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar7.set(osVar7.get().upper())
+
+        osVar7.trace_add('write', to_uppercase)
+
+        osVar8 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar8.set(osVar8.get().upper())
+
+        osVar8.trace_add('write', to_uppercase)
+
+        osVar9 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar9.set(osVar9.get().upper())
+
+        osVar9.trace_add('write', to_uppercase)
+
+        osVar10 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar10.set(osVar10.get().upper())
+
+        osVar10.trace_add('write', to_uppercase)
+
+        osVar11 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar11.set(osVar11.get().upper())
+
+        osVar11.trace_add('write', to_uppercase)
+
+        osVar12 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar12.set(osVar12.get().upper())
+
+        osVar12.trace_add('write', to_uppercase)
+
+
+        # --------------------------------------------------------------------------------------
+
+        repositorio = produto_repositorio.ProdutoRepositorio()
+
+        def atualizarValorFinalDesc(event):
+            atualizarValorFinal()
+
+        def atualizarValorFinal():
+            desconto = self.venda_valor_total_add - self.formataParaFloat(self.venda_desconto.get())
+            self.venda_label_total.config(text=self.insereTotalConvertido(desconto))
+
+        def popularEntradaProdutoVenda(id_prod):
+            repositorio = produto_repositorio.ProdutoRepositorio()
+            produto = repositorio.listar_produto_id_fabr(id_prod, sessao)
+            tree_est_venda.insert('', 'end',
+                                  values=(
+                                      produto.id_fabr, produto.descricao,
+                                      self.insereTotalConvertido(produto.valor_venda), self.venda_qtd_item.get(),
+                                      self.insereTotalConvertido(int(self.venda_qtd_item.get()) * produto.valor_venda)))
+
+        def popularEditProdutoVendaEstoque(id_est):
+            repositorio = produto_venda_repositorio.ProdutoVendaRepositorio()
+            produtos = repositorio.listar_produtos_venda_id_venda(id_est, sessao)
+            for i in produtos:
+                tree_est_venda.insert('', 'end',
+                                      values=(i.id_fabr, i.descricao,
+                                              self.insereTotalConvertido(i.valor_un), i.qtd,
+                                              self.insereTotalConvertido(
+                                                  i.valor_un * i.qtd)))
+
+        def addProdutoestoque(id_prod, qtd):
+            produto = repositorio.listar_produto_id_fabr(id_prod, sessao)
+            if id_prod != '' and qtd != 0:
+                self.lista_produto_venda.append([id_prod, qtd, produto.caixa_peca])
+                popularEntradaProdutoVenda(self.venda_cod_item.get())
+                self.venda_cod_item.config(state=NORMAL)
+                self.venda_cod_item.delete(0, END)
+                self.venda_cod_item.config(stat=DISABLED)
+                self.venda_descr_item.config(state=NORMAL)
+                self.venda_descr_item.delete(0, END)
+                self.venda_descr_item.config(stat=DISABLED)
+                self.venda_preco_item.config(state=NORMAL)
+                self.venda_preco_item.delete(0, END)
+                self.venda_preco_item.config(stat=DISABLED)
+                self.venda_qtd_item.delete(0, END)
+
+                self.venda_valor_total_add += produto.valor_venda * qtd
+                self.venda_label_subtotal.config(text=self.insereTotalConvertido(self.venda_valor_total_add))
+                atualizarValorFinal()
+
+        def removeProdutoEstoque():
+            item_selecionado = tree_est_venda.focus()
+            dados_prod = tree_est_venda.item(item_selecionado, 'values')
+            self.lista_produto_venda[int(item_selecionado[1:]) - 1] = 0
+            tree_est_venda.delete(item_selecionado)
+            self.venda_valor_total_add -= self.formataParaFloat(dados_prod[2].split()[1]) * int(dados_prod[3])
+            self.venda_label_subtotal.config(text=self.insereTotalConvertido(self.venda_valor_total_add))
+            atualizarValorFinal()
+
+        def cadastraProduto(event):
+            addProdutoestoque(self.venda_cod_item.get(), self.formataParaIteiro(self.venda_qtd_item.get()))
+
+        def habilitaEntryOption(opt):
+            if opt != 2:
+                self.venda_cod_item.config(state=NORMAL)
+                self.venda_cod_item.config(bg='white')
+
+        def habilitaEntry(event):
+            habilitaEntryOption(opt)
+
+        def procuraCod(event):
+            codigo = self.venda_cod_item.get()
+
+            try:
+                produto = repositorio.listar_produto_id_fabr(codigo, sessao)
+                self.venda_descr_item.config(state=NORMAL)
+                self.venda_descr_item.delete(0, END)
+                self.venda_descr_item.insert(0, produto.descricao)
+                self.venda_descr_item.config(state=DISABLED)
+                self.venda_preco_item.config(state=NORMAL)
+                self.venda_preco_item.delete(0, END)
+                self.venda_preco_item.insert(0, self.insereNumConvertido(produto.valor_venda))
+                self.venda_preco_item.config(state=DISABLED)
+                self.venda_qtd_item.delete(0, END)
+                self.venda_qtd_item.insert(0, 1)
+                self.venda_cod_item.config(state=DISABLED)
+
+            except:
+                self.venda_cod_item.config(bg='red')
+                self.venda_descr_item.config(state=NORMAL)
+                self.venda_descr_item.delete(0, END)
+                self.venda_descr_item.config(state=DISABLED)
+                self.venda_preco_item.config(state=NORMAL)
+                self.venda_preco_item.delete(0, END)
+                self.venda_preco_item.config(state=DISABLED)
+                self.venda_qtd_item.delete(0, END)
+                self.venda_qtd_item.insert(0, 1)
+
+        def atualizaValorAreceber():
+            dinheiro = self.formataParaFloat(self.venda_entry_dinh.get())
+            cheque = self.formataParaFloat(self.venda_entry_cheque.get())
+            cdebito = self.formataParaFloat(self.venda_entry_cdebito.get())
+            ccredito = self.formataParaFloat(self.venda_entry_ccredito.get())
+            pix = self.formataParaFloat(self.venda_entry_pix.get())
+            outros = self.formataParaFloat(self.venda_entry_outros.get())
+
+            soma_total = dinheiro + cheque + cdebito + ccredito + pix + outros
+
+            self.venda_valor_areceber.config(text=self.insereTotalConvertido(soma_total))
+
+        def atualizaValorArecebeButton(event):
+            atualizaValorAreceber()
+
+        def concederAcesso6(*args):
+            repositorio_tec = tecnico_repositorio.TecnicoRepositorio()
+            if len(op_venda.get()) == 4:
+                for i in self.operadores_total:
+                    if int(op_venda.get()) == int(i[0]):
+                        acess_tec = repositorio_tec.listar_tecnico_senha(int(i[0]), sessao)
+                        self.venda_button_confirma.configure(state=NORMAL)
+                        self.venda_vendedor.delete(0, END)
+                        self.venda_vendedor.configure(validate='none', show='')
+                        self.venda_vendedor.insert(0, i[1])
+                        self.venda_vendedor.configure(state=DISABLED)
+                        self.id_operador = int(acess_tec.id)
+                        return
+                self.venda_vendedor.delete(0, END)
+                messagebox.showinfo(title="ERRO", message="Operador Não Cadastrado!")
+
+        frame_princ = Frame(jan, bg=bg_tela)
+        frame_princ.pack(fill=BOTH)
+        frame_princ1 = Frame(frame_princ, bg=bg_tela)
+        frame_princ1.pack(fill=BOTH, padx=10, pady=10)
+
+        subframe_cliente = Frame(frame_princ1, bg=bg_tela)
+        subframe_cliente.pack(fill=X)
+        Label(subframe_cliente, text='Cliente', bg=bg_tela).grid(row=0, column=0, sticky=W)
+        venda_cliente = Entry(subframe_cliente, width=150, textvariable=osVar1, bg=bg_entry)
+        venda_cliente.grid(row=1, column=0, sticky=W)
+        venda_button_busca_cliente = Button(subframe_cliente, text='Buscar',
+                                                 command=lambda: [self.janelaBuscaCliente(1)])
+        venda_button_busca_cliente.grid(row=1, column=1, padx=10, ipadx=10)
+
+        testa_float = jan.register(self.testaEntradaFloat)
+        testa_inteiro = jan.register(self.testaEntradaInteiro)
+
+        subframe_prod = Frame(frame_princ1, bg=bg_tela)
+        subframe_prod.pack(fill=X, pady=10)
+        frame_prod = LabelFrame(subframe_prod, bg=bg_tela)
+        frame_prod.grid(row=0, column=0, sticky=W, ipady=3)
+        Label(frame_prod, text='Equipamento', bg=bg_tela).grid(sticky=W, padx=10)
+        venda_cod_item = Entry(frame_prod, width=135, textvariable=osVar2, bg=bg_entry)
+        venda_cod_item.config(state=DISABLED)
+        venda_cod_item.grid(row=1, column=0, sticky=W, padx=10)
+
+        venda_button_busca_prod = Button(frame_prod, text='Buscar', command=lambda: [self.janelaBuscaProduto(4)])
+        venda_button_busca_prod.grid(row=1, column=4, padx=10, ipadx=10)
+
+        subframe_prod1 = Frame(frame_princ1, bg=bg_tela)
+        subframe_prod1.pack(fill=BOTH)
+
+        labelframe_material = LabelFrame(subframe_prod1, text="Acessorios")
+        labelframe_material.grid(sticky=W)
+        subframe_material1 = Frame(labelframe_material)
+        subframe_material1.pack(pady=10)
+        Label(subframe_material1, text="EST").grid(row=0, column=0, pady=2, padx=10)
+        Label(subframe_material1, text="Qtd").grid(row=0, column=1, pady=2)
+        Label(subframe_material1, text="CP").grid(row=0, column=2)
+        Label(subframe_material1, text="Descrição").grid(row=0, column=3, pady=2, sticky=W, ipadx=10)
+        Label(subframe_material1, text="Valor Un.").grid(row=0, column=4)
+        Label(subframe_material1, text="Valor (R$)").grid(row=0, column=5, pady=2)
+        Button(subframe_material1, width=3, text="E", command=lambda: [self.janelaBuscaProduto(5)]).grid(row=1,
+                                                                                                         column=0)
+        Button(subframe_material1, width=3, text="E", command=lambda: [self.janelaBuscaProduto(6)]).grid(row=2,
+                                                                                                         column=0,
+                                                                                                         pady=2)
+        Button(subframe_material1, width=3, text="E", command=lambda: [self.janelaBuscaProduto(7)]).grid(row=3,
+                                                                                                         column=0)
+        Button(subframe_material1, width=3, text="E", command=lambda: [self.janelaBuscaProduto(8)]).grid(row=4,
+                                                                                                         column=0,
+                                                                                                         pady=2)
+        Button(subframe_material1, width=3, text="E", command=lambda: [self.janelaBuscaProduto(9)]).grid(row=5,
+                                                                                                         column=0)
+        Button(subframe_material1, width=3, text="E", command=lambda: [self.janelaBuscaProduto(10)]).grid(row=6,
+                                                                                                          column=0,
+                                                                                                          pady=2)
+
+        self.orc_quant_entry1 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all', bg=color_entry1,
+                                      validatecommand=(testa_inteiro, '%P'))
+        self.orc_quant_entry1.grid(row=1, column=1, padx=5)
+        self.orc_id_entry1 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
+                                   validatecommand=(testa_float, '%P'))
+        self.orc_id_entry1.grid(row=1, column=2)
+        self.orc_descr_entry1 = Entry(subframe_material1, width=58, relief=SUNKEN, bg=color_entry1,
+                                      textvariable=osVar7)
+        self.orc_descr_entry1.grid(row=1, column=3, padx=5)
+        self.orc_val_uni_entry1 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
+                                        validatecommand=(testa_float, '%P'))
+        self.orc_val_uni_entry1.grid(row=1, column=4)
+        self.orc_val_total_entry1 = Label(subframe_material1, text='',
+                                          width=10, relief=SUNKEN, bd=2, bg=color_entry2)
+        self.orc_val_total_entry1.grid(row=1, column=5, padx=5)
+        self.orc_quant_entry2 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all', bg=color_entry1,
+                                      validatecommand=(testa_inteiro, '%P'))
+        self.orc_quant_entry2.grid(row=2, column=1, padx=5)
+        self.orc_id_entry2 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
+                                   validatecommand=(testa_float, '%P'))
+        self.orc_id_entry2.grid(row=2, column=2)
+        self.orc_descr_entry2 = Entry(subframe_material1, width=58, relief=SUNKEN, bg=color_entry1,
+                                      textvariable=osVar8)
+        self.orc_descr_entry2.grid(row=2, column=3, padx=5)
+        self.orc_val_uni_entry2 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
+                                        validatecommand=(testa_float, '%P'))
+        self.orc_val_uni_entry2.grid(row=2, column=4)
+        self.orc_val_total_entry2 = Label(subframe_material1, text='',
+                                          width=10, relief=SUNKEN, bd=2, bg=color_entry2)
+        self.orc_val_total_entry2.grid(row=2, column=5, padx=5)
+        self.orc_quant_entry3 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all', bg=color_entry1,
+                                      validatecommand=(testa_inteiro, '%P'))
+        self.orc_quant_entry3.grid(row=3, column=1, padx=5)
+        self.orc_id_entry3 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
+                                   validatecommand=(testa_float, '%P'))
+        self.orc_id_entry3.grid(row=3, column=2)
+        self.orc_descr_entry3 = Entry(subframe_material1, width=58, relief=SUNKEN, bg=color_entry1,
+                                      textvariable=osVar9)
+        self.orc_descr_entry3.grid(row=3, column=3, padx=5)
+        self.orc_val_uni_entry3 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
+                                        validatecommand=(testa_float, '%P'))
+        self.orc_val_uni_entry3.grid(row=3, column=4)
+        self.orc_val_total_entry3 = Label(subframe_material1, text='',
+                                          width=10, relief=SUNKEN, bd=2, bg=color_entry2)
+        self.orc_val_total_entry3.grid(row=3, column=5, padx=5)
+        self.orc_quant_entry4 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all', bg=color_entry1,
+                                      validatecommand=(testa_inteiro, '%P'))
+        self.orc_quant_entry4.grid(row=4, column=1, padx=5)
+        self.orc_id_entry4 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
+                                   validatecommand=(testa_float, '%P'))
+        self.orc_id_entry4.grid(row=4, column=2)
+        self.orc_descr_entry4 = Entry(subframe_material1, width=58, relief=SUNKEN, bg=color_entry1,
+                                      textvariable=osVar10)
+        self.orc_descr_entry4.grid(row=4, column=3, padx=5)
+        self.orc_val_uni_entry4 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
+                                        validatecommand=(testa_float, '%P'))
+        self.orc_val_uni_entry4.grid(row=4, column=4)
+        self.orc_val_total_entry4 = Label(subframe_material1, text='',
+                                          width=10, relief=SUNKEN, bd=2, bg=color_entry2)
+        self.orc_val_total_entry4.grid(row=4, column=5, padx=5)
+        self.orc_quant_entry5 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all', bg=color_entry1,
+                                      validatecommand=(testa_inteiro, '%P'))
+        self.orc_quant_entry5.grid(row=5, column=1, padx=5)
+        self.orc_id_entry5 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
+                                   validatecommand=(testa_float, '%P'))
+        self.orc_id_entry5.grid(row=5, column=2)
+        self.orc_descr_entry5 = Entry(subframe_material1, width=58, relief=SUNKEN, bg=color_entry1,
+                                      textvariable=osVar11)
+        self.orc_descr_entry5.grid(row=5, column=3, padx=5)
+        self.orc_val_uni_entry5 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
+                                        validatecommand=(testa_float, '%P'))
+        self.orc_val_uni_entry5.grid(row=5, column=4)
+        self.orc_val_total_entry5 = Label(subframe_material1, text='',
+                                          width=10, relief=SUNKEN, bd=2, bg=color_entry2)
+        self.orc_val_total_entry5.grid(row=5, column=5, padx=5)
+        self.orc_quant_entry6 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all', bg=color_entry1,
+                                      validatecommand=(testa_inteiro, '%P'))
+        self.orc_quant_entry6.grid(row=6, column=1, padx=5)
+        self.orc_id_entry6 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
+                                   validatecommand=(testa_float, '%P'))
+        self.orc_id_entry6.grid(row=6, column=2)
+        self.orc_descr_entry6 = Entry(subframe_material1, width=58, relief=SUNKEN, bg=color_entry1,
+                                      textvariable=osVar12)
+        self.orc_descr_entry6.grid(row=6, column=3, padx=5)
+        self.orc_val_uni_entry6 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
+                                        validatecommand=(testa_float, '%P'))
+        self.orc_val_uni_entry6.grid(row=6, column=4)
+        self.orc_val_total_entry6 = Label(subframe_material1, text='',
+                                          width=10, relief=SUNKEN, bd=2, bg=color_entry2)
+        self.orc_val_total_entry6.grid(row=6, column=5, padx=5)
+
+        subframe_material2 = Frame(labelframe_material)
+        subframe_material2.pack(fill=BOTH)
+
+        subframe_material3 = Frame(subframe_material2)
+        subframe_material3.pack(side=RIGHT, padx=10, fill=Y)
+
+        self.entry_mao_obra_material = Entry(subframe_material3, width=15)
+        self.entry_mao_obra_material.grid(row=0, column=1, sticky=E)
+        Label(subframe_material3, text="Caixa Peça").grid(row=0, column=0, sticky=E)
+
+        self.entry_form_pag = Entry(subframe_material3, width=15)
+        self.entry_form_pag.grid(row=1, column=1, pady=5, sticky=E)
+        Label(subframe_material3, text="Forma de Pag.").grid(row=1, column=0, sticky=E)
+
+        Label(subframe_material3).grid(row=2, column=0)
+        subframe_material4 = Frame(subframe_material3)
+        subframe_material4.grid(row=3, column=0, sticky=E, columnspan=2)
+        self.entry_total_material = Entry(subframe_material4, width=20, fg="red")
+        self.entry_total_material.pack(side=RIGHT)
+        Label(subframe_material4, text="Total do Serviço").pack(side=RIGHT, padx=10)
+
+
+
+        labelframe_form_pag = LabelFrame(subframe_prod1, text="Forma de Pagamento", bg=bg_tela)
+        labelframe_form_pag.grid(row=0, column=1, sticky=NW, padx=10)
+        subframe_form_pag1 = Frame(labelframe_form_pag, bg=bg_tela)
+        subframe_form_pag1.pack(padx=15, pady=18)
+        Label(subframe_form_pag1, text="Dinheiro", fg="red", anchor=E, font=('Verdana', "10", ""), bg=bg_tela).grid(
+            row=0, column=0,
+            padx=5)
+        venda_entry_dinh = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all',
+                                      validatecommand=(testa_float, '%P'), bg=bg_entry)
+        venda_entry_dinh.grid(row=0, column=1, padx=5)
+        Label(subframe_form_pag1, text="Cheque", fg="red", anchor=E, font=('Verdana', "10", ""), bg=bg_tela).grid(row=1,
+                                                                                                                  column=0,
+                                                                                                                  padx=5,
+                                                                                                                  pady=5)
+        venda_entry_cheque = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all',
+                                        validatecommand=(testa_float, '%P'), bg=bg_entry)
+        venda_entry_cheque.grid(row=1, column=1, padx=5)
+        Label(subframe_form_pag1, text="Cartão de Crédito", fg="red", anchor=E, font=('Verdana', "10", ""),
+              bg=bg_tela).grid(row=2,
+                               column=0,
+                               padx=5)
+        venda_entry_ccredito = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all',
+                                          validatecommand=(testa_float, '%P'), bg=bg_entry)
+        venda_entry_ccredito.grid(row=2, column=1, padx=5)
+        Label(subframe_form_pag1, text="Cartão de Débito", fg="red", anchor=E, font=('Verdana', "10", ""),
+              bg=bg_tela).grid(row=3,
+                               column=0,
+                               padx=5,
+                               pady=5)
+        venda_entry_cdebito = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all',
+                                         validatecommand=(testa_float, '%P'), bg=bg_entry)
+        venda_entry_cdebito.grid(row=3, column=1, padx=5)
+        Label(subframe_form_pag1, text="PIX", fg="red", anchor=E, font=('Verdana', "10", ""), bg=bg_tela).grid(row=4,
+                                                                                                               column=0,
+                                                                                                               padx=5)
+        venda_entry_pix = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all',
+                                     validatecommand=(testa_float, '%P'), bg=bg_entry)
+        venda_entry_pix.grid(row=4, column=1, padx=5)
+        Label(subframe_form_pag1, text="Outros", fg="red", anchor=E, font=('Verdana', "10", ""), bg=bg_tela).grid(row=5,
+                                                                                                                  column=0,
+                                                                                                                  padx=5,
+                                                                                                                  pady=5)
+        venda_entry_outros = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all',
+                                        validatecommand=(testa_float, '%P'), bg=bg_entry)
+        venda_entry_outros.grid(row=5, column=1, padx=5)
+        subframe_form_pag2 = Frame(labelframe_form_pag, bg=bg_tela)
+        subframe_form_pag2.pack(padx=10, fill=X, side=LEFT)
+        labelframe_valor_rec = LabelFrame(subframe_form_pag2, bg=bg_tela)
+        labelframe_valor_rec.grid(row=0, column=0, sticky=W, pady=5)
+        Label(labelframe_valor_rec, text="Valor à Receber:", bg=bg_tela).pack(padx=20)
+        venda_valor_areceber = Label(labelframe_valor_rec, text="R$ 0,00", font=("", "12", ""), fg="red",
+                                          bg=bg_tela)
+        venda_valor_areceber.pack(fill=X, pady=5)
+        venda_valor_areceber.configure(width=10, height=1)
+        venda_valor_areceber.grid_propagate(0)
+        venda_button_salvar = Button(subframe_form_pag2, text="Salvar", width=8, command=atualizaValorAreceber)
+        venda_button_salvar.grid(row=1, column=0, sticky=W, pady=5, padx=30)
+        subframe_form_pag3 = Frame(labelframe_form_pag, bg=bg_tela)
+        subframe_form_pag3.pack(padx=5, fill=BOTH, side=LEFT, pady=7)
+        Label(subframe_form_pag3, text=3, width=21, height=6, bg='gray').pack()
+
+        labelframe_pag_coment = LabelFrame(subframe_prod1, text="Observações de Pagamento", bg=bg_tela)
+        labelframe_pag_coment.grid(row=1, column=0, sticky=W)
+        venda_obs1 = Entry(labelframe_pag_coment, width=108, textvariable=osVar4, bg=bg_entry)
+        venda_obs1.pack(padx=5, pady=5)
+        venda_obs2 = Entry(labelframe_pag_coment, width=108, textvariable=osVar5, bg=bg_entry)
+        venda_obs2.pack(padx=5)
+        venda_obs3 = Entry(labelframe_pag_coment, width=108, textvariable=osVar6, bg=bg_entry)
+        venda_obs3.pack(pady=5, padx=5)
+
+        labelframe_desc_vend = LabelFrame(subframe_prod1, bg=bg_tela)
+        labelframe_desc_vend.grid(row=1, column=1, sticky=SW, padx=10, ipady=1, ipadx=5)
+        frame_descr_vend = Frame(labelframe_desc_vend, bg=bg_tela)
+        frame_descr_vend.pack(fill=BOTH, padx=2, pady=10)
+        Label(frame_descr_vend, text='SubTotal:', bg=bg_tela).grid()
+        venda_label_subtotal = Label(frame_descr_vend, text='R$0,00', fg='blue', font=('', '12', ''), bg=bg_tela)
+        venda_label_subtotal.grid(row=0, column=1)
+        venda_label_subtotal.configure(height=1, width=10)
+        venda_label_subtotal.grid_propagate(0)
+        Label(frame_descr_vend, text='desconto:', bg=bg_tela).grid(row=1, column=0)
+        venda_desconto = Entry(frame_descr_vend, width=10, validate='all', validatecommand=(testa_float, '%P'),
+                                    bg=bg_entry)
+        venda_desconto.grid(row=1, column=1)
+        Label(frame_descr_vend, width=2, bg=bg_tela).grid(row=0, column=2, padx=1)
+        frame_valor_total = LabelFrame(frame_descr_vend, bg=bg_tela)
+        frame_valor_total.grid(row=0, column=3, rowspan=2, padx=0)
+        Label(frame_valor_total, text='TOTAL:', font=('verdana', '12', 'bold'), bg=bg_tela).pack(pady=1, padx=30)
+        venda_label_total = Label(frame_valor_total, text='R$0,00', font=('verdana', '13', 'bold'), fg='red',
+                                       bg=bg_tela)
+        venda_label_total.pack(padx=5, pady=1)
+        venda_label_total.configure(width=10, height=1)
+        venda_label_total.grid_propagate(0)
+
+        frame_orcamento = Frame(subframe_prod1, bg=bg_tela)
+        frame_orcamento.grid(row=2, column=0, sticky=W)
+        venda_button_orcamento = Button(frame_orcamento, text='Orçamento')
+        venda_button_orcamento.grid(row=0, column=0, ipady=10, ipadx=10, sticky=W)
+        Label(frame_orcamento, width=56, bg=bg_tela).grid(row=0, column=1)
+        Label(frame_orcamento, text="Vendedor:", bg=bg_tela).grid(row=0, column=2, padx=10)
+        global op_venda
+        op_venda = StringVar()
+        op_venda.trace_add('write', concederAcesso6)
+        venda_vendedor = Entry(frame_orcamento, width=15, justify=RIGHT, relief=SUNKEN, bd=2, show='*',
+                                    textvariable=op_venda)
+        venda_vendedor.grid(row=0, column=3)
+
+        frame_button_confirma = Frame(subframe_prod1, bg=bg_tela)
+        frame_button_confirma.grid(row=2, column=1, pady=10, sticky=E)
+        venda_button_fechar = Button(frame_button_confirma, text='Fechar', command=jan.destroy)
+        venda_button_fechar.pack(side=LEFT, ipady=10, ipadx=30)
+        venda_button_confirma = Button(frame_button_confirma, text='Confirmar Venda',
+                                            command=lambda: [atualizaValorAreceber(),
+                                                             atualizarValorFinal(),
+                                                             self.cadastroVenda(1, jan)],
+                                            state=DISABLED)
+        venda_button_confirma.pack(side=LEFT, ipady=10, padx=15)
+
+        venda_cod_item.bind('<Button-1>', habilitaEntry)
+        venda_cod_item.bind('<Return>', procuraCod)
+        venda_desconto.bind('<Return>', atualizarValorFinalDesc)
+        venda_entry_dinh.bind('<Return>', atualizaValorArecebeButton)
+        venda_entry_cheque.bind('<Return>', atualizaValorArecebeButton)
+        venda_entry_cdebito.bind('<Return>', atualizaValorArecebeButton)
+        venda_entry_ccredito.bind('<Return>', atualizaValorArecebeButton)
+        venda_entry_pix.bind('<Return>', atualizaValorArecebeButton)
+        venda_entry_outros.bind('<Return>', atualizaValorArecebeButton)
+
 
 
         jan.transient(root2)
