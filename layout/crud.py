@@ -527,16 +527,16 @@ class Castelo:
 
         # ------------------------------- Janela Orçamento----------------------------------------------
 
-        color_orc2 = "#90CBFB"
+        color_orc2 = "#BFA688"
         font_dados_alug = ('Verdana', '10', 'bold')
         font_dados_alug2 = ('Verdana', '10')
         self.frame_orcamentos = Frame(self.frame_princ, bg="#90CBFB")
-        self.subframe_orc1 = Frame(self.frame_orcamentos, bg="#110066")
+        self.subframe_orc1 = Frame(self.frame_orcamentos, bg="#594A3C")
         self.subframe_orc1.pack(fill=X)
         self.subframe_orc2 = Frame(self.frame_orcamentos, bg=color_orc2)
         self.subframe_orc2.pack(fill=BOTH)
 
-        self.widget_orc1 = Label(self.subframe_orc1, text="Aluguel", fg="white", bg="#110066",
+        self.widget_orc1 = Label(self.subframe_orc1, text="Aluguel", fg="#ffff80", bg="#594A3C",
                                  font=('Verdana', '12', 'bold'))
         self.widget_orc1.pack(side=LEFT, padx=20, pady=10)
 
@@ -555,7 +555,7 @@ class Castelo:
 
         self.frame_num_alug = LabelFrame(self.sf_alugueis_ativos, text='Núm de Alugueis', bg=color_orc2)
         self.frame_num_alug.pack(side=RIGHT, padx=10)
-        self.label_num_alug = Label(self.frame_num_alug, text=2, fg='blue', font='bold', bg=color_orc2)
+        self.label_num_alug = Label(self.frame_num_alug, text=2, fg='#ffff80', font='bold', bg=color_orc2)
         self.label_num_alug.pack()
 
 
@@ -747,19 +747,19 @@ class Castelo:
 
         self.scrll_maq_disp = Scrollbar(self.mini_fram, orient=HORIZONTAL)
         self.tree_maq_disp = ttk.Treeview(self.mini_fram,
-                                     columns=('id', 'maquina', 'marca', 'ident', 'valor'),
+                                     columns=('id', 'status', 'maquina', 'ident', 'valor'),
                                      show='headings',
                                      xscrollcommand=self.scrll_orc,
                                      selectmode='browse',
                                      height=4)
         self.tree_maq_disp.column('id', width=0, stretch=False)
-        self.tree_maq_disp.column('maquina', width=200, minwidth=70, stretch=False)
-        self.tree_maq_disp.column('marca', width=350, minwidth=70, stretch=False)
+        self.tree_maq_disp.column('status', width=150, minwidth=70, stretch=False)
+        self.tree_maq_disp.column('maquina', width=400, minwidth=70, stretch=False)
         self.tree_maq_disp.column('ident', width=75, minwidth=80, stretch=False)
         self.tree_maq_disp.column('valor', width=125, minwidth=80, stretch=False)
         self.tree_maq_disp.heading('id', text='ID')
+        self.tree_maq_disp.heading('status', text='STATUS')
         self.tree_maq_disp.heading('maquina', text='MÁQUINA')
-        self.tree_maq_disp.heading('marca', text='MARCA')
         self.tree_maq_disp.heading('ident', text='ID')
         self.tree_maq_disp.heading('valor', text='VALOR ALUG.')
 
@@ -11208,7 +11208,7 @@ class Castelo:
 
     def janelaNovaVenda(self, opt):
 
-        bg_tela = '#015958'
+        bg_tela = '#41BFB3'
         bg_entry = '#C5D7D9'
 
         jan = Toplevel(bg=bg_tela)
@@ -14696,18 +14696,21 @@ class Castelo:
 
     def janelaNovoAluguel(self):
 
-        bg_tela = '#015958'
+        bg_tela = '#F2DEC4'
         bg_entry = '#C5D7D9'
 
         color_entry1 = '#ffffe1'
         color_entry2 = '#ffff80'
 
+        font_dados_alug = ('Verdana', '10', 'bold')
+        font_dados_alug1 = ('Verdana', '9', '')
+
         jan = Toplevel(bg=bg_tela)
 
         # Centraliza a janela
         x_cordinate = int((self.w / 2) - (1030 / 2))
-        y_cordinate = int((self.h / 2) - (625 / 2))
-        jan.geometry("{}x{}+{}+{}".format(1030, 625, x_cordinate, y_cordinate))
+        y_cordinate = int((self.h / 2) - (635 / 2))
+        jan.geometry("{}x{}+{}+{}".format(1030, 635, x_cordinate, y_cordinate))
 
         self.lista_produto_venda = []
         self.venda_valor_total_add = 0
@@ -14950,7 +14953,7 @@ class Castelo:
         frame_prod = LabelFrame(subframe_prod, bg=bg_tela)
         frame_prod.grid(row=0, column=0, sticky=W, ipady=3)
         Label(frame_prod, text='Equipamento', bg=bg_tela).grid(sticky=W, padx=10)
-        venda_cod_item = Entry(frame_prod, width=135, textvariable=osVar2, bg=bg_entry)
+        venda_cod_item = Entry(frame_prod, width=146, textvariable=osVar2, bg=bg_entry)
         venda_cod_item.config(state=DISABLED)
         venda_cod_item.grid(row=1, column=0, sticky=W, padx=10)
 
@@ -14960,16 +14963,19 @@ class Castelo:
         subframe_prod1 = Frame(frame_princ1, bg=bg_tela)
         subframe_prod1.pack(fill=BOTH)
 
-        labelframe_material = LabelFrame(subframe_prod1, text="Acessorios")
+        mini_frame1 = Frame(subframe_prod1, bg=bg_tela)
+        mini_frame1.grid(sticky=W)
+
+        labelframe_material = LabelFrame(mini_frame1, text="Acessorios", bg=bg_tela)
         labelframe_material.grid(sticky=W)
-        subframe_material1 = Frame(labelframe_material)
-        subframe_material1.pack(pady=10)
-        Label(subframe_material1, text="EST").grid(row=0, column=0, pady=2, padx=10)
-        Label(subframe_material1, text="Qtd").grid(row=0, column=1, pady=2)
-        Label(subframe_material1, text="CP").grid(row=0, column=2)
-        Label(subframe_material1, text="Descrição").grid(row=0, column=3, pady=2, sticky=W, ipadx=10)
-        Label(subframe_material1, text="Valor Un.").grid(row=0, column=4)
-        Label(subframe_material1, text="Valor (R$)").grid(row=0, column=5, pady=2)
+        subframe_material1 = Frame(labelframe_material, bg=bg_tela)
+        subframe_material1.pack(pady=5)
+        Label(subframe_material1, text="EST", bg=bg_tela).grid(row=0, column=0, pady=2, padx=10)
+        Label(subframe_material1, text="Qtd", bg=bg_tela).grid(row=0, column=1, pady=2)
+        Label(subframe_material1, text="CP", bg=bg_tela).grid(row=0, column=2)
+        Label(subframe_material1, text="Descrição", bg=bg_tela).grid(row=0, column=3, pady=2, sticky=W, ipadx=10)
+        Label(subframe_material1, text="Valor Un.", bg=bg_tela).grid(row=0, column=4)
+        Label(subframe_material1, text="Valor (R$)", bg=bg_tela).grid(row=0, column=5, pady=2)
         Button(subframe_material1, width=3, text="E", command=lambda: [self.janelaBuscaProduto(5)]).grid(row=1,
                                                                                                          column=0)
         Button(subframe_material1, width=3, text="E", command=lambda: [self.janelaBuscaProduto(6)]).grid(row=2,
@@ -15077,27 +15083,14 @@ class Castelo:
                                           width=10, relief=SUNKEN, bd=2, bg=color_entry2)
         self.orc_val_total_entry6.grid(row=6, column=5, padx=5)
 
-        subframe_material2 = Frame(labelframe_material)
-        subframe_material2.pack(fill=BOTH)
-
-        subframe_material3 = Frame(subframe_material2)
-        subframe_material3.pack(side=RIGHT, padx=10, fill=Y)
-
-        self.entry_mao_obra_material = Entry(subframe_material3, width=15)
-        self.entry_mao_obra_material.grid(row=0, column=1, sticky=E)
-        Label(subframe_material3, text="Caixa Peça").grid(row=0, column=0, sticky=E)
-
-        self.entry_form_pag = Entry(subframe_material3, width=15)
-        self.entry_form_pag.grid(row=1, column=1, pady=5, sticky=E)
-        Label(subframe_material3, text="Forma de Pag.").grid(row=1, column=0, sticky=E)
-
-        Label(subframe_material3).grid(row=2, column=0)
-        subframe_material4 = Frame(subframe_material3)
-        subframe_material4.grid(row=3, column=0, sticky=E, columnspan=2)
-        self.entry_total_material = Entry(subframe_material4, width=20, fg="red")
-        self.entry_total_material.pack(side=RIGHT)
-        Label(subframe_material4, text="Total do Serviço").pack(side=RIGHT, padx=10)
-
+        labelframe_pag_coment = LabelFrame(mini_frame1, text="Observações", bg=bg_tela)
+        labelframe_pag_coment.grid(row=1, column=0, sticky=W)
+        venda_obs1 = Entry(labelframe_pag_coment, width=108, textvariable=osVar4, bg=bg_entry)
+        venda_obs1.pack(padx=5, pady=5)
+        venda_obs2 = Entry(labelframe_pag_coment, width=108, textvariable=osVar5, bg=bg_entry)
+        venda_obs2.pack(padx=5)
+        venda_obs3 = Entry(labelframe_pag_coment, width=108, textvariable=osVar6, bg=bg_entry)
+        venda_obs3.pack(pady=5, padx=5)
 
 
         labelframe_form_pag = LabelFrame(subframe_prod1, text="Forma de Pagamento", bg=bg_tela)
@@ -15146,7 +15139,7 @@ class Castelo:
                                         validatecommand=(testa_float, '%P'), bg=bg_entry)
         venda_entry_outros.grid(row=5, column=1, padx=5)
         subframe_form_pag2 = Frame(labelframe_form_pag, bg=bg_tela)
-        subframe_form_pag2.pack(padx=10, fill=X, side=LEFT)
+        subframe_form_pag2.pack(padx=10, fill=X, side=RIGHT)
         labelframe_valor_rec = LabelFrame(subframe_form_pag2, bg=bg_tela)
         labelframe_valor_rec.grid(row=0, column=0, sticky=W, pady=5)
         Label(labelframe_valor_rec, text="Valor à Receber:", bg=bg_tela).pack(padx=20)
@@ -15159,30 +15152,60 @@ class Castelo:
         venda_button_salvar.grid(row=1, column=0, sticky=W, pady=5, padx=30)
         subframe_form_pag3 = Frame(labelframe_form_pag, bg=bg_tela)
         subframe_form_pag3.pack(padx=5, fill=BOTH, side=LEFT, pady=7)
-        Label(subframe_form_pag3, text=3, width=21, height=6, bg='gray').pack()
+        Label(subframe_form_pag3, text='Desconto:', bg=bg_tela).grid()
+        desconto_entry = Entry(subframe_form_pag3, width=10, validate='all', validatecommand=(testa_float, '%P'),
+                                     bg=bg_entry, justify=CENTER)
+        desconto_entry.grid(row=0, column=1, sticky=W, padx=5)
+        Label(subframe_form_pag3, text='Caixa Peça:', bg=bg_tela).grid(row=1, column=0)
+        cp_entry = Entry(subframe_form_pag3, width=10, validate='all', validatecommand=(testa_float, '%P'),
+                               bg=bg_entry, justify=CENTER)
+        cp_entry.grid(row=1, column=1, sticky=W, padx=5, pady=10)
 
-        labelframe_pag_coment = LabelFrame(subframe_prod1, text="Observações de Pagamento", bg=bg_tela)
-        labelframe_pag_coment.grid(row=1, column=0, sticky=W)
-        venda_obs1 = Entry(labelframe_pag_coment, width=108, textvariable=osVar4, bg=bg_entry)
-        venda_obs1.pack(padx=5, pady=5)
-        venda_obs2 = Entry(labelframe_pag_coment, width=108, textvariable=osVar5, bg=bg_entry)
-        venda_obs2.pack(padx=5)
-        venda_obs3 = Entry(labelframe_pag_coment, width=108, textvariable=osVar6, bg=bg_entry)
-        venda_obs3.pack(pady=5, padx=5)
+        labelframe_dados_cliente = LabelFrame(subframe_prod1, bg=bg_tela, text='Dados do Cliente')
+        labelframe_dados_cliente.grid(row=1, column=0, sticky=NW, ipady=6, ipadx=5, pady=5)
+        mini_frame_dados1 = Frame(labelframe_dados_cliente, bg=bg_tela)
+        mini_frame_dados1.pack(fill=BOTH, pady=10)
+        mini_frame_dados2 = Frame(labelframe_dados_cliente, bg=bg_tela)
+        mini_frame_dados2.pack(fill=BOTH)
+
+
+        Label(mini_frame_dados1, text='Nome:', bg=bg_tela, font=font_dados_alug).grid(row=0, column=0)
+        Label(mini_frame_dados2, text='Endereço:', bg=bg_tela, font=font_dados_alug).grid(row=0, column=0)
+        Label(mini_frame_dados1, text='Telefone:', bg=bg_tela, font=font_dados_alug).grid(row=0, column=2)
+        Label(mini_frame_dados1, text='Qtd. Alugueis:', bg=bg_tela, font=font_dados_alug).grid(row=0, column=4)
+
+        label_nome = Label(mini_frame_dados1, text='Henrique', bg=bg_tela, anchor=W, font=font_dados_alug1, fg='red')
+        label_nome.grid(row=0, column=1, sticky=W)
+        label_nome.configure(width=30)
+        label_nome.grid_propagate(0)
+        label_fone = Label(mini_frame_dados1, text='98428-8565', bg=bg_tela, anchor=W, font=font_dados_alug1, fg='red')
+        label_fone.grid(row=0, column=3)
+        label_fone.configure(width=15)
+        label_fone.grid_propagate(0)
+        label_historico = Label(mini_frame_dados1, text='3', bg=bg_tela, anchor=W, font=font_dados_alug1, fg='red')
+        label_historico.grid(row=0, column=5)
+        label_historico.configure(width=5)
+        label_historico.grid_propagate(0)
+        label_end = Label(mini_frame_dados2, text='Rua Nossa Senhora das Dores, 657   Centro   Artur Nogueira',
+                          bg=bg_tela, anchor=W, font=font_dados_alug1, fg='red')
+        label_end.grid(row=0, column=1)
+        label_end.configure(width=50)
+        label_end.grid_propagate(0)
+
 
         labelframe_desc_vend = LabelFrame(subframe_prod1, bg=bg_tela)
-        labelframe_desc_vend.grid(row=1, column=1, sticky=SW, padx=10, ipady=1, ipadx=5)
+        labelframe_desc_vend.grid(row=1, column=1, sticky=SW, padx=10, ipady=1, ipadx=5, pady=5)
         frame_descr_vend = Frame(labelframe_desc_vend, bg=bg_tela)
         frame_descr_vend.pack(fill=BOTH, padx=2, pady=10)
-        Label(frame_descr_vend, text='SubTotal:', bg=bg_tela).grid()
-        venda_label_subtotal = Label(frame_descr_vend, text='R$0,00', fg='blue', font=('', '12', ''), bg=bg_tela)
-        venda_label_subtotal.grid(row=0, column=1)
-        venda_label_subtotal.configure(height=1, width=10)
-        venda_label_subtotal.grid_propagate(0)
-        Label(frame_descr_vend, text='desconto:', bg=bg_tela).grid(row=1, column=0)
-        venda_desconto = Entry(frame_descr_vend, width=10, validate='all', validatecommand=(testa_float, '%P'),
+        Label(frame_descr_vend, text='Dias:', bg=bg_tela).grid()
+        venda_label_subtotal = Entry(frame_descr_vend, width=5, validate='all', validatecommand=(testa_float, '%P'),
+                                    bg=bg_entry, justify=CENTER)
+        venda_label_subtotal.grid(row=0, column=1, sticky=W, padx=5)
+        venda_label_subtotal.insert(0, 1)
+        Label(frame_descr_vend, text='Entrega:', bg=bg_tela).grid(row=1, column=0)
+        venda_desconto = DateEntry(frame_descr_vend, width=10, validate='all', validatecommand=(testa_float, '%P'),
                                     bg=bg_entry)
-        venda_desconto.grid(row=1, column=1)
+        venda_desconto.grid(row=1, column=1, padx=5)
         Label(frame_descr_vend, width=2, bg=bg_tela).grid(row=0, column=2, padx=1)
         frame_valor_total = LabelFrame(frame_descr_vend, bg=bg_tela)
         frame_valor_total.grid(row=0, column=3, rowspan=2, padx=0)
@@ -15195,9 +15218,7 @@ class Castelo:
 
         frame_orcamento = Frame(subframe_prod1, bg=bg_tela)
         frame_orcamento.grid(row=2, column=0, sticky=W)
-        venda_button_orcamento = Button(frame_orcamento, text='Orçamento')
-        venda_button_orcamento.grid(row=0, column=0, ipady=10, ipadx=10, sticky=W)
-        Label(frame_orcamento, width=56, bg=bg_tela).grid(row=0, column=1)
+
         Label(frame_orcamento, text="Vendedor:", bg=bg_tela).grid(row=0, column=2, padx=10)
         global op_venda
         op_venda = StringVar()
@@ -15210,7 +15231,7 @@ class Castelo:
         frame_button_confirma.grid(row=2, column=1, pady=10, sticky=E)
         venda_button_fechar = Button(frame_button_confirma, text='Fechar', command=jan.destroy)
         venda_button_fechar.pack(side=LEFT, ipady=10, ipadx=30)
-        venda_button_confirma = Button(frame_button_confirma, text='Confirmar Venda',
+        venda_button_confirma = Button(frame_button_confirma, text='Confirmar Aluguel',
                                             command=lambda: [atualizaValorAreceber(),
                                                              atualizarValorFinal(),
                                                              self.cadastroVenda(1, jan)],
