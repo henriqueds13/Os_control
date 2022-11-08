@@ -530,7 +530,7 @@ class Castelo:
         color_orc2 = "#BFA688"
         font_dados_alug = ('Verdana', '10', 'bold')
         font_dados_alug2 = ('Verdana', '10')
-        self.frame_orcamentos = Frame(self.frame_princ, bg="#90CBFB")
+        self.frame_orcamentos = Frame(self.frame_princ, bg=color_orc2)
         self.subframe_orc1 = Frame(self.frame_orcamentos, bg="#594A3C")
         self.subframe_orc1.pack(fill=X)
         self.subframe_orc2 = Frame(self.frame_orcamentos, bg=color_orc2)
@@ -770,7 +770,7 @@ class Castelo:
         self.tree_maq_disp.tag_configure('oddrow', background='#ffffe1')
         self.tree_maq_disp.tag_configure('evenrow', background='#F2EDDC')
 
-        Button(self.mini_fram2, text='Adicionar', width=10).pack()
+        Button(self.mini_fram2, text='Adicionar', width=10, command=lambda: [self.janelaNovaMaqAluguel(1)]).pack()
         Button(self.mini_fram2, text='Remover', width=10).pack(pady=10)
         Button(self.mini_fram2, text='Editar', width=10).pack()
 
@@ -15253,6 +15253,134 @@ class Castelo:
         jan.transient(root2)
         jan.focus_force()
         jan.grab_set()
+
+    def janelaNovaMaqAluguel(self, num):
+
+        font_fg_labels = ("Verdana", "12", "")
+        un_medida = ["UN", "METRO", "Kg"]
+        layout_Princ = '#9AEBA3'
+        layout_Princ1 = '#45C4B0'
+        layout_entry = '#DAFDBA'
+        lista_status = []
+
+
+        with open('status.txt', 'r', encoding='utf8') as status_txt:
+            for i in status_txt:
+                if i != "\n":
+                    i = i.rstrip('\n')
+                    lista_status.append(i)
+
+
+        jan = Toplevel(bg=layout_Princ1)
+
+        # Centraliza a janela
+        x_cordinate = int((self.w / 2) - (1000 / 2))
+        y_cordinate = int((self.h / 2) - (650 / 2))
+        jan.geometry("{}x{}+{}+{}".format(900, 450, x_cordinate, y_cordinate))
+
+        # --------------------------------------------------------------------------------------
+
+        osVar1 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar1.set(osVar1.get().upper())
+
+        osVar1.trace_add('write', to_uppercase)
+
+        osVar2 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar2.set(osVar2.get().upper())
+
+        osVar2.trace_add('write', to_uppercase)
+
+        osVar3 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar3.set(osVar3.get().upper())
+
+        osVar3.trace_add('write', to_uppercase)
+
+        osVar4 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar4.set(osVar4.get().upper())
+
+        osVar4.trace_add('write', to_uppercase)
+
+        # --------------------------------------------------------------------------------------
+
+        frame_princ2 = Frame(jan, bg=layout_Princ1)
+        frame_princ2.pack(fill=BOTH, padx=10, pady=10)
+
+        nb_os = ttk.Notebook(frame_princ2, width=350, style='s1.TNotebook')
+        nb_os.pack(fill=BOTH)
+        frame_est_dados = Frame(nb_os, bg=layout_Princ)
+
+        self.style.configure('s1.TNotebook', tabposition='ne', background=layout_Princ1)
+        self.style.configure("s1.TCombobox", fieldbackground='red', background=layout_entry,
+                             selectforeground=layout_entry)
+
+        nb_os.add(frame_est_dados, text="Dados")
+
+        testa_id = jan.register(self.testaEntradaIdProd)
+        testa_inteiro = jan.register(self.testaEntradaInteiro2)
+        testa_float = jan.register(self.testaEntradaFloat)
+
+        subframe_est_dados1 = LabelFrame(frame_est_dados, text='Dados', bg=layout_Princ, font=('', 9, 'bold'))
+        subframe_est_dados1.pack(fill=X, padx=10, ipadx=10, ipady=5, pady=10)
+        Label(subframe_est_dados1, text="ID. Máquina", bg=layout_Princ).grid(row=0, column=0, sticky=W, pady=10, padx=10)
+        id_entry = Entry(subframe_est_dados1, width=10,
+                         textvariable=osVar1, bg=layout_entry, state=DISABLED)
+        id_entry.grid(row=0, column=1, sticky=W, padx=20)
+        Label(subframe_est_dados1, width=15, bg=layout_Princ).grid(row=0, column=2)
+
+        Label(subframe_est_dados1, text="Equipamento", bg=layout_Princ).grid(row=1, column=0, sticky=W, padx=10)
+        descricao_entry = Entry(subframe_est_dados1, width=87, textvariable=osVar2, bg=layout_entry)
+        descricao_entry.grid(row=1, column=1, columnspan=4, sticky=W, padx=20)
+        Label(subframe_est_dados1, text="N° Série:", bg=layout_Princ).grid(row=2, column=0, sticky=W, pady=10,
+                                                                               padx=10)
+        utilizado_entry = Entry(subframe_est_dados1, width=20, textvariable=osVar3, bg=layout_entry)
+        utilizado_entry.grid(row=2, column=1, columnspan=4, sticky=W, padx=20)
+        Label(subframe_est_dados1, text="Valor Aluguel (R$)", bg=layout_Princ).grid(row=3, column=0, sticky=W, padx=10)
+        Label(subframe_est_dados1, text="Status", bg=layout_Princ).grid(row=4, column=0, sticky=W, pady=10, padx=10)
+        option_marca = ttk.Combobox(subframe_est_dados1, values=lista_status, state="readonly",
+                                    width=17, style='s1.TCombobox')
+        option_marca.set('DISPONÍVEL')
+        option_marca.grid(row=4, column=1, sticky=W, padx=20)
+        localizacao_entry = Entry(subframe_est_dados1, width=15, textvariable=osVar4, bg=layout_entry,
+                                  validate='all', validatecommand=(testa_float, '%P'),)
+        localizacao_entry.grid(row=3, column=1, sticky=W, padx=20)
+        Label(subframe_est_dados1, width=20, relief=SUNKEN, height=7, bg=layout_Princ).grid(row=0, column=5, rowspan=5,
+                                                                                            sticky=N,
+                                                                                            pady=10)
+        Button(subframe_est_dados1, text="IMG", width=5).grid(row=4, column=5, sticky=E)
+
+        ttk.Separator(subframe_est_dados1, orient=HORIZONTAL).grid(row=6, column=0, columnspan=8, sticky=EW, pady=10,
+                                                                   padx=10)
+
+        Label(subframe_est_dados1, text="Observações", bg=layout_Princ).grid(row=14, column=0, sticky=NW, pady=10,
+                                                                             padx=10)
+        obs_criar_prod = Text(subframe_est_dados1, relief=SUNKEN, height=5, width=67, bg=layout_entry)
+        obs_criar_prod.grid(row=14, column=1, sticky=W, columnspan=5, padx=20, pady=10)
+
+        frame_princ1 = Frame(jan, bg=layout_Princ1)
+        frame_princ1.pack(fill=X, padx=15, pady=10)
+
+        Button(frame_princ1, text="Salvar(F2)", width=10, command=lambda: [cadastrarProduto(), jan.destroy()]).pack(
+            side=RIGHT)
+        Button(frame_princ1, text="Cancelar", width=10, command=jan.destroy).pack(side=RIGHT, padx=20)
+        Button(frame_princ1, text="Alugueis Ant.", width=10, command=self.janelaClonarProduto, state=DISABLED).pack(side=LEFT)
+
+        def get_stringvar(event):
+            obs_criar_prod.replace("1.0", END, obs_criar_prod.get("1.0", END).upper())
+
+        obs_criar_prod.bind("<KeyRelease>", get_stringvar)
+
+        jan.transient(root2)
+        jan.focus_force()
+        jan.grab_set()
+
 
 
     @staticmethod

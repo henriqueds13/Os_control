@@ -73,6 +73,7 @@ class Cliente(Base):
 
     oss = relationship('OS', back_populates='cliente', cascade='delete')
     oss_saida = relationship('OSSaida', back_populates='cliente_saida', cascade='delete')
+    cliente_aluguel = relationship('Aluguel', back_populates='aluguel_cliente', cascade='delete')
 
 
 class OS(Base):
@@ -498,6 +499,67 @@ class Calevents(Base):
     id_conta = Column(Integer, ForeignKey('contas.id'))
     envent_conta = relationship('Contas', back_populates='conta_event')
 
+class Aluguel(Base):
+    __tablename__ = 'aluguel'
+    id = Column(Integer, primary_key=True)
+    data = Column(Date)
+    caixa_peca1 = Column(Float)
+    caixa_peca2 = Column(Float)
+    caixa_peca3 = Column(Float)
+    caixa_peca4 = Column(Float)
+    caixa_peca5 = Column(Float)
+    caixa_peca6 = Column(Float)
+    desc_serv1 = Column(String(100))
+    desc_serv2 = Column(String(100))
+    desc_serv3 = Column(String(100))
+    desc_serv4 = Column(String(100))
+    desc_serv5 = Column(String(100))
+    desc_serv6 = Column(String(100))
+    qtd1 = Column(Integer)
+    qtd2 = Column(Integer)
+    qtd3 = Column(Integer)
+    qtd4 = Column(Integer)
+    qtd5 = Column(Integer)
+    qtd6 = Column(Integer)
+    valor_uni1 = Column(Float)
+    valor_uni2 = Column(Float)
+    valor_uni3 = Column(Float)
+    valor_uni4 = Column(Float)
+    valor_uni5 = Column(Float)
+    valor_uni6 = Column(Float)
+    obs1 = Column(String(200))
+    obs2 = Column(String(200))
+    obs3 = Column(String(200))
+    cheque = Column(Float)
+    ccredito = Column(Float)
+    cdebito = Column(Float)
+    pix = Column(Float)
+    dinheiro = Column(Float)
+    outros = Column(Float)
+    desconto = Column(Float)
+    caixa_peca_total = Column(Float)
+    valor_total = Column(Float)
+    dias = Column(Integer)
+    data_entrega = Column(Date)
+    operador = Column(Integer, nullable=False)
+    alug_pago = Column(Integer)
+
+    cliente_id = Column(Integer, ForeignKey('cliente.id'), nullable=False)
+    maquina_id = Column(Integer, ForeignKey('MaquinaAluguel.id'), nullable=False)
+    aluguel_equipamento = relationship('MaquinaAluguel', back_populates='aluguel_equipamento')
+    aluguel_cliente = relationship('Cliente', back_populates='cliente_aluguel')
+
+class MaquinaAluguel(Base):
+    __tablename__ = 'maquina_aluguel'
+    id = Column(Integer, primary_key=True)
+    equipamento = Column(String(100))
+    marca = Column(String(100))
+    num_serie = Column(String(100))
+    valor = Column(Float)
+    status = Column(String(30))
+    obs = Column(String(200))
+
+    equipamento_aluguel = relationship('Aluguel', back_populates='aluguel_equipamento')
 
 Base.metadata.create_all(engine)
 

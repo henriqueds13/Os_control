@@ -1,76 +1,136 @@
-def on_enter(e):
-    e.widget['relief'] = 'raised'
+@property
+    def desc_serv1(self):
+        return self.__desc_serv1
+
+    @property
+    def desc_serv2(self):
+        return self.__desc_serv2
+
+    @property
+    def desc_serv3(self):
+        return self.__desc_serv3
+
+    @property
+    def desc_serv4(self):
+        return self.__desc_serv4
+
+    @property
+    def desc_serv5(self):
+        return self.__desc_serv5
+
+    @property
+    def desc_serv6(self):
+        return self.__desc_serv6
+
+    @property
+    def desc_serv7(self):
+        return self.__desc_serv7
+
+    @property
+    def desc_serv8(self):
+        return self.__desc_serv8
+
+    @property
+    def desc_serv9(self):
+        return self.__desc_serv9
+
+    @property
+    def desconto(self):
+        return self.__desconto
+
+    @property
+    def obs1(self):
+        return self.__obs1
+
+    @property
+    def obs2(self):
+        return self.__obs2
+
+    @property
+    def obs3(self):
+        return self.__obs3
+
+    @property
+    def valor_mao_obra(self):
+        return self.__valor_mao_obra
+
+    @property
+    def qtd1(self):
+        return self.__qtd1
+
+    @property
+    def qtd2(self):
+        return self.__qtd2
+
+    @property
+    def qtd3(self):
+        return self.__qtd3
+
+    @property
+    def qtd4(self):
+        return self.__qtd4
+
+    @property
+    def qtd5(self):
+        return self.__qtd5
+
+    @property
+    def qtd6(self):
+        return self.__qtd6
+
+    @property
+    def qtd7(self):
+        return self.__qtd7
+
+    @property
+    def qtd8(self):
+        return self.__qtd8
+
+    @property
+    def qtd9(self):
+        return self.__qtd9
+
+    @property
+    def valor_uni1(self):
+        return self.__valor_uni1
+
+    @property
+    def valor_uni2(self):
+        return self.__valor_uni2
+
+    @property
+    def valor_uni3(self):
+        return self.__valor_uni3
+
+    @property
+    def valor_uni4(self):
+        return self.__valor_uni4
+
+    @property
+    def valor_uni5(self):
+        return self.__valor_uni5
+
+    @property
+    def valor_uni6(self):
+        return self.__valor_uni6
+
+    @property
+    def valor_uni7(self):
+        return self.__valor_uni7
+
+    @property
+    def valor_uni8(self):
+        return self.__valor_uni8
+
+    @property
+    def valor_uni9(self):
+        return self.__valor_uni9
+
+    @property
+    def tecnico(self):
+        return self.__tecnico
 
 
-def on_leave(e):
-    e.widget['relief'] = 'flat'
-
- button_c.bind('<Enter>', on_enter)
-        button_del.bind('<Leave>', on_leave)
-        button_div.bind('<Enter>', on_enter)
-        button_mult.bind('<Leave>', on_leave)
-        button_sub.bind('<Enter>', on_enter)
-        button_soma.bind('<Leave>', on_leave)
-        button_virg.bind('<Enter>', on_enter)
-        button_9.bind('<Leave>', on_leave)
-        button_8.bind('<Enter>', on_enter)
-        button_7.bind('<Leave>', on_leave)
-        button_6.bind('<Enter>', on_enter)
-        button_5.bind('<Leave>', on_leave)
-        button_4.bind('<Enter>', on_enter)
-        button_3.bind('<Leave>', on_leave)
-        button_2.bind('<Leave>', on_leave)
-        button_1.bind('<Enter>', on_enter)
-        button_0.bind('<Leave>', on_leave)
-        button_igual.bind('<Leave>', on_leave)
-
-
-def formataParaFloat(self, valor):
-       if valor == "":
-              return 0
-       else:
-              valor1 = locale.atof(valor)
-              new_valor = locale.format_string("%.2f", valor1, grouping=True, monetary=True)
-              new_valor = new_valor.replace('.', '')
-              return float(new_valor.replace(',', '.'))
-
-def testaEntradaFloat(self, valor):
-
- if valor and valor.find('.') == -1:
-     try:
-         new_valor = locale.atof(valor)
-         locale.format_string("%.2f", new_valor, grouping=True, monetary=True)
-         return True
-     except ValueError:
-         return False
- elif valor == "":
-     return True
- else:
-     return False
-
-def testaEntradaInteiro3(self, valor):
- if valor.isdigit() and len(valor) < 15 or valor == '':
-     return True
- else:
-     return False
-
- def insereNumConvertido(self, valor):
-     if type(valor) == int:
-         if valor == 0:
-             return ""
-         else:
-             return valor
-     if valor == 0.0:
-         return ""
-     else:
-         valor = str(valor).replace('.', ',')
-         valor1 = locale.atof(valor)
-         valor_separado = locale.currency(valor1).split()
-         return valor_separado[1]
-
-self.abreCalculadora
-with open('mao_de_obra.txt', 'rb') as mao_obra_txt:
-    list_mao_obra = pickle.load(mao_obra_txt)
-
-
-list_mao_obra = []
+    @total.setter
+    def total(self, total):
+        self.__total = total

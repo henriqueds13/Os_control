@@ -28,3 +28,4 @@ class EstoqueQuery():
         estoq.nota = estoque.nota
         estoq.frete = estoque.frete
         estoq.total = estoque.total
+
