@@ -1,8 +1,9 @@
 class MaquinaAluguel():
-    def __init__(self, equipamento, marca, num_serie, valor, status, obs):
+    def __init__(self, equipamento, marca, modelo, num_serie, valor, status, obs):
 
         self.__equipamento = equipamento
         self.__marca = marca
+        self.__modelo = modelo
         self.__num_serie = num_serie
         self.__valor = valor
         self.__status = status
@@ -15,6 +16,10 @@ class MaquinaAluguel():
     @property
     def marca(self):
         return self.__marca
+
+    @property
+    def modelo(self):
+        return self.__modelo
 
     @property
     def numSerie(self):
@@ -39,6 +44,10 @@ class MaquinaAluguel():
     @marca.setter
     def marca(self, marc):
         self.__marca = marc
+
+    @modelo.setter
+    def modelo(self, marc):
+        self.__modelo = marc
 
     @numSerie.setter
     def numSerie(self, num):

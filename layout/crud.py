@@ -13,11 +13,14 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from sqlalchemy.util import NoneType
 
 from entidades import cliente, os, os_saida, produto, revendedor, estoque, produto_venda, os_venda, empresa, tecnico, \
-    livro_caixa, op_livro_caixa, contas, calevent
+    livro_caixa, op_livro_caixa, contas, calevent, aluguel, maquina_aluguel
 from fabricas import fabrica_conexao
 from repositorios import cliente_repositorio, os_repositorio, os_saida_repositorio, produto_repositorio, \
     revendedor_repositorio, estoque_repositorio, produto_venda_repositorio, os_venda_repositorio, tecnico_repositorio, \
-    empresa_repositorio, livro_caixa_repositorio, contas_repositorio, op_livro_caixa_repositorio, calevent_repositorio
+    empresa_repositorio, livro_caixa_repositorio, contas_repositorio, op_livro_caixa_repositorio, calevent_repositorio, \
+    aluguel_repositorio, maquina_aluguel_repositorio
+
+
 
 # coding: utf8
 locale.setlocale(locale.LC_ALL, '')
@@ -14813,7 +14816,7 @@ class Castelo:
             desconto = self.venda_valor_total_add - self.formataParaFloat(self.venda_desconto.get())
             self.venda_label_total.config(text=self.insereTotalConvertido(desconto))
 
-        def popularEntradaProdutoVenda(id_prod):
+        def popularAluguel(id_prod):
             repositorio = produto_repositorio.ProdutoRepositorio()
             produto = repositorio.listar_produto_id_fabr(id_prod, sessao)
             tree_est_venda.insert('', 'end',
@@ -14822,7 +14825,7 @@ class Castelo:
                                       self.insereTotalConvertido(produto.valor_venda), self.venda_qtd_item.get(),
                                       self.insereTotalConvertido(int(self.venda_qtd_item.get()) * produto.valor_venda)))
 
-        def popularEditProdutoVendaEstoque(id_est):
+        def popularMaquinasAluguel(id_est):
             repositorio = produto_venda_repositorio.ProdutoVendaRepositorio()
             produtos = repositorio.listar_produtos_venda_id_venda(id_est, sessao)
             for i in produtos:
@@ -14832,73 +14835,6 @@ class Castelo:
                                               self.insereTotalConvertido(
                                                   i.valor_un * i.qtd)))
 
-        def addProdutoestoque(id_prod, qtd):
-            produto = repositorio.listar_produto_id_fabr(id_prod, sessao)
-            if id_prod != '' and qtd != 0:
-                self.lista_produto_venda.append([id_prod, qtd, produto.caixa_peca])
-                popularEntradaProdutoVenda(self.venda_cod_item.get())
-                self.venda_cod_item.config(state=NORMAL)
-                self.venda_cod_item.delete(0, END)
-                self.venda_cod_item.config(stat=DISABLED)
-                self.venda_descr_item.config(state=NORMAL)
-                self.venda_descr_item.delete(0, END)
-                self.venda_descr_item.config(stat=DISABLED)
-                self.venda_preco_item.config(state=NORMAL)
-                self.venda_preco_item.delete(0, END)
-                self.venda_preco_item.config(stat=DISABLED)
-                self.venda_qtd_item.delete(0, END)
-
-                self.venda_valor_total_add += produto.valor_venda * qtd
-                self.venda_label_subtotal.config(text=self.insereTotalConvertido(self.venda_valor_total_add))
-                atualizarValorFinal()
-
-        def removeProdutoEstoque():
-            item_selecionado = tree_est_venda.focus()
-            dados_prod = tree_est_venda.item(item_selecionado, 'values')
-            self.lista_produto_venda[int(item_selecionado[1:]) - 1] = 0
-            tree_est_venda.delete(item_selecionado)
-            self.venda_valor_total_add -= self.formataParaFloat(dados_prod[2].split()[1]) * int(dados_prod[3])
-            self.venda_label_subtotal.config(text=self.insereTotalConvertido(self.venda_valor_total_add))
-            atualizarValorFinal()
-
-        def cadastraProduto(event):
-            addProdutoestoque(self.venda_cod_item.get(), self.formataParaIteiro(self.venda_qtd_item.get()))
-
-        def habilitaEntryOption(opt):
-            if opt != 2:
-                self.venda_cod_item.config(state=NORMAL)
-                self.venda_cod_item.config(bg='white')
-
-        def habilitaEntry(event):
-            habilitaEntryOption(opt)
-
-        def procuraCod(event):
-            codigo = self.venda_cod_item.get()
-
-            try:
-                produto = repositorio.listar_produto_id_fabr(codigo, sessao)
-                self.venda_descr_item.config(state=NORMAL)
-                self.venda_descr_item.delete(0, END)
-                self.venda_descr_item.insert(0, produto.descricao)
-                self.venda_descr_item.config(state=DISABLED)
-                self.venda_preco_item.config(state=NORMAL)
-                self.venda_preco_item.delete(0, END)
-                self.venda_preco_item.insert(0, self.insereNumConvertido(produto.valor_venda))
-                self.venda_preco_item.config(state=DISABLED)
-                self.venda_qtd_item.delete(0, END)
-                self.venda_qtd_item.insert(0, 1)
-                self.venda_cod_item.config(state=DISABLED)
-
-            except:
-                self.venda_cod_item.config(bg='red')
-                self.venda_descr_item.config(state=NORMAL)
-                self.venda_descr_item.delete(0, END)
-                self.venda_descr_item.config(state=DISABLED)
-                self.venda_preco_item.config(state=NORMAL)
-                self.venda_preco_item.delete(0, END)
-                self.venda_preco_item.config(state=DISABLED)
-                self.venda_qtd_item.delete(0, END)
-                self.venda_qtd_item.insert(0, 1)
 
         def atualizaValorAreceber():
             dinheiro = self.formataParaFloat(self.venda_entry_dinh.get())
@@ -15276,7 +15212,7 @@ class Castelo:
         # Centraliza a janela
         x_cordinate = int((self.w / 2) - (1000 / 2))
         y_cordinate = int((self.h / 2) - (650 / 2))
-        jan.geometry("{}x{}+{}+{}".format(900, 450, x_cordinate, y_cordinate))
+        jan.geometry("{}x{}+{}+{}".format(780, 460, x_cordinate, y_cordinate))
 
         # --------------------------------------------------------------------------------------
 
@@ -15308,7 +15244,38 @@ class Castelo:
 
         osVar4.trace_add('write', to_uppercase)
 
+        osVar5 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar5.set(osVar5.get().upper())
+
+        osVar5.trace_add('write', to_uppercase)
+
+        osVar6 = StringVar(jan)
+
+        def to_uppercase(*args):
+            osVar6.set(osVar6.get().upper())
+
+        osVar6.trace_add('write', to_uppercase)
+
+
         # --------------------------------------------------------------------------------------
+
+        def cadastrarMaquinaAluguel():
+            repositorio_maq = maquina_aluguel_repositorio.MaquinaAluguelRepositorio()
+
+            equipamento =  descricao_entry.get()
+            marca = marca_entry.get()
+            modelo = modelo_entry.get()
+            n_serie = utilizado_entry.get()
+            valor = localizacao_entry.get()
+            status = option_marca.get()
+            obs = obs_criar_prod.get('1.0', 'end-1c')
+
+            novo_equip = maquina_aluguel.MaquinaAluguel(equipamento, marca, modelo, n_serie, valor, status, obs)
+
+            repositorio_maq.inserir_equip(novo_equip, sessao)
+
 
         frame_princ2 = Frame(jan, bg=layout_Princ1)
         frame_princ2.pack(fill=BOTH, padx=10, pady=10)
@@ -15333,27 +15300,34 @@ class Castelo:
         id_entry = Entry(subframe_est_dados1, width=10,
                          textvariable=osVar1, bg=layout_entry, state=DISABLED)
         id_entry.grid(row=0, column=1, sticky=W, padx=20)
-        Label(subframe_est_dados1, width=15, bg=layout_Princ).grid(row=0, column=2)
+
 
         Label(subframe_est_dados1, text="Equipamento", bg=layout_Princ).grid(row=1, column=0, sticky=W, padx=10)
-        descricao_entry = Entry(subframe_est_dados1, width=87, textvariable=osVar2, bg=layout_entry)
-        descricao_entry.grid(row=1, column=1, columnspan=4, sticky=W, padx=20)
-        Label(subframe_est_dados1, text="N° Série:", bg=layout_Princ).grid(row=2, column=0, sticky=W, pady=10,
+        descricao_entry = Entry(subframe_est_dados1, width=35, textvariable=osVar2, bg=layout_entry)
+        descricao_entry.grid(row=1, column=1, sticky=W, padx=20)
+        Label(subframe_est_dados1, text="Marca:", bg=layout_Princ).grid(row=1, column=2, sticky=W)
+        marca_entry = Entry(subframe_est_dados1, width=20, textvariable=osVar5, bg=layout_entry, )
+        marca_entry.grid(row=1, column=3, sticky=E, padx=10)
+        Label(subframe_est_dados1, text="Modelo:", bg=layout_Princ).grid(row=2, column=0, sticky=W, padx=10,  pady=10)
+        modelo_entry = Entry(subframe_est_dados1, width=15, textvariable=osVar6, bg=layout_entry, )
+        modelo_entry.grid(row=2, column=1, sticky=W, padx=20)
+        Label(subframe_est_dados1, text="N° Série:", bg=layout_Princ).grid(row=3, column=0, sticky=W,
                                                                                padx=10)
         utilizado_entry = Entry(subframe_est_dados1, width=20, textvariable=osVar3, bg=layout_entry)
-        utilizado_entry.grid(row=2, column=1, columnspan=4, sticky=W, padx=20)
-        Label(subframe_est_dados1, text="Valor Aluguel (R$)", bg=layout_Princ).grid(row=3, column=0, sticky=W, padx=10)
-        Label(subframe_est_dados1, text="Status", bg=layout_Princ).grid(row=4, column=0, sticky=W, pady=10, padx=10)
+        utilizado_entry.grid(row=3, column=1, columnspan=4, sticky=W, padx=20)
+        Label(subframe_est_dados1, text="Valor Aluguel (R$)", bg=layout_Princ).grid(row=4, column=0, sticky=W, padx=10,
+                                                                                    pady=10)
+        Label(subframe_est_dados1, text="Status", bg=layout_Princ).grid(row=5, column=0, sticky=W, padx=10)
         option_marca = ttk.Combobox(subframe_est_dados1, values=lista_status, state="readonly",
                                     width=17, style='s1.TCombobox')
         option_marca.set('DISPONÍVEL')
-        option_marca.grid(row=4, column=1, sticky=W, padx=20)
+        option_marca.grid(row=5, column=1, sticky=W, padx=20)
         localizacao_entry = Entry(subframe_est_dados1, width=15, textvariable=osVar4, bg=layout_entry,
                                   validate='all', validatecommand=(testa_float, '%P'),)
-        localizacao_entry.grid(row=3, column=1, sticky=W, padx=20)
+        localizacao_entry.grid(row=4, column=1, sticky=W, padx=20)
         Label(subframe_est_dados1, width=20, relief=SUNKEN, height=7, bg=layout_Princ).grid(row=0, column=5, rowspan=5,
                                                                                             sticky=N,
-                                                                                            pady=10)
+                                                                                            pady=10, padx=10)
         Button(subframe_est_dados1, text="IMG", width=5).grid(row=4, column=5, sticky=E)
 
         ttk.Separator(subframe_est_dados1, orient=HORIZONTAL).grid(row=6, column=0, columnspan=8, sticky=EW, pady=10,

@@ -545,8 +545,8 @@ class Aluguel(Base):
     alug_pago = Column(Integer)
 
     cliente_id = Column(Integer, ForeignKey('cliente.id'), nullable=False)
-    maquina_id = Column(Integer, ForeignKey('MaquinaAluguel.id'), nullable=False)
-    aluguel_equipamento = relationship('MaquinaAluguel', back_populates='aluguel_equipamento')
+    maquina_id = Column(Integer, ForeignKey('maquina_aluguel.id'), nullable=False)
+    aluguel_equipamento = relationship('MaquinaAluguel', back_populates='equipamento_aluguel')
     aluguel_cliente = relationship('Cliente', back_populates='cliente_aluguel')
 
 class MaquinaAluguel(Base):
@@ -554,6 +554,7 @@ class MaquinaAluguel(Base):
     id = Column(Integer, primary_key=True)
     equipamento = Column(String(100))
     marca = Column(String(100))
+    modelo = Column(String(100))
     num_serie = Column(String(100))
     valor = Column(Float)
     status = Column(String(30))
