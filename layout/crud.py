@@ -774,8 +774,15 @@ class Castelo:
         self.tree_maq_disp.tag_configure('evenrow', background='#F2EDDC')
 
         Button(self.mini_fram2, text='Adicionar', width=10, command=lambda: [self.janelaNovaMaqAluguel(1)]).pack()
-        Button(self.mini_fram2, text='Remover', width=10).pack(pady=10)
-        Button(self.mini_fram2, text='Editar', width=10).pack()
+        Button(self.mini_fram2, text='Remover', width=10, command=self.deletarMaqAluguel).pack(pady=10)
+        Button(self.mini_fram2, text='Editar', width=10, command=lambda: [self.janelaNovaMaqAluguel(2)]).pack()
+
+        self.popularMaquinasAluguel()
+
+        def EditaMaqAluguel(event):
+            self.janelaNovaMaqAluguel(2)
+
+        self.tree_maq_disp.bind('<Double-1>', EditaMaqAluguel)
 
         # ------------------------------- Janela Aparelhos em Manutenção------------------------------------------------
         osVar = StringVar(master)
@@ -14697,6 +14704,49 @@ class Castelo:
         jan.focus_force()
         jan.grab_set()
 
+    def popularAluguel(self):
+        repositorio = produto_repositorio.ProdutoRepositorio()
+        produto = repositorio.listar_produto_id_fabr(id_prod, sessao)
+        tree_maq_disp.insert('', 'end',
+                              values=(
+                                  produto.id_fabr, produto.descricao,
+                                  self.insereTotalConvertido(produto.valor_venda), self.venda_qtd_item.get(),
+                                  self.insereTotalConvertido(int(self.venda_qtd_item.get()) * produto.valor_venda)))
+
+    def popularMaquinasAluguel(self):
+        self.tree_maq_disp.delete(*self.tree_maq_disp.get_children())
+        repositorio = maquina_aluguel_repositorio.MaquinaAluguelRepositorio()
+        produtos = repositorio.listar_equip(sessao)
+        for i in produtos:
+            self.tree_maq_disp.insert('', 'end',
+                                  values=(i.id, i.status, f'{i.equipamento} {i.marca} {i.modelo}', i.id,
+                                          self.insereTotalConvertido(i.valor)))
+        self.tree_maq_disp.focus_set()
+        children = self.tree_maq_disp.get_children()
+        if children:
+            self.tree_maq_disp.focus(children[0])
+            self.tree_maq_disp.selection_set(children[0])
+
+    def deletarMaqAluguel(self):
+        res = messagebox.askyesno(None, "Deseja Realmente Deletar o Cadastro?")
+        if res:
+            try:
+                item_selecionado = self.tree_maq_disp.selection()[0]
+                id_maq = self.tree_maq_disp.item(item_selecionado, "values")[0]
+                repositorio = maquina_aluguel_repositorio.MaquinaAluguelRepositorio()
+                repositorio.remover_equip(id_maq, sessao)
+                sessao.commit()
+                self.mostrarMensagem("1", "Equipamento Excluído com Sucesso!")
+                self.popularMaquinasAluguel()
+
+            except:
+                messagebox.showinfo(title="ERRO", message="Selecione um elemento a ser deletado")
+
+            finally:
+                sessao.close()
+        else:
+            pass
+
     def janelaNovoAluguel(self):
 
         bg_tela = '#F2DEC4'
@@ -14815,26 +14865,6 @@ class Castelo:
         def atualizarValorFinal():
             desconto = self.venda_valor_total_add - self.formataParaFloat(self.venda_desconto.get())
             self.venda_label_total.config(text=self.insereTotalConvertido(desconto))
-
-        def popularAluguel(id_prod):
-            repositorio = produto_repositorio.ProdutoRepositorio()
-            produto = repositorio.listar_produto_id_fabr(id_prod, sessao)
-            tree_est_venda.insert('', 'end',
-                                  values=(
-                                      produto.id_fabr, produto.descricao,
-                                      self.insereTotalConvertido(produto.valor_venda), self.venda_qtd_item.get(),
-                                      self.insereTotalConvertido(int(self.venda_qtd_item.get()) * produto.valor_venda)))
-
-        def popularMaquinasAluguel(id_est):
-            repositorio = produto_venda_repositorio.ProdutoVendaRepositorio()
-            produtos = repositorio.listar_produtos_venda_id_venda(id_est, sessao)
-            for i in produtos:
-                tree_est_venda.insert('', 'end',
-                                      values=(i.id_fabr, i.descricao,
-                                              self.insereTotalConvertido(i.valor_un), i.qtd,
-                                              self.insereTotalConvertido(
-                                                  i.valor_un * i.qtd)))
-
 
         def atualizaValorAreceber():
             dinheiro = self.formataParaFloat(self.venda_entry_dinh.get())
@@ -15174,18 +15204,6 @@ class Castelo:
                                             state=DISABLED)
         venda_button_confirma.pack(side=LEFT, ipady=10, padx=15)
 
-        venda_cod_item.bind('<Button-1>', habilitaEntry)
-        venda_cod_item.bind('<Return>', procuraCod)
-        venda_desconto.bind('<Return>', atualizarValorFinalDesc)
-        venda_entry_dinh.bind('<Return>', atualizaValorArecebeButton)
-        venda_entry_cheque.bind('<Return>', atualizaValorArecebeButton)
-        venda_entry_cdebito.bind('<Return>', atualizaValorArecebeButton)
-        venda_entry_ccredito.bind('<Return>', atualizaValorArecebeButton)
-        venda_entry_pix.bind('<Return>', atualizaValorArecebeButton)
-        venda_entry_outros.bind('<Return>', atualizaValorArecebeButton)
-
-
-
         jan.transient(root2)
         jan.focus_force()
         jan.grab_set()
@@ -15261,20 +15279,33 @@ class Castelo:
 
         # --------------------------------------------------------------------------------------
 
-        def cadastrarMaquinaAluguel():
+        def cadastrarMaquinaAluguel(jan):
+
             repositorio_maq = maquina_aluguel_repositorio.MaquinaAluguelRepositorio()
 
-            equipamento =  descricao_entry.get()
+            equipamento = descricao_entry.get()
             marca = marca_entry.get()
             modelo = modelo_entry.get()
             n_serie = utilizado_entry.get()
-            valor = localizacao_entry.get()
+            valor = self.formataParaFloat(localizacao_entry.get())
             status = option_marca.get()
             obs = obs_criar_prod.get('1.0', 'end-1c')
 
-            novo_equip = maquina_aluguel.MaquinaAluguel(equipamento, marca, modelo, n_serie, valor, status, obs)
+            if equipamento == '':
+                messagebox.showinfo(title="ERRO", message="Campo EQUIPAMENTO não pode estar vazio!")
+            elif marca == '':
+                messagebox.showinfo(title="ERRO", message="Campo MARCA não pode estar vazio!")
+            elif n_serie == '':
+                messagebox.showinfo(title="ERRO", message="Campo N° SERIE não pode estar vazio!")
+            else:
 
-            repositorio_maq.inserir_equip(novo_equip, sessao)
+                novo_equip = maquina_aluguel.MaquinaAluguel(equipamento, marca, modelo, n_serie, valor, status, obs)
+
+                repositorio_maq.inserir_equip(novo_equip, sessao)
+                sessao.commit()
+                self.mostrarMensagem('1', 'Equipamento cadastrado com sucesso!')
+                self.popularMaquinasAluguel()
+                jan.destroy()
 
 
         frame_princ2 = Frame(jan, bg=layout_Princ1)
@@ -15341,8 +15372,8 @@ class Castelo:
         frame_princ1 = Frame(jan, bg=layout_Princ1)
         frame_princ1.pack(fill=X, padx=15, pady=10)
 
-        Button(frame_princ1, text="Salvar(F2)", width=10, command=lambda: [cadastrarProduto(), jan.destroy()]).pack(
-            side=RIGHT)
+        salvar_button = Button(frame_princ1, text="Salvar(F2)", width=10, command=lambda: [cadastrarMaquinaAluguel(jan)])
+        salvar_button.pack(side=RIGHT)
         Button(frame_princ1, text="Cancelar", width=10, command=jan.destroy).pack(side=RIGHT, padx=20)
         Button(frame_princ1, text="Alugueis Ant.", width=10, command=self.janelaClonarProduto, state=DISABLED).pack(side=LEFT)
 
@@ -15350,6 +15381,22 @@ class Castelo:
             obs_criar_prod.replace("1.0", END, obs_criar_prod.get("1.0", END).upper())
 
         obs_criar_prod.bind("<KeyRelease>", get_stringvar)
+
+        if num == 2:
+            item_selecionado = self.tree_maq_disp.selection()[0]
+            id_maq = self.tree_maq_disp.item(item_selecionado, "values")[0]
+            repositorio_maq = maquina_aluguel_repositorio.MaquinaAluguelRepositorio()
+            maq_selec = repositorio_maq.listar_equip_id(id_maq, sessao)
+            id_entry.config(state=NORMAL)
+            id_entry.insert(0, maq_selec.id)
+            id_entry.config(state=DISABLED)
+            descricao_entry.insert(0, maq_selec.equipamento)
+            marca_entry.insert(0, maq_selec.marca)
+            modelo_entry.insert(0, maq_selec.modelo)
+            utilizado_entry.insert(0, maq_selec.num_serie)
+            localizacao_entry.insert(0, self.insereNumConvertido(maq_selec.valor))
+            option_marca.set(maq_selec.status)
+            obs_criar_prod.insert('end', maq_selec.obs)
 
         jan.transient(root2)
         jan.focus_force()
