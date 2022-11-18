@@ -589,7 +589,8 @@ class Castelo:
 
         self.sf_alugueis_buttons = Frame(self.labelframe_dadoscli, bg=color_orc2)
         self.sf_alugueis_buttons.pack(fill=X, padx=10, pady=10)
-        Button(self.sf_alugueis_buttons, text="Novo Aluguel", width=10, command=self.janelaNovoAluguel).pack(side=LEFT, ipadx=5, ipady=5)
+        Button(self.sf_alugueis_buttons, text="Novo Aluguel", width=10,
+               command=lambda: [self.janelaNovoAluguel(1)]).pack(side=LEFT, ipadx=5, ipady=5)
         Button(self.sf_alugueis_buttons, text="Editar", width=10).pack(side=LEFT, ipadx=5, ipady=5, padx=10)
         Button(self.sf_alugueis_buttons, text="Dar Baixa", width=10).pack(side=LEFT, pady=5, ipadx=5, ipady=5)
 
@@ -12200,7 +12201,10 @@ class Castelo:
         # Centraliza a janela
         x_cordinate = int((self.w / 2) - (1200 / 2))
         y_cordinate = int((self.h / 2) - (900 / 2))
-        jan.geometry("{}x{}+{}+{}".format(890, 550, x_cordinate, y_cordinate))
+        jan.geometry("{}x{}+{}+{}".format(1040, 545, x_cordinate, y_cordinate))
+
+        global variable_busc_cli
+        variable_busc_cli = IntVar()
 
         # --------------------------------------------------------------------------------------
 
@@ -12234,11 +12238,11 @@ class Castelo:
                 treeview_busca_cliente.selection_set(children[0])
             entry_pesq_cliente.focus()
 
-        def popularPesqBuscaCliente():
+        def popularPesqBuscaCliente(tipo):
             treeview_busca_cliente.delete(*treeview_busca_cliente.get_children())
             client = entry_pesq_cliente.get()
             repositorio = cliente_repositorio.ClienteRepositorio()
-            clientes = repositorio.listar_cliente_nome(client, 2, sessao)
+            clientes = repositorio.listar_cliente_nome(client, tipo, sessao)
             for i in clientes:
                 treeview_busca_cliente.insert('', 'end',
                                               values=(i.id,
@@ -12310,20 +12314,28 @@ class Castelo:
 
         subframe2 = Frame(frame_principal)
         subframe2.pack(padx=10, pady=10, side=LEFT)
+        subframe3 = Frame(subframe2)
+        subframe3.grid(row=0, column=1, sticky=E, padx=30)
 
         frame_prod = LabelFrame(subframe2, text='Digite um Nome para Pesquisar')
         frame_prod.grid(row=0, column=0, sticky=W, ipady=3)
-        entry_pesq_cliente = Entry(frame_prod, width=90, textvariable=osVar1)
+        entry_pesq_cliente = Entry(frame_prod, width=70, textvariable=osVar1)
         entry_pesq_cliente.grid(row=0, column=0, sticky=W, padx=10)
-        Button(frame_prod, text='1', height=2, command=popularEntradaBuscaCliente).grid(row=0, column=1, padx=10,
+        check_pesq_avan_cli = Checkbutton(frame_prod, text='Busca Avançada',
+                                          variable=variable_busc_cli, onvalue=1, offvalue=0)
+        check_pesq_avan_cli.grid(row=0, column=1, sticky=W, padx=10)
+        Button(frame_prod, text='1', height=2, command=popularEntradaBuscaCliente).grid(row=0, column=2, padx=10,
                                                                                         ipadx=15)
-        Button(subframe2, text='Fechar', command=jan.destroy).grid(row=0, column=1, padx=15, ipadx=20,
+
+        Button(subframe3, text='Fechar', width=12, command=jan.destroy).grid(row=0, column=3,
                                                                    ipady=5)
-        Button(subframe2, text='Selecionar', command=lambda: [selecionaCliente(num)]).grid(row=0, column=2, ipadx=20,
+        Button(subframe3, text='Selecionar', command=lambda: [selecionaCliente(num)], width=12).grid(row=0, column=1,
                                                                                            ipady=5)
+        Button(subframe3, text='Novo', command=self.janelaCadastroCliente, width=12).grid(row=0, column=2,
+                                                                                                     ipady=5, padx=15)
 
         def pesquisClient(event):
-            popularPesqBuscaCliente()
+            popularPesqBuscaCliente(variable_busc_cli.get())
 
         entry_pesq_cliente.bind('<Return>', pesquisClient)
         popularEntradaBuscaCliente()
@@ -14747,7 +14759,7 @@ class Castelo:
         else:
             pass
 
-    def janelaNovoAluguel(self):
+    def janelaNovoAluguel(self, num):
 
         bg_tela = '#F2DEC4'
         bg_entry = '#C5D7D9'
@@ -14765,8 +14777,14 @@ class Castelo:
         y_cordinate = int((self.h / 2) - (635 / 2))
         jan.geometry("{}x{}+{}+{}".format(1030, 635, x_cordinate, y_cordinate))
 
-        self.lista_produto_venda = []
-        self.venda_valor_total_add = 0
+
+        self.alug_valor_total = 0
+        valor_rec = 0
+        self.equipamento_obj = None
+        self.cliente_obj = None
+        global variable_int_pago
+        variable_int_pago = IntVar()
+        variable_int_pago.set(1)
 
         # --------------------------------------------------------------------------------------
 
@@ -14859,8 +14877,173 @@ class Castelo:
 
         repositorio = produto_repositorio.ProdutoRepositorio()
 
-        def atualizarValorFinalDesc(event):
-            atualizarValorFinal()
+        def cadastrarAluguel(jan, num, valor_total, equip, cli, valor_a_rec):
+
+            repositorio_alug = aluguel_repositorio.AluguelRepositorio()
+
+            data = datetime.now()
+            equipamento = equip
+            cliente = cli
+            caixa_peca1 = orc_id_entry1.get()
+            caixa_peca2 = orc_id_entry2.get()
+            caixa_peca3 = orc_id_entry3.get()
+            caixa_peca4 = orc_id_entry4.get()
+            caixa_peca5 = orc_id_entry5.get()
+            caixa_peca6 = orc_id_entry6.get()
+            valor_uni1 = orc_val_uni_entry1.get()
+            valor_uni2 = orc_val_uni_entry2.get()
+            valor_uni3 = orc_val_uni_entry3.get()
+            valor_uni4 = orc_val_uni_entry4.get()
+            valor_uni5 = orc_val_uni_entry5.get()
+            valor_uni6 = orc_val_uni_entry6.get()
+            qtd1 = orc_quant_entry1.get()
+            qtd2 = orc_quant_entry2.get()
+            qtd3 = orc_quant_entry3.get()
+            qtd4 = orc_quant_entry4.get()
+            qtd5 = orc_quant_entry5.get()
+            qtd6 = orc_quant_entry6.get()
+            desc_serv1 = orc_descr_entry1.get()
+            desc_serv2 = orc_descr_entry2.get()
+            desc_serv3 = orc_descr_entry3.get()
+            desc_serv4 = orc_descr_entry4.get()
+            desc_serv5 = orc_descr_entry5.get()
+            desc_serv6 = orc_descr_entry6.get()
+            obs1 = venda_obs1.get()
+            obs2 = venda_obs2.get()
+            obs3 = venda_obs3.get()
+            cheque = venda_entry_cheque.get()
+            dinheiro = venda_entry_dinh.get()
+            pix = venda_entry_pix.get()
+            outros = venda_entry_outros.get()
+            ccredito = venda_entry_ccredito.get()
+            cdebito = venda_entry_cdebito.get()
+            desconto = self.formataParaFloat(desconto_entry.get())
+            caixa_peca_total = self.formataParaFloat(cp_entry.get())
+            valor_total = self.formataParaFloat(valor_total)
+            dias = venda_label_subtotal.get()
+            data_entrega = venda_desconto.get_date()
+            operador = 1
+            alug_pago = 1
+
+            if equipamento == None:
+                messagebox.showinfo(title="ERRO", message="Campo EQUIPAMENTO não pode estar vazio!")
+            elif cliente == None:
+                messagebox.showinfo(title="ERRO", message="Campo Cliente não pode estar vazio!")
+            elif valor_rec < valor_total:
+                messagebox.showinfo(title="ERRO", message="Valor a receber menor do que o valor total!")
+            else:
+                novo_alug = aluguel.Aluguel(data, equipamento, cliente, caixa_peca1, caixa_peca2, caixa_peca3,
+                                            caixa_peca4, caixa_peca5, caixa_peca6, valor_uni1, valor_uni2, valor_uni3,
+                                            valor_uni4, valor_uni5, valor_uni6,
+                                            qtd1, qtd2, qtd3, qtd4, qtd5, qtd6, desc_serv1, desc_serv2, desc_serv3,
+                                            desc_serv4, desc_serv5, desc_serv6, obs1, obs2, obs3, cheque, dinheiro,
+                                            pix,
+                                            outros, ccredito, cdebito, desconto, caixa_peca_total, valor_total, dias,
+                                            data_entrega, operador, alug_pago)
+                if num == 1:
+                    repositorio_alug.inserir_aluguel(novo_alug, sessao)
+                    sessao.commit()
+                    self.mostrarMensagem('1', 'Equipamento Cadastrado com Sucesso!')
+                # elif num == 2:
+                #     repositorio_alug.editar_aluguel(id_alug, novo_alug, sessao)
+                #     sessao.commit()
+                #     self.mostrarMensagem('1', 'Dados Alterado com Sucesso!')
+
+                self.popularMaquinasAluguel()
+                jan.destroy()
+
+        def janelaBuscaequip():
+
+            jan = Toplevel()
+
+            # Centraliza a janela
+            x_cordinate = int((self.w / 2) - (1200 / 2))
+            y_cordinate = int((self.h / 2) - (900 / 2))
+            jan.geometry("{}x{}+{}+{}".format(770, 330, x_cordinate, y_cordinate))
+
+
+            # --------------------------------------------------------------------------------------
+
+            osVar1 = StringVar(jan)
+
+            def to_uppercase(*args):
+                osVar1.set(osVar1.get().upper())
+
+            osVar1.trace_add('write', to_uppercase)
+
+            # --------------------------------------------------------------------------------------
+
+            def popularMaquinasAluguel():
+                treeview_busca_equip.delete(*treeview_busca_equip.get_children())
+                repositorio = maquina_aluguel_repositorio.MaquinaAluguelRepositorio()
+                produtos = repositorio.listar_equip(sessao)
+                for i in produtos:
+                    treeview_busca_equip.insert('', 'end',
+                                              values=( i.status, f'{i.equipamento} {i.marca} {i.modelo}', i.id,
+                                                      self.insereTotalConvertido(i.valor)))
+                treeview_busca_equip.focus_set()
+                children = treeview_busca_equip.get_children()
+                if children:
+                    treeview_busca_equip.focus(children[0])
+                    treeview_busca_equip.selection_set(children[0])
+
+
+            def selecionaEquip():
+                equip_selecionado = treeview_busca_equip.focus()
+                dado_equip = treeview_busca_equip.item(equip_selecionado, 'values')
+
+                self.equipamento_obj = maquina_aluguel_repositorio.MaquinaAluguelRepositorio().listar_equip_id(dado_equip[2], sessao)
+
+                venda_cod_item.config(state=NORMAL)
+                venda_cod_item.delete(0, END)
+                venda_cod_item.insert(0, f'{self.equipamento_obj.equipamento} {self.equipamento_obj.marca} {self.equipamento_obj.modelo}')
+                venda_cod_item.config(state=DISABLED)
+
+                self.alug_valor_total = (self.equipamento_obj.valor * int(venda_label_subtotal.get()))
+
+                jan.destroy()
+
+            frame_principal = Frame(jan)
+            frame_principal.pack(pady=10, fill=BOTH)
+
+            subframe1 = Frame(frame_principal)
+            subframe1.pack(fill=X)
+            scrollbar_busca_y = Scrollbar(subframe1, orient=VERTICAL)
+            scrollbar_busca_x = Scrollbar(subframe1, orient=HORIZONTAL)
+            treeview_busca_equip = ttk.Treeview(subframe1,
+                                                  columns=("status", 'maquina', 'id', 'valor'),
+                                                  show='headings',
+                                                  xscrollcommand=scrollbar_busca_x,
+                                                  yscrollcommand=scrollbar_busca_y,
+                                                  selectmode='browse',
+                                                  height=10)
+            treeview_busca_equip.column('status', width=150, minwidth=50, stretch=False, anchor=CENTER)
+            treeview_busca_equip.column('maquina', width=400, minwidth=50, stretch=False)
+            treeview_busca_equip.column('id', width=75, minwidth=50, stretch=False)
+            treeview_busca_equip.column('valor', width=125, minwidth=50, stretch=False)
+
+            treeview_busca_equip.heading('status', text='STATUS')
+            treeview_busca_equip.heading('maquina', text='EQUIPAMENTO')
+            treeview_busca_equip.heading('id', text='ID.')
+            treeview_busca_equip.heading('valor', text='VALOR DIÁRIA')
+
+            scrollbar_busca_y.config(command=treeview_busca_equip.yview)
+            scrollbar_busca_y.pack(fill=Y, side=RIGHT)
+            treeview_busca_equip.pack()
+            scrollbar_busca_x.config(command=treeview_busca_equip.xview)
+            scrollbar_busca_x.pack(fill=X)
+
+            subframe2 = Frame(frame_principal)
+            subframe2.pack(padx=10, pady=10, side=RIGHT, fill=X)
+
+            Button(subframe2, text='Selecionar', command=selecionaEquip, width=12).pack(padx=10, pady=10, side=RIGHT, ipady=3)
+            Button(subframe2, text='Fechar', width=12, command=jan.destroy).pack(padx=10, pady=10, side=RIGHT, ipady=3)
+
+            popularMaquinasAluguel()
+
+            jan.transient(root2)
+            jan.focus_force()
+            jan.grab_set()
 
         def atualizarValorFinal():
             desconto = self.venda_valor_total_add - self.formataParaFloat(self.venda_desconto.get())
@@ -14923,7 +15106,7 @@ class Castelo:
         venda_cod_item.config(state=DISABLED)
         venda_cod_item.grid(row=1, column=0, sticky=W, padx=10)
 
-        venda_button_busca_prod = Button(frame_prod, text='Buscar', command=lambda: [self.janelaBuscaProduto(4)])
+        venda_button_busca_prod = Button(frame_prod, text='Buscar', command=janelaBuscaequip)
         venda_button_busca_prod.grid(row=1, column=4, padx=10, ipadx=10)
 
         subframe_prod1 = Frame(frame_princ1, bg=bg_tela)
@@ -14958,96 +15141,96 @@ class Castelo:
                                                                                                           column=0,
                                                                                                           pady=2)
 
-        self.orc_quant_entry1 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all', bg=color_entry1,
+        orc_quant_entry1 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all', bg=color_entry1,
                                       validatecommand=(testa_inteiro, '%P'))
-        self.orc_quant_entry1.grid(row=1, column=1, padx=5)
-        self.orc_id_entry1 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
+        orc_quant_entry1.grid(row=1, column=1, padx=5)
+        orc_id_entry1 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
                                    validatecommand=(testa_float, '%P'))
-        self.orc_id_entry1.grid(row=1, column=2)
-        self.orc_descr_entry1 = Entry(subframe_material1, width=58, relief=SUNKEN, bg=color_entry1,
+        orc_id_entry1.grid(row=1, column=2)
+        orc_descr_entry1 = Entry(subframe_material1, width=58, relief=SUNKEN, bg=color_entry1,
                                       textvariable=osVar7)
-        self.orc_descr_entry1.grid(row=1, column=3, padx=5)
-        self.orc_val_uni_entry1 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
+        orc_descr_entry1.grid(row=1, column=3, padx=5)
+        orc_val_uni_entry1 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
                                         validatecommand=(testa_float, '%P'))
-        self.orc_val_uni_entry1.grid(row=1, column=4)
-        self.orc_val_total_entry1 = Label(subframe_material1, text='',
+        orc_val_uni_entry1.grid(row=1, column=4)
+        orc_val_total_entry1 = Label(subframe_material1, text='',
                                           width=10, relief=SUNKEN, bd=2, bg=color_entry2)
-        self.orc_val_total_entry1.grid(row=1, column=5, padx=5)
-        self.orc_quant_entry2 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all', bg=color_entry1,
+        orc_val_total_entry1.grid(row=1, column=5, padx=5)
+        orc_quant_entry2 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all', bg=color_entry1,
                                       validatecommand=(testa_inteiro, '%P'))
-        self.orc_quant_entry2.grid(row=2, column=1, padx=5)
-        self.orc_id_entry2 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
+        orc_quant_entry2.grid(row=2, column=1, padx=5)
+        orc_id_entry2 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
                                    validatecommand=(testa_float, '%P'))
-        self.orc_id_entry2.grid(row=2, column=2)
-        self.orc_descr_entry2 = Entry(subframe_material1, width=58, relief=SUNKEN, bg=color_entry1,
+        orc_id_entry2.grid(row=2, column=2)
+        orc_descr_entry2 = Entry(subframe_material1, width=58, relief=SUNKEN, bg=color_entry1,
                                       textvariable=osVar8)
-        self.orc_descr_entry2.grid(row=2, column=3, padx=5)
-        self.orc_val_uni_entry2 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
+        orc_descr_entry2.grid(row=2, column=3, padx=5)
+        orc_val_uni_entry2 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
                                         validatecommand=(testa_float, '%P'))
-        self.orc_val_uni_entry2.grid(row=2, column=4)
-        self.orc_val_total_entry2 = Label(subframe_material1, text='',
+        orc_val_uni_entry2.grid(row=2, column=4)
+        orc_val_total_entry2 = Label(subframe_material1, text='',
                                           width=10, relief=SUNKEN, bd=2, bg=color_entry2)
-        self.orc_val_total_entry2.grid(row=2, column=5, padx=5)
-        self.orc_quant_entry3 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all', bg=color_entry1,
+        orc_val_total_entry2.grid(row=2, column=5, padx=5)
+        orc_quant_entry3 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all', bg=color_entry1,
                                       validatecommand=(testa_inteiro, '%P'))
-        self.orc_quant_entry3.grid(row=3, column=1, padx=5)
-        self.orc_id_entry3 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
+        orc_quant_entry3.grid(row=3, column=1, padx=5)
+        orc_id_entry3 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
                                    validatecommand=(testa_float, '%P'))
-        self.orc_id_entry3.grid(row=3, column=2)
-        self.orc_descr_entry3 = Entry(subframe_material1, width=58, relief=SUNKEN, bg=color_entry1,
+        orc_id_entry3.grid(row=3, column=2)
+        orc_descr_entry3 = Entry(subframe_material1, width=58, relief=SUNKEN, bg=color_entry1,
                                       textvariable=osVar9)
-        self.orc_descr_entry3.grid(row=3, column=3, padx=5)
-        self.orc_val_uni_entry3 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
+        orc_descr_entry3.grid(row=3, column=3, padx=5)
+        orc_val_uni_entry3 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
                                         validatecommand=(testa_float, '%P'))
-        self.orc_val_uni_entry3.grid(row=3, column=4)
-        self.orc_val_total_entry3 = Label(subframe_material1, text='',
+        orc_val_uni_entry3.grid(row=3, column=4)
+        orc_val_total_entry3 = Label(subframe_material1, text='',
                                           width=10, relief=SUNKEN, bd=2, bg=color_entry2)
-        self.orc_val_total_entry3.grid(row=3, column=5, padx=5)
-        self.orc_quant_entry4 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all', bg=color_entry1,
+        orc_val_total_entry3.grid(row=3, column=5, padx=5)
+        orc_quant_entry4 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all', bg=color_entry1,
                                       validatecommand=(testa_inteiro, '%P'))
-        self.orc_quant_entry4.grid(row=4, column=1, padx=5)
-        self.orc_id_entry4 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
+        orc_quant_entry4.grid(row=4, column=1, padx=5)
+        orc_id_entry4 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
                                    validatecommand=(testa_float, '%P'))
-        self.orc_id_entry4.grid(row=4, column=2)
-        self.orc_descr_entry4 = Entry(subframe_material1, width=58, relief=SUNKEN, bg=color_entry1,
+        orc_id_entry4.grid(row=4, column=2)
+        orc_descr_entry4 = Entry(subframe_material1, width=58, relief=SUNKEN, bg=color_entry1,
                                       textvariable=osVar10)
-        self.orc_descr_entry4.grid(row=4, column=3, padx=5)
-        self.orc_val_uni_entry4 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
+        orc_descr_entry4.grid(row=4, column=3, padx=5)
+        orc_val_uni_entry4 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
                                         validatecommand=(testa_float, '%P'))
-        self.orc_val_uni_entry4.grid(row=4, column=4)
-        self.orc_val_total_entry4 = Label(subframe_material1, text='',
+        orc_val_uni_entry4.grid(row=4, column=4)
+        orc_val_total_entry4 = Label(subframe_material1, text='',
                                           width=10, relief=SUNKEN, bd=2, bg=color_entry2)
-        self.orc_val_total_entry4.grid(row=4, column=5, padx=5)
-        self.orc_quant_entry5 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all', bg=color_entry1,
+        orc_val_total_entry4.grid(row=4, column=5, padx=5)
+        orc_quant_entry5 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all', bg=color_entry1,
                                       validatecommand=(testa_inteiro, '%P'))
-        self.orc_quant_entry5.grid(row=5, column=1, padx=5)
-        self.orc_id_entry5 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
+        orc_quant_entry5.grid(row=5, column=1, padx=5)
+        orc_id_entry5 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
                                    validatecommand=(testa_float, '%P'))
-        self.orc_id_entry5.grid(row=5, column=2)
-        self.orc_descr_entry5 = Entry(subframe_material1, width=58, relief=SUNKEN, bg=color_entry1,
+        orc_id_entry5.grid(row=5, column=2)
+        orc_descr_entry5 = Entry(subframe_material1, width=58, relief=SUNKEN, bg=color_entry1,
                                       textvariable=osVar11)
-        self.orc_descr_entry5.grid(row=5, column=3, padx=5)
-        self.orc_val_uni_entry5 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
+        orc_descr_entry5.grid(row=5, column=3, padx=5)
+        orc_val_uni_entry5 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
                                         validatecommand=(testa_float, '%P'))
-        self.orc_val_uni_entry5.grid(row=5, column=4)
-        self.orc_val_total_entry5 = Label(subframe_material1, text='',
+        orc_val_uni_entry5.grid(row=5, column=4)
+        orc_val_total_entry5 = Label(subframe_material1, text='',
                                           width=10, relief=SUNKEN, bd=2, bg=color_entry2)
-        self.orc_val_total_entry5.grid(row=5, column=5, padx=5)
-        self.orc_quant_entry6 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all', bg=color_entry1,
+        orc_val_total_entry5.grid(row=5, column=5, padx=5)
+        orc_quant_entry6 = Entry(subframe_material1, width=4, relief=SUNKEN, validate='all', bg=color_entry1,
                                       validatecommand=(testa_inteiro, '%P'))
-        self.orc_quant_entry6.grid(row=6, column=1, padx=5)
-        self.orc_id_entry6 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
+        orc_quant_entry6.grid(row=6, column=1, padx=5)
+        orc_id_entry6 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
                                    validatecommand=(testa_float, '%P'))
-        self.orc_id_entry6.grid(row=6, column=2)
-        self.orc_descr_entry6 = Entry(subframe_material1, width=58, relief=SUNKEN, bg=color_entry1,
+        orc_id_entry6.grid(row=6, column=2)
+        orc_descr_entry6 = Entry(subframe_material1, width=58, relief=SUNKEN, bg=color_entry1,
                                       textvariable=osVar12)
-        self.orc_descr_entry6.grid(row=6, column=3, padx=5)
-        self.orc_val_uni_entry6 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
+        orc_descr_entry6.grid(row=6, column=3, padx=5)
+        orc_val_uni_entry6 = Entry(subframe_material1, width=10, relief=SUNKEN, validate='all', bg=color_entry1,
                                         validatecommand=(testa_float, '%P'))
-        self.orc_val_uni_entry6.grid(row=6, column=4)
-        self.orc_val_total_entry6 = Label(subframe_material1, text='',
+        orc_val_uni_entry6.grid(row=6, column=4)
+        orc_val_total_entry6 = Label(subframe_material1, text='',
                                           width=10, relief=SUNKEN, bd=2, bg=color_entry2)
-        self.orc_val_total_entry6.grid(row=6, column=5, padx=5)
+        orc_val_total_entry6.grid(row=6, column=5, padx=5)
 
         labelframe_pag_coment = LabelFrame(mini_frame1, text="Observações", bg=bg_tela)
         labelframe_pag_coment.grid(row=1, column=0, sticky=W)
@@ -15109,7 +15292,7 @@ class Castelo:
         labelframe_valor_rec = LabelFrame(subframe_form_pag2, bg=bg_tela)
         labelframe_valor_rec.grid(row=0, column=0, sticky=W, pady=5)
         Label(labelframe_valor_rec, text="Valor à Receber:", bg=bg_tela).pack(padx=20)
-        venda_valor_areceber = Label(labelframe_valor_rec, text="R$ 0,00", font=("", "12", ""), fg="red",
+        venda_valor_areceber = Label(labelframe_valor_rec, text=self.insereTotalConvertido(self.alug_valor_total), font=("", "12", ""), fg="red",
                                           bg=bg_tela)
         venda_valor_areceber.pack(fill=X, pady=5)
         venda_valor_areceber.configure(width=10, height=1)
@@ -15126,6 +15309,10 @@ class Castelo:
         cp_entry = Entry(subframe_form_pag3, width=10, validate='all', validatecommand=(testa_float, '%P'),
                                bg=bg_entry, justify=CENTER)
         cp_entry.grid(row=1, column=1, sticky=W, padx=5, pady=10)
+        check_pago = Checkbutton(subframe_form_pag3, text='Pagamento Adiantado', variable=variable_int_pago,
+                                 onvalue=1, offvalue=0, bg=bg_tela)
+        check_pago.grid(row=2, column=0, columnspan=2)
+
 
         labelframe_dados_cliente = LabelFrame(subframe_prod1, bg=bg_tela, text='Dados do Cliente')
         labelframe_dados_cliente.grid(row=1, column=0, sticky=NW, ipady=6, ipadx=5, pady=5)
@@ -15170,13 +15357,15 @@ class Castelo:
         venda_label_subtotal.insert(0, 1)
         Label(frame_descr_vend, text='Entrega:', bg=bg_tela).grid(row=1, column=0)
         venda_desconto = DateEntry(frame_descr_vend, width=10, validate='all', validatecommand=(testa_float, '%P'),
-                                    bg=bg_entry)
+                                    bg=bg_entry, firstweekday='sunday',
+                                     showweeknumbers=FALSE, showothermonthdays=FALSE)
         venda_desconto.grid(row=1, column=1, padx=5)
+        venda_desconto.set_date(self.alteraData(1, datetime.now(), 1))
         Label(frame_descr_vend, width=2, bg=bg_tela).grid(row=0, column=2, padx=1)
         frame_valor_total = LabelFrame(frame_descr_vend, bg=bg_tela)
         frame_valor_total.grid(row=0, column=3, rowspan=2, padx=0)
         Label(frame_valor_total, text='TOTAL:', font=('verdana', '12', 'bold'), bg=bg_tela).pack(pady=1, padx=30)
-        venda_label_total = Label(frame_valor_total, text='R$0,00', font=('verdana', '13', 'bold'), fg='red',
+        venda_label_total = Label(frame_valor_total, text=self.insereTotalConvertido(self.alug_valor_total), font=('verdana', '13', 'bold'), fg='red',
                                        bg=bg_tela)
         venda_label_total.pack(padx=5, pady=1)
         venda_label_total.configure(width=10, height=1)
@@ -15200,7 +15389,8 @@ class Castelo:
         venda_button_confirma = Button(frame_button_confirma, text='Confirmar Aluguel',
                                             command=lambda: [atualizaValorAreceber(),
                                                              atualizarValorFinal(),
-                                                             self.cadastroVenda(1, jan)],
+                                                             cadastrarAluguel(jan, num, self.alug_valor_total, equipamento_obj,
+                                                                              cliente_obj, valor_rec)],
                                             state=DISABLED)
         venda_button_confirma.pack(side=LEFT, ipady=10, padx=15)
 
@@ -15279,7 +15469,7 @@ class Castelo:
 
         # --------------------------------------------------------------------------------------
 
-        def cadastrarMaquinaAluguel(jan):
+        def cadastrarMaquinaAluguel(jan, num):
 
             repositorio_maq = maquina_aluguel_repositorio.MaquinaAluguelRepositorio()
 
@@ -15298,12 +15488,16 @@ class Castelo:
             elif n_serie == '':
                 messagebox.showinfo(title="ERRO", message="Campo N° SERIE não pode estar vazio!")
             else:
-
                 novo_equip = maquina_aluguel.MaquinaAluguel(equipamento, marca, modelo, n_serie, valor, status, obs)
+                if num == 1:
+                    repositorio_maq.inserir_equip(novo_equip, sessao)
+                    sessao.commit()
+                    self.mostrarMensagem('1', 'Equipamento Cadastrado com Sucesso!')
+                elif num == 2:
+                    repositorio_maq.editar_equip(id_maq, novo_equip, sessao)
+                    sessao.commit()
+                    self.mostrarMensagem('1', 'Dados Alterado com Sucesso!')
 
-                repositorio_maq.inserir_equip(novo_equip, sessao)
-                sessao.commit()
-                self.mostrarMensagem('1', 'Equipamento cadastrado com sucesso!')
                 self.popularMaquinasAluguel()
                 jan.destroy()
 
@@ -15372,7 +15566,7 @@ class Castelo:
         frame_princ1 = Frame(jan, bg=layout_Princ1)
         frame_princ1.pack(fill=X, padx=15, pady=10)
 
-        salvar_button = Button(frame_princ1, text="Salvar(F2)", width=10, command=lambda: [cadastrarMaquinaAluguel(jan)])
+        salvar_button = Button(frame_princ1, text="Salvar(F2)", width=10, command=lambda: [cadastrarMaquinaAluguel(jan, num)])
         salvar_button.pack(side=RIGHT)
         Button(frame_princ1, text="Cancelar", width=10, command=jan.destroy).pack(side=RIGHT, padx=20)
         Button(frame_princ1, text="Alugueis Ant.", width=10, command=self.janelaClonarProduto, state=DISABLED).pack(side=LEFT)

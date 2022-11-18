@@ -20,7 +20,7 @@ class MaquinaAluguelQuery():
     def editar_equip(self, equip_id, novo_op, sessao):
         equip = self.listar_equip_id(equip_id, sessao)
         equip.equipamento = novo_op.equipamento
-        equip.marca = novo_op.__marca
+        equip.marca = novo_op.marca
         equip.num_serie = novo_op.numSerie
         equip.valor = novo_op.valor
         equip.status = novo_op.status
