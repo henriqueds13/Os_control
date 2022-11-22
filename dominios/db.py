@@ -562,6 +562,12 @@ class MaquinaAluguel(Base):
 
     equipamento_aluguel = relationship('Aluguel', back_populates='aluguel_equipamento')
 
+class MaquinaAluguelAcessorios(Base):
+    __tablename__ = 'maquina_aluguel_acessorios'
+    id = Column(Integer, primary_key=True)
+    acessorio = Column(String(100))
+    valor = Column(Float)
+
 Base.metadata.create_all(engine)
 
 
