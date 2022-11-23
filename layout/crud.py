@@ -781,7 +781,7 @@ class Castelo:
         Button(self.mini_fram2, text='Adicionar', width=10, command=lambda: [self.janelaNovaMaqAluguel(1)]).pack()
         Button(self.mini_fram2, text='Remover', width=10, command=self.deletarMaqAluguel).pack(pady=10)
         Button(self.mini_fram2, text='Editar', width=10, command=lambda: [self.janelaNovaMaqAluguel(2)]).pack()
-        Button(self.mini_fram2, text='Acessórios', width=10, command=lambda: [self.janelaNovaMaqAluguel(2)]).pack(pady=10)
+        Button(self.mini_fram2, text='Acessórios', width=10, command=self.janelaAcessorioAluguel).pack(pady=10)
 
         self.popularMaquinasAluguel()
 
@@ -15222,42 +15222,42 @@ class Castelo:
                     orc_descr_entry1.delete(0, END)
                     orc_descr_entry1.insert(0, acessorio_selec.acessorio)
                     orc_val_uni_entry1.delete(0, END)
-                    orc_val_uni_entry1.insert(0, acessorio_selec.valor)
+                    orc_val_uni_entry1.insert(0, self.insereNumConvertido(acessorio_selec.valor))
                 elif num == 2:
                     orc_quant_entry2.delete(0, END)
                     orc_quant_entry2.insert(0, 1)
                     orc_descr_entry2.delete(0, END)
                     orc_descr_entry2.insert(0, acessorio_selec.acessorio)
                     orc_val_uni_entry2.delete(0, END)
-                    orc_val_uni_entry2.insert(0, acessorio_selec.valor)
+                    orc_val_uni_entry2.insert(0, self.insereNumConvertido(acessorio_selec.valor))
                 elif num == 3:
                     orc_quant_entry3.delete(0, END)
                     orc_quant_entry3.insert(0, 1)
                     orc_descr_entry3.delete(0, END)
                     orc_descr_entry3.insert(0, acessorio_selec.acessorio)
                     orc_val_uni_entry3.delete(0, END)
-                    orc_val_uni_entry3.insert(0, acessorio_selec.valor)
+                    orc_val_uni_entry3.insert(0, self.insereNumConvertido(acessorio_selec.valor))
                 elif num == 4:
                     orc_quant_entry4.delete(0, END)
                     orc_quant_entry4.insert(0, 1)
                     orc_descr_entry4.delete(0, END)
                     orc_descr_entry4.insert(0, acessorio_selec.acessorio)
                     orc_val_uni_entry4.delete(0, END)
-                    orc_val_uni_entry4.insert(0, acessorio_selec.valor)
+                    orc_val_uni_entry4.insert(0, self.insereNumConvertido(acessorio_selec.valor))
                 elif num == 5:
                     orc_quant_entry5.delete(0, END)
                     orc_quant_entry5.insert(0, 1)
                     orc_descr_entry5.delete(0, END)
                     orc_descr_entry5.insert(0, acessorio_selec.acessorio)
                     orc_val_uni_entry5.delete(0, END)
-                    orc_val_uni_entry5.insert(0, acessorio_selec.valor)
+                    orc_val_uni_entry5.insert(0, self.insereNumConvertido(acessorio_selec.valor))
                 elif num == 6:
                     orc_quant_entry6.delete(0, END)
                     orc_quant_entry6.insert(0, 1)
                     orc_descr_entry6.delete(0, END)
                     orc_descr_entry6.insert(0, acessorio_selec.acessorio)
                     orc_val_uni_entry6.delete(0, END)
-                    orc_val_uni_entry6.insert(0, acessorio_selec.valor)
+                    orc_val_uni_entry6.insert(0, self.insereNumConvertido(acessorio_selec.valor))
 
                 jan.destroy()
 
@@ -15290,8 +15290,9 @@ class Castelo:
             subframe2 = Frame(frame_principal)
             subframe2.pack(padx=10, pady=10, side=RIGHT, fill=X)
 
-            Button(subframe2, text='Selecionar', command=lambda: [selecionaAcess(num)], width=12).pack(padx=10, pady=10, side=RIGHT,
-                                                                                        ipady=3)
+            Button(subframe2, text='Selecionar', command=lambda: [selecionaAcess(num)], width=12).pack(padx=10, pady=10,
+                                                                                                       side=RIGHT,
+                                                                                                       ipady=3)
             Button(subframe2, text='Fechar', width=12, command=jan.destroy).pack(padx=10, pady=10, side=RIGHT, ipady=3)
 
             popularAcessorios()
@@ -15402,17 +15403,17 @@ class Castelo:
         Label(subframe_material1, text="Valor Un.", bg=bg_tela).grid(row=0, column=4)
         Label(subframe_material1, text="Valor (R$)", bg=bg_tela).grid(row=0, column=5, pady=2)
         Button(subframe_material1, width=3, text="E", command=lambda: [janelaBuscaAcessorio(1)]).grid(row=1,
-                                                                                                     column=0)
+                                                                                                      column=0)
         Button(subframe_material1, width=3, text="E", command=lambda: [janelaBuscaAcessorio(2)]).grid(row=2,
-                                                                                                     column=0,
-                                                                                                         pady=2)
+                                                                                                      column=0,
+                                                                                                      pady=2)
         Button(subframe_material1, width=3, text="E", command=lambda: [janelaBuscaAcessorio(3)]).grid(row=3,
-                                                                                                     column=0)
+                                                                                                      column=0)
         Button(subframe_material1, width=3, text="E", command=lambda: [janelaBuscaAcessorio(4)]).grid(row=4,
-                                                                                                     column=0,
-                                                                                                     pady=2)
+                                                                                                      column=0,
+                                                                                                      pady=2)
         Button(subframe_material1, width=3, text="E", command=lambda: [janelaBuscaAcessorio(5)]).grid(row=5,
-                                                                                                     column=0)
+                                                                                                      column=0)
         Button(subframe_material1, width=3, text="E", command=lambda: [janelaBuscaAcessorio(6)]).grid(row=6,
                                                                                                       column=0,
                                                                                                       pady=2)
@@ -15864,6 +15865,193 @@ class Castelo:
             localizacao_entry.insert(0, self.insereNumConvertido(maq_selec.valor))
             option_marca.set(maq_selec.status)
             obs_criar_prod.insert('end', maq_selec.obs)
+
+        jan.transient(root2)
+        jan.focus_force()
+        jan.grab_set()
+
+    def janelaAcessorioAluguel(self):
+
+        jan = Toplevel()
+
+        # Centraliza a janela
+        x_cordinate = int((self.w / 2) - (1200 / 2))
+        y_cordinate = int((self.h / 2) - (900 / 2))
+        jan.geometry("{}x{}+{}+{}".format(545, 330, x_cordinate, y_cordinate))
+
+        def popularAcessorios():
+            treeview_busca_acess.delete(*treeview_busca_acess.get_children())
+            repositorio_acessorio = acessorio_maquina_aluguel_repositorio.AcessorioMaquinaAluguelRepositorio()
+            acessorios = repositorio_acessorio.listar_equip(sessao)
+            for i in acessorios:
+                treeview_busca_acess.insert('', 'end',
+                                            values=(i.id, i.acessorio, self.insereTotalConvertido(i.valor)))
+            treeview_busca_acess.focus_set()
+            children = treeview_busca_acess.get_children()
+            if children:
+                treeview_busca_acess.focus(children[0])
+                treeview_busca_acess.selection_set(children[0])
+
+        def janelaNovoAcessorio(num):
+
+            font_fg_labels = ("Verdana", "12", "")
+            un_medida = ["UN", "METRO", "Kg"]
+            layout_Princ = '#9AEBA3'
+            layout_Princ1 = '#45C4B0'
+            layout_entry = '#DAFDBA'
+            lista_status = []
+
+            jan = Toplevel(bg=layout_Princ1)
+
+            # Centraliza a janela
+            x_cordinate = int((self.w / 2) - (1000 / 2))
+            y_cordinate = int((self.h / 2) - (650 / 2))
+            jan.geometry("{}x{}+{}+{}".format(500, 200, x_cordinate, y_cordinate))
+
+            # --------------------------------------------------------------------------------------
+
+            osVar1 = StringVar(jan)
+
+            def to_uppercase(*args):
+                osVar1.set(osVar1.get().upper())
+
+            osVar1.trace_add('write', to_uppercase)
+
+            osVar2 = StringVar(jan)
+
+            # --------------------------------------------------------------------------------------
+
+            def cadastrarAcessorioAluguel(jan, num):
+
+                repositorio_maq = acessorio_maquina_aluguel_repositorio.AcessorioMaquinaAluguelRepositorio()
+
+                acessorio = acess_entry.get()
+                valor = self.formataParaFloat(valor_entry.get())
+
+                if acessorio == '':
+                    messagebox.showinfo(title="ERRO", message="Campo ACESSÓRIO não pode estar vazio!")
+                elif valor == '':
+                    messagebox.showinfo(title="ERRO", message="Campo VALOR não pode estar vazio!")
+                else:
+                    novo_equip = acessorios_aluguel.AcessoriosMaquinaAluguel(acessorio, valor)
+                    if num == 1:
+                        repositorio_maq.inserir_equip(novo_equip, sessao)
+                        sessao.commit()
+                        self.mostrarMensagem('1', 'Acessório Cadastrado com Sucesso!')
+                    elif num == 2:
+                        repositorio_maq.editar_equip(id_maq, novo_equip, sessao)
+                        sessao.commit()
+                        self.mostrarMensagem('1', 'Dados Alterado com Sucesso!')
+
+                    popularAcessorios()
+                    jan.destroy()
+
+            frame_princ2 = Frame(jan, bg=layout_Princ1)
+            frame_princ2.pack(fill=BOTH, padx=10, pady=10)
+
+            testa_op = jan.register(self.testaEntradaNumOperador)
+            testa_float = jan.register(self.testaEntradaFloat)
+
+            subframe_est_dados1 = LabelFrame(frame_princ2, text='Dados', bg=layout_Princ, font=('', 9, 'bold'))
+            subframe_est_dados1.pack(fill=X, padx=10, ipadx=10, ipady=5, pady=10)
+            Label(subframe_est_dados1, text="Acessório", bg=layout_Princ).grid(row=0, column=0, sticky=W, pady=10,
+                                                                               padx=10)
+            acess_entry = Entry(subframe_est_dados1, width=50, textvariable=osVar1, bg=layout_entry)
+            acess_entry.grid(row=0, column=1, sticky=W, padx=20)
+
+            Label(subframe_est_dados1, text="Valor", bg=layout_Princ).grid(row=1, column=0, sticky=W, padx=10)
+            valor_entry = Entry(subframe_est_dados1, width=20, textvariable=osVar2, bg=layout_entry,
+                                validate='all', validatecommand=(testa_float, '%P'))
+            valor_entry.grid(row=1, column=1, sticky=W, padx=20)
+
+            frame_princ1 = Frame(jan, bg=layout_Princ1)
+            frame_princ1.pack(fill=X, padx=15, pady=10)
+
+            Label(frame_princ1, text="Operador:", bg=layout_Princ1).pack(side=LEFT)
+            op_entry = Entry(frame_princ1, width=20, bg=layout_entry, show='*',
+                                validate='all', validatecommand=(testa_op, '%P'))
+            op_entry.pack(side=LEFT, padx=10)
+
+            salvar_button = Button(frame_princ1, text="Adicionar", width=10,
+                                   command=lambda: [cadastrarAcessorioAluguel(jan, num)])
+            salvar_button.pack(side=RIGHT)
+            Button(frame_princ1, text="Cancelar", width=10, command=jan.destroy).pack(side=RIGHT, padx=20)
+
+            if num == 2:
+                item_selecionado = treeview_busca_acess.selection()[0]
+                id_maq = treeview_busca_acess.item(item_selecionado, "values")[0]
+                repositorio_acess =  acessorio_maquina_aluguel_repositorio.AcessorioMaquinaAluguelRepositorio()
+                maq_selec = repositorio_acess.listar_equip_id(id_maq, sessao)
+
+                acess_entry.insert(0, maq_selec.acessorio)
+                valor_entry.insert(0, self.insereNumConvertido(maq_selec.valor))
+                salvar_button.configure(text='Editar')
+
+            jan.transient(root2)
+            jan.focus_force()
+            jan.grab_set()
+
+        def deletarAcessorioAluguel():
+            res = messagebox.askyesno(None, "Deseja Realmente Deletar o Acessório?")
+            if res:
+                try:
+                    item_selecionado = treeview_busca_acess.selection()[0]
+                    id_maq = treeview_busca_acess.item(item_selecionado, "values")[0]
+                    repositorio_acess =  acessorio_maquina_aluguel_repositorio.AcessorioMaquinaAluguelRepositorio()
+                    repositorio_acess.remover_equip(id_maq, sessao)
+                    sessao.commit()
+                    self.mostrarMensagem("1", "Acessorio Excluído com Sucesso!")
+                    popularAcessorios()
+
+                except:
+                    messagebox.showinfo(title="ERRO", message="Selecione um elemento a ser deletado")
+
+                finally:
+                    sessao.close()
+            else:
+                pass
+
+        frame_principal = Frame(jan)
+        frame_principal.pack(pady=10, fill=BOTH)
+
+        subframe1 = Frame(frame_principal)
+        subframe1.pack(fill=X)
+        scrollbar_busca_y_acess = Scrollbar(subframe1, orient=VERTICAL)
+        scrollbar_busca_x_acess = Scrollbar(subframe1, orient=HORIZONTAL)
+        treeview_busca_acess = ttk.Treeview(subframe1,
+                                            columns=("id", "acessorio", 'valor'),
+                                            show='headings',
+                                            xscrollcommand=scrollbar_busca_x_acess,
+                                            yscrollcommand=scrollbar_busca_y_acess,
+                                            selectmode='browse',
+                                            height=10)
+        treeview_busca_acess.column('id', width=0, minwidth=0, stretch=False)
+        treeview_busca_acess.column('acessorio', width=400, minwidth=50, stretch=False)
+        treeview_busca_acess.column('valor', width=125, minwidth=50, stretch=False)
+        treeview_busca_acess.heading('acessorio', text='ACESSÓRIO')
+        treeview_busca_acess.heading('valor', text='VALOR')
+
+        scrollbar_busca_y_acess.config(command=treeview_busca_acess.yview)
+        scrollbar_busca_y_acess.pack(fill=Y, side=RIGHT)
+        treeview_busca_acess.pack()
+        scrollbar_busca_x_acess.config(command=treeview_busca_acess.xview)
+        scrollbar_busca_x_acess.pack(fill=X)
+
+        subframe2 = Frame(frame_principal)
+        subframe2.pack(padx=10, pady=10, fill=X)
+
+        Button(subframe2, text='Adicionar', command=lambda:[janelaNovoAcessorio(1)], width=12).pack(padx=10, pady=10,
+                                                                                   side=LEFT,
+                                                                                   ipady=3)
+        Button(subframe2, text='Editar', command=lambda:[janelaNovoAcessorio(2)], width=12).pack(padx=10, pady=10,
+                                                                                side=LEFT,
+                                                                                ipady=3)
+        Button(subframe2, text='Remover', command=deletarAcessorioAluguel, width=12).pack(padx=10, pady=10,
+                                                                                 side=LEFT,
+                                                                                 ipady=3)
+        Button(subframe2, text='Fechar', width=12, command=jan.destroy).pack(padx=10, pady=10, side=RIGHT, ipady=3)
+
+        popularAcessorios()
 
         jan.transient(root2)
         jan.focus_force()
