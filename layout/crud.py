@@ -588,7 +588,8 @@ class Castelo:
         self.sf_alugueis_buttons.pack(fill=X, padx=10, pady=10)
         Button(self.sf_alugueis_buttons, text="Novo Aluguel", width=10,
                command=lambda: [self.janelaNovoAluguel(1)]).pack(side=LEFT, ipadx=5, ipady=3)
-        Button(self.sf_alugueis_buttons, text="Editar", width=10).pack(side=LEFT, ipadx=5, ipady=3, padx=10)
+        Button(self.sf_alugueis_buttons, text="Editar", width=10,
+               command=lambda: [self.janelaNovoAluguel(2)]).pack(side=LEFT, ipadx=5, ipady=3, padx=10)
         Button(self.sf_alugueis_buttons, text="Dar Baixa", width=10).pack(side=LEFT, pady=5, ipadx=5, ipady=3)
 
         Button(self.sf_alugueis_buttons, text="Fechar", width=10).pack(side=RIGHT, pady=5, ipadx=5, ipady=3, padx=10)
@@ -684,7 +685,7 @@ class Castelo:
 
         self.entry_form_pag = Entry(self.introframe_material2, width=15)
         self.entry_form_pag.grid(row=1, column=1, pady=5)
-        Label(self.introframe_material2, bg=color_orc2, text="Forma de Pag.").grid(row=1, column=0)
+        Label(self.introframe_material2, bg=color_orc2, text="Valor da Diária").grid(row=1, column=0)
 
         Label(self.introframe_material2, bg=color_orc2).grid(row=2, column=0)
         self.subframe_material3 = Frame(self.labelframe_material, bg=color_orc2)
@@ -783,12 +784,18 @@ class Castelo:
         Button(self.mini_fram2, text='Editar', width=10, command=lambda: [self.janelaNovaMaqAluguel(2)]).pack()
         Button(self.mini_fram2, text='Acessórios', width=10, command=self.janelaAcessorioAluguel).pack(pady=10)
 
+        self.popularAluguel()
         self.popularMaquinasAluguel()
 
         def EditaMaqAluguel(event):
             self.janelaNovaMaqAluguel(2)
 
+        def atualizaAlug(event):
+            self.atualizaDadosAlug()
+
         self.tree_maq_disp.bind('<Double-1>', EditaMaqAluguel)
+        self.tree_orc.bind('<ButtonRelease-1>', atualizaAlug)
+
 
         # ------------------------------- Janela Aparelhos em Manutenção------------------------------------------------
         osVar = StringVar(master)
@@ -14711,13 +14718,20 @@ class Castelo:
         jan.grab_set()
 
     def popularAluguel(self):
-        repositorio = produto_repositorio.ProdutoRepositorio()
-        produto = repositorio.listar_produto_id_fabr(id_prod, sessao)
-        tree_maq_disp.insert('', 'end',
-                             values=(
-                                 produto.id_fabr, produto.descricao,
-                                 self.insereTotalConvertido(produto.valor_venda), self.venda_qtd_item.get(),
-                                 self.insereTotalConvertido(int(self.venda_qtd_item.get()) * produto.valor_venda)))
+        self.tree_orc.delete(*self.tree_orc.get_children())
+        repositorio = aluguel_repositorio.AluguelRepositorio()
+        alugueis = repositorio.listar_alugueis(sessao)
+        for i in alugueis:
+            self.tree_orc.insert('', 'end',
+                                 values=(i.id,
+                                         i.data.strftime('%d/%m/%Y'), i.data_entrega.strftime('%d/%m/%Y'),
+                                         i.aluguel_cliente.nome,
+                                         f'{i.aluguel_equipamento.equipamento} {i.aluguel_equipamento.marca} {i.aluguel_equipamento.modelo}'))
+            self.tree_orc.focus_set()
+            children = self.tree_orc.get_children()
+            if children:
+                self.tree_orc.focus(children[0])
+                self.tree_orc.selection_set(children[0])
 
     def popularMaquinasAluguel(self):
         self.tree_maq_disp.delete(*self.tree_maq_disp.get_children())
@@ -14772,7 +14786,7 @@ class Castelo:
         jan.geometry("{}x{}+{}+{}".format(1030, 635, x_cordinate, y_cordinate))
 
         self.alug_valor_total = 0
-        valor_rec = 0
+        self.valor_rec = 0
         self.equipamento_obj = None
         self.cliente_obj = None
         global variable_int_pago
@@ -14876,24 +14890,24 @@ class Castelo:
             data = datetime.now()
             equipamento = equip
             cliente = cli
-            caixa_peca1 = orc_id_entry1.get()
-            caixa_peca2 = orc_id_entry2.get()
-            caixa_peca3 = orc_id_entry3.get()
-            caixa_peca4 = orc_id_entry4.get()
-            caixa_peca5 = orc_id_entry5.get()
-            caixa_peca6 = orc_id_entry6.get()
-            valor_uni1 = orc_val_uni_entry1.get()
-            valor_uni2 = orc_val_uni_entry2.get()
-            valor_uni3 = orc_val_uni_entry3.get()
-            valor_uni4 = orc_val_uni_entry4.get()
-            valor_uni5 = orc_val_uni_entry5.get()
-            valor_uni6 = orc_val_uni_entry6.get()
-            qtd1 = orc_quant_entry1.get()
-            qtd2 = orc_quant_entry2.get()
-            qtd3 = orc_quant_entry3.get()
-            qtd4 = orc_quant_entry4.get()
-            qtd5 = orc_quant_entry5.get()
-            qtd6 = orc_quant_entry6.get()
+            caixa_peca1 = self.formataParaFloat(orc_id_entry1.get())
+            caixa_peca2 = self.formataParaFloat(orc_id_entry2.get())
+            caixa_peca3 = self.formataParaFloat(orc_id_entry3.get())
+            caixa_peca4 = self.formataParaFloat(orc_id_entry4.get())
+            caixa_peca5 = self.formataParaFloat(orc_id_entry5.get())
+            caixa_peca6 = self.formataParaFloat(orc_id_entry6.get())
+            valor_uni1 = self.formataParaFloat(orc_val_uni_entry1.get())
+            valor_uni2 = self.formataParaFloat(orc_val_uni_entry2.get())
+            valor_uni3 = self.formataParaFloat(orc_val_uni_entry3.get())
+            valor_uni4 = self.formataParaFloat(orc_val_uni_entry4.get())
+            valor_uni5 = self.formataParaFloat(orc_val_uni_entry5.get())
+            valor_uni6 = self.formataParaFloat(orc_val_uni_entry6.get())
+            qtd1 = self.formataParaFloat(orc_quant_entry1.get())
+            qtd2 = self.formataParaFloat(orc_quant_entry2.get())
+            qtd3 = self.formataParaFloat(orc_quant_entry3.get())
+            qtd4 = self.formataParaFloat(orc_quant_entry4.get())
+            qtd5 = self.formataParaFloat(orc_quant_entry5.get())
+            qtd6 = self.formataParaFloat(orc_quant_entry6.get())
             desc_serv1 = orc_descr_entry1.get()
             desc_serv2 = orc_descr_entry2.get()
             desc_serv3 = orc_descr_entry3.get()
@@ -14903,34 +14917,34 @@ class Castelo:
             obs1 = venda_obs1.get()
             obs2 = venda_obs2.get()
             obs3 = venda_obs3.get()
-            cheque = venda_entry_cheque.get()
-            dinheiro = venda_entry_dinh.get()
-            pix = venda_entry_pix.get()
-            outros = venda_entry_outros.get()
-            ccredito = venda_entry_ccredito.get()
-            cdebito = venda_entry_cdebito.get()
+            cheque = self.formataParaFloat(venda_entry_cheque.get())
+            dinheiro = self.formataParaFloat(venda_entry_dinh.get())
+            pix = self.formataParaFloat(venda_entry_pix.get())
+            outros = self.formataParaFloat(venda_entry_outros.get())
+            ccredito = self.formataParaFloat(venda_entry_ccredito.get())
+            cdebito = self.formataParaFloat(venda_entry_cdebito.get())
             desconto = self.formataParaFloat(desconto_entry.get())
             caixa_peca_total = self.formataParaFloat(cp_entry.get())
-            valor_total = self.formataParaFloat(valor_total)
-            dias = venda_label_subtotal.get()
-            data_entrega = venda_desconto.get_date()
+            dias = dias_entry.get()
+            data_entrega = data_entry.get_date()
             operador = 1
-            alug_pago = 1
+            alug_pago = variable_int_pago.get()
 
-            if equipamento == None:
-                messagebox.showinfo(title="ERRO", message="Campo EQUIPAMENTO não pode estar vazio!")
-            elif cliente == None:
+            if cliente == None:
                 messagebox.showinfo(title="ERRO", message="Campo Cliente não pode estar vazio!")
-            elif valor_rec < valor_total:
-                messagebox.showinfo(title="ERRO", message="Valor a receber menor do que o valor total!")
+            elif equipamento == None:
+                messagebox.showinfo(title="ERRO", message="Campo EQUIPAMENTO não pode estar vazio!")
+            if alug_pago == 1:
+                if valor_a_rec != valor_total:
+                    messagebox.showinfo(title="ERRO", message="Valor a receber DIFERENTE do que o valor total!")
             else:
-                novo_alug = aluguel.Aluguel(data, equipamento, cliente, caixa_peca1, caixa_peca2, caixa_peca3,
+                novo_alug = aluguel.Aluguel(data, cliente, equipamento, caixa_peca1, caixa_peca2, caixa_peca3,
                                             caixa_peca4, caixa_peca5, caixa_peca6, valor_uni1, valor_uni2, valor_uni3,
                                             valor_uni4, valor_uni5, valor_uni6,
                                             qtd1, qtd2, qtd3, qtd4, qtd5, qtd6, desc_serv1, desc_serv2, desc_serv3,
                                             desc_serv4, desc_serv5, desc_serv6, obs1, obs2, obs3, cheque, dinheiro,
                                             pix,
-                                            outros, ccredito, cdebito, desconto, caixa_peca_total, valor_total, dias,
+                                            outros, ccredito, cdebito, desconto, caixa_peca_total, float(valor_total), dias,
                                             data_entrega, operador, alug_pago)
                 if num == 1:
                     repositorio_alug.inserir_aluguel(novo_alug, sessao)
@@ -14941,7 +14955,7 @@ class Castelo:
                 #     sessao.commit()
                 #     self.mostrarMensagem('1', 'Dados Alterado com Sucesso!')
 
-                self.popularMaquinasAluguel()
+                self.popularAluguel()
                 jan.destroy()
 
         def janelaBuscaCliente():
@@ -15019,6 +15033,11 @@ class Castelo:
                 venda_cliente.delete(0, END)
                 venda_cliente.insert(0, self.cliente_obj.nome)
                 venda_cliente.config(state=DISABLED)
+
+                label_nome.config(text=self.cliente_obj.nome)
+                label_fone.config(text=self.cliente_obj.whats)
+                # label_historico.config(text=self.cliente_obj.nome)
+                label_end.config(text=f'{self.cliente_obj.logradouro} {self.cliente_obj.bairro} {self.cliente_obj.uf}')
 
                 jan.destroy()
 
@@ -15139,7 +15158,6 @@ class Castelo:
                                       f'{self.equipamento_obj.equipamento} {self.equipamento_obj.marca} {self.equipamento_obj.modelo}')
                 venda_cod_item.config(state=DISABLED)
 
-                self.alug_valor_total = (self.equipamento_obj.valor * int(venda_label_subtotal.get()))
                 atualizarValorFinal()
 
                 jan.destroy()
@@ -15302,41 +15320,131 @@ class Castelo:
             jan.grab_set()
 
         def atualizarValorFinal():
-            valor_ac = (self.formataParaFloat(orc_val_uni_entry1.get()) * self.formataParaFloat(orc_quant_entry1.get())
-                        + self.formataParaFloat(orc_val_uni_entry2.get()) * self.formataParaFloat(
-                        orc_quant_entry2.get())
-                        + self.formataParaFloat(orc_val_uni_entry3.get()) * self.formataParaFloat(
-                        orc_quant_entry3.get())
-                        + self.formataParaFloat(orc_val_uni_entry4.get()) * self.formataParaFloat(
-                        orc_quant_entry4.get())
-                        + self.formataParaFloat(orc_val_uni_entry5.get()) * self.formataParaFloat(
-                        orc_quant_entry5.get())
-                        + self.formataParaFloat(orc_val_uni_entry6.get()) * self.formataParaFloat(
-                        orc_quant_entry6.get()))
 
-            valor_cp = (self.formataParaFloat(orc_id_entry1.get()) * self.formataParaFloat(orc_quant_entry1.get())
-                        + self.formataParaFloat(orc_id_entry2.get()) * self.formataParaFloat(orc_quant_entry2.get())
-                        + self.formataParaFloat(orc_id_entry3.get()) * self.formataParaFloat(orc_quant_entry3.get())
-                        + self.formataParaFloat(orc_id_entry4.get()) * self.formataParaFloat(orc_quant_entry4.get())
-                        + self.formataParaFloat(orc_id_entry5.get()) * self.formataParaFloat(orc_quant_entry5.get())
-                        + self.formataParaFloat(orc_id_entry6.get()) * self.formataParaFloat(orc_quant_entry6.get()))
+            valor1 = self.formataParaFloat(orc_val_uni_entry1.get())
+            valor2 = self.formataParaFloat(orc_val_uni_entry2.get())
+            valor3 = self.formataParaFloat(orc_val_uni_entry3.get())
+            valor4 = self.formataParaFloat(orc_val_uni_entry4.get())
+            valor5 = self.formataParaFloat(orc_val_uni_entry5.get())
+            valor6 = self.formataParaFloat(orc_val_uni_entry6.get())
+            cp1 = self.formataParaFloat(orc_id_entry1.get())
+            cp2 = self.formataParaFloat(orc_id_entry2.get())
+            cp3 = self.formataParaFloat(orc_id_entry3.get())
+            cp4 = self.formataParaFloat(orc_id_entry4.get())
+            cp5 = self.formataParaFloat(orc_id_entry5.get())
+            cp6 = self.formataParaFloat(orc_id_entry6.get())
 
-            valor_final = self.alug_valor_total - self.formataParaFloat(desconto_entry.get()) + valor_ac
-            venda_label_total.config(text=self.insereTotalConvertido(valor_final))
+            valorTotal1 = valor1 * self.formataParaFloat(orc_quant_entry1.get())
+            valorTotal2 = valor2 * self.formataParaFloat(orc_quant_entry2.get())
+            valorTotal3 = valor3 * self.formataParaFloat(orc_quant_entry3.get())
+            valorTotal4 = valor4 * self.formataParaFloat(orc_quant_entry4.get())
+            valorTotal5 = valor5 * self.formataParaFloat(orc_quant_entry5.get())
+            valorTotal6 = valor6 * self.formataParaFloat(orc_quant_entry6.get())
+
+
+            valor_ac = valorTotal1 + valorTotal2 + valorTotal3 + valorTotal4 + valorTotal5 + valorTotal6
+            valor_cp = (cp1 * self.formataParaFloat(orc_quant_entry1.get())
+                        + cp2 * self.formataParaFloat(orc_quant_entry2.get())
+                        + cp3 * self.formataParaFloat(orc_quant_entry3.get())
+                        + cp4 * self.formataParaFloat(orc_quant_entry4.get())
+                        + cp5 * self.formataParaFloat(orc_quant_entry5.get())
+                        + cp6 * self.formataParaFloat(orc_quant_entry6.get()))
+            if self.equipamento_obj is not None:
+                self.alug_valor_total = (self.equipamento_obj.valor * int(dias_entry.get()))
+            else:
+                self.alug_valor_total = 0
+
+            self.alug_valor_total = self.alug_valor_total - self.formataParaFloat(desconto_entry.get()) + valor_ac
+            venda_label_total.config(text=self.insereTotalConvertido(self.alug_valor_total))
             cp_entry.delete(0, END)
             cp_entry.insert(0, self.insereNumConvertido(valor_cp))
 
+            orc_val_uni_entry1.delete(0, END)
+            orc_val_uni_entry1.insert(0, self.insereNumConvertido(valor1))
+            orc_val_uni_entry2.delete(0, END)
+            orc_val_uni_entry2.insert(0, self.insereNumConvertido(valor2))
+            orc_val_uni_entry3.delete(0, END)
+            orc_val_uni_entry3.insert(0, self.insereNumConvertido(valor3))
+            orc_val_uni_entry4.delete(0, END)
+            orc_val_uni_entry4.insert(0, self.insereNumConvertido(valor4))
+            orc_val_uni_entry5.delete(0, END)
+            orc_val_uni_entry5.insert(0, self.insereNumConvertido(valor5))
+            orc_val_uni_entry6.delete(0, END)
+            orc_val_uni_entry6.insert(0, self.insereNumConvertido(valor6))
+            orc_id_entry1.delete(0, END)
+            orc_id_entry1.insert(0, self.insereNumConvertido(cp1))
+            orc_id_entry2.delete(0, END)
+            orc_id_entry2.insert(0, self.insereNumConvertido(cp2))
+            orc_id_entry3.delete(0, END)
+            orc_id_entry3.insert(0, self.insereNumConvertido(cp3))
+            orc_id_entry4.delete(0, END)
+            orc_id_entry4.insert(0, self.insereNumConvertido(cp4))
+            orc_id_entry5.delete(0, END)
+            orc_id_entry5.insert(0, self.insereNumConvertido(cp5))
+            orc_id_entry6.delete(0, END)
+            orc_id_entry6.insert(0, self.insereNumConvertido(cp6))
+            orc_val_total_entry1.config(text=self.insereNumConvertido(valorTotal1))
+            orc_val_total_entry2.config(text=self.insereNumConvertido(valorTotal2))
+            orc_val_total_entry3.config(text=self.insereNumConvertido(valorTotal3))
+            orc_val_total_entry4.config(text=self.insereNumConvertido(valorTotal4))
+            orc_val_total_entry5.config(text=self.insereNumConvertido(valorTotal5))
+            orc_val_total_entry6.config(text=self.insereNumConvertido(valorTotal6))
+
+            if self.formataParaFloat(orc_quant_entry1.get()) == 0:
+                orc_val_uni_entry1.delete(0, END)
+                orc_id_entry1.delete(0, END)
+                orc_descr_entry1.delete(0, END)
+                orc_quant_entry1.delete(0, END)
+            if self.formataParaFloat(orc_quant_entry2.get()) == 0:
+                orc_val_uni_entry2.delete(0, END)
+                orc_id_entry2.delete(0, END)
+                orc_descr_entry2.delete(0, END)
+                orc_quant_entry2.delete(0, END)
+            if self.formataParaFloat(orc_quant_entry3.get()) == 0:
+                orc_val_uni_entry3.delete(0, END)
+                orc_id_entry3.delete(0, END)
+                orc_descr_entry3.delete(0, END)
+                orc_quant_entry3.delete(0, END)
+            if self.formataParaFloat(orc_quant_entry4.get()) == 0:
+                orc_val_uni_entry4.delete(0, END)
+                orc_id_entry4.delete(0, END)
+                orc_descr_entry4.delete(0, END)
+                orc_quant_entry4.delete(0, END)
+            if self.formataParaFloat(orc_quant_entry5.get()) == 0:
+                orc_val_uni_entry5.delete(0, END)
+                orc_id_entry5.delete(0, END)
+                orc_descr_entry5.delete(0, END)
+                orc_quant_entry5.delete(0, END)
+            if self.formataParaFloat(orc_quant_entry6.get()) == 0:
+                orc_val_uni_entry6.delete(0, END)
+                orc_id_entry6.delete(0, END)
+                orc_descr_entry6.delete(0, END)
+                orc_quant_entry6.delete(0, END)
+
         def atualizaValorAreceber():
-            dinheiro = self.formataParaFloat(self.venda_entry_dinh.get())
-            cheque = self.formataParaFloat(self.venda_entry_cheque.get())
-            cdebito = self.formataParaFloat(self.venda_entry_cdebito.get())
-            ccredito = self.formataParaFloat(self.venda_entry_ccredito.get())
-            pix = self.formataParaFloat(self.venda_entry_pix.get())
-            outros = self.formataParaFloat(self.venda_entry_outros.get())
+            dinheiro = self.formataParaFloat(venda_entry_dinh.get())
+            cheque = self.formataParaFloat(venda_entry_cheque.get())
+            cdebito = self.formataParaFloat(venda_entry_cdebito.get())
+            ccredito = self.formataParaFloat(venda_entry_ccredito.get())
+            pix = self.formataParaFloat(venda_entry_pix.get())
+            outros = self.formataParaFloat(venda_entry_outros.get())
 
-            soma_total = dinheiro + cheque + cdebito + ccredito + pix + outros
+            self.valor_rec = dinheiro + cheque + cdebito + ccredito + pix + outros
 
-            venda_valor_areceber.config(text=self.insereTotalConvertido(soma_total))
+            venda_valor_areceber.config(text=self.insereTotalConvertido(self.valor_rec))
+
+            venda_entry_dinh.delete(0, END)
+            venda_entry_dinh.insert(0, self.insereNumConvertido(dinheiro))
+            venda_entry_cheque.delete(0, END)
+            venda_entry_cheque.insert(0, self.insereNumConvertido(cheque))
+            venda_entry_cdebito.delete(0, END)
+            venda_entry_cdebito.insert(0, self.insereNumConvertido(cdebito))
+            venda_entry_ccredito.delete(0, END)
+            venda_entry_ccredito.insert(0, self.insereNumConvertido(ccredito))
+            venda_entry_pix.delete(0, END)
+            venda_entry_pix.insert(0, self.insereNumConvertido(pix))
+            venda_entry_outros.delete(0, END)
+            venda_entry_outros.insert(0, self.insereNumConvertido(outros))
 
         def atualizaValorArecebeButton(event):
             atualizaValorAreceber()
@@ -15568,13 +15676,14 @@ class Castelo:
         labelframe_valor_rec = LabelFrame(subframe_form_pag2, bg=bg_tela)
         labelframe_valor_rec.grid(row=0, column=0, sticky=W, pady=5)
         Label(labelframe_valor_rec, text="Valor à Receber:", bg=bg_tela).pack(padx=20)
-        venda_valor_areceber = Label(labelframe_valor_rec, text=self.insereTotalConvertido(self.alug_valor_total),
+        venda_valor_areceber = Label(labelframe_valor_rec, text='R$0,00',
                                      font=("", "12", ""), fg="red",
                                      bg=bg_tela)
         venda_valor_areceber.pack(fill=X, pady=5)
         venda_valor_areceber.configure(width=10, height=1)
         venda_valor_areceber.grid_propagate(0)
-        venda_button_salvar = Button(subframe_form_pag2, text="Salvar", width=8, command=atualizaValorAreceber)
+        venda_button_salvar = Button(subframe_form_pag2, text="Calcular", width=8,
+                                     command=lambda: [atualizarValorFinal(), atualizaValorAreceber()])
         venda_button_salvar.grid(row=1, column=0, sticky=W, pady=5, padx=30)
         subframe_form_pag3 = Frame(labelframe_form_pag, bg=bg_tela)
         subframe_form_pag3.pack(padx=5, fill=BOTH, side=LEFT, pady=7)
@@ -15602,19 +15711,19 @@ class Castelo:
         Label(mini_frame_dados1, text='Telefone:', bg=bg_tela, font=font_dados_alug).grid(row=0, column=2)
         Label(mini_frame_dados1, text='Qtd. Alugueis:', bg=bg_tela, font=font_dados_alug).grid(row=0, column=4)
 
-        label_nome = Label(mini_frame_dados1, text='Henrique', bg=bg_tela, anchor=W, font=font_dados_alug1, fg='red')
+        label_nome = Label(mini_frame_dados1, text='', bg=bg_tela, anchor=W, font=font_dados_alug1, fg='red')
         label_nome.grid(row=0, column=1, sticky=W)
         label_nome.configure(width=30)
         label_nome.grid_propagate(0)
-        label_fone = Label(mini_frame_dados1, text='98428-8565', bg=bg_tela, anchor=W, font=font_dados_alug1, fg='red')
+        label_fone = Label(mini_frame_dados1, text='', bg=bg_tela, anchor=W, font=font_dados_alug1, fg='red')
         label_fone.grid(row=0, column=3)
         label_fone.configure(width=15)
         label_fone.grid_propagate(0)
-        label_historico = Label(mini_frame_dados1, text='3', bg=bg_tela, anchor=W, font=font_dados_alug1, fg='red')
+        label_historico = Label(mini_frame_dados1, text='', bg=bg_tela, anchor=W, font=font_dados_alug1, fg='red')
         label_historico.grid(row=0, column=5)
         label_historico.configure(width=5)
         label_historico.grid_propagate(0)
-        label_end = Label(mini_frame_dados2, text='Rua Nossa Senhora das Dores, 657   Centro   Artur Nogueira',
+        label_end = Label(mini_frame_dados2, text='',
                           bg=bg_tela, anchor=W, font=font_dados_alug1, fg='red')
         label_end.grid(row=0, column=1)
         label_end.configure(width=50)
@@ -15625,16 +15734,16 @@ class Castelo:
         frame_descr_vend = Frame(labelframe_desc_vend, bg=bg_tela)
         frame_descr_vend.pack(fill=BOTH, padx=2, pady=10)
         Label(frame_descr_vend, text='Dias:', bg=bg_tela).grid()
-        venda_label_subtotal = Entry(frame_descr_vend, width=5, validate='all', validatecommand=(testa_float, '%P'),
-                                     bg=bg_entry, justify=CENTER)
-        venda_label_subtotal.grid(row=0, column=1, sticky=W, padx=5)
-        venda_label_subtotal.insert(0, 1)
+        dias_entry = Entry(frame_descr_vend, width=5, validate='all', validatecommand=(testa_inteiro, '%P'),
+                           bg=bg_entry, justify=CENTER)
+        dias_entry.grid(row=0, column=1, sticky=W, padx=5)
+        dias_entry.insert(0, 1)
         Label(frame_descr_vend, text='Entrega:', bg=bg_tela).grid(row=1, column=0)
-        venda_desconto = DateEntry(frame_descr_vend, width=10, validate='all', validatecommand=(testa_float, '%P'),
-                                   bg=bg_entry, firstweekday='sunday',
-                                   showweeknumbers=FALSE, showothermonthdays=FALSE)
-        venda_desconto.grid(row=1, column=1, padx=5)
-        venda_desconto.set_date(self.alteraData(1, datetime.now(), 1))
+        data_entry = DateEntry(frame_descr_vend, width=10, validate='all', validatecommand=(testa_float, '%P'),
+                               bg=bg_entry, firstweekday='sunday',
+                               showweeknumbers=FALSE, showothermonthdays=FALSE)
+        data_entry.grid(row=1, column=1, padx=5)
+        data_entry.set_date(self.alteraData(1, datetime.now(), 1))
         Label(frame_descr_vend, width=2, bg=bg_tela).grid(row=0, column=2, padx=1)
         frame_valor_total = LabelFrame(frame_descr_vend, bg=bg_tela)
         frame_valor_total.grid(row=0, column=3, rowspan=2, padx=0)
@@ -15665,10 +15774,144 @@ class Castelo:
                                        command=lambda: [atualizaValorAreceber(),
                                                         atualizarValorFinal(),
                                                         cadastrarAluguel(jan, num, self.alug_valor_total,
-                                                                         equipamento_obj,
-                                                                         cliente_obj, valor_rec)],
-                                       state=DISABLED)
+                                                                         self.equipamento_obj,
+                                                                         self.cliente_obj, self.valor_rec)],
+                                       state=NORMAL)
         venda_button_confirma.pack(side=LEFT, ipady=10, padx=15)
+
+        if num == 2:
+            item_selecionado = self.tree_orc.selection()[0]
+            id_alug = self.tree_orc.item(item_selecionado, "values")[0]
+            repositorio_alug = aluguel_repositorio.AluguelRepositorio()
+            alug_selec = repositorio_alug.listar_aluguel_id(id_alug, sessao)
+
+            venda_cliente.config(state=NORMAL)
+            venda_cliente.insert(0, alug_selec.aluguel_cliente.nome)
+            venda_cliente.config(state=DISABLED)
+            venda_cod_item.config(state=NORMAL)
+            venda_cod_item.insert(0,
+                                  f'{alug_selec.aluguel_equipamento.equipamento} {alug_selec.aluguel_equipamento.marca} {alug_selec.aluguel_equipamento.modelo}')
+            venda_cod_item.config(state=DISABLED)
+            orc_val_uni_entry1.insert(0, self.insereNumConvertido(alug_selec.valor_uni1))
+            orc_val_uni_entry2.insert(0, self.insereNumConvertido(alug_selec.valor_uni2))
+            orc_val_uni_entry3.insert(0, self.insereNumConvertido(alug_selec.valor_uni3))
+            orc_val_uni_entry4.insert(0, self.insereNumConvertido(alug_selec.valor_uni4))
+            orc_val_uni_entry5.insert(0, self.insereNumConvertido(alug_selec.valor_uni5))
+            orc_val_uni_entry6.insert(0, self.insereNumConvertido(alug_selec.valor_uni6))
+            orc_id_entry1.insert(0, self.insereNumConvertido(alug_selec.caixa_peca1))
+            orc_id_entry2.insert(0, self.insereNumConvertido(alug_selec.caixa_peca2))
+            orc_id_entry3.insert(0, self.insereNumConvertido(alug_selec.caixa_peca3))
+            orc_id_entry4.insert(0, self.insereNumConvertido(alug_selec.caixa_peca4))
+            orc_id_entry5.insert(0, self.insereNumConvertido(alug_selec.caixa_peca5))
+            orc_id_entry6.insert(0, self.insereNumConvertido(alug_selec.caixa_peca6))
+            orc_quant_entry1.insert(0, self.insereNumConvertido(alug_selec.qtd1))
+            orc_quant_entry2.insert(0, self.insereNumConvertido(alug_selec.qtd2))
+            orc_quant_entry3.insert(0, self.insereNumConvertido(alug_selec.qtd3))
+            orc_quant_entry4.insert(0, self.insereNumConvertido(alug_selec.qtd4))
+            orc_quant_entry5.insert(0, self.insereNumConvertido(alug_selec.qtd5))
+            orc_quant_entry6.insert(0, self.insereNumConvertido(alug_selec.qtd6))
+            orc_val_total_entry1.config(text=self.insereNumConvertido(alug_selec.valor_uni1 * alug_selec.qtd1))
+            orc_val_total_entry2.config(text=self.insereNumConvertido(alug_selec.valor_uni2 * alug_selec.qtd2))
+            orc_val_total_entry3.config(text=self.insereNumConvertido(alug_selec.valor_uni3 * alug_selec.qtd3))
+            orc_val_total_entry4.config(text=self.insereNumConvertido(alug_selec.valor_uni4 * alug_selec.qtd4))
+            orc_val_total_entry5.config(text=self.insereNumConvertido(alug_selec.valor_uni5 * alug_selec.qtd5))
+            orc_val_total_entry6.config(text=self.insereNumConvertido(alug_selec.valor_uni6 * alug_selec.qtd6))
+            orc_descr_entry1.insert(0, alug_selec.desc_serv1)
+            orc_descr_entry2.insert(0, alug_selec.desc_serv2)
+            orc_descr_entry3.insert(0, alug_selec.desc_serv3)
+            orc_descr_entry4.insert(0, alug_selec.desc_serv4)
+            orc_descr_entry5.insert(0, alug_selec.desc_serv5)
+            orc_descr_entry6.insert(0, alug_selec.desc_serv6)
+            venda_obs1.insert(0, alug_selec.obs1)
+            venda_obs2.insert(0, alug_selec.obs2)
+            venda_obs3.insert(0, alug_selec.obs3)
+            venda_entry_dinh.insert(0, self.insereNumConvertido(alug_selec.dinheiro))
+            venda_entry_cheque.insert(0, self.insereNumConvertido(alug_selec.cheque))
+            venda_entry_ccredito.insert(0, self.insereNumConvertido(alug_selec.ccredito))
+            venda_entry_cdebito.insert(0, self.insereNumConvertido(alug_selec.cdebito))
+            venda_entry_pix.insert(0, self.insereNumConvertido(alug_selec.pix))
+            venda_entry_outros.insert(0, self.insereNumConvertido(alug_selec.outros))
+            desconto_entry.insert(0, self.insereNumConvertido(alug_selec.desconto))
+            cp_entry.insert(0, self.insereNumConvertido(alug_selec.caixa_peca_total))
+            variable_int_pago.set(alug_selec.alug_pago)
+            dias_entry.delete(0, END)
+            dias_entry.insert(0, alug_selec.dias)
+            data_entry.delete(0, END)
+            data_entry.insert(0, alug_selec.data_entrega.strftime('%d/%m/%Y'))
+            venda_label_total.config(text=self.insereTotalConvertido(alug_selec.valor_total))
+
+        def apagaEntry1():
+            if self.formataParaFloat(orc_quant_entry1.get()) == 0:
+                orc_val_uni_entry1.delete(0, END)
+                orc_id_entry1.delete(0, END)
+                orc_descr_entry1.delete(0, END)
+                orc_quant_entry1.delete(0, END)
+                orc_val_total_entry1.config(text='')
+
+        def apagaEntry2():
+            if self.formataParaFloat(orc_quant_entry2.get()) == 0:
+                orc_val_uni_entry2.delete(0, END)
+                orc_id_entry2.delete(0, END)
+                orc_descr_entry2.delete(0, END)
+                orc_quant_entry2.delete(0, END)
+                orc_val_total_entry2.config(text='')
+
+        def apagaEntry3():
+            if self.formataParaFloat(orc_quant_entry3.get()) == 0:
+                orc_val_uni_entry3.delete(0, END)
+                orc_id_entry3.delete(0, END)
+                orc_descr_entry3.delete(0, END)
+                orc_quant_entry3.delete(0, END)
+                orc_val_total_entry3.config(text='')
+
+        def apagaEntry4():
+            if self.formataParaFloat(orc_quant_entry4.get()) == 0:
+                orc_val_uni_entry4.delete(0, END)
+                orc_id_entry4.delete(0, END)
+                orc_descr_entry4.delete(0, END)
+                orc_quant_entry4.delete(0, END)
+                orc_val_total_entry4.config(text='')
+
+        def apagaEntry5():
+            if self.formataParaFloat(orc_quant_entry5.get()) == 0:
+                orc_val_uni_entry5.delete(0, END)
+                orc_id_entry5.delete(0, END)
+                orc_descr_entry5.delete(0, END)
+                orc_quant_entry5.delete(0, END)
+                orc_val_total_entry5.config(text='')
+
+        def apagaEntry6():
+            if self.formataParaFloat(orc_quant_entry6.get()) == 0:
+                orc_val_uni_entry6.delete(0, END)
+                orc_id_entry6.delete(0, END)
+                orc_descr_entry6.delete(0, END)
+                orc_quant_entry6.delete(0, END)
+                orc_val_total_entry6.config(text='')
+
+        def zeraEntry1(event):
+            apagaEntry1()
+
+        def zeraEntry2(event):
+            apagaEntry2()
+
+        def zeraEntry3(event):
+            apagaEntry3()
+
+        def zeraEntry4(event):
+            apagaEntry4()
+
+        def zeraEntry5(event):
+            apagaEntry5()
+
+        def zeraEntry6(event):
+            apagaEntry6()
+
+        orc_quant_entry1.bind('<Return>', zeraEntry1)
+        orc_quant_entry2.bind('<Return>', zeraEntry2)
+        orc_quant_entry3.bind('<Return>', zeraEntry3)
+        orc_quant_entry4.bind('<Return>', zeraEntry4)
+        orc_quant_entry5.bind('<Return>', zeraEntry5)
+        orc_quant_entry6.bind('<Return>', zeraEntry6)
 
         jan.transient(root2)
         jan.focus_force()
@@ -15969,7 +16212,7 @@ class Castelo:
 
             Label(frame_princ1, text="Operador:", bg=layout_Princ1).pack(side=LEFT)
             op_entry = Entry(frame_princ1, width=20, bg=layout_entry, show='*',
-                                validate='all', validatecommand=(testa_op, '%P'))
+                             validate='all', validatecommand=(testa_op, '%P'))
             op_entry.pack(side=LEFT, padx=10)
 
             salvar_button = Button(frame_princ1, text="Adicionar", width=10,
@@ -15980,7 +16223,7 @@ class Castelo:
             if num == 2:
                 item_selecionado = treeview_busca_acess.selection()[0]
                 id_maq = treeview_busca_acess.item(item_selecionado, "values")[0]
-                repositorio_acess =  acessorio_maquina_aluguel_repositorio.AcessorioMaquinaAluguelRepositorio()
+                repositorio_acess = acessorio_maquina_aluguel_repositorio.AcessorioMaquinaAluguelRepositorio()
                 maq_selec = repositorio_acess.listar_equip_id(id_maq, sessao)
 
                 acess_entry.insert(0, maq_selec.acessorio)
@@ -15997,7 +16240,7 @@ class Castelo:
                 try:
                     item_selecionado = treeview_busca_acess.selection()[0]
                     id_maq = treeview_busca_acess.item(item_selecionado, "values")[0]
-                    repositorio_acess =  acessorio_maquina_aluguel_repositorio.AcessorioMaquinaAluguelRepositorio()
+                    repositorio_acess = acessorio_maquina_aluguel_repositorio.AcessorioMaquinaAluguelRepositorio()
                     repositorio_acess.remover_equip(id_maq, sessao)
                     sessao.commit()
                     self.mostrarMensagem("1", "Acessorio Excluído com Sucesso!")
@@ -16040,15 +16283,15 @@ class Castelo:
         subframe2 = Frame(frame_principal)
         subframe2.pack(padx=10, pady=10, fill=X)
 
-        Button(subframe2, text='Adicionar', command=lambda:[janelaNovoAcessorio(1)], width=12).pack(padx=10, pady=10,
-                                                                                   side=LEFT,
-                                                                                   ipady=3)
-        Button(subframe2, text='Editar', command=lambda:[janelaNovoAcessorio(2)], width=12).pack(padx=10, pady=10,
-                                                                                side=LEFT,
-                                                                                ipady=3)
+        Button(subframe2, text='Adicionar', command=lambda: [janelaNovoAcessorio(1)], width=12).pack(padx=10, pady=10,
+                                                                                                     side=LEFT,
+                                                                                                     ipady=3)
+        Button(subframe2, text='Editar', command=lambda: [janelaNovoAcessorio(2)], width=12).pack(padx=10, pady=10,
+                                                                                                  side=LEFT,
+                                                                                                  ipady=3)
         Button(subframe2, text='Remover', command=deletarAcessorioAluguel, width=12).pack(padx=10, pady=10,
-                                                                                 side=LEFT,
-                                                                                 ipady=3)
+                                                                                          side=LEFT,
+                                                                                          ipady=3)
         Button(subframe2, text='Fechar', width=12, command=jan.destroy).pack(padx=10, pady=10, side=RIGHT, ipady=3)
 
         popularAcessorios()
@@ -16056,6 +16299,147 @@ class Castelo:
         jan.transient(root2)
         jan.focus_force()
         jan.grab_set()
+
+    def atualizaDadosAlug(self):
+
+        alug_selecionado = self.tree_orc.focus()
+        dado_alug = self.tree_orc.item(alug_selecionado, "values")
+        alug_dados = aluguel_repositorio.AluguelRepositorio().listar_aluguel_id(dado_alug[0], sessao)
+
+        if alug_dados is not None:
+            self.quant_entry2.config(state=NORMAL)
+            self.quant_entry2.delete(0, END)
+            self.quant_entry2.insert(0, alug_dados.qtd1)
+            self.quant_entry2.config(state=DISABLED)
+            self.quant_entry3.config(state=NORMAL)
+            self.quant_entry3.delete(0, END)
+            self.quant_entry3.insert(0, alug_dados.qtd2)
+            self.quant_entry3.config(state=DISABLED)
+            self.quant_entry4.config(state=NORMAL)
+            self.quant_entry4.delete(0, END)
+            self.quant_entry4.insert(0, alug_dados.qtd3)
+            self.quant_entry4.config(state=DISABLED)
+            self.quant_entry5.config(state=NORMAL)
+            self.quant_entry5.delete(0, END)
+            self.quant_entry5.insert(0, alug_dados.qtd4)
+            self.quant_entry5.config(state=DISABLED)
+            self.quant_entry6.config(state=NORMAL)
+            self.quant_entry6.delete(0, END)
+            self.quant_entry6.insert(0, alug_dados.qtd5)
+            self.quant_entry6.config(state=DISABLED)
+            self.quant_entry7.config(state=NORMAL)
+            self.quant_entry7.delete(0, END)
+            self.quant_entry7.insert(0, alug_dados.qtd6)
+            self.quant_entry7.config(state=DISABLED)
+            self.id_entry2.config(state=NORMAL)
+            self.id_entry2.delete(0, END)
+            self.id_entry2.insert(0, self.insereNumConvertido(alug_dados.caixa_peca1))
+            self.id_entry2.config(state=DISABLED)
+            self.id_entry3.config(state=NORMAL)
+            self.id_entry3.delete(0, END)
+            self.id_entry3.insert(0, self.insereNumConvertido(alug_dados.caixa_peca2))
+            self.id_entry3.config(state=DISABLED)
+            self.id_entry4.config(state=NORMAL)
+            self.id_entry4.delete(0, END)
+            self.id_entry4.insert(0, self.insereNumConvertido(alug_dados.caixa_peca3))
+            self.id_entry4.config(state=DISABLED)
+            self.id_entry5.config(state=NORMAL)
+            self.id_entry5.delete(0, END)
+            self.id_entry5.insert(0, self.insereNumConvertido(alug_dados.caixa_peca4))
+            self.id_entry5.config(state=DISABLED)
+            self.id_entry6.config(state=NORMAL)
+            self.id_entry6.delete(0, END)
+            self.id_entry6.insert(0, self.insereNumConvertido(alug_dados.caixa_peca5))
+            self.id_entry6.config(state=DISABLED)
+            self.id_entry7.config(state=NORMAL)
+            self.id_entry7.delete(0, END)
+            self.id_entry7.insert(0, self.insereNumConvertido(alug_dados.caixa_peca6))
+            self.id_entry7.config(state=DISABLED)
+            self.descr_entry2.config(state=NORMAL)
+            self.descr_entry2.delete(0, END)
+            self.descr_entry2.insert(0, alug_dados.desc_serv1)
+            self.descr_entry2.config(state=DISABLED)
+            self.descr_entry3.config(state=NORMAL)
+            self.descr_entry3.delete(0, END)
+            self.descr_entry3.insert(0, alug_dados.desc_serv2)
+            self.descr_entry3.config(state=DISABLED)
+            self.descr_entry4.config(state=NORMAL)
+            self.descr_entry4.delete(0, END)
+            self.descr_entry4.insert(0, alug_dados.desc_serv3)
+            self.descr_entry4.config(state=DISABLED)
+            self.descr_entry5.config(state=NORMAL)
+            self.descr_entry5.delete(0, END)
+            self.descr_entry5.insert(0, alug_dados.desc_serv4)
+            self.descr_entry5.config(state=DISABLED)
+            self.descr_entry6.config(state=NORMAL)
+            self.descr_entry6.delete(0, END)
+            self.descr_entry6.insert(0, alug_dados.desc_serv5)
+            self.descr_entry6.config(state=DISABLED)
+            self.descr_entry7.config(state=NORMAL)
+            self.descr_entry7.delete(0, END)
+            self.descr_entry7.insert(0, alug_dados.desc_serv6)
+            self.descr_entry7.config(state=DISABLED)
+            self.val_uni_entry2.config(state=NORMAL)
+            self.val_uni_entry2.delete(0, END)
+            self.val_uni_entry2.insert(0, self.insereNumConvertido(alug_dados.valor_uni1))
+            self.val_uni_entry2.config(state=DISABLED)
+            self.val_uni_entry3.config(state=NORMAL)
+            self.val_uni_entry3.delete(0, END)
+            self.val_uni_entry3.insert(0, self.insereNumConvertido(alug_dados.valor_uni2))
+            self.val_uni_entry3.config(state=DISABLED)
+            self.val_uni_entry4.config(state=NORMAL)
+            self.val_uni_entry4.delete(0, END)
+            self.val_uni_entry4.insert(0, self.insereNumConvertido(alug_dados.valor_uni3))
+            self.val_uni_entry4.config(state=DISABLED)
+            self.val_uni_entry5.config(state=NORMAL)
+            self.val_uni_entry5.delete(0, END)
+            self.val_uni_entry5.insert(0, self.insereNumConvertido(alug_dados.valor_uni4))
+            self.val_uni_entry5.config(state=DISABLED)
+            self.val_uni_entry6.config(state=NORMAL)
+            self.val_uni_entry6.delete(0, END)
+            self.val_uni_entry6.insert(0, self.insereNumConvertido(alug_dados.valor_uni5))
+            self.val_uni_entry6.config(state=DISABLED)
+            self.val_uni_entry7.config(state=NORMAL)
+            self.val_uni_entry7.delete(0, END)
+            self.val_uni_entry7.insert(0, self.insereNumConvertido(alug_dados.valor_uni6))
+            self.val_uni_entry7.config(state=DISABLED)
+            self.val_total_entry2.config(state=NORMAL)
+            self.val_total_entry2.delete(0, END)
+            self.val_total_entry2.insert(0, self.insereNumConvertido(alug_dados.valor_uni1 * alug_dados.qtd1))
+            self.val_total_entry2.config(state=DISABLED)
+            self.val_total_entry3.config(state=NORMAL)
+            self.val_total_entry3.delete(0, END)
+            self.val_total_entry3.insert(0, self.insereNumConvertido(alug_dados.valor_uni2 * alug_dados.qtd2))
+            self.val_total_entry3.config(state=DISABLED)
+            self.val_total_entry4.config(state=NORMAL)
+            self.val_total_entry4.delete(0, END)
+            self.val_total_entry4.insert(0, self.insereNumConvertido(alug_dados.valor_uni3 * alug_dados.qtd3))
+            self.val_total_entry4.config(state=DISABLED)
+            self.val_total_entry5.config(state=NORMAL)
+            self.val_total_entry5.delete(0, END)
+            self.val_total_entry5.insert(0, self.insereNumConvertido(alug_dados.valor_uni4 * alug_dados.qtd4))
+            self.val_total_entry5.config(state=DISABLED)
+            self.val_total_entry6.config(state=NORMAL)
+            self.val_total_entry6.delete(0, END)
+            self.val_total_entry6.insert(0, self.insereNumConvertido(alug_dados.valor_uni5 * alug_dados.qtd5))
+            self.val_total_entry6.config(state=DISABLED)
+            self.val_total_entry7.config(state=NORMAL)
+            self.val_total_entry7.delete(0, END)
+            self.val_total_entry7.insert(0, self.insereNumConvertido(alug_dados.valor_uni6 * alug_dados.qtd6))
+            self.val_total_entry7.config(state=DISABLED)
+
+            self.entry_mao_obra_material.config(state=NORMAL)
+            self.entry_mao_obra_material.delete(0, END)
+            self.entry_mao_obra_material.insert(0, self.insereNumConvertido(alug_dados.caixa_peca_total))
+            self.entry_mao_obra_material.config(state=DISABLED)
+            self.entry_form_pag.config(state=NORMAL)
+            self.entry_form_pag.delete(0, END)
+            self.entry_form_pag.insert(0, self.insereNumConvertido(alug_dados.aluguel_equipamento.valor))
+            self.entry_form_pag.config(state=DISABLED)
+            self.entry_total_material.config(state=NORMAL)
+            self.entry_total_material.delete(0, END)
+            self.entry_total_material.insert(0, self.insereNumConvertido(alug_dados.valor_total))
+            self.entry_total_material.config(state=DISABLED)
 
     @staticmethod
     def __callback():

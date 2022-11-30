@@ -6,7 +6,7 @@ class AluguelRepositorio:
 
     def inserir_aluguel(self, novo_op, sessao):
         query_op = aluguel_query.AluguelQuery()
-        nova_operação = Aluguel(data=novo_op.data, caixa_peca1=novo_op.__caixa_peca1,
+        nova_operação = Aluguel(data=novo_op.data, caixa_peca1=novo_op.caixaPeca1,
                                 caixa_peca2=novo_op.caixaPeca2,
                                 caixa_peca3=novo_op.caixaPeca3, caixa_peca4=novo_op.caixaPeca4,
                                 caixa_peca5=novo_op.caixaPeca5, caixa_peca6=novo_op.caixaPeca6,
@@ -50,3 +50,4 @@ class AluguelRepositorio:
         query_op = aluguel_query.AluguelQuery()
         op = query_op.listar_aluguel_id(aluguel_id, sessao)
         return op
+

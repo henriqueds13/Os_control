@@ -1,168 +1,228 @@
-def deletarCliente(self):
-    res = messagebox.askyesno(None,
-                              "ATENÇÃO:Deletar o Cadastro Apagará Tambem Todas as Ordem de Serviço deste Cliente. "
-                              "Deseja Realmente Deletar o Cadastro?")
-    if res:
-        try:
-            item_selecionado = self.tree_cliente.selection()[0]
-            id_cliente = self.tree_cliente.item(item_selecionado, "values")[0]
-            repositorio = cliente_repositorio.ClienteRepositorio()
-            repositorio.remover_cliente(id_cliente, sessao)
-            sessao.commit()
-            self.tree_cliente.delete(item_selecionado)
-            self.mostrarMensagem("1", "Cadastro Excluído com Sucesso!")
-            self.popular()
 
-        except:
-            messagebox.showinfo(title="ERRO", message="Selecione um elemento a ser deletado")
+self.alug_valor_total = 0
+self.valor_rec = 0
+self.equipamento_obj = None
+self.cliente_obj = None
+global variable_int_pago
+variable_int_pago = IntVar()
+variable_int_pago.set(1)
 
-        finally:
-            sessao.close()
-    else:
-        pass
+if self.formataParaFloat(orc_quant_entry1.get()) == 0:
+    orc_val_uni_entry1.delete(0, END)
+    orc_id_entry1.delete(0, END)
+    orc_descr_entry1.delete(0, END)
+    orc_quant_entry1.delete(0, END)
+if self.formataParaFloat(orc_quant_entry2.get()) == 0:
+    orc_val_uni_entry2.delete(0, END)
+    orc_id_entry2.delete(0, END)
+    orc_descr_entry2.delete(0, END)
+    orc_quant_entry2.delete(0, END)
+if self.formataParaFloat(orc_quant_entry3.get()) == 0:
+    orc_val_uni_entry3.delete(0, END)
+    orc_id_entry3.delete(0, END)
+    orc_descr_entry3.delete(0, END)
+    orc_quant_entry3.delete(0, END)
+if self.formataParaFloat(orc_quant_entry4.get()) == 0:
+    orc_val_uni_entry4.delete(0, END)
+    orc_id_entry4.delete(0, END)
+    orc_descr_entry4.delete(0, END)
+    orc_quant_entry4.delete(0, END)
+if self.formataParaFloat(orc_quant_entry5.get()) == 0:
+    orc_val_uni_entry5.delete(0, END)
+    orc_id_entry5.delete(0, END)
+    orc_descr_entry5.delete(0, END)
+    orc_quant_entry5.delete(0, END)
+if self.formataParaFloat(orc_quant_entry6.get()) == 0:
+    orc_val_uni_entry6.delete(0, END)
+    orc_id_entry6.delete(0, END)
+    orc_descr_entry6.delete(0, END)
+    orc_quant_entry6.delete(0, END)
 
-Label(subframe_form_pag1, text="Dinheiro", fg="red", anchor=E, font=('Verdana', "10", ""), bg=bg_tela).grid(
-            row=0, column=0,
-            padx=5)
-        venda_entry_dinh = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all',
-                                      validatecommand=(testa_float, '%P'), bg=bg_entry)
-        venda_entry_dinh.grid(row=0, column=1, padx=5)
-        Label(subframe_form_pag1, text="Cheque", fg="red", anchor=E, font=('Verdana', "10", ""), bg=bg_tela).grid(row=1,
-                                                                                                                  column=0,
-                                                                                                                  padx=5,
-                                                                                                                  pady=5)
-        venda_entry_cheque = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all',
-                                        validatecommand=(testa_float, '%P'), bg=bg_entry)
-        venda_entry_cheque.grid(row=1, column=1, padx=5)
-        Label(subframe_form_pag1, text="Cartão de Crédito", fg="red", anchor=E, font=('Verdana', "10", ""),
-              bg=bg_tela).grid(row=2,
-                               column=0,
-                               padx=5)
-        venda_entry_ccredito = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all',
-                                          validatecommand=(testa_float, '%P'), bg=bg_entry)
-        venda_entry_ccredito.grid(row=2, column=1, padx=5)
-        Label(subframe_form_pag1, text="Cartão de Débito", fg="red", anchor=E, font=('Verdana', "10", ""),
-              bg=bg_tela).grid(row=3,
-                               column=0,
-                               padx=5,
-                               pady=5)
-        venda_entry_cdebito = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all',
-                                         validatecommand=(testa_float, '%P'), bg=bg_entry)
-        venda_entry_cdebito.grid(row=3, column=1, padx=5)
-        Label(subframe_form_pag1, text="PIX", fg="red", anchor=E, font=('Verdana', "10", ""), bg=bg_tela).grid(row=4,
-                                                                                                               column=0,
-                                                                                                               padx=5)
-        venda_entry_pix = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all',
-                                     validatecommand=(testa_float, '%P'), bg=bg_entry)
-        venda_entry_pix.grid(row=4, column=1, padx=5)
-        Label(subframe_form_pag1, text="Outros", fg="red", anchor=E, font=('Verdana', "10", ""), bg=bg_tela).grid(row=5,
-                                                                                                                  column=0,
-                                                                                                                  padx=5,
-                                                                                                                  pady=5)
-        venda_entry_outros = Entry(subframe_form_pag1, width=18, justify=RIGHT, validate='all',
-                                        validatecommand=(testa_float, '%P'), bg=bg_entry)
-        venda_entry_outros.grid(row=5, column=1, padx=5)
-        subframe_form_pag2 = Frame(labelframe_form_pag, bg=bg_tela)
-        subframe_form_pag2.pack(padx=10, fill=X, side=RIGHT)
-        labelframe_valor_rec = LabelFrame(subframe_form_pag2, bg=bg_tela)
-        labelframe_valor_rec.grid(row=0, column=0, sticky=W, pady=5)
-        Label(labelframe_valor_rec, text="Valor à Receber:", bg=bg_tela).pack(padx=20)
-        venda_valor_areceber = Label(labelframe_valor_rec, text="R$ 0,00", font=("", "12", ""), fg="red",
-                                          bg=bg_tela)
-        venda_valor_areceber.pack(fill=X, pady=5)
-        venda_valor_areceber.configure(width=10, height=1)
-        venda_valor_areceber.grid_propagate(0)
-        venda_button_salvar = Button(subframe_form_pag2, text="Salvar", width=8, command=atualizaValorAreceber)
-        venda_button_salvar.grid(row=1, column=0, sticky=W, pady=5, padx=30)
-        subframe_form_pag3 = Frame(labelframe_form_pag, bg=bg_tela)
-        subframe_form_pag3.pack(padx=5, fill=BOTH, side=LEFT, pady=7)
-        Label(subframe_form_pag3, text='Desconto:', bg=bg_tela).grid()
-        desconto_entry = Entry(subframe_form_pag3, width=10, validate='all', validatecommand=(testa_float, '%P'),
-                                     bg=bg_entry, justify=CENTER)
-        desconto_entry.grid(row=0, column=1, sticky=W, padx=5)
-        Label(subframe_form_pag3, text='Caixa Peça:', bg=bg_tela).grid(row=1, column=0)
-        cp_entry = Entry(subframe_form_pag3, width=10, validate='all', validatecommand=(testa_float, '%P'),
-                               bg=bg_entry, justify=CENTER)
-        cp_entry.grid(row=1, column=1, sticky=W, padx=5, pady=10)
-
-        labelframe_dados_cliente = LabelFrame(subframe_prod1, bg=bg_tela, text='Dados do Cliente')
-        labelframe_dados_cliente.grid(row=1, column=0, sticky=NW, ipady=6, ipadx=5, pady=5)
-        mini_frame_dados1 = Frame(labelframe_dados_cliente, bg=bg_tela)
-        mini_frame_dados1.pack(fill=BOTH, pady=10)
-        mini_frame_dados2 = Frame(labelframe_dados_cliente, bg=bg_tela)
-        mini_frame_dados2.pack(fill=BOTH)
+orc_val_total_entry1.config(text=self.insereNumConvertido(valorTotal1))
+            orc_val_total_entry2.config(text=self.insereNumConvertido(valorTotal2))
+            orc_val_total_entry3.config(text=self.insereNumConvertido(valorTotal3))
+            orc_val_total_entry4.config(text=self.insereNumConvertido(valorTotal4))
+            orc_val_total_entry5.config(text=self.insereNumConvertido(valorTotal5))
+            orc_val_total_entry6.config(text=self.insereNumConvertido(valorTotal6))
 
 
-        Label(mini_frame_dados1, text='Nome:', bg=bg_tela, font=font_dados_alug).grid(row=0, column=0)
-        Label(mini_frame_dados2, text='Endereço:', bg=bg_tela, font=font_dados_alug).grid(row=0, column=0)
-        Label(mini_frame_dados1, text='Telefone:', bg=bg_tela, font=font_dados_alug).grid(row=0, column=2)
-        Label(mini_frame_dados1, text='Qtd. Alugueis:', bg=bg_tela, font=font_dados_alug).grid(row=0, column=4)
+def atualizandoDados(self):
+    def retornaOperadorCli(id_tec):
+        repositorio_operador = tecnico_repositorio.TecnicoRepositorio()
+        operador_cli = repositorio_operador.listar_tecnico_id(id_tec, sessao)
+        return operador_cli.nome
 
-        label_nome = Label(mini_frame_dados1, text='Henrique', bg=bg_tela, anchor=W, font=font_dados_alug1, fg='red')
-        label_nome.grid(row=0, column=1, sticky=W)
-        label_nome.configure(width=30)
-        label_nome.grid_propagate(0)
-        label_fone = Label(mini_frame_dados1, text='98428-8565', bg=bg_tela, anchor=W, font=font_dados_alug1, fg='red')
-        label_fone.grid(row=0, column=3)
-        label_fone.configure(width=15)
-        label_fone.grid_propagate(0)
-        label_historico = Label(mini_frame_dados1, text='3', bg=bg_tela, anchor=W, font=font_dados_alug1, fg='red')
-        label_historico.grid(row=0, column=5)
-        label_historico.configure(width=5)
-        label_historico.grid_propagate(0)
-        label_end = Label(mini_frame_dados2, text='Rua Nossa Senhora das Dores, 657   Centro   Artur Nogueira',
-                          bg=bg_tela, anchor=W, font=font_dados_alug1, fg='red')
-        label_end.grid(row=0, column=1)
-        label_end.configure(width=50)
-        label_end.grid_propagate(0)
+    cliente_selecionado = self.tree_cliente.focus()
+    dado_cli = self.tree_cliente.item(cliente_selecionado, "values")
+    cliente_dados = cliente_repositorio.ClienteRepositorio().listar_cliente_id(dado_cli[0], sessao)
+    self.id_label.config(text=cliente_dados.id)
+    self.nome_label.config(text=cliente_dados.nome)
+    self.end_label.config(text=cliente_dados.logradouro)
+    self.compl_label.config(text=cliente_dados.complemento)
+    self.bairro_label.config(text=cliente_dados.bairro)
+    self.cidade_label.config(text=cliente_dados.cidade)
+    self.estado_label.config(text=cliente_dados.uf)
+    self.cep_label.config(text=cliente_dados.cep)
+    self.telfix_label.config(text=cliente_dados.tel_fixo)
+    self.whats_label.config(text=cliente_dados.whats)
+    self.telcom_label.config(text=cliente_dados.email)
+    self.cel_label.config(text=cliente_dados.celular)
+    # self.obs_label.config(text=cliente_dados.contato)
+    self.op_label.config(text=retornaOperadorCli(cliente_dados.operador))
+    self.datacad_label.config(text=cliente_dados.indicacao)
 
 
-        labelframe_desc_vend = LabelFrame(subframe_prod1, bg=bg_tela)
-        labelframe_desc_vend.grid(row=1, column=1, sticky=SW, padx=10, ipady=1, ipadx=5, pady=5)
-        frame_descr_vend = Frame(labelframe_desc_vend, bg=bg_tela)
-        frame_descr_vend.pack(fill=BOTH, padx=2, pady=10)
-        Label(frame_descr_vend, text='Dias:', bg=bg_tela).grid()
-        venda_label_subtotal = Entry(frame_descr_vend, width=5, validate='all', validatecommand=(testa_float, '%P'),
-                                    bg=bg_entry, justify=CENTER)
-        venda_label_subtotal.grid(row=0, column=1, sticky=W, padx=5)
-        venda_label_subtotal.insert(0, 1)
-        Label(frame_descr_vend, text='Entrega:', bg=bg_tela).grid(row=1, column=0)
-        venda_desconto = DateEntry(frame_descr_vend, width=10, validate='all', validatecommand=(testa_float, '%P'),
-                                    bg=bg_entry)
-        venda_desconto.grid(row=1, column=1, padx=5)
-        Label(frame_descr_vend, width=2, bg=bg_tela).grid(row=0, column=2, padx=1)
-        frame_valor_total = LabelFrame(frame_descr_vend, bg=bg_tela)
-        frame_valor_total.grid(row=0, column=3, rowspan=2, padx=0)
-        Label(frame_valor_total, text='TOTAL:', font=('verdana', '12', 'bold'), bg=bg_tela).pack(pady=1, padx=30)
-        venda_label_total = Label(frame_valor_total, text='R$0,00', font=('verdana', '13', 'bold'), fg='red',
-                                       bg=bg_tela)
-        venda_label_total.pack(padx=5, pady=1)
-        venda_label_total.configure(width=10, height=1)
-        venda_label_total.grid_propagate(0)
+def atualizarComClique(self, event):
+    self.atualizandoDados()
 
-        frame_orcamento = Frame(subframe_prod1, bg=bg_tela)
-        frame_orcamento.grid(row=2, column=0, sticky=W)
+    self.frame2_orc = Frame(self.subframe_orc2, bg=color_orc2)
+    self.frame2_orc.pack(fill=X)
+    self.labelframe_material = LabelFrame(self.frame2_orc, bg=color_orc2, text="Resumo")
+    self.labelframe_material.pack(padx=10, side=LEFT, ipady=5)
+    self.subframe_material1 = Frame(self.labelframe_material, bg=color_orc2)
+    self.subframe_material1.pack(pady=10)
+    self.quant_entry1 = Label(self.subframe_material1, width=3, text='Qtd.', bg=color_orc2)
+    self.quant_entry1.grid(padx=5)
+    self.id_entry1 = Label(self.subframe_material1, width=3, text='CP', bg=color_orc2)
+    self.id_entry1.grid(row=0, column=1)
+    self.descr_entry1 = Label(self.subframe_material1, width=40, text='Descrição', bg=color_orc2, anchor=W)
+    self.descr_entry1.grid(row=0, column=2, padx=5)
+    self.val_uni_entry1 = Label(self.subframe_material1, width=5, text='V.Unit.', bg=color_orc2)
+    self.val_uni_entry1.grid(row=0, column=3)
+    self.val_total_entry1 = Label(self.subframe_material1, width=5, text='V.Total', bg=color_orc2)
+    self.val_total_entry1.grid(row=0, column=4, padx=5)
+    self.quant_entry2 = Entry(self.subframe_material1, width=5, relief=RIDGE)
+    self.quant_entry2.grid(row=1, column=0, padx=5)
+    self.id_entry2 = Entry(self.subframe_material1, width=10, relief=RIDGE)
+    self.id_entry2.grid(row=1, column=1)
+    self.descr_entry2 = Entry(self.subframe_material1, width=50, relief=RIDGE)
+    self.descr_entry2.grid(row=1, column=2, padx=5)
+    self.val_uni_entry2 = Entry(self.subframe_material1, width=10, relief=RIDGE)
+    self.val_uni_entry2.grid(row=1, column=3)
+    self.val_total_entry2 = Entry(self.subframe_material1, width=10, relief=RIDGE)
+    self.val_total_entry2.grid(row=1, column=4, padx=5)
+    self.quant_entry3 = Entry(self.subframe_material1, width=5, relief=RIDGE)
+    self.quant_entry3.grid(row=2, column=0, padx=5)
+    self.id_entry3 = Entry(self.subframe_material1, width=10, relief=RIDGE)
+    self.id_entry3.grid(row=2, column=1)
+    self.descr_entry3 = Entry(self.subframe_material1, width=50, relief=RIDGE)
+    self.descr_entry3.grid(row=2, column=2, padx=5)
+    self.val_uni_entry3 = Entry(self.subframe_material1, width=10, relief=RIDGE)
+    self.val_uni_entry3.grid(row=2, column=3)
+    self.val_total_entry3 = Entry(self.subframe_material1, width=10, relief=RIDGE)
+    self.val_total_entry3.grid(row=2, column=4, padx=5)
+    self.quant_entry4 = Entry(self.subframe_material1, width=5, relief=RIDGE)
+    self.quant_entry4.grid(row=3, column=0, padx=5)
+    self.id_entry4 = Entry(self.subframe_material1, width=10, relief=RIDGE)
+    self.id_entry4.grid(row=3, column=1)
+    self.descr_entry4 = Entry(self.subframe_material1, width=50, relief=RIDGE)
+    self.descr_entry4.grid(row=3, column=2, padx=5)
+    self.val_uni_entry4 = Entry(self.subframe_material1, width=10, relief=RIDGE)
+    self.val_uni_entry4.grid(row=3, column=3)
+    self.val_total_entry4 = Entry(self.subframe_material1, width=10, relief=RIDGE)
+    self.val_total_entry4.grid(row=3, column=4, padx=5)
+    self.quant_entry5 = Entry(self.subframe_material1, width=5, relief=RIDGE)
+    self.quant_entry5.grid(row=4, column=0, padx=5)
+    self.id_entry5 = Entry(self.subframe_material1, width=10, relief=RIDGE)
+    self.id_entry5.grid(row=4, column=1)
+    self.descr_entry5 = Entry(self.subframe_material1, width=50, relief=RIDGE)
+    self.descr_entry5.grid(row=4, column=2, padx=5)
+    self.val_uni_entry5 = Entry(self.subframe_material1, width=10, relief=RIDGE)
+    self.val_uni_entry5.grid(row=4, column=3)
+    self.val_total_entry5 = Entry(self.subframe_material1, width=10, relief=RIDGE)
+    self.val_total_entry5.grid(row=4, column=4, padx=5)
+    self.quant_entry6 = Entry(self.subframe_material1, width=5, relief=RIDGE)
+    self.quant_entry6.grid(row=5, column=0, padx=5)
+    self.id_entry6 = Entry(self.subframe_material1, width=10, relief=RIDGE)
+    self.id_entry6.grid(row=5, column=1)
+    self.descr_entry6 = Entry(self.subframe_material1, width=50, relief=RIDGE)
+    self.descr_entry6.grid(row=5, column=2, padx=5)
+    self.val_uni_entry6 = Entry(self.subframe_material1, width=10, relief=RIDGE)
+    self.val_uni_entry6.grid(row=5, column=3)
+    self.val_total_entry6 = Entry(self.subframe_material1, width=10, relief=RIDGE)
+    self.val_total_entry6.grid(row=5, column=4, padx=5)
+    self.quant_entry7 = Entry(self.subframe_material1, width=5, relief=RIDGE)
+    self.quant_entry7.grid(row=6, column=0, padx=5)
+    self.id_entry7 = Entry(self.subframe_material1, width=10, relief=RIDGE)
+    self.id_entry7.grid(row=6, column=1)
+    self.descr_entry7 = Entry(self.subframe_material1, width=50, relief=RIDGE)
+    self.descr_entry7.grid(row=6, column=2, padx=5)
+    self.val_uni_entry7 = Entry(self.subframe_material1, width=10, relief=RIDGE)
+    self.val_uni_entry7.grid(row=6, column=3)
+    self.val_total_entry7 = Entry(self.subframe_material1, width=10, relief=RIDGE)
+    self.val_total_entry7.grid(row=6, column=4, padx=5)
 
-        Label(frame_orcamento, text="Vendedor:", bg=bg_tela).grid(row=0, column=2, padx=10)
-        global op_venda
-        op_venda = StringVar()
-        op_venda.trace_add('write', concederAcesso6)
-        venda_vendedor = Entry(frame_orcamento, width=15, justify=RIGHT, relief=SUNKEN, bd=2, show='*',
-                                    textvariable=op_venda)
-        venda_vendedor.grid(row=0, column=3)
+    self.subframe_material2 = Frame(self.labelframe_material, bg=color_orc2)
+    self.subframe_material2.pack(fill=X)
+    self.introframe_material = Frame(self.subframe_material2, bg=color_orc2)
+    self.introframe_material.pack(side=LEFT)
 
-        frame_button_confirma = Frame(subframe_prod1, bg=bg_tela)
-        frame_button_confirma.grid(row=2, column=1, pady=10, sticky=E)
-        venda_button_fechar = Button(frame_button_confirma, text='Fechar', command=jan.destroy)
-        venda_button_fechar.pack(side=LEFT, ipady=10, ipadx=30)
-        venda_button_confirma = Button(frame_button_confirma, text='Confirmar Aluguel',
-                                            command=lambda: [atualizaValorAreceber(),
-                                                             atualizarValorFinal(),
-                                                             self.cadastroVenda(1, jan)],
-                                            state=DISABLED)
-        venda_button_confirma.pack(side=LEFT, ipady=10, padx=15)
+    self.introframe_material2 = Frame(self.subframe_material2, bg=color_orc2)
+    self.introframe_material2.pack(side=RIGHT, fill=Y, padx=5)
 
-self.tree_maq_disp.column('status', width=150, minwidth=70, stretch=False)
-self.tree_maq_disp.column('maquina', width=400, minwidth=70, stretch=False)
-self.tree_maq_disp.column('ident', width=75, minwidth=80, stretch=False)
-self.tree_maq_disp.column('valor', width=125, minwidth=80, stretch=False)
+    self.entry_mao_obra_material = Entry(self.introframe_material2, width=15)
+    self.entry_mao_obra_material.grid(row=0, column=1)
+    Label(self.introframe_material2, bg=color_orc2, text="Caixa Peça").grid(row=0, column=0)
+
+    self.entry_form_pag = Entry(self.introframe_material2, width=15)
+    self.entry_form_pag.grid(row=1, column=1, pady=5)
+    Label(self.introframe_material2, bg=color_orc2, text="Forma de Pag.").grid(row=1, column=0)
+
+    Label(self.introframe_material2, bg=color_orc2).grid(row=2, column=0)
+    self.subframe_material3 = Frame(self.labelframe_material, bg=color_orc2)
+    self.subframe_material3.pack(fill=X, padx=5)
+    self.entry_total_material = Entry(self.subframe_material3, width=20, fg="red")
+    self.entry_total_material.pack(side=RIGHT)
+    Label(self.subframe_material3, bg=color_orc2, text="Total do Serviço").pack(side=RIGHT, padx=25)
+
+    self.frame3_orc = Frame(self.frame2_orc, bg=color_orc2)
+    self.frame3_orc.pack(side=LEFT, fill=BOTH)
+    self.labelframe_orc_dadosap = LabelFrame(self.frame3_orc, text="Dados do Aluguel", bg=color_orc2)
+    self.labelframe_orc_dadosap.pack()
+    self.sub_dados_alug = Frame(self.labelframe_orc_dadosap, bg=color_orc2)
+    self.sub_dados_alug.pack(fill=BOTH, padx=10, pady=10)
+
+    Label(self.sub_dados_alug, text='ID:', bg=color_orc2, font=font_dados_alug).grid(column=0, row=0, sticky=W)
+    Label(self.sub_dados_alug, text='Cliente:', bg=color_orc2, font=font_dados_alug).grid(column=0, row=1,
+                                                                                          sticky=W)
+    Label(self.sub_dados_alug, text='Telefone:', bg=color_orc2, font=font_dados_alug).grid(column=0, row=2,
+                                                                                           sticky=W)
+    Label(self.sub_dados_alug, text='Aparelho:', bg=color_orc2, font=font_dados_alug).grid(column=0, row=3,
+                                                                                           sticky=W)
+    Label(self.sub_dados_alug, text='Marca:', bg=color_orc2, font=font_dados_alug).grid(column=0, row=4, sticky=W)
+    Label(self.sub_dados_alug, text='Modelo:', bg=color_orc2, font=font_dados_alug).grid(column=0, row=5, sticky=W)
+    Label(self.sub_dados_alug, text='N/Serie:', bg=color_orc2, font=font_dados_alug).grid(column=0, row=6, sticky=W)
+    Label(self.sub_dados_alug, text='Dias Loc.:', bg=color_orc2, font=font_dados_alug).grid(column=0, row=7,
+                                                                                            sticky=W)
+    Label(self.sub_dados_alug, text='Saída:', bg=color_orc2, font=font_dados_alug).grid(column=0, row=8, sticky=W)
+    Label(self.sub_dados_alug, text='Devolução:', bg=color_orc2, font=font_dados_alug).grid(column=0, row=9,
+                                                                                            sticky=W)
+    Label(self.sub_dados_alug, text='Pago:', bg=color_orc2, font=font_dados_alug).grid(column=0, row=10, sticky=W)
+    Label(self.sub_dados_alug, text='Lavadora Alta Pressão', bg=color_orc2, fg="red", font=font_dados_alug2).grid(
+        column=1, row=2,
+        sticky=W,
+        padx=10)
+    Label(self.sub_dados_alug, text='Karcher', bg=color_orc2, fg="red", font=font_dados_alug2).grid(column=1, row=3,
+                                                                                                    sticky=W,
+                                                                                                    padx=10)
+    Label(self.sub_dados_alug, text='K330', bg=color_orc2, fg="red", font=font_dados_alug2).grid(column=1, row=4,
+                                                                                                 sticky=W,
+                                                                                                 padx=10)
+    Label(self.sub_dados_alug, text='Sem Pressão', bg=color_orc2, fg="red", font=font_dados_alug2).grid(column=1,
+                                                                                                        row=5,
+                                                                                                        sticky=W,
+                                                                                                        padx=10)
+
+    self.frame5_orc = Frame(self.subframe_orc2, bg=color_orc2)
+    self.frame5_orc.pack(fill=BOTH)
+
+    self.introframe_orc_material = Frame(self.frame5_orc, bg=color_orc2)
+    self.introframe_orc_material.pack(side=LEFT, padx=10, fill=BOTH)
+    self.labelframe_orc_coment = LabelFrame(self.introframe_orc_material, text="Comentários", bg=color_orc2)
+    self.labelframe_orc_coment.pack()
+    Entry(self.labelframe_orc_coment, width=140).pack(padx=5, pady=5)
+    Entry(self.labelframe_orc_coment, width=140).pack()
+    Entry(self.labelframe_orc_coment, width=140).pack(pady=5)
+
+    self.frame6_orc = Frame(self.subframe_orc2, bg=color_orc2)
+    self.frame6_orc.pack(fill=BOTH)
