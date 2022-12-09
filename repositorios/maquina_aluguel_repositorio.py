@@ -30,3 +30,7 @@ class MaquinaAluguelRepositorio:
         query_op = maquina_aluguel_query.MaquinaAluguelQuery()
         op = query_op.listar_equip_id(equip_id, sessao)
         return op
+
+    def edita_status_equip(self, equip_id, status, sessao):
+        query_op = maquina_aluguel_query.MaquinaAluguelQuery()
+        query_op.edita_status_equip(equip_id, status, sessao)

@@ -18,3 +18,4 @@ label_end.grid_propagate(0)
 
 venda_button_busca_cliente
 venda_button_busca_prod
+cadastrarAluguel(jan, num, valor_total, equip, cli, valor_a_rec)

@@ -25,3 +25,7 @@ class MaquinaAluguelQuery():
         equip.valor = novo_op.valor
         equip.status = novo_op.status
         equip.obs = novo_op.obs
+
+    def edita_status_equip(self, equip_id, status, sessao):
+        equip = self.listar_equip_id(equip_id, sessao)
+        equip.status = status
